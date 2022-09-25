@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "description": "Express Application for Interactive Learning Tool Server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.ece.iastate.edu/sd/sdmay23-40.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "jest": "^29.0.3"
+  }
+}
