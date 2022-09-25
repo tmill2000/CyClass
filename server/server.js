@@ -7,9 +7,6 @@ const port = process.env.PORT || 6000;
 app.use(bodyParser.json());
 
 app.use('/api', routes);
-// app.get('/', (req, res) => {
-//   res.send('ok')
-// })
 
 const server = app.listen(port, () => {
   console.log(`Server Listening on Port ${port}`);
