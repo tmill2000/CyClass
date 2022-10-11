@@ -4,3 +4,10 @@ Express Application for Senior Design Team 40
 ```
 npm run start
 ```
+
+
+## Run in docker
+```
+docker build --tag server .
+docker run -p 6000:6000 server
+```
