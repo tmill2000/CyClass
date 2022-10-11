@@ -11,14 +11,10 @@ CREATE TABLE lectures (
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 
-CREATE TABLE message (
-	message_id int PRIMARY KEY,
-    sender_id int NOT NULL,
-    lecture_id int NOT NULL,
-    timestamp datetime NOT NULL,
-    body varchar(1024),
-    FOREIGN KEY (sender_id) REFERENCES users(user_id),
-    FOREIGN KEY (lecture_id) REFERENCES lectures(lecture_id)
+CREATE TABLE users (
+	user_id int PRIMARY KEY,
+    netid varchar(24) NOT NULL, -- This long enough???
+    password varchar(30) NOT NULL
 );
 
 CREATE TABLE roles (
@@ -30,10 +26,14 @@ CREATE TABLE roles (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE users (
-	user_id int PRIMARY KEY,
-    netid varchar(24) NOT NULL, -- This long enough???
-    password varchar(30) NOT NULL
+CREATE TABLE message (
+	message_id int PRIMARY KEY,
+    sender_id int NOT NULL,
+    lecture_id int NOT NULL,
+    timestamp datetime NOT NULL,
+    body varchar(1024),
+    FOREIGN KEY (sender_id) REFERENCES users(user_id),
+    FOREIGN KEY (lecture_id) REFERENCES lectures(lecture_id)
 );
 
 CREATE TABLE polls (
