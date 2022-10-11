@@ -6,4 +6,10 @@ const router = express.Router()
 
 router.get('/health', health.getHealthCheck);
 
+router.ws('/echo', (ws, req) => {
+    ws.on('message', (msg) => {
+        ws.send(msg);
+    })
+})
+
 module.exports = router;
