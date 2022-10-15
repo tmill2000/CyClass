@@ -7,6 +7,9 @@ const router = express.Router()
 
 router.get('/health', health.getHealthCheck);
 router.get('/userInfo', user.getUserInfoByUserId);
+router.get('/logout', user.logout)
+
+router.post('/login', user.login);
 
 router.ws('/echo', (ws, _req) => {
     ws.on('message', (msg) => {

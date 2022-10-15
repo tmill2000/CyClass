@@ -4,10 +4,10 @@ const util = require('util');
 
 const makeDb = () => {
     const connection = mysql.createConnection({
-        host: process.env.db_host || 'localhost',
-        user: process.env.db_user || 'root',
-        password: process.env.db_password || 'password',
-        database: process.env.db || 'db',
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
         port: 3306
     });
     return {
