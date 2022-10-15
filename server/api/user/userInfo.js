@@ -3,9 +3,9 @@ const crypto = require('crypto');
 
 const getUserInfoByUserId = async (req, res) => {
     try {
-        if(req.body.session_id !== req.session.id){
-            return res.status(403).send('Invalid Session')
-        }
+        // if(req.body.session_id !== req.session.id){
+        //     return res.status(403).send('Invalid Session')
+        // }
         const userId = req?.query?.id;
         if (!userId) {
             return res.status(400).send('Invalid Parameters')
@@ -15,6 +15,7 @@ const getUserInfoByUserId = async (req, res) => {
         const userData = rows[0];
         //remove password
         delete userData.password;
+        console.log(userData);
         return res.status(200).send(rows.length ? rows[0] : {});
     } catch (e) {
         return res.status(500).send({ msg: 'Internal Server Error' })

@@ -4,7 +4,7 @@
   "description": "Express Application for Interactive Learning Tool Server",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=\"local\" && bash .bin/start_local.sh",
+    "start": "bash .bin/start_local.sh",
     "test": "npm run test",
     "build:local": "bash .bin/build_docker.sh"
   },
