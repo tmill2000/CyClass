@@ -60,4 +60,6 @@ CREATE TABLE poll_choices (
     FOREIGN KEY (poll_id) REFERENCES polls(poll_id)
 );
 
+INSERT INTO users (user_id, netid, password) VALUES (1, 'twmiller', 'netid');
+
 
