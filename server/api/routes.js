@@ -2,7 +2,7 @@ const express = require('express')
 
 const health = require('./health/getHealthCheck');
 const user = require('./user/userInfo')
-const validateSession = require('../utils/validateSession');
+const validateSession = require('../middleware/validateSession');
 
 const router = express.Router()
 
