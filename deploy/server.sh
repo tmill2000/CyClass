@@ -1,5 +1,5 @@
 # Pull code
-pwd
+ls
 cd /sdmay23-40/server
 git checkout master
 git pull origin master
