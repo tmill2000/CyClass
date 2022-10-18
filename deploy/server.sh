@@ -1,6 +1,5 @@
 # Pull code
-ls
-cd /sdmay23-40/server
+cd ./sdmay23-40/server
 git checkout master
 git pull origin master
 
