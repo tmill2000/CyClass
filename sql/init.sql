@@ -42,7 +42,7 @@ CREATE TABLE polls (
     lecture_id int NOT NULL,
     timestamp datetime NOT NULL,
     question_text varchar(512),
-	FOREIGN KEY (lecture_id) REFERENCES lectures(lecture_id)
+	FOREIGN KEY (lecture_id) REFERENCES lectures(lecture_id),
     FOREIGN KEY (sender_id) REFERENCES users(user_id)
 );
 
