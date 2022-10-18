@@ -5,4 +5,4 @@ git pull origin master
 
 # Build and deploy
 npm install --production
-pm2 restart server
+nodemon server.js
