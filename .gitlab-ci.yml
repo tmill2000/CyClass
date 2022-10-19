@@ -1,4 +1,3 @@
-image: node:16
 before_script:
   - apt-get update -qq
   - apt-get install -qq git
@@ -11,24 +10,11 @@ before_script:
 
 deploy:
   stage: deploy
-  tags:
-   - docker
   environment:
     name: production
     url: http://sdmay23-40.ece.iastate.edu
   script:
     - node -v
-    # - bash deploy/deploy.sh
-    - DEPLOY_SERVER=sdmay23-40.ece.iastate.edu
-    - echo "Deploying to ${DEPLOY_SERVER}"
-    - node -v
-    - ssh vm-user@sdmay23-40.ece.iastate.edu < ./deploy/server.sh
-    # - ls 
-    # - node -vm
-    # - cd ./sdmay23-40/DEPLOY_SERVER
-    # - git checkout master
-    # - git pull origin master
-    # - npm install --production
-    # - node server.js
+    - bash deploy/deploy.sh
   only:
     - master
