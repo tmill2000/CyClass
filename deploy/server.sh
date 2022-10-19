@@ -4,6 +4,6 @@ git checkout master
 git pull origin master
 
 # Build and deploy
-npm install --production
+npm install --omit=dev
 killall node
 nodemon server.js &
