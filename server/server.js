@@ -1,6 +1,7 @@
 const express = require('express')
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
+  console.log(process.env.DB_HOST)
 }
 console.log(process.env.PORT)
 const bodyParser = require('body-parser');
