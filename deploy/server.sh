@@ -1,7 +1,9 @@
 # Pull code
-nvm --version
 pwd
 hostnamectl
+curl -s https://deb.nodesource.com/setup_16.x | sudo bash
+sudo apt install nodejs -y
+node -v
 cd ./sdmay23-40/server
 git checkout master
 git pull origin master
