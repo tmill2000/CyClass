@@ -11,6 +11,8 @@ before_script:
 
 deploy:
   stage: deploy
+  tags:
+   - docker
   environment:
     name: production
     url: http://sdmay23-40.ece.iastate.edu
