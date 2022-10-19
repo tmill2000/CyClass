@@ -14,7 +14,6 @@ deploy:
     name: production
     url: http://sdmay23-40.ece.iastate.edu
   script:
-    - node -v
     - bash deploy/deploy.sh
   only:
     - master
