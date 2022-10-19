@@ -5,4 +5,5 @@ git pull origin master
 
 # Build and deploy
 npm install --production
-node server.js
+killall node
+node server.js &
