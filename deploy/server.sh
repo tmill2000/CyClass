@@ -1,8 +1,8 @@
 # Pull code
 pwd
 hostnamectl
-curl -s https://deb.nodesource.com/setup_16.x | sudo bash
-sudo apt install nodejs -y
+curl -s https://deb.nodesource.com/setup_16.x | sudo -S bash
+sudo -S apt install nodejs -y
 node -v
 cd ./sdmay23-40/server
 git checkout master
