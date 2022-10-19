@@ -4,5 +4,6 @@ git checkout master
 git pull origin master
 
 # Build and deploy
+node -v
 npm install --production
 node server.js
