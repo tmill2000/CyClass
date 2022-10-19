@@ -13,6 +13,9 @@
     "type": "git",
     "url": "https://git.ece.iastate.edu/sd/sdmay23-40.git"
   },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
