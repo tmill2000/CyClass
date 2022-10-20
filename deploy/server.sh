@@ -5,4 +5,4 @@ git pull origin master
 
 # Build and deploy
 npm install --omit=dev
-pm2 restart server.js
+/usr/bin/pm2 restart server.js
