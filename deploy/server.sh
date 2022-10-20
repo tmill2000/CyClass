@@ -5,5 +5,4 @@ git pull origin master
 
 # Build and deploy
 npm install --omit=dev
-killall node
-nodemon server.js &
+pm2 restart server.js
