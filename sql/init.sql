@@ -13,7 +13,7 @@ CREATE TABLE lectures (
 
 CREATE TABLE users (
 	user_id int PRIMARY KEY,
-    netid varchar(24) NOT NULL, -- This long enough???
+    netid varchar(24) NOT NULL,
     password varchar(30) NOT NULL
 );
 
