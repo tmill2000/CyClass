@@ -9,6 +9,6 @@ const res = {
 describe("getHealthCheck.js", () => {
     it('should return ok', async () => {
         const resp = await getHealthCheck(req, res);
-        expect(resp).toEqual({message: 'OK'});
+        expect(resp).toEqual({ status: 'UP' });
     })
 })
