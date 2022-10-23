@@ -11,14 +11,8 @@ DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=password
 DB_NAME=db
+SESSION_SECRET=test
 ```
 ```
 npm run start
-```
-
-
-## Run in docker
-```
-docker build --tag server .
-docker run -p 6000:6000 server
 ```
