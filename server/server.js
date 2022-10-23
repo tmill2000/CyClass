@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const _expressWs = require('express-ws')(app);
 const routes = require('./api/routes');
-const port = process.env.PORT;
+const port = process.env.PORT || 6000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -16,7 +16,7 @@ app.use(express.static(__dirname));
 app.use(cookieParser());
 
 app.use(sessions({
-  secret: process.env.SESSION_SECRET || 'test',
+  secret: process.env.SESSION_SECRET,
   saveUninitialized: true,
   cookie: { maxAge: 86400000 },
   resave: false
