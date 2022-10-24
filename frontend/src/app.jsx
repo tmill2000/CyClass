@@ -10,6 +10,7 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } 
 
 import "./app.css";
 
+import TopBar from "./components/TopBar";
 import Root from "./routes/Root";
 
 // Create the router, defining all routes
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
 // Create Root and render complete app
 createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
+		<TopBar />
 		<RouterProvider router={router} />
 	</React.StrictMode>
 );
