@@ -1,3 +1,7 @@
 node_modules/
 .idea
 .env
+
+# Frontend Build
+/www/bundle.js
+/www/assets/
