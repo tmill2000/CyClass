@@ -5,13 +5,16 @@
  */
 
  import React from "react";
- import Button from "../../components/Button";
+ import Button from "../../components/Button/Button";
+ import Checkbox from "../../components/Checkbox/CheckboxWithLabel";
+ import DateTimeStamp from "../../components/DateTime/DateTimeStamp";
 
  function Root(props) {
 	
 	return (
 		<div>
 			<h1>Title Text</h1>
+
 			<Button
     			onClick={() => {
        				 console.log("This can be any function!");
@@ -20,11 +23,14 @@
     			buttonStyle="btn--post--outline"
     			buttonSize="btn--large"
     		>
-			Post
-   			 </Button>
-		</div>
+			POST
+   			</Button>
 
-	
+			<Checkbox label="This is a test!" />
+
+			<DateTimeStamp></DateTimeStamp>
+			
+		</div>
 	);
 
  }

@@ -1,6 +1,6 @@
 import React from "react";
 
-const CheckboxWithLabel = ({ label }) => {
+const Checkbox = ({ label }) => {
     /*
         To render the checkbox with any label of choice, simply render with:
 
@@ -19,4 +19,4 @@ const CheckboxWithLabel = ({ label }) => {
       </div>
     );
   };
-  export default CheckboxWithLabel;
+  export default Checkbox;
