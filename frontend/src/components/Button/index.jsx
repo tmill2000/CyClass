@@ -1,5 +1,5 @@
 import React from "react";
-import "./button.css";
+import "../../routes/Root/styles.css";
 
 const STYLES = [
     "btn--post--solid",
