@@ -11,6 +11,8 @@ DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=password
 DB_NAME=db
+MYSQL_ROOT_PASSWORD=password
+MYSQL_DATABASE=db
 SESSION_SECRET=test
 ```
 ```
