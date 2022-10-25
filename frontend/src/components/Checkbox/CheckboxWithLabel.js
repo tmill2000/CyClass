@@ -11,7 +11,7 @@ const CheckboxWithLabel = ({ label }) => {
         Making sure to import this class into the component of choice as well.
     */
     return (
-      <div className="checkbox-wrapper">
+      <div id="checkbox" className="checkbox-wrapper">
         <label>
           <input type="checkbox" />
           <span>{label}</span>
