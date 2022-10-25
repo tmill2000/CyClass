@@ -1,0 +1,43 @@
+.profile-icon-outline {
+	display: inline-flex;
+    border: 1px;
+    border-color: black;
+    height: 70px;
+}
+
+.profile-img {
+    width:55px;
+    margin: auto;
+}
+
+.profile-info {
+    font-style: normal;
+    flex: 3px;
+}
+
+.profile-name{
+    padding-right: 10px;
+    font-weight: bold;
+    font-size: medium;
+}
+
+.profile-role{
+    font-size:small;
+    color: gray;
+}
+
+.list-layout{
+    margin: 0px;
+    list-style-type: none;
+    padding: 0;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.list-item {
+    margin-left: 2px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    line-height: 15px;
+}
