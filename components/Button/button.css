@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+:root {
+    --post: #309BFE;
+    --cancel: #CE150F;
+    --newComment: #309BFE;
+    --reply: #A408DA;
+    --viewParticipation: #D18512;
+    --goToPost: #CE150F;
+    --exportToCSV: #A408DA;
+}
+
+.btn {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.btn:hover {
+ transform: translateY(-3px);
+}
+
+/* Button Colors and Styles */
+
+.btn--post--solid {
+    background-color: var(--post);
+    color: var(--white);
+    border: none;
+}
+
+.btn--cancel--solid {
+    background-color: var(--cancel);
+    color: var(--white);
+    border: none;
+}
+
+.btn--newComment--solid {
+    background-color: var(--newComment);
+    color: var(--white);
+    border: none;
+}
+
+.btn--reply--solid {
+    background-color: var(--reply);
+    color: var(--white);
+    border: none;
+}
+
+.btn--viewParticipation--solid {
+    background-color: var(--viewParticipation);
+    color: var(--white);
+    border: none;
+}
+
+.btn--goToPost--solid {
+    background-color: var(--goToPost);
+    color: var(--white);
+    border: none;
+}
+
+.btn--exportToCSV--solid {
+    background-color: var(--exportToCSV);
+    color: var(--white);
+    border: none;
+}
+
+.btn--post--outline {
+    background-color: transparent;
+    border: 2px solid var(--post);
+    color: var(--post);
+}
+
+.btn--cancel--outline {
+    background-color: transparent;
+    border: 2px solid var(--cancel);
+    color: var(--cancel);
+}
+
+.btn--newComment--outline {
+    background-color: transparent;
+    border: 2px solid var(--newComment);
+    color: var(--newComment);
+}
+
+.btn--reply--outline {
+    background-color: transparent;
+    border: 2px solid var(--reply);
+    color: var(--reply);
+}
+
+.btn--viewParticipation--outline {
+    background-color: transparent;
+    border: 2px solid var(--viewParticipation);
+    color: var(--viewParticipation);
+}
+
+.btn--goToPost--outline {
+    background-color: transparent;
+    border: 2px solid var(--goToPost);
+    color: var(--goToPost);
+}
+
+.btn--exportToCSV--outline {
+    background-color: transparent;
+    border: 2px solid var(--exportToCSV);
+    color: var(--exportToCSV);
+}
+
+/* Button Size */
+
+.btn--medium {
+    padding: 10px 20px;
+    font-size: 18px;
+}
+
+.btn--large {
+    padding: 15px 30px;
+    font-size: 20px;
+}
