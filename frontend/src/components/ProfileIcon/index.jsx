@@ -7,7 +7,7 @@ import "./style.css";
 // Example use:
 //<ProfileIcon profile_name="Jaden Ciesielski" profile_role="Student" width="500px"></ProfileIcon>
 
-function ProfileIcon(props) {
+const ProfileIcon = (props) => {
 
     return (
         <div className="profile-icon-outline" style={{width: props.width}}>
