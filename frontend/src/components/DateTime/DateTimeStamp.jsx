@@ -1,6 +1,6 @@
 import  React, { useState } from 'react'
 
-export const DateTimeStamp = () => {
+const DateTimeStamp = () => {
 
     const [date] = useState(new Date());
 
