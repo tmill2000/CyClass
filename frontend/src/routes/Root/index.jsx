@@ -5,7 +5,7 @@
  */
 
  import React from "react";
- import Button from "../../components/Button/index";
+ import Button from "../../components/Button";
 
  function Root(props) {
 	
