@@ -2,7 +2,7 @@ import  React, { useState } from 'react'
 
 export const DateTimeStamp = () => {
 
-    var [date] = useState(new Date());
+    const [date] = useState(new Date());
 
     /* 
         To implement this date time stamp in the application simply:
@@ -13,7 +13,7 @@ export const DateTimeStamp = () => {
     */
 
     return(
-        <div>
+        <div id="date-time">
             <p>{date.toLocaleDateString()} {date.toLocaleTimeString()}</p>
         </div>
     )
