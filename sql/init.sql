@@ -1,3 +1,12 @@
+DROP TABLE poll_choices;
+DROP TABLE poll_responses;
+DROP TABLE polls;
+DROP TABLE messages;
+DROP TABLE roles;
+DROP TABLE users;
+DROP TABLE lectures;
+DROP TABLE courses;
+
 CREATE TABLE courses (
     course_id int PRIMARY KEY,
     owner_id int NOT NULL,
@@ -26,7 +35,7 @@ CREATE TABLE roles (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE message (
+CREATE TABLE messages (
 	message_id int PRIMARY KEY,
     parent_id int,
     sender_id int NOT NULL,
@@ -105,19 +114,19 @@ VALUES ('3',
 
 
 
-INSERT INTO message (message_id, sender_id, lecture_id, timestamp, body)
+INSERT INTO messages (message_id, sender_id, lecture_id, timestamp, body)
 VALUES ('1',
 (select user_id from users where netid='maruf'),
 (select lecture_id from lectures where title='Lib 160 Lecture 1'),
 CURRENT_TIMESTAMP, 'Hello students, this message is from the Prof' );
 
-INSERT INTO message (message_id, sender_id, lecture_id, timestamp, body)
+INSERT INTO messages (message_id, sender_id, lecture_id, timestamp, body)
 VALUES ('2',
 (select user_id from users where netid='maruf_TA'),
 (select lecture_id from lectures where title='Lib 160 Lecture 1'),
 CURRENT_TIMESTAMP, 'Hello students, this message if from the TA' );
 
-INSERT INTO message (message_id, sender_id, lecture_id, timestamp, body)
+INSERT INTO messages (message_id, sender_id, lecture_id, timestamp, body)
 VALUES ('3',
 (select user_id from users where netid='student'),
 (select lecture_id from lectures where title='Lib 160 Lecture 1'),
