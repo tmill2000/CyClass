@@ -2,12 +2,11 @@
 	display: inline-flex;
     border: 1px;
     border-color: black;
-    /* background-color: aqua; */
+    height: 70px;
 }
 
 .profile-img {
-    flex: 3px;
-    width:50px;
+    width:55px;
     margin: auto;
 }
 
@@ -25,15 +24,14 @@
 .profile-role{
     font-size:small;
     color: gray;
-    /* line-height: 0; */
 }
 
 .list-layout{
     margin: 0px;
     list-style-type: none;
     padding: 0;
-    margin-top: 5px;
-    padding-top: 5px;
+    padding-top: 10px;
+    margin-top: 10px;
 }
 
 .list-item {
