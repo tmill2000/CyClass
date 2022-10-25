@@ -20,7 +20,7 @@
     			buttonStyle="btn--post--outline"
     			buttonSize="btn--large"
     		>
-			POST
+			Post
    			 </Button>
 		</div>
 
