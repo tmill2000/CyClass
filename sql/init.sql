@@ -1,5 +1,5 @@
-DROP TABLE poll_choices;
 DROP TABLE poll_responses;
+DROP TABLE poll_choices;
 DROP TABLE polls;
 DROP TABLE messages;
 DROP TABLE roles;
@@ -58,15 +58,6 @@ CREATE TABLE polls (
 	FOREIGN KEY (lecture_id) REFERENCES lectures(lecture_id)
 );
 
-CREATE TABLE poll_responses (
-	poll_response_id int PRIMARY KEY,
-    response_id varchar(512),
-    poll_id int NOT NULL,
-    timestamp datetime NOT NULL,
-    FOREIGN KEY (poll_id) REFERENCES polls(poll_id),
-    FOREIGN KEY (response_id) REFERENCES poll_choices(poll_choice_id)
-);
-
 CREATE TABLE poll_choices (
 	poll_choice_id int PRIMARY KEY,
     poll_id int NOT NULL,
@@ -75,6 +66,14 @@ CREATE TABLE poll_choices (
     FOREIGN KEY (poll_id) REFERENCES polls(poll_id)
 );
 
+CREATE TABLE poll_responses (
+	poll_response_id int PRIMARY KEY,
+    response_id int,
+    poll_id int NOT NULL,
+    timestamp datetime NOT NULL,
+    FOREIGN KEY (poll_id) REFERENCES polls(poll_id),
+    FOREIGN KEY (response_id) REFERENCES poll_choices(poll_choice_id)
+);
 
 INSERT INTO courses (course_id, owner_id, course_name) VALUES ('1', '1', 'Lib 160');
 INSERT INTO courses (course_id, owner_id, course_name) VALUES ('2', '2', 'CPRE 491');
