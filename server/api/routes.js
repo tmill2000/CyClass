@@ -18,11 +18,5 @@ router.post('/login', user.login);
 
 //Put Requests
 
-//Web Sockets
-router.ws('/echo', validateSession, (ws, _req) => {
-    ws.on('message', (msg) => {
-        ws.send(msg);
-    })
-})
 
 module.exports = router;
