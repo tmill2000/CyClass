@@ -68,10 +68,12 @@ CREATE TABLE poll_choices (
 
 CREATE TABLE poll_responses (
 	poll_response_id int PRIMARY KEY,
+    user_id int,
     response_id int,
     poll_id int NOT NULL,
     timestamp datetime NOT NULL,
     FOREIGN KEY (poll_id) REFERENCES polls(poll_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (response_id) REFERENCES poll_choices(poll_choice_id)
 );
 
