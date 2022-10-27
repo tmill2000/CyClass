@@ -16,8 +16,8 @@ const getUserInfoByUserId = async (req, res) => {
         }
         const query = 'SELECT * FROM users WHERE user_id = ?';
         const rows = await runQuery(query, [userId]);
-        if(!rows?.length){
-            return res.status(200).send({msg: 'No user found'});
+        if (!rows?.length) {
+            return res.status(200).send({ msg: 'No user found' });
         }
         const userData = rows[0];
 

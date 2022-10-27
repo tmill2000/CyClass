@@ -24,8 +24,8 @@ app.use(sessions({
 app.use('/api', routes);
 
 
-const webSocketServer = new (require('ws')).Server({noServer: true});
-webSocketServer.on('connection',  websockets.handleRequest)
+const webSocketServer = new (require('ws')).Server({ noServer: true });
+webSocketServer.on('connection', websockets.handleRequest)
 
 const server = app.listen(port, () => {
   console.log(`Server Listening on Port ${port}`);
@@ -38,7 +38,7 @@ server.on('upgrade', (request, socket, head) => {
 });
 
 process.on('SIGTERM', () => {
-    server.close(() => {
-        console.log('Server Closed');
-    })
+  server.close(() => {
+    console.log('Server Closed');
+  })
 })
