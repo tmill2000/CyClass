@@ -1,5 +1,5 @@
 const containsPortillos = (string) => {
-    return string.toLowerCase().includes('portillos');
+    return string.toLowerCase().includes('portillo');
 }
 
 module.exports = { containsPortillos };
