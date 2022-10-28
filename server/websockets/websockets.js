@@ -1,3 +1,5 @@
+const { containsPortillos } = require("../utils/removePortillos");
+
 const webSockets = new Map(); // userID: webSocket
 const lectures = new Map(); // lectureId: [ userId ]
 
@@ -23,6 +25,9 @@ const handleRequest = (webSocket, req) => {
 
   webSocket.on('message', (message) => {
     const messageObj = JSON.parse(message)
+    if(containsPortillos(JSON.stringify(messageObj))){
+      return;
+    }
     const users = lectures.get(lectureId);
     users.forEach((user) => {
       if (user === userId) {
