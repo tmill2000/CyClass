@@ -1,24 +1,24 @@
 CREATE TABLE courses (
-    course_id int PRIMARY KEY,
+    course_id int PRIMARY KEY AUTO_INCREMENT,
     owner_id int NOT NULL,
     course_name varchar(100)
 );
 
 CREATE TABLE lectures (
-	lecture_id int PRIMARY KEY,
+	lecture_id int PRIMARY KEY AUTO_INCREMENT,
     course_id int NOT NULL,
     title varchar(100),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 
 CREATE TABLE users (
-	user_id int PRIMARY KEY,
+	user_id int PRIMARY KEY AUTO_INCREMENT,
     netid varchar(24) NOT NULL,
     password varchar(30) NOT NULL
 );
 
 CREATE TABLE roles (
-	role_id int PRIMARY KEY,
+	role_id int PRIMARY KEY AUTO_INCREMENT,
     course_id int NOT NULL,
     user_id int NOT NULL,
     role enum('PROFESSOR', 'TA', 'STUDENT') NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE messages (
-	message_id int PRIMARY KEY,
+	message_id int PRIMARY KEY AUTO_INCREMENT,
     parent_id int,
     sender_id int NOT NULL,
     lecture_id int NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE messages (
 );
 
 CREATE TABLE polls (
-	poll_id int PRIMARY KEY,
+	poll_id int PRIMARY KEY AUTO_INCREMENT,
     sender_id int NOT NULL,
     lecture_id int NOT NULL,
     timestamp datetime NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE polls (
 );
 
 CREATE TABLE poll_choices (
-	poll_choice_id int PRIMARY KEY,
+	poll_choice_id int PRIMARY KEY AUTO_INCREMENT,
     poll_id int NOT NULL,
     choice_text varchar(256) NOT NULL,
     is_correct_choice bool NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE poll_choices (
 );
 
 CREATE TABLE poll_responses (
-	poll_response_id int PRIMARY KEY,
+	poll_response_id int PRIMARY KEY AUTO_INCREMENT,
     user_id int,
     response_id int,
     poll_id int NOT NULL,
@@ -67,4 +67,4 @@ CREATE TABLE poll_responses (
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (response_id) REFERENCES poll_choices(poll_choice_id)
 );
-INSERT INTO users (user_id, netid, password) VALUES ('1', 'twmiller', 'pw');
+INSERT INTO users (netid, password) VALUES ('twmiller', 'pw');
