@@ -1,12 +1,3 @@
-DROP TABLE poll_responses;
-DROP TABLE poll_choices;
-DROP TABLE polls;
-DROP TABLE messages;
-DROP TABLE roles;
-DROP TABLE users;
-DROP TABLE lectures;
-DROP TABLE courses;
-
 CREATE TABLE courses (
     course_id int PRIMARY KEY,
     owner_id int NOT NULL,
