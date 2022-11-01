@@ -1,5 +1,17 @@
 const { runQuery } = require('../../utils/db_connection');
 
+
+/**
+ * Function to add a course
+ * @param {*} req 
+ *  req.body = {
+ *    owner_id: int,
+ *    course_title: string
+ *    session_id: int
+ *  }
+ * @param {*} res 
+ * @returns course_id of the course if successful, otherwise a 500 error
+ */
 const addCourse = async (req, res) => {
     try {
         const { owner_id: ownerID, course_title: courseTitle } = req.body;
