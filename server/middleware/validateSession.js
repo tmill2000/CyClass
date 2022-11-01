@@ -1,5 +1,7 @@
 module.exports = (req, res, next) => {
-    if (
+    if(process.env.NODE_ENV === 'devl'){
+        next();
+    } else if(
         !req?.body?.session_id ||
         !req.session.id ||
         req.body.session_id !== req.session.id
