@@ -2,6 +2,7 @@ import React from 'react';
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
 import UserStore from './stores/UserStore';
+import logoImg from "./ISULogo.png";
 
 class LoginForm extends React.Component {
 
@@ -80,24 +81,30 @@ class LoginForm extends React.Component {
     render() {
         return (
             <div className="loginForm">
-                <InputField
-                    type="text"
-                    placeholder="Username"
-                    value={this.state.username ? this.state.username : ''}
-                    onChange={ (val) => this.setInputValue('username', val) }
-                />
-                <InputField
+                <div className="login-logo-container">
+				    <img className="login-logo" src={logoImg} />
+			    </div>
+                <div className="username-container">
+                    <InputField
+                       type="text"
+                       placeholder="Username"
+                       value={this.state.username ? this.state.username : ''}
+                       onChange={ (val) => this.setInputValue('username', val) }
+                    />
+                </div>
+                <div className="password-container">
+                    <InputField
                     type="password"
                     placeholder="Password"
                     value={this.state.password ? this.state.password : ''}
                     onChange={ (val) => this.setInputValue('password', val) }
-                />
-
-                <SubmitButton
+                    />
+                </div>
+                    <SubmitButton
                     text="Sign in"
                     disabled={this.state.buttonDisabled}
                     onClick={ () => this.doLogin() }
-                />
+                    />
             </div>
         );
     }
