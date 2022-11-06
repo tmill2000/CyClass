@@ -1,0 +1,38 @@
+.lfeed-container {
+	overflow-y: scroll;
+}
+
+.lfeed-feed {
+	padding: 1%;
+	display: flex;
+	flex-direction: column-reverse;
+	justify-content: flex-end;
+	gap: 6px;
+}
+
+.lfeed-post-container {
+	width: 60%;
+}
+
+.lfeed-post-timestamp {
+	margin: 6px 8px 3px 8px;
+	color: #888;
+	font-weight: lighter;
+}
+
+.lfeed-message-container {
+	width: fit-content;
+}
+
+.lfeed-message-text-container {
+	width: fit-content;
+	padding: 12px 15px;
+	border-radius: 15px;
+	filter: drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.07));
+}
+
+.lfeed-post-user-container {
+	margin-top: -7px;
+	margin-bottom: -7px;
+	padding: 0px 0px;
+}
