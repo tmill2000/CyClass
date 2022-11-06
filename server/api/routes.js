@@ -1,10 +1,10 @@
 const express = require('express')
 
 const health = require('./health/getHealthCheck');
-const user = require('./user/userInfo');
+const user = require('./user/router');
 const course = require('./course/router');
 const lecture = require('./lecture/router');
-const createUser = require('./createUser/router');
+
 const validateSession = require('../middleware/validateSession');
 
 const router = express.Router()
@@ -18,7 +18,7 @@ router.get('/logout', validateSession, user.logout);
 router.post('/login', user.login);
 router.post('/course', validateSession, course.addCourse);
 router.post('/lecture', validateSession, lecture.addLecture);
-router.post('/createUser', validateSession, createUser.addUser);
+router.post('/createUser', validateSession, user.addUser);
 
 //Delete Requests
 
