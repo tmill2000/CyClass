@@ -9,7 +9,7 @@ class LoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
+            netid: '',
             password: '',
             buttonDisabled: false
         }
@@ -27,14 +27,14 @@ class LoginForm extends React.Component {
 
     resetForm() {
         this.setState({
-            username: '',
+            netid: '',
             password: '',
             buttonDisabled: false
         })
     }
 
     async doLogin() {
-        if(!this.state.username){
+        if(!this.state.netid){
             return;
         }
         if(!this.state.password){
@@ -54,7 +54,7 @@ class LoginForm extends React.Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username: this.state.username,
+                    netid: this.state.netid,
                     password: this.state.password 
                 })
             });
@@ -62,7 +62,7 @@ class LoginForm extends React.Component {
             let result = await res.json();
             if(result && result.success) {
                 UserStore.isLoggedIn = true;
-                UserStore.username = result.username;
+                UserStore.netid = result.netid;
             }
 
             else if(result && result.success === false) {
@@ -88,8 +88,8 @@ class LoginForm extends React.Component {
                     <InputField
                        type="text"
                        placeholder="Username"
-                       value={this.state.username ? this.state.username : ''}
-                       onChange={ (val) => this.setInputValue('username', val) }
+                       value={this.state.netid ? this.state.netid : ''}
+                       onChange={ (val) => this.setInputValue('netid', val) }
                     />
                 </div>
                 <div className="password-container">
