@@ -6,9 +6,9 @@
 
  import React from "react";
  import { observer } from 'mobx-react';
- import UserStore from "../Login/stores/UserStore";
- import LoginForm from "../Login/LoginForm";
- import SubmitButton from "../Login/SubmitButton";
+ import UserStore from "./stores/UserStore";
+ import LoginForm from "./LoginForm";
+ import SubmitButton from "./SubmitButton";
 
  function Login(props) {
 	
