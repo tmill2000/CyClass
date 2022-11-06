@@ -31,7 +31,7 @@ body, html, .login, .container {
 	flex-grow: 1;
 	flex-basis: 10%;
 	overflow: hidden;
-  padding-top: 30px;
+  padding-top: 33px;
 }
 
 .login-logo {
@@ -46,6 +46,7 @@ body, html, .login, .container {
  outline: none;
  border: solid 2px #8B8888;
  border-radius: 4px;
+ border-width: thin;
  color: #292929;
  width: 298px;
  padding: 14px;
@@ -55,17 +56,28 @@ body, html, .login, .container {
 }
 
 .submitButton {
- padding-top: 35px;
+ padding-top: 32px;
 }
 
+.forgotPassword {
+  color: #0287C0;
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: lighter;
+}
+.forgotpassword-container {
+  padding-top: 4px;
+  text-align: left;
+  padding-left: 65px;
+}
 
 .submitBtn {
  width: 259px;
  height: 43px;
  color: #fff;
- padding: 15px;
- font-size: 14px;
- font-weight: bold;
+ font-size: 17px;
+ font-weight: normal;
  background: #0077B5;
  cursor: pointer;
  border: none;
