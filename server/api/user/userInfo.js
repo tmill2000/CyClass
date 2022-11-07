@@ -41,6 +41,9 @@ const getUserInfoByUserId = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { netId, password } = req.body;
+        if (!netId || !password) {
+            return res.status(400).send({ msg: "Invalid Body" })
+        }
         const query = 'SELECT * FROM users WHERE netid = ? AND password = ?';
         const rows = await runQuery(query, [netId, password]);
 
