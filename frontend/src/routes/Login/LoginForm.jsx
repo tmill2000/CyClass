@@ -48,7 +48,7 @@ class LoginForm extends React.Component {
         try {
 
             let res = await fetch('/login', {
-                method: 'post',
+                method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ class LoginForm extends React.Component {
                 this.resetForm();
                 alert(result.msg);
             }
-
+            console.log(UserStore.isLoggedIn);
         }
 
         catch(e) {
