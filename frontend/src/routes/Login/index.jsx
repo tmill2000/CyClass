@@ -28,7 +28,7 @@
 			if (result && result.success){
 				UserStore.loading = false;
 				UserStore.isLoggedIn = true;
-				UserStore.username = result.username;
+				UserStore.netid = result.netid;
 			}
 			else {
 				UserStore.loading = false;
@@ -59,7 +59,7 @@
 
 			if (result && result.success){
 				UserStore.isLoggedIn = false;
-				UserStore.username = '';
+				UserStore.netid = '';
 			}
 	
 		}
@@ -73,7 +73,7 @@
 		return (
 			<div className="login">
 				<div className="container">
-					Welcome {UserStore.username}
+					Welcome {UserStore.netid}
 
 					<SubmitButton
 						text={'Log out'}
