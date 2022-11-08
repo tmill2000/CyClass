@@ -47,6 +47,8 @@ paths:
                   user_id:
                     type: integer
                     example: 2
+        '403':
+          description: Invalid Session
         '404':
           description: Invalid Body
         '500':
@@ -84,6 +86,8 @@ paths:
                     example: twmiller@iastate.edu
         '400':
           description: Invalid Parameters
+        '403':
+          description: Invalid Session
         '500':
           description: Internal Server Error
   /user/login:
@@ -146,6 +150,8 @@ paths:
       responses:
         '200':
           description: Logged Out
+        '403':
+          description: Invalid Session
         '500':
           description: Internal Server Error
   /course:
@@ -183,6 +189,8 @@ paths:
                     example: 1
         '400':
           description: Invalid Body
+        '403':
+          description: Invalid Session
         '500':
           description: Internal Server Error
   /lecture:
@@ -219,6 +227,8 @@ paths:
                     example: 1
         '400':
           description: Invalid Body
+        '403':
+          description: Invalid Session
         '500':
           description: Internal Server Error
   /message:
@@ -264,6 +274,8 @@ paths:
                     example: 1
         '400':
           description: Invalid Body
+        '403':
+          description: Invalid Session
         '500':
           description: Internal Server Error
 components:
