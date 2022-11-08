@@ -134,7 +134,7 @@ paths:
     post:
       tags:
         - user
-      summary: logs given user into system
+      summary: logs given user out of system
       description: Logs user in, creates session, and returns session
       operationId: logout
       requestBody:
@@ -199,7 +199,7 @@ paths:
         - lecture
       summary: adds a new lecture to the system
       requestBody:
-        description: Create a new course in the system
+        description: Create a new lecture in the system
         content:
           application/json:
             schema:
@@ -235,9 +235,9 @@ paths:
     post:
       tags:
         - message
-      summary: adds a new lecture to the system
+      summary: adds a new message to the system
       requestBody:
-        description: Create a new course in the system
+        description: Create a new message in the system
         content:
           application/json:
             schema:
