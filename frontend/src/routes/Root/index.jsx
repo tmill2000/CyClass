@@ -9,13 +9,17 @@
  import Checkbox from "../../components/Checkbox/CheckboxWithLabel";
  import DateTimeStamp from "../../components/DateTime/DateTimeStamp";
 
+ import LiveLectureTitle from "../Lectures/LiveLectureTitle";
+ import LiveLectureLeftMenu from "../Lectures/LiveLectureLeftMenu";
+
  function Root(props) {
 	
 	return (
 		<div>
-			<h1>Title Text</h1>
-
-			<Button
+		<LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
+		<LiveLectureLeftMenu></LiveLectureLeftMenu>
+			{/* <h1>Title Text</h1> */}
+			{/* <Button
     			onClick={() => {
        				 console.log("This can be any function!");
     			}}
@@ -28,7 +32,7 @@
 
 			<Checkbox label="This is a test!" />
 
-			<DateTimeStamp></DateTimeStamp>
+			<DateTimeStamp></DateTimeStamp> */}
 			
 		</div>
 	);

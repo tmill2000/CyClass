@@ -1,0 +1,65 @@
+
+.filter-box {
+    background-color: rgb(224, 224, 224);
+    padding: 0;
+    margin: 0;
+    margin-top: 35px;
+    padding-bottom: 10px;
+}
+
+.filter-title-box {
+    display:inline-block;
+    background-color: white;
+    width: 100%;
+    padding-bottom: 15px;
+}
+
+.filter-img {
+    width:25px;
+    margin-top: 7px;
+    padding-top: 5px;
+    padding-left:10px;
+}
+
+.filter-title {
+    font-size: large;
+    padding-left: 15px;
+    padding-top: 0;
+    margin-top: 0;
+    color: rgb(75, 75, 75);
+    font-weight: bold;
+}
+
+.inner-filter-box{
+    background-color: rgb(224, 224, 224);
+    width: 100%;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.checkbox {
+    transform: scale(10);
+}
+
+.list-item-title-filter {
+    padding-left: 10px;
+    font-size: medium;
+    color: rgb(95, 90, 90);
+    padding-top: 0;
+    margin-top: 0;
+    padding-bottom: 5px;
+}
+
+.list-item-element-filter {
+    padding-left: 20px;
+    line-height: 15px;
+    padding-bottom: 10px;
+}
+
+.list-layout-filter{
+    margin: 0px;
+    list-style-type: none;
+    padding: 0;
+    padding-top: 10px;
+    margin-top: 10px;
+}
