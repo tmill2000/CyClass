@@ -12,7 +12,7 @@ const router = express.Router()
 
 //Get Requests
 router.get('/health', health.getHealthCheck);
-router.get('/userInfo', validateSession, user.getUserInfoByUserId);
+router.get('/user', validateSession, user.getUserInfoByUserId);
 router.get('/logout', validateSession, user.logout);
 
 //Post Requests
