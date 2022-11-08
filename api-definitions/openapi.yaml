@@ -9,7 +9,7 @@ info:
     email: miller.tyler094@gmail.com
   version: 1.0.0
 servers:
-  - url: https://sdmay23-40.ece.iastate.edu/api
+  - url: https://sdmay23-40.ece.iastate.edu:6000/api
 tags:
   - name: user
     description: User api routes
