@@ -13,9 +13,9 @@ const router = express.Router()
 //Get Requests
 router.get('/health', health.getHealthCheck);
 router.get('/user', validateSession, user.getUserInfoByUserId);
-router.get('/user/logout', validateSession, user.logout);
 
 //Post Requests
+router.post('/user/logout', validateSession, user.logout);
 router.post('/user/login', user.login);
 router.post('/course', validateSession, course.addCourse);
 router.post('/lecture', validateSession, lecture.addLecture);
