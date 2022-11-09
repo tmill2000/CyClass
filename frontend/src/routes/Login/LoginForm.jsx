@@ -47,7 +47,7 @@ class LoginForm extends React.Component {
 
         try {
 
-            let res = await fetch('http://localhost:2000/api/login', {
+            let res = await fetch('http://localhost:2000/api/user/login', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -55,7 +55,7 @@ class LoginForm extends React.Component {
                 },
                 mode: 'no-cors',
                 body: JSON.stringify({
-                    netid: this.state.netid,
+                    netId: this.state.netid,
                     password: this.state.password 
                 })
             });

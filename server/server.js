@@ -14,14 +14,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 app.use(cookieParser());
 
-app.use(sessions({
+
+  app.use(sessions({
   secret: process.env.SESSION_SECRET,
   saveUninitialized: true,
   cookie: { maxAge: 86400000 },
   resave: false
 }))
 
+
 app.use('/api', routes);
+app.use('/',express.static('../www'));
 
 
 const webSocketServer = new (require('ws')).Server({ noServer: true });

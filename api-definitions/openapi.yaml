@@ -1,0 +1,294 @@
+openapi: 3.0.3
+info:
+  title: sdmay23-40 Interactive Classroom Backend - OpenAPI 3.0
+  description: |-
+    These are the api documents for the sdmay23-40 backend
+    Some useful links:
+    - [sdmay23-40 repository](https://git.ece.iastate.edu/sd/sdmay23-40)
+  contact:
+    email: miller.tyler094@gmail.com
+  version: 1.0.0
+servers:
+  - url: https://sdmay23-40.ece.iastate.edu:6000/api
+tags:
+  - name: user
+    description: User api routes
+  - name: message
+    description: Message api routes
+  - name: course
+    description: course api routes
+  - name: lecture
+    description: lecture api routes
+  - name: poll
+    description: poll api routes
+paths:
+  /user:
+    post:
+      tags:
+        - user
+      summary: Add a new user to the system
+      description: Add a new user to the system
+      operationId: addUser
+      requestBody:
+        description: Create a new user in the system
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 2
+        '403':
+          description: Invalid Session
+        '404':
+          description: Invalid Body
+        '500':
+          description: Internal Server Error
+    get:
+      tags:
+        - user
+      summary: get user info
+      description: get a users info by their id
+      operationId: getUserInfo
+      parameters:
+        - in: query
+          required: true
+          name: id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                    example: 2
+                  email:
+                    type: string
+                    example: twmiller@iastate.edu
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: logs given user into system
+      description: Logs user in, creates session, and returns session
+      operationId: login
+      requestBody:
+        description: Create a new user in the system
+        content:
+          application/json:
+            schema:
+              properties:
+                netId:
+                  type: string
+                  example: twiller
+                password:
+                  type: string
+                  example: password
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                    example: 1
+                  sessionId:
+                    type: string
+                    example: kjsahfkdsjhksdGjsjfjdwkj
+        '400':
+          description: Invalid Body
+        '401':
+          description: Incorrect Username or Password
+        '500':
+          description: Internal Server Error
+  /user/logout:
+    post:
+      tags:
+        - user
+      summary: logs given user out of system
+      description: Logs user in, creates session, and returns session
+      operationId: logout
+      requestBody:
+        description: Create a new user in the system
+        content:
+          application/json:
+            schema:
+              properties:
+                session_id:
+                  type: string
+                  example: kjhfksdkjvhsdkjvhdskj
+        required: true
+      responses:
+        '200':
+          description: Logged Out
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+  /course:
+    post:
+      tags:
+        - course
+      summary: adds a new course to the system
+      operationId: Create a new course
+      requestBody:
+        description: Create a new course in the system
+        content:
+          application/json:
+            schema:
+              properties:
+                owner_id:
+                  type: integer
+                  example: 2
+                course_title:
+                  type: string
+                  example: Course 2
+                session_id:
+                  type: string
+                  example: kjhfksdkjvhsdkjvhdskj
+        required: true
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  course_id:
+                    type: integer
+                    example: 1
+        '400':
+          description: Invalid Body
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+  /lecture:
+    post:
+      tags:
+        - lecture
+      summary: adds a new lecture to the system
+      requestBody:
+        description: Create a new lecture in the system
+        content:
+          application/json:
+            schema:
+              properties:
+                course_id:
+                  type: integer
+                  example: 2
+                title:
+                  type: string
+                  example: Lecture 1
+                session_id:
+                  type: string
+                  example: kjhfksdkjvhsdkjvhdskj
+        required: true
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lecture_id:
+                    type: integer
+                    example: 1
+        '400':
+          description: Invalid Body
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+  /message:
+    post:
+      tags:
+        - message
+      summary: adds a new message to the system
+      requestBody:
+        description: Create a new message in the system
+        content:
+          application/json:
+            schema:
+              properties:
+                sender_id:
+                  type: integer
+                  example: 2
+                body:
+                  type: string
+                  example: This is a message
+                lecture_id:
+                  type: integer
+                  example: 1
+                is_anonymous:
+                  type: boolean
+                  example: false
+                parent_id:
+                  type: integer
+                  example: null
+                session_id:
+                  type: string
+                  example: kjhfksdkjvhsdkjvhdskj
+        required: true
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message_id:
+                    type: integer
+                    example: 1
+        '400':
+          description: Invalid Body
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        netid:
+          type: string
+          example: username
+        password:
+          type: string
+          example: password
+        session_id:
+          type: string
+          example: wejhgkashghakjshgkjashkjlgh43hk4jh
