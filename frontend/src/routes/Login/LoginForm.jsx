@@ -47,21 +47,18 @@ class LoginForm extends React.Component {
 
         try {
 
-            let res = await fetch('http://localhost:2000/api/user/login', {
+            const res = await fetch('/api/user/login', {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                mode: 'no-cors',
                 body: JSON.stringify({
                     netId: this.state.netid,
                     password: this.state.password 
                 })
             });
-
-            let result = await res.json();
-            if(result && result.success) {
+            const result = await res.json();
+            if(result?.sessionId) {
                 UserStore.isLoggedIn = true;
                 UserStore.netid = result.netid;
             }
@@ -74,7 +71,6 @@ class LoginForm extends React.Component {
         }
 
         catch(e) {
-            console.log(e);
             this.resetForm();
         }
     }
