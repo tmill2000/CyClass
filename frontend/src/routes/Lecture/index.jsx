@@ -4,27 +4,17 @@ import Button from "../../components/Button/Button";
 import Checkbox from "../../components/Checkbox/CheckboxWithLabel";
 import DateTimeStamp from "../../components/DateTime/DateTimeStamp";
 import LectureFeed from "../Lecture/LectureFeed";
+import LiveLectureTitle from "./LiveLectureTitle";
+import LiveLectureLeftMenu from "./LiveLectureLeftMenu";
 
-function Root(props) {
+
+function Lecture(props) {
 	
 	return (
 		<div>
-			<h1>Title Text</h1>
+            <LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
 
-			<Button
-				onClick={() => {
-						console.log("This can be any function!");
-				}}
-				type="button"
-				buttonStyle="btn--post--outline"
-				buttonSize="btn--large"
-			>
-			POST
-			</Button>
-
-			<Checkbox label="This is a test!" />
-
-			<DateTimeStamp></DateTimeStamp>
+            <LiveLectureLeftMenu></LiveLectureLeftMenu>
 
 			<LectureFeed style={{position: "absolute", inset: "120px 0px 200px 400px"}} />
 			
@@ -33,4 +23,4 @@ function Root(props) {
 
 }
 
-export default Root;
+export default Lecture;

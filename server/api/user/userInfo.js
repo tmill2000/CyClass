@@ -48,7 +48,7 @@ const login = async (req, res) => {
         const rows = await runQuery(query, [netId, password]);
 
         if (!rows) {
-            return res.status(200).send('Incorrect Username or Password')
+            return res.status(401).send({msg: 'Incorrect Username or Password'})
         }
         if (netId == rows[0]?.netid && password == rows[0]?.password) {
             session = req.session;

@@ -12,14 +12,14 @@ const router = express.Router()
 
 //Get Requests
 router.get('/health', health.getHealthCheck);
-router.get('/userInfo', validateSession, user.getUserInfoByUserId);
-router.get('/logout', validateSession, user.logout);
+router.get('/user', validateSession, user.getUserInfoByUserId);
 
 //Post Requests
-router.post('/login', user.login);
+router.post('/user/logout', validateSession, user.logout);
+router.post('/user/login', user.login);
 router.post('/course', validateSession, course.addCourse);
 router.post('/lecture', validateSession, lecture.addLecture);
-router.post('/createUser', validateSession, user.addUser);
+router.post('/user', validateSession, user.addUser);
 router.post('/message', validateSession, message.addMessage);
 
 //Delete Requests
