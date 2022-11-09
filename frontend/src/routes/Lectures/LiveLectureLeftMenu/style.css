@@ -1,7 +1,7 @@
 .left-menu-container {
     display: block;
     width: 13%;
-    height: 100vh;
+    height: calc(100vh - 140px);
     background-color: rgb(176, 176, 176);
     position: relative;
     padding-right: 0;
@@ -69,7 +69,7 @@
 }
 
 .buttons-LLLM {
-    padding-top: 75%;
+    padding-top: 40%;
     margin-top: auto;
     margin-bottom: 0;
     padding-right: 70%;
