@@ -1,5 +1,5 @@
 import React from "react";
-import "../../routes/Root/styles.css";
+import "./styles.css";
 
 const STYLES = [
     "btn--post--solid",
@@ -18,7 +18,7 @@ const STYLES = [
     "btn--exportToCSV--outline",
 ];
 
-const SIZES = ["btn--medium", "btn--large"];
+const SIZES = ["btn--small", "btn--medium", "btn--large"];
 
 const Button = ({ 
     children, 
