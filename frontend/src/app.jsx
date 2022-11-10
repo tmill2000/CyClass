@@ -11,11 +11,13 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } 
 import "./routes/Login/styles.css";
 
 import Root from "./routes/Root";
+import Lecture from "./routes/Lecture";
 
 // Create the router, defining all routes
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<Root />}>
+		<Route path="./Lecture" element={<Lecture />}></Route>
 			{/* any additional Routes should go here */}
 		</Route>
 	)

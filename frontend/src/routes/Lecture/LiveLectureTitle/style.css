@@ -1,0 +1,67 @@
+.live-lecture-outline {
+	display: inline-flex;
+    border: 1px;
+    border-color: black;
+    height: 80px;
+    background-color: white;
+	width: 100%;
+	display: flex;
+	position: relative;
+}
+
+.list-layout{
+    margin: 0px;
+    list-style-type: none;
+    padding: 0;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.list-layout1{
+    margin: 0px;
+    list-style-type: none;
+    padding: 0;
+    line-height: 2px;
+    padding-left: 5px;
+}
+
+.list-item {
+    margin: 0;
+    padding: 0;
+}
+.list-item1 {
+    margin: 0;
+    padding-top: 5px;
+}
+.list-item-title {
+    font-size: x-large;
+    font-weight: bolder;
+}
+
+.list-item-starttime {
+    font-size: small;
+    color: gray;
+}
+
+.title-section {
+    text-align: center;
+    align-items: center;
+    padding-left: 25%;
+}
+
+.host-by {
+    margin-top: 5px;
+    font-size: small;
+    padding-left: 8px;
+    color: gray;
+    font-weight: bold;
+}
+
+.button-section{
+    position: absolute;
+    right: 0px;
+    padding: 10px;
+    text-align: right;
+    color: white;
+    font-size: 15px;
+}
