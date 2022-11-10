@@ -22,6 +22,29 @@ app.use(sessions({
 }))
 
 app.use('/api', routes);
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, '../www/index.html'), function(err) {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+});
+app.get('/*', function(req, res) {
+  const filePath = path.join(__dirname, '../www', req.path);
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath, function(err) {
+      if (err) {
+        res.status(500).send(err)
+      }
+    })
+  } else {
+    res.sendFile(path.join(__dirname, '../www/index.html'), function(err) {
+      if (err) {
+        res.status(500).send(err)
+      }
+    })
+  }
+})
 
 
 const webSocketServer = new (require('ws')).Server({ noServer: true });
