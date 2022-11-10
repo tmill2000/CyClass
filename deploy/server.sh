@@ -5,7 +5,7 @@ git checkout master
 git pull origin master
 
 npm install --omit=dev
-npm run Build
+npm run build
 
 cd ../server
 # Build and deploy
