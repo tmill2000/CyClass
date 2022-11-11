@@ -4,7 +4,7 @@ cd ./sdmay23-40/frontend
 git checkout master
 git pull origin master
 ls
-npm ci --omit=dev
+npm ci
 npm run build
 
 cd ../server
