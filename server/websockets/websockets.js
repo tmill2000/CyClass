@@ -24,7 +24,7 @@ const handleRequest = (webSocket, req) => {
   console.log('connected user: ' + userId + ' to lecture: ' + lectureId);
 
   webSocket.on('message', (message) => {
-    const messageObj = JSON.parse(JSON.stringify(message))
+    const messageObj = JSON.parse(message)
     if(containsPortillos(JSON.stringify(messageObj))){
       return;
     }
