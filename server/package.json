@@ -6,7 +6,7 @@
   "scripts": {
     "start": "bash .bin/start_local.sh",
     "start:server": "bash .bin/start_server.sh",
-    "test": "npm run test",
+    "test": "jest test",
     "build:local": "bash .bin/build_docker.sh"
   },
   "repository": {

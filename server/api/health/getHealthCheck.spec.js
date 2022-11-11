@@ -3,7 +3,7 @@ const { getHealthCheck } = require('./getHealthCheck');
 const req = {};
 const res = {
     status: () => ({
-        send: jest.fn().mockResolvedValue({ message: 'OK' }),
+        send: jest.fn().mockResolvedValue({ status: 'UP' }),
     })
 };
 describe("getHealthCheck.js", () => {
