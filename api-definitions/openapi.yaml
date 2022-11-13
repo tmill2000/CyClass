@@ -278,8 +278,98 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
+  /message/messagesByLecture:
+    get:
+      tags:
+        - message
+      summary: gets all messages and polls for a lecture
+      description: gets all messages and polls for a lecture
+      operationId: getMessagesAndPollsByLectureId
+      parameters:
+        - in: query
+          required: true
+          name: lecture_id
+          schema:
+            type: string
+        - in: query
+          required: false
+          name: timestamp
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                  type: array
+                  items:
+                    anyOf:
+                      - $ref: '#/components/schemas/Message'
+                      - $ref: '#/components/schemas/Poll'
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+              
+
 components:
   schemas:
+    Message:
+      type: object
+      properties:
+        sender_id:
+          type: integer
+          example: 2
+        timestamp:
+          type: string
+          example: 2017-07-23 13:10:11
+        role: 
+          type: string
+          example: owner
+        netId:
+          type: string
+          example: twmiller
+        body: 
+          type: string
+          example: This is an example message
+        is_anonymous:
+          type: boolean
+          example: false
+        parent_id:
+          type: integer
+          example: 3 | null
+        message_id:
+          type: integer
+          example: 2
+    Poll:
+      type: object
+      properties:
+        poll_id:
+          type: integer
+          example: 2
+        timestamp:
+          type: string
+          example: 2017-07-23 13:10:11
+        question:
+          type: string
+          example: what is the speed of gravity?
+        choices:
+          type: array
+          items:
+            type: object
+            properties:
+              poll_choice_id:
+                type: integer
+                example: 1
+              text:
+                type: string
+                example: 9.82m/s^2
+              is_correct:
+                type: boolean
+                example: true
     User:
       type: object
       properties:
