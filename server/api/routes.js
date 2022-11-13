@@ -13,6 +13,7 @@ const router = express.Router()
 //Get Requests
 router.get('/health', health.getHealthCheck);
 router.get('/user', validateSession, user.getUserInfoByUserId);
+router.get('/message/messagesByLecture', validateSession, message.getMessagesAndPollsByLectureId)
 
 //Post Requests
 router.post('/user/logout', validateSession, user.logout);
