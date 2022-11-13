@@ -296,6 +296,11 @@ paths:
           name: timestamp
           schema:
             type: string
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
       responses:
         '200':
           description: Success
