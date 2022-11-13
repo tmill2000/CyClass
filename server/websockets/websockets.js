@@ -1,4 +1,5 @@
 const { containsPortillos } = require("../utils/removePortillos");
+const addMessage = require('./addMessage');
 
 const webSockets = new Map(); // userID: webSocket
 const lectures = new Map(); // lectureId: [ userId ]
@@ -26,6 +27,25 @@ const handleRequest = (webSocket, req) => {
   webSocket.on('message', (message) => {
     const messageObj = JSON.parse(message)
     if(containsPortillos(JSON.stringify(messageObj))){
+      return;
+    }
+    if(messageObj.type === 'message'){
+      const { 
+        sender_id: senderId, 
+        body,
+        is_anonymous: isAnonymous, 
+        lecture_id: lectureId, 
+        parent_id: parentId } = messageObj.payload;
+      addMessage(
+        senderId, 
+        body, 
+        isAnonymous, 
+        lectureId, 
+        parentId
+      );
+    } else if (messageObj.type === 'poll'){
+      // TODO
+    } else {
       return;
     }
     const users = lectures.get(lectureId);
