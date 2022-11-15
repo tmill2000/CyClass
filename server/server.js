@@ -59,8 +59,8 @@ webSocketServer.on('connection', websockets.handleRequest)
 const server = https
   .createServer(
     {
-      key: fs.readFileSync("server.key"),
-      cert: fs.readFileSync("server.cert"),
+      key: fs.readFileSync("/home/vm-user/ssl/sdmay23-40.key"),
+      cert: fs.readFileSync("/home/vm-user/ssl/sdmay23-40.cert"),
     },
     app
   )
