@@ -9,5 +9,4 @@ npm run build
 cd ../server
 # Build and deploy
 npm ci --omit=dev
-su gitlab-runner
-sudo /usr/bin/pm2 restart server.js -S
+sudo /usr/bin/pm2 restart server.js
