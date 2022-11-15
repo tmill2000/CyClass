@@ -64,7 +64,7 @@ const server = https
     },
     app
   )
-  .listen(3000, function () {
+  .listen(port, function () {
     console.log(`Server Listening on Port ${port}`);
   });
 
