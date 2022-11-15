@@ -9,4 +9,4 @@ npm run build
 cd ../server
 # Build and deploy
 npm ci --omit=dev
-/usr/bin/pm2 restart server.js
+sudo /usr/bin/pm2 restart server.js
