@@ -60,7 +60,7 @@ const server = https
   .createServer(
     {
       key: fs.readFileSync("/home/vm-user/ssl/sdmay23-40.key"),
-      cert: fs.readFileSync("/home/vm-user/ssl/sdmay23-40.cert"),
+      cert: fs.readFileSync("/home/vm-user/ssl/sdmay23-40.crt"),
     },
     app
   )
