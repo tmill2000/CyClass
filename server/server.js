@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const routes = require('./api/routes');
 const websockets = require('./websockets/websockets');
-const port = process.env.PORT || 2000;
+const port = process.env.PORT || 80;
 const path = require('path');
 const fs = require('fs');
 
