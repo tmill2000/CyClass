@@ -231,6 +231,47 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
+  /role:
+    post:
+      tags:
+        - role
+      summary: adds a new role to the system
+      requestBody:
+        description: Create a new role in the system
+        content:
+          application/json:
+            schema:
+              properties:
+                courseId:
+                  type: integer
+                  example: 2
+                userID:
+                  type: integer
+                  example: 2
+                role:
+                  type: string
+                  example: STUDENT/TA/PROFESSOR
+                session_id:
+                  type: string
+                  example: kjhfksdkjvhsdkjvhdskj
+        required: true
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rollID:
+                    type: integer
+                    example: 1
+        '400':
+          description: Invalid Body
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
   /message:
     post:
       tags:

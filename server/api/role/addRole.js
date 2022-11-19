@@ -8,7 +8,7 @@ const { runQuery } = require('../../utils/db_connection');
  *  role: enum('PROFESSOR', 'TA', 'STUDENT'),
  * }
  * @param {*} res 
- * @returns roll_id of created roll
+ * @returns rollID of created roll
  */
 const addRole = async (req, res) => {
     try {
@@ -18,7 +18,7 @@ const addRole = async (req, res) => {
         }
         const query = 'INSERT INTO roles (course_id, user_id, role) VALUES (?, ?, ?);';
         const resp = await runQuery(query, [courseId, userID, role]);
-        return res.status(201).send({ roll_id: resp.insertId });
+        return res.status(201).send({ rollID: resp.insertId });
     } catch (e) {
         console.error(e);
         return res.status(500).send({ msg: 'Internal Server Error' });
