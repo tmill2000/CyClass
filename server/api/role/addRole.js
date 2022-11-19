@@ -3,8 +3,8 @@ const { runQuery } = require('../../utils/db_connection');
 /**
  * @param {*} req 
  * req.body = {
- *  course_id: int,
- *  user_id: int,
+ *  courseID: int,
+ *  userID: int,
  *  role: enum('PROFESSOR', 'TA', 'STUDENT'),
  * }
  * @param {*} res 
@@ -12,7 +12,7 @@ const { runQuery } = require('../../utils/db_connection');
  */
 const addRole = async (req, res) => {
     try {
-        const { course_id: courseId, user_id: userID, role } = req.body;
+        const { courseId, userID, role } = req.body;
         if (!courseId || !userID || !['PROFESSOR', 'TA', 'STUDENT'].includes(role)) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
