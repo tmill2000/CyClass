@@ -67,10 +67,7 @@ class LoginForm extends React.Component {
             const result = await res.json();
             if(result?.sessionId) {
                 UserStore.isLoggedIn = true;
-                UserStore.netid = result.netid;
-
-                DataStore.set("userID", result.userId);
-                DataStore.set("sessionID", result.sessionId);
+                UserStore.netid = result.netid
             }
 
             else if(result && result.success === false) {

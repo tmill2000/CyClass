@@ -6,6 +6,8 @@
 
 import axios from "axios";
 
+import DataStore from "../data/DataStore";
+
 import defaultProfileImg from "../../components/ProfileIcon/profileIconIMG.jpg";
 
 const userDataCache = {}
@@ -16,8 +18,8 @@ const userDataCache = {}
 class UserAPI {
 
 	/**
-	 * Attempts a login using the given username and password. If successful, returned Promise will resolve to the
-	 * following:
+	 * Attempts a login using the given username and password. Will error if a user is already logged in. If successful,
+	 * returned Promise will resolve to the following:
 	 * - `accepted` - boolean if login was accepted
 	 * - `userID` - userID of user, if accepted
 	 * - `sessionID` - new sessionID, if accepted
@@ -27,19 +29,33 @@ class UserAPI {
 	 */
 	login(username, password) {
 
+		// Make sure no one is logged in
+		if (DataStore.get("sessionID") != null) {
+			throw new Error("User is already logged in");
+		}
+
 		// Perform login
 		return axios.post("/api/user/login", {
 				netId: username,
 				password: password
 			})
 			.then((res) => {
+
+				// Store
+				DataStore.set("userID", rres.data.userId);
+				DataStore.set("sessionID", rres.data.sessionId);
+
+				// Return formatted data
 				return {
 					accepted: true,
 					userID: res.data.userId,
 					sessionID: res.data.sessionId
 				};
+
 			})
 			.catch((err) => {
+
+				// Return rejection if due to invalid credentials
 				if (err.response?.status == 401) {
 					return {
 						accepted: false,
@@ -47,8 +63,11 @@ class UserAPI {
 						sessionID: null
 					};
 				}
+
+				// Otherwise, log and propogate
 				console.error("Failed to perform login request:", err);
 				throw err;
+
 			});
 
 	}

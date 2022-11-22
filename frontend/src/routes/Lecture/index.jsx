@@ -97,8 +97,7 @@ function Lecture(props) {
 			});
 
 			// Update version
-			lectureData.version++;
-			setDataVersion(lectureData.version);
+			setDataVersion(lectureData.version++);
 
 		});
 
