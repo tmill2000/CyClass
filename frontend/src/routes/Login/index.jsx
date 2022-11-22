@@ -9,6 +9,10 @@
  import UserStore from "./stores/UserStore";
  import LoginForm from "./LoginForm";
  import SubmitButton from "./SubmitButton";
+ 
+import { Link } from "react-router-dom";
+
+ import "./styles.css";
 
  function Login(props) {
 	
@@ -75,6 +79,12 @@
 				<div className="container">
 					Welcome {UserStore.netid}
 
+					<Link to="/lecture">
+						<SubmitButton
+							text={'Go to Lecture'}
+							disabled={false}
+						/>
+					</Link>
 					<SubmitButton
 						text={'Log out'}
 						disabled={false}

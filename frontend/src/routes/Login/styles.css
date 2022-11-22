@@ -1,13 +1,3 @@
-body, html, .login, .container {
-  width: 100%;
-  height: 100%;
-  background: #EAEAEA;
-}
-
-#root {
-  padding-top: 170px;
-}
-
 .loginForm {
  margin: auto;
  box-sizing: border-box;
@@ -82,4 +72,8 @@ body, html, .login, .container {
  cursor: pointer;
  border: none;
  border-radius: 30px;
+}
+
+.login {
+  padding: 5%
 }

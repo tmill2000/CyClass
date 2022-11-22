@@ -4,6 +4,8 @@ import SubmitButton from './SubmitButton';
 import UserStore from './stores/UserStore';
 import logoImg from "./ISULogo.png";
 
+import { redirect } from "react-router-dom";
+
 class LoginForm extends React.Component {
 
     constructor(props) {
@@ -61,6 +63,8 @@ class LoginForm extends React.Component {
             if(result?.sessionId) {
                 UserStore.isLoggedIn = true;
                 UserStore.netid = result.netid;
+
+                redirect("/lecture");
             }
 
             else if(result && result.success === false) {
