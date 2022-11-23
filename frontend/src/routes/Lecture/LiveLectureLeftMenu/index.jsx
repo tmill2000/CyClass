@@ -31,7 +31,7 @@ const LiveLectureLeftMenu = (props) => {
                 RAISE HAND</button>
             </div>
             <div className="post-LLLM">
-                <button className="button-LLLM-new-post">NEW POST</button>
+                <button className="button-LLLM-new-post">NEW POLL</button>
             </div>
         </div>
     );

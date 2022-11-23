@@ -16,7 +16,7 @@ function Lecture(props) {
 
             <LiveLectureLeftMenu></LiveLectureLeftMenu>
 
-			<LectureFeed style={{position: "absolute", inset: "120px 0px 200px 400px"}} />
+			<LectureFeed style={{position: "absolute", inset: "140px 0px 160px 220px"}} />
 			
 		</div>
 	);
