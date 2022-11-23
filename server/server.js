@@ -56,7 +56,9 @@ app.get('/*', function(req, res) {
 const webSocketServer = new (require('ws')).Server({ noServer: true });
 webSocketServer.on('connection', websockets.handleRequest)
 
-const server = https
+let server;
+if (port == 443) {
+  server = https
   .createServer(
     {
       key: fs.readFileSync("/home/vm-user/ssl/sdmay23-40.key"),
@@ -67,6 +69,11 @@ const server = https
   .listen(port, function () {
     console.log(`Server Listening on Port ${port}`);
   });
+} else {
+  server = app.listen(port, () => {
+    console.log(`Server Listening on Port ${port}`);
+  });
+}
 
 server.on('upgrade', (request, socket, head) => {
   webSocketServer.handleUpgrade(request, socket, head, socket => {
