@@ -4,7 +4,10 @@ import SubmitButton from './SubmitButton';
 import UserStore from './stores/UserStore';
 import logoImg from "./ISULogo.png";
 
-import { redirect } from "react-router-dom";
+import DataStore from '../../utilities/data/DataStore';
+import UserAPI from '../../utilities/api/UserAPI';
+
+const userAPI = new UserAPI();
 
 class LoginForm extends React.Component {
 
@@ -49,22 +52,22 @@ class LoginForm extends React.Component {
 
         try {
 
-            const res = await fetch('/api/user/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    netId: this.state.netid,
-                    password: this.state.password 
-                })
-            });
+            const res = await userAPI.login(this.state.netid, this.state.password);
+
+            // const res = await fetch('/api/user/login', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({
+            //         netId: this.state.netid,
+            //         password: this.state.password 
+            //     })
+            // });
             const result = await res.json();
             if(result?.sessionId) {
                 UserStore.isLoggedIn = true;
-                UserStore.netid = result.netid;
-
-                redirect("/lecture");
+                UserStore.netid = result.netid
             }
 
             else if(result && result.success === false) {
