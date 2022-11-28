@@ -14,7 +14,9 @@ const router = express.Router()
 router.get('/health', health.getHealthCheck);
 router.get('/user', validateSession, user.getUserInfoByUserId);
 router.get('/message/messagesByLecture', validateSession, message.getMessagesAndPollsByLectureId)
-
+router.get('/course', validateSession, course.getCourse)
+router.get('/message', validateSession, message.getMessage);
+router.get('/lecture', validateSession, lecture.getLecture);
 //Post Requests
 router.post('/user/logout', validateSession, user.logout);
 router.post('/user/login', user.login);
