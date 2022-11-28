@@ -63,10 +63,15 @@ class RegistrationForm extends React.Component {
                 <div className="registration-logo-container">
 				    <img className="registration-logo" src={logoImg} />
 			    </div>
+                <div className="text">
+                <p>
+                    Please enter your credentials below:
+                </p>
+                </div>
                 <div className="username-container">
                     <InputField
                        type="text"
-                       placeholder="Username"
+                       placeholder="Net ID"
                        value={this.state.netid ? this.state.netid : ''}
                        onChange={ (val) => this.setInputValue('netid', val) }
                     />
