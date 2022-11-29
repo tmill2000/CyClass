@@ -21,6 +21,9 @@ tags:
     description: lecture api routes
   - name: poll
     description: poll api routes
+  - name: role
+    description: role api routes
+  
 paths:
   /user:
     post:
@@ -312,6 +315,49 @@ paths:
         '500':
           description: Internal Server Error
   /role:
+    get:
+      tags:
+        - role
+      summary: get role info
+      description: get a roles info by their id
+      operationId: getRole
+      parameters:
+        - in: query
+          required: true
+          name: role_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role_id:
+                    type: integer
+                    example: 2
+                  course_id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 4
+                  role: 
+                    type: string 
+                    example: PROFESSOR | TA | STUDENT
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
     post:
       tags:
         - role
@@ -353,6 +399,53 @@ paths:
         '500':
           description: Internal Server Error
   /poll-response:
+    get:
+      tags:
+        - poll
+        - poll-response
+      summary: get poll-response info
+      description: get a poll-responses info by their id
+      operationId: getPollResponseInfo
+      parameters:
+        - in: query
+          required: true
+          name: poll_response_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  poll_response_id:
+                    type: integer
+                    example: 2
+                  user_id:
+                    type: integer
+                    example: 1
+                  response_id:
+                    type: integer
+                    example: 4
+                  poll_id: 
+                    type: integer 
+                    example: 5
+                  timestamp: 
+                    type: integer
+                    example: 21094832850
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
     post:
       tags:
         - poll-response
