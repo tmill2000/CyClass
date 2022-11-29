@@ -1,6 +1,6 @@
 const { runQuery } = require('../../utils/db_connection');
 
-import { addRole } from '../role/addRole';
+const { addRole } = require('../role/addRole');
 
 
 /**
