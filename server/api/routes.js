@@ -6,6 +6,7 @@ const course = require('./course/router');
 const lecture = require('./lecture/router');
 const message = require('./message/router');
 const role = require('./role/router');
+const poll = require('./poll/router');
 
 const validateSession = require('../middleware/validateSession');
 
@@ -26,6 +27,7 @@ router.post('/lecture', validateSession, lecture.addLecture);
 router.post('/user', validateSession, user.addUser);
 router.post('/message', validateSession, message.addMessage);
 router.post('/role', validateSession, role.addRole);
+router.post('/poll-response', validateSession, poll.addPollResponse);
 
 //Delete Requests
 
