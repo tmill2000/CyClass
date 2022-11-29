@@ -1,5 +1,15 @@
 const { runQuery } = require('../../utils/db_connection');
 
+/**
+ * @param {*} req
+ * req.body = {
+ *  choiceId: int,
+ *  userID: int,
+ *  pollId: int,
+ * }
+ * @param {*} res 
+ * @returns pollResponseID of created poll response
+ */
 const addPollResponse = async (req, res) => {
     try {
         const { choiceId, userID, pollId } = req.body;

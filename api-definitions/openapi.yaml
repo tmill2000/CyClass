@@ -235,7 +235,7 @@ paths:
     post:
       tags:
         - role
-      summary: adds a new role to the system
+      summary: Adds a new role to the system
       requestBody:
         description: Create a new role in the system
         content:
@@ -266,6 +266,48 @@ paths:
                   rollID:
                     type: integer
                     example: 1
+        '400':
+          description: Invalid Body
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+  /poll-response:
+    post:
+      tags:
+        - poll-response
+        - poll
+      summary: Adds a new poll-response to the system
+      requestBody:
+        description: Create a new poll-response in the system
+        content:
+          application/json:
+            schema:
+              properties:
+                choiceId:
+                  type: integer
+                  example: 44
+                userID:
+                  type: integer
+                  example: 88
+                pollId:
+                  type: string
+                  example: 91
+                session_id:
+                  type: string
+                  example: kjhfksdkjvhsdkjvhdskj
+        required: true
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pollResponseID:
+                    type: integer
+                    example: 24
         '400':
           description: Invalid Body
         '403':
