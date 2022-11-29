@@ -155,6 +155,46 @@ paths:
         '500':
           description: Internal Server Error
   /course:
+    get:
+      tags:
+        - course
+      summary: get course info
+      description: get a courses info by their id
+      operationId: getCourseInfo
+      parameters:
+        - in: query
+          required: true
+          name: course_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  course_id:
+                    type: integer
+                    example: 2
+                  owner_id:
+                    type: integer
+                    example: 1
+                  course_name:
+                    type: string
+                    example: EE 201
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
     post:
       tags:
         - course
@@ -194,6 +234,46 @@ paths:
         '500':
           description: Internal Server Error
   /lecture:
+    get:
+      tags:
+        - lecture
+      summary: get Lecture info
+      description: get a Lectures info by their id
+      operationId: getLectureInfo
+      parameters:
+        - in: query
+          required: true
+          name: lecture_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lecture_id:
+                    type: integer
+                    example: 2
+                  course_id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: Lecture 15
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
     post:
       tags:
         - lecture
@@ -315,6 +395,58 @@ paths:
         '500':
           description: Internal Server Error
   /message:
+    get:
+      tags:
+        - message
+      summary: get message info
+      description: get a messages info by their id
+      operationId: getMessageInfo
+      parameters:
+        - in: query
+          required: true
+          name: message_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message_id:
+                    type: integer
+                    example: 2
+                  parent_id:
+                    type: integer
+                    example: 1 | null
+                  sender_id:
+                    type: integer
+                    example: 4
+                  lecture_id: 
+                    type: integer 
+                    example: 3
+                  timestamp:
+                    type: integer
+                    example: 14209584209509
+                  is_anonymous:
+                    type: boolean
+                    example: true
+                  body: 
+                    type: string
+                    example: 'Hello everyone!'
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
     post:
       tags:
         - message
@@ -401,7 +533,6 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
-              
 
 components:
   schemas:
