@@ -19,6 +19,8 @@ router.get('/message/messagesByLecture', validateSession, message.getMessagesAnd
 router.get('/course', validateSession, course.getCourse)
 router.get('/message', validateSession, message.getMessage);
 router.get('/lecture', validateSession, lecture.getLecture);
+router.get('/poll-response', validateSession, poll.getPollResponse);
+router.get('/role', validateSession, role.getRole)
 //Post Requests
 router.post('/user/logout', validateSession, user.logout);
 router.post('/user/login', user.login);

@@ -32,5 +32,5 @@ const getRole = async (req, res) => {
 }
 
 module.exports = {
-    getPollResponse,
+    getRole,
 }
