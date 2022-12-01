@@ -68,6 +68,8 @@ CREATE TABLE poll_responses (
     FOREIGN KEY (response_id) REFERENCES poll_choices(poll_choice_id)
 );
 
+SET GLOBAL time_zone = 'UTC';
+
 INSERT INTO courses (course_id, owner_id, course_name) VALUES ('1', '1', 'Lib 160');
 INSERT INTO courses (course_id, owner_id, course_name) VALUES ('2', '2', 'CPRE 491');
 
