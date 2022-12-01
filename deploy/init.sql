@@ -67,4 +67,6 @@ CREATE TABLE poll_responses (
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (response_id) REFERENCES poll_choices(poll_choice_id)
 );
+
+SET GLOBAL time_zone = 'UTC';
 INSERT INTO users (netid, password) VALUES ('twmiller', 'pw');
