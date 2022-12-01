@@ -37,6 +37,15 @@ function Lecture(props) {
 
 	}
 
+	// Make new API instance, clearing previous state if API still exists for a different lecture (for some reason)
+	if (lectureAPI != null && lectureAPI.getLectureID() != lectureID) {
+		lectureAPI.closeLive();
+		lectureAPI = null;
+	}
+	if (lectureAPI == null && lectureID != null) {
+		lectureAPI = new LiveLectureAPI(lectureID);
+	}
+
 	// Define lecture data and data version state
 	let lectureData = lectureID != null ? lectureDataMap[lectureID] : null;
 	if (lectureData == null) {
@@ -53,58 +62,56 @@ function Lecture(props) {
 	// Add effect for setting up API connection
 	useEffect(() => {
 
-		// Start by clearing previous state (API clean-up is mostly a sanity check)
-		if (lectureAPI != null) {
-			lectureAPI.closeLive();
-			lectureAPI = null;
-		}
-
 		// Stop here if invalid lecture
 		if (lectureID == null) {
 			return;
 		}
 
-		// Create API instance and bind to events
-		const meUserID = DataStore.get("userID");
-		lectureAPI = new LiveLectureAPI(lectureID);
-		lectureAPI.onLiveClose((event) => {
+		// If not live, then bind to events and go live
+		if (!lectureAPI.isLive()) {
 
-			// Check if unexpected
-			if (event.dueToError) {
+			// Bind to events
+			lectureAPI.onLiveClose((event) => {
 
-				// TODO:  display some sort of error
+				// Check if unexpected
+				if (event.dueToError) {
 
-			}
+					// TODO:  display some sort of error
 
-		});
-		lectureAPI.onMessage(async (event) => {
+				}
 
-			// Fetch user data (unless null)
-			const userData = event.userID != null ? await userAPI.getUserData(event.userID) : {	
-				name: "?",
-				role: "?"
-			};
+			});
+			const meUserID = DataStore.get("userID");
+			lectureAPI.onMessage(async (event) => {
 
-			// Add to messages array
-			lectureData.messages.push({
-				user: {
-					id: event.userID,
-					name: userData.name,
-					role: userData.role
-				},
-				me: event.userID == meUserID,
-				text: event.body,
-				time: event.timestamp
+				// Fetch user data (unless null)
+				const userData = event.userID != null ? await userAPI.getUserData(event.userID) : {	
+					name: "?",
+					role: "?"
+				};
+
+				// Add to messages array
+				lectureData.messages.push({
+					user: {
+						id: event.userID,
+						name: userData.name,
+						role: userData.role
+					},
+					me: event.userID == meUserID,
+					text: event.body,
+					time: event.timestamp
+				});
+
+				// Update version
+				setDataVersion(lectureData.version++);
+
 			});
 
-			// Update version
-			setDataVersion(lectureData.version++);
+			// Begin accepting messages
+			lectureAPI.fetchHistory();
+			lectureAPI.openLive();
 
-		});
-
-		// Begin accepting messages
-		lectureAPI.fetchHistory();
-		lectureAPI.openLive();
+		}
 
 		// Clean up upon page leave / new lecture
 		return () => {
