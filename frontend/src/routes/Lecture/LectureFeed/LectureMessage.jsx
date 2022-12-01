@@ -5,6 +5,7 @@
  */
 
 import React from "react";
+import { useEffect } from "react";
 
 import ProfileIcon from "../../../components/ProfileIcon";
 
@@ -16,9 +17,11 @@ function pmod(x, y) {
 
 function LectureMessage(props) {
 
-	// Relative time text generation
+	// Check if time was specified
 	let timeText;
 	if (props.time != null) {
+
+		// Generate time string
 		const date = new Date();
 		date.setTime(props.time);
 		const timeStr = `${pmod(date.getHours() - 1, 12) + 1}:${date.getMinutes().toString().padStart(2, "0")}${(date.getHours() < 12) ? "am" : "pm"}`;
@@ -35,6 +38,7 @@ function LectureMessage(props) {
 		} else {
 			timeText = timeStr + " • " + dateStr;
 		}
+
 	}
 
 	// Dynamic style

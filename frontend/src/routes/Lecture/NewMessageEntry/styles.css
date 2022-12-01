@@ -1,0 +1,29 @@
+.lme-container {
+	height: 50%;
+	max-height: 200px;
+	flex-grow: 0;
+}
+
+.lme-line {
+	height: 1px;
+	width: calc(100% - 40px);
+	margin-left: 20px;
+	background-color: #d5d5d5;
+}
+
+.lme-textbox {
+	width: calc(100% - 115px);
+	height: calc(100% - 110px);
+	margin: 20px 40px 0px 40px;
+	padding: 12px;
+	resize: none;
+	border: 2px solid gray;
+	border-radius: 10px;
+}
+
+.lme-buttonarea {
+	width: calc(100% - 120px);
+	margin: -10px 60px 0px 60px;
+	display: flex;
+	flex-direction: row-reverse;
+}

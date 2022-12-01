@@ -42,8 +42,8 @@ class UserAPI {
 			.then((res) => {
 
 				// Store
-				DataStore.set("userID", rres.data.userId);
-				DataStore.set("sessionID", rres.data.sessionId);
+				DataStore.set("userID", res.data.userId);
+				DataStore.set("sessionID", res.data.sessionId);
 
 				// Return formatted data
 				return {

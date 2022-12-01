@@ -7,7 +7,8 @@ import UserAPI from "../../utilities/api/UserAPI";
 import Button from "../../components/Button/Button";
 import Checkbox from "../../components/Checkbox/CheckboxWithLabel";
 import DateTimeStamp from "../../components/DateTime/DateTimeStamp";
-import LectureFeed from "../Lecture/LectureFeed";
+import LectureFeed from "./LectureFeed";
+import NewMessageEntry from "./NewMessageEntry";
 import LiveLectureTitle from "./LiveLectureTitle";
 import LiveLectureLeftMenu from "./LiveLectureLeftMenu";
 
@@ -118,9 +119,13 @@ function Lecture(props) {
 		<div>
             <LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
 
-            <LiveLectureLeftMenu></LiveLectureLeftMenu>
-
-			<LectureFeed messages={lectureData.messages} style={{position: "absolute", inset: "140px 0px 160px 220px"}} />
+			<div style={{ display: "flex" }}>
+            	<LiveLectureLeftMenu />
+				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
+					<LectureFeed messages={lectureData.messages} />
+					<NewMessageEntry api={lectureAPI} />
+				</div>
+			</div>
 			
 		</div>
 	);
