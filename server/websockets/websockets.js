@@ -50,9 +50,6 @@ const handleRequest = (webSocket, req) => {
     }
     const users = lectures.get(lectureId);
     users.forEach((user) => {
-      if (user === userId) {
-        return;
-      }
       const toUserWebSocket = webSockets.get(user);
       if (toUserWebSocket) {
         toUserWebSocket.send(JSON.stringify(messageObj))

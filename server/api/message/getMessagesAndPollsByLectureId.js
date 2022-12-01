@@ -58,7 +58,7 @@ const getMessagesAndPollsByLectureId = async (req, res) => {
     for( const [key, value] of pollMap){
         formattedPolls.push({
             poll_id: key,
-            timestamp: new Date(value[0].timestamp).getTime(),
+            timestamp: new Date(value[0].timestamp).getUTCMilliseconds(),
             question: value[0].question_text,
             choices: value.map((item) => ({
                 poll_choice_id: item.poll_choice_id,

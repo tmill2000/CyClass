@@ -24,7 +24,7 @@ const getMessage = async (req, res) => {
             parent_id: resp[0].parent_id,
             sender_id: resp[0].sender_id,
             lecture_id: resp[0].lecture_id,
-            timestamp: new Date(resp[0].timestamp).getTime(),
+            timestamp: new Date(resp[0].timestamp).getUTCMilliseconds(),
             is_anonymous: resp[0].is_anonymous,
             body: resp[0].body
         });
