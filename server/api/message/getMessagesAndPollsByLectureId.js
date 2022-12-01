@@ -26,7 +26,7 @@ const getMessagesAndPollsByLectureId = async (req, res) => {
     const messages = await runQuery(query, options);
     const formattedMessages = messages.map((value) => ({
         sender_id: value.sender_id,
-        timestamp: new Date(new Date(value[0].timestamp).toUTCString()).getTime(),
+        timestamp: new Date(value.timestamp).getTime(),
         role: value.role,
         netid: value.netid,
         body: value.body,
@@ -58,7 +58,7 @@ const getMessagesAndPollsByLectureId = async (req, res) => {
     for( const [key, value] of pollMap){
         formattedPolls.push({
             poll_id: key,
-            timestamp: new Date(new Date(value[0].timestamp).toUTCString()).getTime(),
+            timestamp: new Date(value[0].timestamp).getTime(),
             question: value[0].question_text,
             choices: value.map((item) => ({
                 poll_choice_id: item.poll_choice_id,
