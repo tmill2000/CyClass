@@ -26,7 +26,7 @@ const getMessagesAndPollsByLectureId = async (req, res) => {
     const messages = await runQuery(query, options);
     const formattedMessages = messages.map((value) => ({
         sender_id: value.sender_id,
-        timestamp: new Date(value.timestamp).getTime(),
+        timestamp: new Date(value.timestamp).getUTCMilliseconds(),
         role: value.role,
         netid: value.netid,
         body: value.body,
