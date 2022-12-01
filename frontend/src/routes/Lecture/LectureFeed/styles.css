@@ -1,12 +1,15 @@
 .lfeed-container {
 	overflow-y: scroll;
+	width: 100%;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column-reverse;
 }
 
 .lfeed-feed {
 	padding: 1%;
 	display: flex;
 	flex-direction: column-reverse;
-	justify-content: flex-end;
 	gap: 6px;
 }
 

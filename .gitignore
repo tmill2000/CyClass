@@ -1,6 +1,8 @@
 node_modules/
 .idea
 .env
+server.cert
+server.key
 
 # Frontend Build
 /www/bundle.js

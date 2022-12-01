@@ -9,7 +9,7 @@ info:
     email: miller.tyler094@gmail.com
   version: 1.0.0
 servers:
-  - url: https://sdmay23-40.ece.iastate.edu:6000/api
+  - url: https://sdmay23-40.ece.iastate.edu/api
 tags:
   - name: user
     description: User api routes
@@ -21,6 +21,9 @@ tags:
     description: lecture api routes
   - name: poll
     description: poll api routes
+  - name: role
+    description: role api routes
+  
 paths:
   /user:
     post:
@@ -155,6 +158,46 @@ paths:
         '500':
           description: Internal Server Error
   /course:
+    get:
+      tags:
+        - course
+      summary: get course info
+      description: get a courses info by their id
+      operationId: getCourseInfo
+      parameters:
+        - in: query
+          required: true
+          name: course_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  course_id:
+                    type: integer
+                    example: 2
+                  owner_id:
+                    type: integer
+                    example: 1
+                  course_name:
+                    type: string
+                    example: EE 201
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
     post:
       tags:
         - course
@@ -194,6 +237,46 @@ paths:
         '500':
           description: Internal Server Error
   /lecture:
+    get:
+      tags:
+        - lecture
+      summary: get Lecture info
+      description: get a Lectures info by their id
+      operationId: getLectureInfo
+      parameters:
+        - in: query
+          required: true
+          name: lecture_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lecture_id:
+                    type: integer
+                    example: 2
+                  course_id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: Lecture 15
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
     post:
       tags:
         - lecture
@@ -231,7 +314,232 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
+  /role:
+    get:
+      tags:
+        - role
+      summary: get role info
+      description: get a roles info by their id
+      operationId: getRole
+      parameters:
+        - in: query
+          required: true
+          name: role_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role_id:
+                    type: integer
+                    example: 2
+                  course_id:
+                    type: integer
+                    example: 1
+                  user_id:
+                    type: integer
+                    example: 4
+                  role: 
+                    type: string 
+                    example: PROFESSOR | TA | STUDENT
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+    post:
+      tags:
+        - role
+      summary: Adds a new role to the system
+      requestBody:
+        description: Create a new role in the system
+        content:
+          application/json:
+            schema:
+              properties:
+                courseId:
+                  type: integer
+                  example: 2
+                userID:
+                  type: integer
+                  example: 2
+                role:
+                  type: string
+                  example: STUDENT/TA/PROFESSOR
+                session_id:
+                  type: string
+                  example: kjhfksdkjvhsdkjvhdskj
+        required: true
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rollID:
+                    type: integer
+                    example: 1
+        '400':
+          description: Invalid Body
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+  /poll-response:
+    get:
+      tags:
+        - poll
+        - poll-response
+      summary: get poll-response info
+      description: get a poll-responses info by their id
+      operationId: getPollResponseInfo
+      parameters:
+        - in: query
+          required: true
+          name: poll_response_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  poll_response_id:
+                    type: integer
+                    example: 2
+                  user_id:
+                    type: integer
+                    example: 1
+                  response_id:
+                    type: integer
+                    example: 4
+                  poll_id: 
+                    type: integer 
+                    example: 5
+                  timestamp: 
+                    type: integer
+                    example: 21094832850
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+    post:
+      tags:
+        - poll-response
+        - poll
+      summary: Adds a new poll-response to the system
+      requestBody:
+        description: Create a new poll-response in the system
+        content:
+          application/json:
+            schema:
+              properties:
+                choiceId:
+                  type: integer
+                  example: 44
+                userID:
+                  type: integer
+                  example: 88
+                pollId:
+                  type: string
+                  example: 91
+                session_id:
+                  type: string
+                  example: kjhfksdkjvhsdkjvhdskj
+        required: true
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pollResponseID:
+                    type: integer
+                    example: 24
+        '400':
+          description: Invalid Body
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
   /message:
+    get:
+      tags:
+        - message
+      summary: get message info
+      description: get a messages info by their id
+      operationId: getMessageInfo
+      parameters:
+        - in: query
+          required: true
+          name: message_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: session_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message_id:
+                    type: integer
+                    example: 2
+                  parent_id:
+                    type: integer
+                    example: 1 | null
+                  sender_id:
+                    type: integer
+                    example: 4
+                  lecture_id: 
+                    type: integer 
+                    example: 3
+                  timestamp:
+                    type: integer
+                    example: 14209584209509
+                  is_anonymous:
+                    type: boolean
+                    example: true
+                  body: 
+                    type: string
+                    example: 'Hello everyone!'
+        '400':
+          description: Invalid Parameters
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
     post:
       tags:
         - message
@@ -318,7 +626,6 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
-              
 
 components:
   schemas:
