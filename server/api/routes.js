@@ -7,6 +7,7 @@ const lecture = require('./lecture/router');
 const message = require('./message/router');
 const role = require('./role/router');
 const poll = require('./poll/router');
+const media = require('./media/router');
 
 const validateSession = require('../middleware/validateSession');
 
@@ -30,6 +31,7 @@ router.post('/user', validateSession, user.addUser);
 router.post('/message', validateSession, message.addMessage);
 router.post('/role', validateSession, role.addRole);
 router.post('/poll-response', validateSession, poll.addPollResponse);
+router.post('/upload-media', validateSession, media.uploadMedia);
 
 //Delete Requests
 
