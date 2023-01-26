@@ -33,12 +33,15 @@ const mediaQuery = `INSERT INTO media_metadata ( media_id, course_id, message_id
  */
 const addMessage = async (req, res) => {
     try {
-        const { sender_id: senderId, body, is_anonymous: isAnonymous, lecture_id: lectureId, course_id: courseId, parent_id: parentID, has_media: hasMedia = false } = req.body;
-
-        console.log(senderId);
-        console.log(body);
-        console.log(isAnonymous);
-        console.log(lectureId);
+        const { 
+            sender_id: senderId, 
+            body, 
+            is_anonymous: isAnonymous, 
+            lecture_id: lectureId, 
+            course_id: courseId, 
+            parent_id: parentID, 
+            has_media: hasMedia = false 
+        } = req.body;
 
         if (!senderId || !body || !(typeof isAnonymous === "boolean") || !lectureId) {
             return res.status(400).send({ msg: "Invalid Body" })
