@@ -1,4 +1,5 @@
-const express = require('express')
+const express = require('express');
+const bodyParser = require('body-parser');
 
 const health = require('./health/getHealthCheck');
 const user = require('./user/router');
@@ -32,6 +33,7 @@ router.post('/message', validateSession, message.addMessage);
 router.post('/role', validateSession, role.addRole);
 router.post('/poll-response', validateSession, poll.addPollResponse);
 router.post('/upload-media', validateSession, media.uploadMedia);
+router.post('/upload-media-test', validateSession, bodyParser.raw({ type: ['image/jpeg', 'image/png'], limit: '5mb' }), media.uploadMedia);
 
 //Delete Requests
 

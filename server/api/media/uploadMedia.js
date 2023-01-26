@@ -8,7 +8,7 @@
  * @returns guid of uploaded media
  */
 const uploadMedia = async (req, res) => {
-    console.log("req received", req);
+    console.log("img", req.body);
     return res.status(200).send({ guid: 'guid goes here' });
 }
 
