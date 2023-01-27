@@ -131,8 +131,20 @@ const addMessage = async (senderId, body, isAnonymous, lectureId, parentID) => {
     }
 }
 
+const addMediaMetadata = async (mediaID, courseID, msgID) => {
+    try {
+        const mediaQuery = `INSERT INTO media_metadata ( media_id, course_id, message_id, timestamp ) VALUES ( ?, ?, ?, NOW());`;
+        const resp = await runQuery(mediaQuery, [mediaID, courseID, msgID]);
+        return resp.insertId;
+    } catch (e) {
+        console.error(e);
+        throw e
+    }
+}
+
 module.exports = {
     getMessage,
     getMessagesAndPollsByLectureId,
-    addMessage
+    addMessage,
+    addMediaMetadata
 }

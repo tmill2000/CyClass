@@ -1,17 +1,6 @@
-const messageService = require('./services/messageService')
+const { v4 } = require('uuid');
 
-const msgQuery = `INSERT INTO messages (
-    sender_id, 
-    lecture_id, 
-    timestamp, 
-    is_anonymous, 
-    body,
-    parent_id) VALUES
-    (
-        ?, ?, NOW(), ?, ?, ?
-    );`;
-
-const mediaQuery = `INSERT INTO media_metadata ( media_id, course_id, message_id, timestamp ) VALUES ( ?, ?, ?, NOW());`;
+const messageService = require('./services/messageService');
 
 /**
  * 
@@ -23,26 +12,39 @@ const mediaQuery = `INSERT INTO media_metadata ( media_id, course_id, message_id
  *    course_id: int, (REQUIRED FOR MEDIA)
  *    is_anonymous: bool
  *    parent_id: <optional>int
- *    session_id: int
  *    has_media: bool
  * }
  * @param {*} res 
- * @returns message_id of created message
+ * @returns messageId of created message & mediaId of where to post media to
  */
 const addMessage = async (req, res) => {
     try {
-        const { sender_id: senderId, body, is_anonymous: isAnonymous, lecture_id: lectureId, parent_id: parentID } = req.body;
-        if (!senderId || !body || !lectureId) {
+        const { 
+            sender_id: senderId,
+            body,
+            is_anonymous: isAnonymous = false,
+            lecture_id: lectureId,
+            parent_id: parentID,
+            course_id: courseID,
+            has_media: hasMedia = false,
+        } = req.body;
+        if (!senderId || !body || !lectureId || (hasMedia && !courseID)) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-        const insertId = await messageService.addMessage(
+        const msgInsertId = await messageService.addMessage(
             senderId,
             body,
             !!isAnonymous,
             lectureId,
             parentID ?? null,
         );
-        return res.status(201).send({ messageId: insertId })
+
+        let mediaInsertId;
+        if (hasMedia) {
+            mediaInsertId = await messageService.addMediaMetadata(v4(), courseID, msgInsertId);
+        }
+
+        return res.status(201).send({ messageId: msgInsertId, mediaId: mediaInsertId })
     } catch (e){
         console.error(e);
         return res.status(500).send({ msg: 'Internal Server Error' })
