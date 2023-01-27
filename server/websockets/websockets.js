@@ -36,13 +36,14 @@ const handleRequest = (webSocket, req) => {
         is_anonymous: isAnonymous, 
         lecture_id: lectureId, 
         parent_id: parentId } = messageObj.payload;
-      addMessage(
+      const insertId = addMessage(
         senderId, 
         body, 
         isAnonymous, 
         lectureId, 
         parentId
       );
+      messageObj.payload.message_id = insertId
     } else if (messageObj.type === 'poll'){
       // TODO
     } else {

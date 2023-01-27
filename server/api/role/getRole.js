@@ -1,4 +1,4 @@
-const { runQuery } = require('../../utils/db_connection');
+const roleService = require('./services/roleService');
 
 
 /**
@@ -14,11 +14,10 @@ const { runQuery } = require('../../utils/db_connection');
 const getRole = async (req, res) => {
     try {
         const {  role_id: roleId } = req.query;
-        if (!courseId) {
+        if (!roleId) {
             return res.status(400).send({ msg: "No role_id Provided" })
         }
-        const query = 'SELECT * from roles WHERE role_id = ?;';
-        const resp = await runQuery(query, [roleId]);
+        const resp = await roleService.getRole(roleId)
         return res.status(200).send({ 
             role_id: resp[0].role_id,
             course_id: resp[0].course_id,

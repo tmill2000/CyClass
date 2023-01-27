@@ -1,5 +1,4 @@
-const { runQuery } = require('../../utils/db_connection');
-
+const messageService = require('./services/messageService')
 
 /**
  * Function to get a course
@@ -13,18 +12,17 @@ const { runQuery } = require('../../utils/db_connection');
  */
 const getMessage = async (req, res) => {
     try {
-        const {  lecture_id: lectureId } = req.query;
-        if (!courseId) {
+        const {  message_id: messageId } = req.query;
+        if (!messageId) {
             return res.status(400).send({ msg: "No message_id Provided" })
         }
-        const query = 'SELECT * from messages WHERE message_id = ?;';
-        const resp = await runQuery(query, [lectureId]);
+        const resp = await messageService.getMessage(messageId)
         return res.status(200).send({ 
             message_id: resp[0].message_id,
             parent_id: resp[0].parent_id,
             sender_id: resp[0].sender_id,
             lecture_id: resp[0].lecture_id,
-            timestamp: new Date(new Date(value[0].timestamp).toUTCString()).getTime(),
+            timestamp: new Date(resp[0].timestamp).getTime(),
             is_anonymous: resp[0].is_anonymous,
             body: resp[0].body
         });

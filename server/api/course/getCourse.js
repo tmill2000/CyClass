@@ -1,4 +1,4 @@
-const { runQuery } = require('../../utils/db_connection');
+const courseService = require('./services/courseService')
 
 
 /**
@@ -18,7 +18,7 @@ const getCourse = async (req, res) => {
             return res.status(400).send({ msg: "No course_id Provided" })
         }
         const query = 'SELECT * from courses WHERE course_id = ?;';
-        const resp = await runQuery(query, [courseId]);
+        const resp = await courseService.getCourse(courseId);
         return res.status(200).send({ 
             course_id: resp[0].course_id,
             owner_id: resp[0].owner_id,

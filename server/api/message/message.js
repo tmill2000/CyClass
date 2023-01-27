@@ -1,4 +1,4 @@
-const { runQuery } = require('../../utils/db_connection');
+const messageService = require('./services/messageService')
 
 /**
  * 
@@ -17,27 +17,17 @@ const { runQuery } = require('../../utils/db_connection');
 const addMessage = async (req, res) => {
     try {
         const { sender_id: senderId, body, is_anonymous: isAnonymous, lecture_id: lectureId, parent_id: parentID } = req.body;
-        if (!senderId || !body || !isAnonymous || !lectureId) {
+        if (!senderId || !body || !lectureId) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-        const query = `INSERT INTO messages (
-            sender_id, 
-            lecture_id, 
-            timestamp, 
-            is_anonymous, 
-            body,
-            parent_id) VALUES
-            (
-                ?, ?, NOW(), ?, ?, ?
-            );`
-        const resp = await runQuery(query, [
+        const insertId = await messageService.addMessage(
             senderId,
-            lectureId,
-            isAnonymous,
             body,
+            !!isAnonymous,
+            lectureId,
             parentID ?? null,
-        ]);
-        return res.status(201).send({ message_id: resp.insertId })
+        );
+        return res.status(201).send({ messageId: insertId })
     } catch (e){
         console.error(e);
         return res.status(500).send({ msg: 'Internal Server Error' })

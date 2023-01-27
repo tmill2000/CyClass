@@ -18,13 +18,14 @@ module.exports = async (
         (
             ?, ?, NOW(), ?, ?, ?
         );`
-        await runQuery(query, [
+        const res = await runQuery(query, [
             senderId,
             lectureId,
             isAnonymous,
             body,
             parentId ?? null,
         ]);
+        return res.insertId
     } catch (e) {
         console.error(e);
     }

@@ -1,4 +1,4 @@
-const { runQuery } = require('../../utils/db_connection');
+const lectureService = require('./services/lectureService')
 
 /**
  * @param {*} req 
@@ -16,9 +16,8 @@ const addLecture = async (req, res) => {
         if (!courseId || !title) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-        const query = 'INSERT INTO lectures (course_id, title) VALUES (?, ?);';
-        const resp = await runQuery(query, [courseId, title]);
-        return res.status(201).send({ lecture_id: resp.insertId });
+        const insertId = await lectureService.addLecture(courseId, title);
+        return res.status(201).send({ lecture_id: insertId });
     } catch (e) {
         console.error(e);
         return res.status(500).send({ msg: 'Internal Server Error' });
