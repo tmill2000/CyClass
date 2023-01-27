@@ -1,4 +1,5 @@
 const { runQuery } = require('../../utils/db_connection');
+const pollResponseService = require('./services/pollResponseService')
 
 /**
  * @param {*} req
@@ -16,9 +17,8 @@ const addPollResponse = async (req, res) => {
         if (!choiceId || !userID || !pollId) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-        const query = 'INSERT INTO poll_responses (response_id, user_id, poll_id) VALUES (?, ?, ?);';
-        const resp = await runQuery(query, [choiceId, userID, pollId]);
-        return res.status(201).send({ pollResponseID: resp.insertId });
+        const insertId = await pollResponseService.addPollResponse(choiceId, userID, pollId)
+        return res.status(201).send({ pollResponseID: insertId });
     } catch (e) {
         console.error(e);
         return res.status(500).send({ msg: 'Internal Server Error' });

@@ -32,6 +32,12 @@ paths:
       summary: Add a new user to the system
       description: Add a new user to the system
       operationId: addUser
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
       requestBody:
         description: Create a new user in the system
         content:
@@ -68,11 +74,11 @@ paths:
           name: id
           schema:
             type: integer
-        - in: query
-          required: true
-          name: session_id
+        - in: header
+          name: x-session-id
           schema:
             type: string
+          required: true
       responses:
         '200':
           description: Success
@@ -127,6 +133,19 @@ paths:
                   sessionId:
                     type: string
                     example: kjsahfkdsjhksdGjsjfjdwkj
+                  userRoles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        role_id:
+                          type: number
+                        course_id:
+                          type: number
+                        course_name:
+                          type: string
+                        role:
+                          type: string
         '400':
           description: Invalid Body
         '401':
@@ -138,18 +157,13 @@ paths:
       tags:
         - user
       summary: logs given user out of system
-      description: Logs user in, creates session, and returns session
       operationId: logout
-      requestBody:
-        description: Create a new user in the system
-        content:
-          application/json:
-            schema:
-              properties:
-                session_id:
-                  type: string
-                  example: kjhfksdkjvhsdkjvhdskj
-        required: true
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           description: Logged Out
@@ -170,11 +184,11 @@ paths:
           name: course_id
           schema:
             type: integer
-        - in: query
-          required: true
-          name: session_id
+        - in: header
+          name: x-session-id
           schema:
             type: string
+          required: true
       responses:
         '200':
           description: Success
@@ -203,6 +217,12 @@ paths:
         - course
       summary: adds a new course to the system
       operationId: Create a new course
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
       requestBody:
         description: Create a new course in the system
         content:
@@ -215,9 +235,6 @@ paths:
                 course_title:
                   type: string
                   example: Course 2
-                session_id:
-                  type: string
-                  example: kjhfksdkjvhsdkjvhdskj
         required: true
       responses:
         '201':
@@ -249,11 +266,11 @@ paths:
           name: lecture_id
           schema:
             type: integer
-        - in: query
-          required: true
-          name: session_id
+        - in: header
+          name: x-session-id
           schema:
             type: string
+          required: true
       responses:
         '200':
           description: Success
@@ -281,6 +298,12 @@ paths:
       tags:
         - lecture
       summary: adds a new lecture to the system
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
       requestBody:
         description: Create a new lecture in the system
         content:
@@ -293,9 +316,6 @@ paths:
                 title:
                   type: string
                   example: Lecture 1
-                session_id:
-                  type: string
-                  example: kjhfksdkjvhsdkjvhdskj
         required: true
       responses:
         '201':
@@ -327,11 +347,11 @@ paths:
           name: role_id
           schema:
             type: integer
-        - in: query
-          required: true
-          name: session_id
+        - in: header
+          name: x-session-id
           schema:
             type: string
+          required: true
       responses:
         '200':
           description: Success
@@ -362,6 +382,12 @@ paths:
       tags:
         - role
       summary: Adds a new role to the system
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
       requestBody:
         description: Create a new role in the system
         content:
@@ -377,9 +403,6 @@ paths:
                 role:
                   type: string
                   example: STUDENT/TA/PROFESSOR
-                session_id:
-                  type: string
-                  example: kjhfksdkjvhsdkjvhdskj
         required: true
       responses:
         '201':
@@ -412,11 +435,11 @@ paths:
           name: poll_response_id
           schema:
             type: integer
-        - in: query
-          required: true
-          name: session_id
+        - in: header
+          name: x-session-id
           schema:
             type: string
+          required: true
       responses:
         '200':
           description: Success
@@ -451,6 +474,12 @@ paths:
         - poll-response
         - poll
       summary: Adds a new poll-response to the system
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
       requestBody:
         description: Create a new poll-response in the system
         content:
@@ -466,9 +495,6 @@ paths:
                 pollId:
                   type: string
                   example: 91
-                session_id:
-                  type: string
-                  example: kjhfksdkjvhsdkjvhdskj
         required: true
       responses:
         '201':
@@ -500,11 +526,11 @@ paths:
           name: message_id
           schema:
             type: integer
-        - in: query
-          required: true
-          name: session_id
+        - in: header
+          name: x-session-id
           schema:
             type: string
+          required: true
       responses:
         '200':
           description: Success
@@ -604,11 +630,11 @@ paths:
           name: timestamp
           schema:
             type: string
-        - in: query
-          required: true
-          name: session_id
+        - in: header
+          name: x-session-id
           schema:
             type: string
+          required: true
       responses:
         '200':
           description: Success
@@ -691,6 +717,3 @@ components:
         password:
           type: string
           example: password
-        session_id:
-          type: string
-          example: wejhgkashghakjshgkjashkjlgh43hk4jh

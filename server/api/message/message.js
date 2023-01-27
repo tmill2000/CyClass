@@ -1,6 +1,4 @@
-const { v4 } = require('uuid');
-
-const { runQuery } = require('../../utils/db_connection');
+const messageService = require('./services/messageService')
 
 const msgQuery = `INSERT INTO messages (
     sender_id, 
@@ -33,40 +31,18 @@ const mediaQuery = `INSERT INTO media_metadata ( media_id, course_id, message_id
  */
 const addMessage = async (req, res) => {
     try {
-        const { 
-            sender_id: senderId, 
-            body, 
-            is_anonymous: isAnonymous, 
-            lecture_id: lectureId, 
-            course_id: courseId, 
-            parent_id: parentID, 
-            has_media: hasMedia = false 
-        } = req.body;
-
-        if (!senderId || !body || !(typeof isAnonymous === "boolean") || !lectureId) {
+        const { sender_id: senderId, body, is_anonymous: isAnonymous, lecture_id: lectureId, parent_id: parentID } = req.body;
+        if (!senderId || !body || !lectureId) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-
-        const msgQueryResp = await runQuery(msgQuery, [
+        const insertId = await messageService.addMessage(
             senderId,
-            lectureId,
-            isAnonymous,
             body,
+            !!isAnonymous,
+            lectureId,
             parentID ?? null,
-        ]);
-
-        let mediaQueryResp;
-        const mediaGUID = v4();
-        if (hasMedia) {
-            mediaQueryResp = await runQuery(mediaQuery, [
-                mediaGUID,
-                courseId,
-                msgQueryResp.insertId
-            ]);
-        }
-
-        return res.status(201).send({ message_id: msgQueryResp.insertId, media_id: mediaQueryResp.insertId });
-
+        );
+        return res.status(201).send({ messageId: insertId })
     } catch (e){
         console.error(e);
         return res.status(500).send({ msg: 'Internal Server Error' })
