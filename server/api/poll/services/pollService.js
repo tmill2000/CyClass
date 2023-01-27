@@ -28,7 +28,7 @@ const addPoll = async (senderId, lectureId, questionText, pollChoices) => {
         for (pollChoice of pollChoices) {
             const { choice_text: choiceText, is_correct_choice: isCorrectChoice } = pollChoice
             const query = `INSERT INTO poll_choices (poll_id, choice_text, is_correct_choice) VALUES ( ?, ?, ?);`
-            const choiceId = await runQuery(query, [pollId, choiceText, isCorrectChoice]);
+            const choiceId = await runQuery(query, [pollId, choiceText, !!isCorrectChoice]);
             choiceIds.push(choiceId);
         }
         return {
