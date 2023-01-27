@@ -30,6 +30,7 @@ router.post('/user', validateSession, user.addUser);
 router.post('/message', validateSession, message.addMessage);
 router.post('/role', validateSession, role.addRole);
 router.post('/poll-response', validateSession, poll.addPollResponse);
+router.post('/poll', validateSession, poll.addPoll);
 
 //Delete Requests
 
