@@ -1,4 +1,4 @@
-const { runQuery } = require('../../utils/db_connection');
+const pollResponseService = require('./services/pollResponseService')
 
 
 /**
@@ -14,11 +14,10 @@ const { runQuery } = require('../../utils/db_connection');
 const getPollResponse = async (req, res) => {
     try {
         const {  poll_response_id: pollResponseId } = req.query;
-        if (!courseId) {
+        if (!pollResponseId) {
             return res.status(400).send({ msg: "No poll_response_id Provided" })
         }
-        const query = 'SELECT * from poll_responses WHERE poll_response_id = ?;';
-        const resp = await runQuery(query, [pollResponseId]);
+        const resp = await pollResponseService.getPollResponse(pollResponseId)
         return res.status(200).send({ 
             poll_response_id: resp[0].poll_response_id,
             user_id: resp[0].user_id,

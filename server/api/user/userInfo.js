@@ -1,4 +1,5 @@
-const { runQuery } = require('../../utils/db_connection');
+const roleService = require('../role/services/roleService');
+const userService = require('./services/userService')
 const crypto = require('crypto');
 
 /**
@@ -14,8 +15,7 @@ const getUserInfoByUserId = async (req, res) => {
         if (!userId) {
             return res.status(400).send({ msg: 'Invalid Parameters' })
         }
-        const query = 'SELECT * FROM users WHERE user_id = ?';
-        const rows = await runQuery(query, [userId]);
+        const rows = await userService.getUserInfoByUserId(userId)
         if (!rows?.length) {
             return res.status(200).send({ msg: 'No user found' });
         }
@@ -44,18 +44,18 @@ const login = async (req, res) => {
         if (!netId || !password) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-        const query = 'SELECT * FROM users WHERE netid = ? AND password = ?';
-        const rows = await runQuery(query, [netId, password]);
-
+        const rows = await userService.loginInfo(netId, password)
         if (!rows) {
             return res.status(401).send({msg: 'Incorrect Username or Password'})
         }
         if (netId == rows[0]?.netid && password == rows[0]?.password) {
             session = req.session;
-            session.userid = rows[0].netid;
+            session.userid = rows[0].user_id;
             session.netId = netId;
-            session.id = crypto.randomBytes(16).toString('base64');
-            res.status(200).send({ userId: rows[0].user_id, sessionId: session.id });
+            session.sessionId = crypto.randomBytes(16).toString('base64');
+            const roles = await roleService.getCourseRolesByUser(session.userid)
+            session.user_roles = roles
+            res.status(200).send({ userId: rows[0].user_id, sessionId: session.sessionId, userRoles: roles });
         }
         else {
             res.send({ msg: 'Incorrect username or password' });
