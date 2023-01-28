@@ -21,6 +21,7 @@ router.get('/message/messagesByLecture', validateSession, message.getMessagesAnd
 router.get('/course', validateSession, course.getCourse)
 router.get('/message', validateSession, message.getMessage);
 router.get('/lecture', validateSession, lecture.getLecture);
+router.get('/lecture/live', validateSession, lecture.isLectureLive);
 router.get('/poll-response', validateSession, poll.getPollResponse);
 router.get('/role', validateSession, role.getRole)
 //Post Requests
@@ -32,8 +33,8 @@ router.post('/user', validateSession, user.addUser);
 router.post('/message', validateSession, message.addMessage);
 router.post('/role', validateSession, role.addRole);
 router.post('/poll-response', validateSession, poll.addPollResponse);
-router.post('/upload-media', validateSession, media.uploadMedia);
-router.post('/upload-media-test', validateSession, bodyParser.raw({ type: ['image/jpeg', 'image/png'], limit: '5mb' }), media.uploadMedia); //TODO: Very vulnerable to malicious files
+router.post('/upload-media', validateSession, bodyParser.raw({ type: ['image/jpeg', 'image/png'], limit: '5mb' }), media.uploadMedia); //TODO: Very vulnerable to malicious files
+router.post('/poll', validateSession, poll.addPoll);
 
 //Delete Requests
 
