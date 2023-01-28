@@ -131,10 +131,10 @@ const addMessage = async (senderId, body, isAnonymous, lectureId, parentID) => {
     }
 }
 
-const addMediaMetadata = async (mediaID, courseID, msgID) => {
+const addMediaMetadata = async (mediaID, courseID, userID, msgID) => {
     try {
-        const mediaQuery = `INSERT INTO media_metadata ( media_id, course_id, message_id, timestamp ) VALUES ( ?, ?, ?, NOW());`;
-        const resp = await runQuery(mediaQuery, [mediaID, courseID, msgID]);
+        const mediaQuery = `INSERT INTO media_metadata ( media_id, course_id, user_id, message_id, timestamp ) VALUES ( ?, ?, ?, ?, NOW());`;
+        const resp = await runQuery(mediaQuery, [mediaID, courseID, userID, msgID]);
         return resp.insertId;
     } catch (e) {
         console.error(e);

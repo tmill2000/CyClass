@@ -72,6 +72,7 @@ CREATE TABLE media_metadata (
     media_id varchar(36) PRIMARY KEY,
     course_id int NOT NULL,
     message_id int NOT NULL,
+    user_id int NOT NULL,
     timestamp datetime NOT NULL,
 )
 
