@@ -1,4 +1,5 @@
 const lectureService = require('./services/lectureService')
+const { lectures } = require('../../websockets/websockets')
 
 
 /**
@@ -29,6 +30,16 @@ const getLecture = async (req, res) => {
     }
 }
 
+const isLectureLive = async (req, res) => {
+    try {
+        const { lecture_id: lectureId } = req.query;
+        return res.status(200).send({ lectureId, live: lectures.has(Number(lectureId)) })
+    } catch (e) {
+        res.status(500).send({ msg: 'Internal Server Error' })
+    }
+}
+
 module.exports = {
     getLecture,
+    isLectureLive
 }

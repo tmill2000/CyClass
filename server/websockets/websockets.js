@@ -70,5 +70,6 @@ const handleRequest = (webSocket, req) => {
 }
 
 module.exports = {
-  handleRequest
+  handleRequest,
+  lectures,
 }

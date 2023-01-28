@@ -334,6 +334,39 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
+  /lecture/live:
+    get:
+      tags:
+        - lecture
+      summary: get Lecture live status
+      operationId: isLectureLive
+      parameters:
+        - in: query
+          required: true
+          name: lecture_id
+          schema:
+            type: integer
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lecture_id:
+                    type: integer
+                    example: 2
+                  live:
+                    type: boolean
+        '500':
+          description: Internal Server Error
+
   /role:
     get:
       tags:
