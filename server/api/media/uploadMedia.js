@@ -10,7 +10,7 @@ const mediaService = require('./services/mediaService');
  * @param {*} res 
  * @returns guid of uploaded media
  */
-const uploadMedia = async (req, res) => { // TODO: wrap in try/catch
+const uploadMedia = async (req, res) => { //TODO: Add open-api spec
     try {
         const {
             media_id: mediaID,

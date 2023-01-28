@@ -16,7 +16,7 @@ const messageService = require('./services/messageService');
  * @param {*} res 
  * @returns messageId of created message & mediaId of where to post media to
  */
-const addMessage = async (req, res) => {
+const addMessage = async (req, res) => { //TODO: Update open-api spec
     try {
         const {
             body,
