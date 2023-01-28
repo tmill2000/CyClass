@@ -4,21 +4,21 @@ const fs = require('fs');
  * @param {*} req 
  * req.body = {
  *    course_id: int,
- *    message_id: int,
  *    media_id: String
  * }
  * @param {*} res 
  * @returns guid of uploaded media
  */
 const uploadMedia = async (req, res) => {
-    console.log("img", req.body);
-
     const {
         course_id: courseID,
-        message_id: messageID,
         media_id: mediaID,
-    } = req.body;
-    const dir = `../../../../sdmay23-40_media/${courseID}`;
+    } = req.query;
+    const dir = `../../sdmay23-40_media/${courseID}`;
+
+    if (!courseID || !mediaID) {
+        return res.status(400).send({ msg: "Invalid Body" });
+    }
 
     // TODO: add guid check from metadata here
 
@@ -27,16 +27,14 @@ const uploadMedia = async (req, res) => {
     }
 
     try {
-        fs.writeFile(`${mediaID}.jpeg`, req.body, (error) => { //not sure how handle file extension yet
-          if (error) {
-            throw error;
-          }
+        fs.writeFile(`${dir}/${mediaID}.png`, req.body, (error) => { //not sure how handle file extension yet
+            if (error) {
+                throw error;
+            }
         });
-  
-        res.sendStatus(200);
-      } catch (error) {
+    } catch (error) {
         res.sendStatus(500);
-      }
+    }
 
     return res.status(200).send({ guid: 'guid goes here' });
 }
