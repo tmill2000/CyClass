@@ -135,7 +135,7 @@ const addMediaMetadata = async (mediaID, courseID, userID, msgID) => {
     try {
         const mediaQuery = `INSERT INTO media_metadata ( media_id, course_id, user_id, message_id, timestamp ) VALUES ( ?, ?, ?, ?, NOW());`;
         const resp = await runQuery(mediaQuery, [mediaID, courseID, userID, msgID]);
-        return resp.insertId;
+        return mediaID;
     } catch (e) {
         console.error(e);
         throw e
