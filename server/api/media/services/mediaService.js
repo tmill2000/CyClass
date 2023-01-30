@@ -15,6 +15,18 @@ const authUpload = async (mediaID) => {
     }
 }
 
+const markMediaReceived = async (mediaID) => {
+    try {
+        const query = 'UPDATE media_metadata SET received = true WHERE media_id = ?;';
+        const resp = await runQuery(query, [mediaID]);
+        return resp
+    } catch (e) {
+        console.error(e);
+        throw e
+    }
+}
+
 module.exports = {
-    authUpload
+    authUpload,
+    markMediaReceived
 }
