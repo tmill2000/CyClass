@@ -68,6 +68,14 @@ CREATE TABLE poll_responses (
     FOREIGN KEY (response_id) REFERENCES poll_choices(poll_choice_id)
 );
 
+CREATE TABLE media_metadata (
+    media_id varchar(36) PRIMARY KEY,
+    course_id int NOT NULL,
+    message_id int NOT NULL,
+    user_id int NOT NULL,
+    timestamp datetime NOT NULL
+);
+
 SET GLOBAL time_zone = 'UTC';
 
 INSERT INTO courses (course_id, owner_id, course_name) VALUES ('1', '1', 'Lib 160');

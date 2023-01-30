@@ -1,4 +1,5 @@
-const express = require('express')
+const express = require('express');
+const bodyParser = require('body-parser');
 
 const health = require('./health/getHealthCheck');
 const user = require('./user/router');
@@ -7,6 +8,7 @@ const lecture = require('./lecture/router');
 const message = require('./message/router');
 const role = require('./role/router');
 const poll = require('./poll/router');
+const media = require('./media/router');
 
 const validateSession = require('../middleware/validateSession');
 
@@ -31,6 +33,7 @@ router.post('/user', validateSession, user.addUser);
 router.post('/message', validateSession, message.addMessage);
 router.post('/role', validateSession, role.addRole);
 router.post('/poll-response', validateSession, poll.addPollResponse);
+router.post('/upload-media', validateSession, bodyParser.raw({ type: ['image/jpeg', 'image/png'], limit: '5mb' }), media.uploadMedia); //TODO: Very vulnerable to malicious files
 router.post('/poll', validateSession, poll.addPoll);
 
 //Delete Requests
