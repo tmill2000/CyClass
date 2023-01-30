@@ -73,6 +73,7 @@ CREATE TABLE media_metadata (
     course_id int NOT NULL,
     message_id int NOT NULL,
     user_id int NOT NULL,
+    received boolean NOT NULL,
     timestamp datetime NOT NULL
 );
 
