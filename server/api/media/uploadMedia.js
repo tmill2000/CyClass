@@ -24,7 +24,7 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
         const { course_id: courseID, user_id: userID } = response[0];
 
         if (userID !== req.session.userid) {
-            return res.status(403).send({ msg: "Forbidden to upload file to this mediaID", usersUserID: userID, sessionID: req.session.userid, courseID });
+            return res.status(403).send({ msg: "Forbidden to upload file to this mediaID" });
         }
 
         const dir = `../../sdmay23-40_media/${courseID}`;
@@ -39,7 +39,7 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
             }
         });
 
-        return res.status(200).send({ guid: 'guid goes here' });
+        return res.status(200).send({ msg: 'Image successfully saved' });
     } catch (e) {
         console.error(e);
         return res.status(500).send({ msg: 'Internal Server Error' });
