@@ -21,9 +21,9 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
         }
 
         const response = await mediaService.authUpload(mediaID);
-        const { course_id: courseID, user_id: userID } = response[0];
+        const { course_id: courseID, user_id: userID, received } = response[0];
 
-        if (userID !== req.session.userid) {
+        if (userID !== req.session.userid || !received) {
             return res.status(403).send({ msg: "Forbidden to upload file to this mediaID" });
         }
 
@@ -38,6 +38,8 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
                 throw error;
             }
         });
+
+        await mediaService.markMediaReceived(mediaID);
 
         return res.status(200).send({ msg: 'Image successfully saved' });
     } catch (e) {
