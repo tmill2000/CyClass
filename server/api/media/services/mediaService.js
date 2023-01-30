@@ -6,7 +6,7 @@ const { runQuery } = require('../../../utils/db_connection');
  */
 const authUpload = async (mediaID) => {
     try {
-        const query = 'SELECT course_id, user_id FROM media_metadata WHERE media_id = \'?\'';
+        const query = 'SELECT course_id, user_id FROM media_metadata WHERE media_id = ?';
         const resp = await runQuery(query, [mediaID]);
         return resp
     } catch (e) {
