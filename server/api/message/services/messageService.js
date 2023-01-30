@@ -133,8 +133,8 @@ const addMessage = async (senderId, body, isAnonymous, lectureId, parentID) => {
 
 const addMediaMetadata = async (mediaID, courseID, userID, msgID) => {
     try {
-        const mediaQuery = `INSERT INTO media_metadata ( media_id, course_id, user_id, message_id, timestamp ) VALUES ( ?, ?, ?, ?, NOW());`;
-        const resp = await runQuery(mediaQuery, [mediaID, courseID, userID, msgID]);
+        const mediaQuery = `INSERT INTO media_metadata ( media_id, course_id, user_id, message_id, received, timestamp ) VALUES ( ?, ?, ?, ?, ?, NOW());`;
+        await runQuery(mediaQuery, [mediaID, courseID, userID, msgID, false]);
         return mediaID;
     } catch (e) {
         console.error(e);
