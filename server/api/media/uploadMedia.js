@@ -7,6 +7,9 @@ const mediaService = require('./services/mediaService');
  * req.body = {
  *    media_id: String
  * }
+ * req.headers = {
+ *    Content-Type must be set to correct image MIME type
+ * }
  * @param {*} res 
  * @returns guid of uploaded media
  */
@@ -15,6 +18,8 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
         const {
             media_id: mediaID,
         } = req.query;
+
+        const fileType = req.get('Content-Type').split('/')[1];
 
         if (!mediaID) {
             return res.status(400).send({ msg: "Invalid Body" });
@@ -33,13 +38,13 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
             fs.mkdirSync(dir, { recursive: true }); 
         }
 
-        fs.writeFile(`${dir}/${mediaID}.png`, req.body, (error) => { //TODO: correctly handle file extension
+        fs.writeFile(`${dir}/${mediaID}.${fileType}`, req.body, (error) => {
             if (error) {
                 throw error;
             }
         });
 
-        await mediaService.markMediaReceived(mediaID);
+        await mediaService.updateMediaMetadataOnReceived(mediaID, fileType);
 
         return res.status(200).send({ msg: 'Image successfully saved' });
     } catch (e) {

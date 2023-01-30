@@ -6,6 +6,7 @@ const downloadMedia = async (req, res) => { //TODO: Add open-api spec
             media_id: mediaID,
         } = req.query;
 
+        // TODO: check if requester has access to course associated with media
         
     } catch (e) {
         console.error(e);
