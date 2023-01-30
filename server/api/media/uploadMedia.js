@@ -23,8 +23,8 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
         const response = await mediaService.authUpload(mediaID);
         const { course_id: courseID, user_id: userID, received } = response[0];
 
-        if (userID !== req.session.userid || !received) {
-            return res.status(403).send({ msg: "Forbidden to upload file to this mediaID", received });
+        if (userID !== req.session.userid || received) {
+            return res.status(403).send({ msg: "Forbidden to upload file to this mediaID" });
         }
 
         const dir = `../../sdmay23-40_media/${courseID}`;
