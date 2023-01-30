@@ -20,7 +20,7 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
             return res.status(400).send({ msg: "Invalid Body" });
         }
     
-        const { course_id: courseID, user_id: userID } = mediaService.authUpload(mediaID);
+        const { course_id: courseID, user_id: userID } = await mediaService.authUpload(mediaID);
     
         if (userID !== req.session.userid) {
             return res.status(403).send({ msg: "Forbidden to upload file to this mediaID", usersUserID: userID, sessionID: req.session.userid });
