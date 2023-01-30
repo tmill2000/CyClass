@@ -24,6 +24,7 @@ router.get('/lecture', validateSession, lecture.getLecture);
 router.get('/lecture/live', validateSession, lecture.isLectureLive);
 router.get('/poll-response', validateSession, poll.getPollResponse);
 router.get('/role', validateSession, role.getRole)
+router.get('/download-media', validateSession, media.downloadMedia)
 //Post Requests
 router.post('/user/logout', validateSession, user.logout);
 router.post('/user/login', user.login);
