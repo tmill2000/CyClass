@@ -33,7 +33,7 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
             fs.mkdirSync(dir, { recursive: true }); 
         }
 
-        fs.writeFile(`${dir}/${mediaID}.png`, req.body, (error) => { //not sure how handle file extension yet
+        fs.writeFile(`${dir}/${mediaID}.png`, req.body, (error) => { //TODO: correctly handle file extension
             if (error) {
                 throw error;
             }
