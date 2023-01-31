@@ -19,10 +19,14 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
             media_id: mediaID,
         } = req.query;
 
-        const fileType = req.get('Content-Type').split('/')[1];
-
         if (!mediaID) {
             return res.status(400).send({ msg: "Invalid Body" });
+        }
+
+        const fileType = req.get('Content-Type')?.split('/')[1];
+
+        if (!["png", "jpg", "jpeg"].includes(fileType)) {
+            return res.status(400).send({ msg: "Missing valid Content-Type header" });
         }
 
         const response = await mediaService.authUpload(mediaID);
