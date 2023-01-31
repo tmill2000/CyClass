@@ -27,7 +27,7 @@ const downloadMedia = async (req, res) => { //TODO: Add open-api spec
             }
         };
 
-        res.sendFile(`${mediaID}.${fileType}`, options, (err) => { // TODO: unhardcode file ext
+        res.sendFile(`${mediaID}.${fileType}`, options, (err) => {
             if (err) {
                 console.log(err)
             } else {
