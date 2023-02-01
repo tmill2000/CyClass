@@ -74,7 +74,7 @@ CREATE TABLE media_metadata (
     file_type varchar(5),
     course_id int NOT NULL,
     message_id int NOT NULL,
-    user_id int NOT NULL,
+    user_id int NOT NULL,-- TODO: refactor to not use in here, look at associated msg's user_id
     received boolean NOT NULL,
     timestamp datetime NOT NULL
 );
