@@ -663,9 +663,6 @@ paths:
           application/json:
             schema:
               properties:
-                sender_id:
-                  type: integer
-                  example: 2
                 body:
                   type: string
                   example: This is a message
@@ -678,9 +675,13 @@ paths:
                 parent_id:
                   type: integer
                   example: null
-                session_id:
-                  type: string
-                  example: kjhfksdkjvhsdkjvhdskj
+                course_id:
+                  description: Required if has_media is true
+                  type: integer
+                  example: 5
+                has_media:
+                  type: boolean
+                  example: true
         required: true
       responses:
         '201':
