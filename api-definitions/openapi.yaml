@@ -663,9 +663,6 @@ paths:
           application/json:
             schema:
               properties:
-                sender_id:
-                  type: integer
-                  example: 2
                 body:
                   type: string
                   example: This is a message
@@ -678,9 +675,13 @@ paths:
                 parent_id:
                   type: integer
                   example: null
-                session_id:
-                  type: string
-                  example: kjhfksdkjvhsdkjvhdskj
+                course_id:
+                  description: Required if has_media is true
+                  type: integer
+                  example: 5
+                has_media:
+                  type: boolean
+                  example: true
         required: true
       responses:
         '201':
@@ -739,6 +740,80 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
+  /download-media:
+    get:
+      tags:
+        - media
+      summary: download media
+      description: download media by media_id & course_id
+      operationId: downloadMedia
+      parameters:
+        - in: query
+          required: true
+          name: course_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: media_id
+          schema:
+            type: integer
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+  /upload-media:
+    post:
+      tags:
+        - media
+      summary: stores a new media file associated with a message
+      parameters:
+        - in: query
+          required: true
+          name: media_id
+          schema:
+            type: integer
+        - in: header
+          required: true
+          name: Content-Type
+          description: Must be set to the sent image's correct MIME type (e.g. "image/png"... etc.)
+          schema:
+            type: integer
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: The binary blob of the file
+        content:
+          application/json:
+            schema:
+              properties:
+                body:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: "Image successfully saved"
 
 components:
   schemas:

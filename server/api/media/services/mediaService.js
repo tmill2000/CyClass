@@ -34,8 +34,8 @@ const updateMediaMetadataOnReceived = async (mediaID, fileType) => {
 
 /**
  * Service to return necessary media metadata for file downloads
- * @param {*} userID ID of user making the request
- * @param {*} mediaID GUID of media file
+ * @param {int} userID ID of user making the request
+ * @param {string} mediaID GUID of media file
  * @returns received, file_type, user_in_course
  */
 const metadataForDownload = async (userID, mediaID) => {
