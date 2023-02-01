@@ -7,10 +7,14 @@ const downloadMedia = async (req, res) => { //TODO: Add open-api spec
             course_id: courseID
         } = req.query;
 
+        if (!mediaID || ! courseID) {
+            return res.status(400).send({ msg: 'Missing media_id or course_id query params' });
+        }
+
         const response = await mediaService.metadataForDownload(mediaID);
         const { file_type: fileType, user_in_course: userInCourse, received } = response[0];
 
-        if (!received) {
+        if (!received || ! fileType) {
             return res.status(404).send({ msg: 'Media not available' });
         }
 
@@ -31,13 +35,13 @@ const downloadMedia = async (req, res) => { //TODO: Add open-api spec
             if (err) {
                 console.log(err)
             } else {
-                console.log('Sent:', `${mediaID}.jpeg`)
+                console.log('Sent:', `${mediaID}.${fileType}`)
             }
         });
 
     } catch (e) {
         console.error(e);
-        return res.status(500).send({ msg: 'Internal Server Error' });
+        return res.status(500).send({ msg: 'Internal Server Error', e });
     }
 
 }
