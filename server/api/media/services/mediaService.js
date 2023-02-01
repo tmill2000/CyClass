@@ -45,8 +45,6 @@ const metadataForDownload = async (userID, mediaID) => {
             EXISTS (SELECT user_id FROM roles WHERE user_id = ? LIMIT 1 ) AS user_in_course
             FROM media_metadata WHERE media_id = ?;
         `;
-
-        return res.status(500).send({ msg: `SELECT received, file_type, EXISTS (SELECT user_id FROM roles WHERE user_id = ${userID} LIMIT 1 ) AS user_in_course FROM media_metadata WHERE media_id = \'${mediaID}\';` });
         const resp = await runQuery(query, [userID, mediaID]);
         return resp
     } catch (e) {
