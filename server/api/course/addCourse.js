@@ -7,8 +7,6 @@ const courseService = require('./services/courseService')
  *  req.body = {
  *    ownerId: int,
  *    courseTitle: string
- *    // TODO: camel case sessionID???
- *    session_id: int
  *  }
  * @param {*} res 
  * @returns course_id of the course if successful, otherwise a 500 error
