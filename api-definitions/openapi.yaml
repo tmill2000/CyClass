@@ -740,6 +740,37 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
+  /download-media:
+    get:
+      tags:
+        - media
+      summary: download media
+      description: download media by media_id & course_id
+      operationId: downloadMedia
+      parameters:
+        - in: query
+          required: true
+          name: course_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: media_id
+          schema:
+            type: integer
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
 
 components:
   schemas:
