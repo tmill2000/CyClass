@@ -771,6 +771,49 @@ paths:
               schema:
                 type: string
                 format: binary
+  /upload-media:
+    post:
+      tags:
+        - media
+      summary: stores a new media file associated with a message
+      parameters:
+        - in: query
+          required: true
+          name: media_id
+          schema:
+            type: integer
+        - in: header
+          required: true
+          name: Content-Type
+          description: Must be set to the sent image's correct MIME type (e.g. "image/png"... etc.)
+          schema:
+            type: integer
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: The binary blob of the file
+        content:
+          application/json:
+            schema:
+              properties:
+                body:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: "Image successfully saved"
 
 components:
   schemas:

@@ -4,7 +4,7 @@ const mediaService = require('./services/mediaService');
 
 /**
  * @param {*} req 
- * req.body = {
+ * req.query = {
  *    media_id: String
  * }
  * req.headers = {
