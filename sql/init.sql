@@ -69,8 +69,10 @@ CREATE TABLE poll_responses (
     FOREIGN KEY (response_id) REFERENCES poll_choices(poll_choice_id)
 );
 
+--Also include original filename?
 CREATE TABLE media_metadata (
     media_id varchar(36) PRIMARY KEY,
+    file_type varchar(5),
     course_id int NOT NULL,
     message_id int NOT NULL,
     user_id int NOT NULL,
