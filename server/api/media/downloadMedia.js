@@ -12,7 +12,6 @@ const downloadMedia = async (req, res) => { //TODO: Add open-api spec
         }
 
         const response = await mediaService.metadataForDownload(req.session.userid, mediaID);
-
         const { file_type: fileType, user_in_course: userInCourse, received } = response[0];
 
         if (!received || ! fileType) {
