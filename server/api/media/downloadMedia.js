@@ -13,7 +13,7 @@ const downloadMedia = async (req, res) => { //TODO: Add open-api spec
 
         const response = await mediaService.metadataForDownload(mediaID);
 
-        return res.status(500).send({ msg: 'This is on purpose', response });
+        return res.status(500).send({ msg: 'This is on purpose', r: response[0] });
     
         const { file_type: fileType, user_in_course: userInCourse, received } = response[0];
 
