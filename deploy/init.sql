@@ -72,7 +72,7 @@ CREATE TABLE poll_responses (
 CREATE TABLE media_metadata (
     media_id varchar(36) PRIMARY KEY,
     file_type varchar(5),
-    course_id int NOT NULL,
+    course_id int NOT NULL, -- TODO: refactor to find this through msg_id -> lecture_id -> course_id
     message_id int NOT NULL,
     user_id int NOT NULL,-- TODO: refactor to not use in here, look at associated msg's user_id
     received boolean NOT NULL,

@@ -11,10 +11,8 @@ const downloadMedia = async (req, res) => { //TODO: Add open-api spec
             return res.status(400).send({ msg: 'Missing media_id or course_id query params' });
         }
 
-        const response = await mediaService.metadataForDownload(mediaID);
+        const response = await mediaService.metadataForDownload(req.session.userid, mediaID);
 
-        return res.status(500).send({ msg: 'This is on purpose', response });
-    
         const { file_type: fileType, user_in_course: userInCourse, received } = response[0];
 
         if (!received || ! fileType) {
