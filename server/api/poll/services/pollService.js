@@ -1,4 +1,5 @@
 const { runQuery } = require('../../../utils/db_connection');
+const { addUser } = require('../../user/addUser');
 
 
 /**
@@ -16,12 +17,14 @@ const addPoll = async (senderId, lectureId, questionText, pollChoices) => {
                         sender_id,
                         lecture_id,
                         timestamp,
-                        question_text
+                        question_text,
+                        is_open
                     ) VALUES (
                         ?,
                         ?,
                         NOW(),
-                        ?
+                        ?,
+                        true
                     );`
         const resp = await runQuery(query, [senderId, lectureId, questionText]);
         const choiceIds = [];
@@ -38,6 +41,27 @@ const addPoll = async (senderId, lectureId, questionText, pollChoices) => {
     } catch (e) {
         throw e
     }
+}
+
+/**
+ * 
+ * @param {*} pollId 
+ * @returns list of poll responses 
+ */
+const getPollMetrics = async (pollId) => {
+    const query = `
+    SELECT 
+        users.user_id,
+        poll_choices.poll_choice_id,
+        poll_choices.is_correct_choice 
+    FROM polls 
+        inner join poll_choices on poll_choices.poll_id = ?
+        inner join poll_responses on poll_responses.poll_id = ?
+        inner join users on users.user_id = poll_responses.user_id
+    WHERE
+        polls.poll_id = ?`
+    const resp = await runQuery(query, pollId);
+    return resp;
 }
 
 module.exports = {
