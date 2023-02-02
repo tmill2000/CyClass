@@ -60,10 +60,21 @@ const getPollMetrics = async (pollId) => {
         inner join users on users.user_id = poll_responses.user_id
     WHERE
         polls.poll_id = ?`
-    const resp = await runQuery(query, pollId);
+    const resp = await runQuery(query, [pollId, pollId, pollId]);
     return resp;
 }
 
+/**
+ * 
+ * @param {*} pollId 
+ */
+const closePoll = async (pollId) => {
+    const query = 'UPDATE polls SET is_open = ?, close_date = NOW() WHERE poll_id = ?;'
+    await runQuery(query, [false, pollId])
+}
+
 module.exports = {
-    addPoll
+    addPoll,
+    getPollMetrics,
+    closePoll
 }

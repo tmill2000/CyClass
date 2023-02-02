@@ -46,6 +46,7 @@ CREATE TABLE polls (
     timestamp datetime NOT NULL,
     question_text varchar(512),
     is_open boolean,
+    close_date datetime,
     FOREIGN KEY (sender_id) REFERENCES users(user_id),
 	FOREIGN KEY (lecture_id) REFERENCES lectures(lecture_id)
 );

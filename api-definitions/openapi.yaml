@@ -546,6 +546,75 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
+  /poll/close:
+    patch:
+      tags:
+        - poll
+      summary: closes a poll
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: poll_id
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Invalid Body
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+  /poll/metrics:
+    get:
+      tags:
+        - poll
+      summary: gets a polls metrics
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: poll_id
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalRespondants:
+                    type: integer
+                  correctResponses:
+                    type: integer
+                  userResponses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        user_id: 
+                          type: integer
+                        poll_choice_id:
+                          type: integer
+                        is_correct_choice:
+                          type: boolean
+
+          description: Success
+        '400':
+          description: Invalid Body
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
   /poll:
     post:
         tags:
@@ -781,6 +850,11 @@ components:
         question:
           type: string
           example: what is the speed of gravity?
+        close_date:
+          type: string
+          nullable: true
+        is_open:
+          type: boolean
         choices:
           type: array
           items:
