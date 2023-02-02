@@ -85,7 +85,7 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
                 timestamp: new Date(value[0].timestamp).getTime(),
                 question: value[0].question_text,
                 close_date: value[0].close_date,
-                closed: !!value[0].is_open,
+                closed: !value[0].is_open,
                 choices: value.map((item) => ({
                     poll_choice_id: item.poll_choice_id,
                     text: item.choice_text,
