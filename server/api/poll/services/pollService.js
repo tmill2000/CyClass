@@ -50,16 +50,16 @@ const addPoll = async (senderId, lectureId, questionText, pollChoices) => {
  */
 const getPollMetrics = async (pollId) => {
     const query = `
-    SELECT 
-        users.user_id,
-        poll_choices.poll_choice_id,
-        poll_choices.is_correct_choice 
-    FROM polls 
-        inner join poll_choices on poll_choices.poll_id = ?
-        inner join poll_responses on poll_responses.poll_id = ?
-        inner join users on users.user_id = poll_responses.user_id
-    WHERE
-        polls.poll_id = ?`
+    SELECT
+        distinct poll_responses.response_id as "poll_choice_id",
+        poll_responses.user_id,
+        poll_choices.is_correct_choice
+    FROM poll_responses
+        inner join poll_choices on poll_responses.poll_id = poll_choices.poll_id
+    WHERE 
+        poll_responses.poll_id = ?
+    AND
+        poll_responses.response_id = poll_choices.poll_choice_id;`
     const resp = await runQuery(query, [pollId, pollId, pollId]);
     return resp;
 }
