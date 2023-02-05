@@ -59,7 +59,8 @@ const handleRequest = (webSocket, req) => {
         questionText,
         pollChoices
       )
-      message.payload.pollInfo = pollInfo
+      messageObj.payload.pollInfo = pollInfo
+      messageObj.payload.poll_choices = messageObj.payload.poll_choices.map((choice) => ({choice_text: choice.choice_text}))
     } else {
       return;
     }
