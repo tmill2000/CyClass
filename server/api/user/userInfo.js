@@ -23,7 +23,9 @@ const getUserInfoByUserId = async (req, res) => {
 
         const resp = {
             userId: userData.user_id,
-            email: `${userData.netid}@iastate.edu`
+            email: `${userData.netid}@iastate.edu`,
+            first_name: userData.first_name,
+            last_name: userData.last_name
         }
         return res.status(200).send(resp);
     } catch (e) {
