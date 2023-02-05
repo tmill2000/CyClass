@@ -20,7 +20,7 @@ const getPollMetrics = async (req, res) => {
         const isFaculty = course.role === 'PROFESSOR' || course.role === 'TA'
         const resp = await pollService.getPollMetrics(pollId, isFaculty)
         if(!isFaculty){
-            const userResp = resp.filter((response) => response.user_id === req.session.user_id)
+            const userResp = resp.filter((response) => response.user_id === req.session.user_id)[0]
             return res.status(200).send({
                 totalRespondants: userResp.length,
                 correctResponses: userResp.is_correct_choice,
