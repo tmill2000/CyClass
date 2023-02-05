@@ -1,18 +1,17 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	10/24/2022
- * UPDATED:	11/22/2022
+ * UPDATED:	02/05/2023
  */
 
 import React from "react";
 import axios from "axios";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
-import { Provider } from "react-redux";
 
 import "./app.css";
 
-import DataStore from "./utilities/data/DataStore";
+import DataStore, { DataStoreProvider } from "./utilities/data/DataStore";
 
 import Home from "./routes/Home";
 import Lecture from "./routes/Lecture";
@@ -48,9 +47,9 @@ const router = createBrowserRouter([
 // Create Root and render complete app
 createRoot(document.getElementById("root")).render(
 	//<React.StrictMode>
-		<Provider store={DataStore.getReduxStore()}>
+		<DataStoreProvider>
 			<TopBar />
 			<RouterProvider router={router} />
-		</Provider>
+		</DataStoreProvider>
 	//</React.StrictMode>
 );
