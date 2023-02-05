@@ -21,7 +21,7 @@ const getPollMetrics = async (req, res) => {
         const resp = await pollService.getPollMetrics(pollId, isFaculty)
         return res.status(200).send(resp)
         if(!isFaculty){
-            const userResp = resp.filter((response) => response.user_id === req.session.user_id)
+            const userResp = resp.filter((response) => Number(response.user_id) === Number(req.session.user_id))
             return res.status(200).send({
                 totalRespondants: userResp.length,
                 correctResponses: userResp[0]?.is_correct_choice,
