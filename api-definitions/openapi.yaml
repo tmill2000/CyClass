@@ -585,6 +585,12 @@ paths:
           name: poll_id
           schema:
             type: string
+          required: true
+        - in: query
+          name: course_id
+          schema:
+            type: string
+          required: true
       responses:
         '200':
           content:
@@ -611,6 +617,8 @@ paths:
           description: Success
         '400':
           description: Invalid Body
+        '401':
+          description: User is not associated with course
         '403':
           description: Invalid Session
         '500':
