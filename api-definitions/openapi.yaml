@@ -93,6 +93,10 @@ paths:
                   email:
                     type: string
                     example: twmiller@iastate.edu
+                  first_name:
+                    type: string
+                  last_name: 
+                    type: string
         '400':
           description: Invalid Parameters
         '403':
@@ -961,3 +965,7 @@ components:
         password:
           type: string
           example: password
+        first_name:
+          type: string
+        last_name:
+          type: string

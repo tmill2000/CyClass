@@ -14,6 +14,8 @@ CREATE TABLE lectures (
 CREATE TABLE users (
 	user_id int PRIMARY KEY AUTO_INCREMENT,
     netid varchar(24) NOT NULL,
+    first_name varchar(255),
+    last_name varchar(255),
     password varchar(30) NOT NULL
 );
 
