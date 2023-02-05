@@ -46,7 +46,6 @@ const handleRequest = (webSocket, req) => {
       );
       messageObj.payload.message_id = insertId
     } else if (messageObj.type === 'poll'){
-      // TODO
       const {
         sender_id: senderId,
         lecture_id: lectureId,
