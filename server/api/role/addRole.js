@@ -1,4 +1,4 @@
-const { runQuery } = require('../../utils/db_connection');
+const roleService = require('./services/roleService')
 
 /**
  * @param {*} req 
@@ -16,9 +16,8 @@ const addRole = async (req, res) => {
         if (!courseId || !userID || !['PROFESSOR', 'TA', 'STUDENT'].includes(role)) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-        const query = 'INSERT INTO roles (course_id, user_id, role) VALUES (?, ?, ?);';
-        const resp = await runQuery(query, [courseId, userID, role]);
-        return res.status(201).send({ rollID: resp.insertId });
+        const insertId = await roleService.addRole(courseId, userID, role)
+        return res.status(201).send({ rollID: insertId });
     } catch (e) {
         console.error(e);
         return res.status(500).send({ msg: 'Internal Server Error' });

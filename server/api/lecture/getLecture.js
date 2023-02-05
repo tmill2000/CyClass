@@ -1,4 +1,5 @@
-const { runQuery } = require('../../utils/db_connection');
+const lectureService = require('./services/lectureService')
+const { lectures } = require('../../websockets/websockets')
 
 
 /**
@@ -14,11 +15,10 @@ const { runQuery } = require('../../utils/db_connection');
 const getLecture = async (req, res) => {
     try {
         const {  lecture_id: lectureId } = req.query;
-        if (!courseId) {
+        if (!lectureId) {
             return res.status(400).send({ msg: "No lecture_id Provided" })
         }
-        const query = 'SELECT * from lectures WHERE lecture_id = ?;';
-        const resp = await runQuery(query, [lectureId]);
+        const resp = await lectureService.getLecture(lectureId);
         return res.status(200).send({ 
             lecture_id: resp[0].lecture_id,
             course_id: resp[0].course_id,
@@ -30,6 +30,16 @@ const getLecture = async (req, res) => {
     }
 }
 
+const isLectureLive = async (req, res) => {
+    try {
+        const { lecture_id: lectureId } = req.query;
+        return res.status(200).send({ lectureId, live: lectures.has(Number(lectureId)) })
+    } catch (e) {
+        res.status(500).send({ msg: 'Internal Server Error' })
+    }
+}
+
 module.exports = {
     getLecture,
+    isLectureLive
 }

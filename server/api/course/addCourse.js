@@ -1,6 +1,4 @@
-const { runQuery } = require('../../utils/db_connection');
-
-const { addRole } = require('../role/addRole');
+const courseService = require('./services/courseService')
 
 
 /**
@@ -9,8 +7,6 @@ const { addRole } = require('../role/addRole');
  *  req.body = {
  *    ownerId: int,
  *    courseTitle: string
- *    // TODO: camel case sessionID???
- *    session_id: int
  *  }
  * @param {*} res 
  * @returns course_id of the course if successful, otherwise a 500 error
@@ -21,12 +17,9 @@ const addCourse = async (req, res) => {
         if (!ownerID || !courseTitle) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-        const query = 'INSERT INTO courses (owner_id, course_name) VALUES (?, ?);';
-        const resp = await runQuery(query, [ownerID, courseTitle]);
+        const insertId = await courseService.addCourse(ownerID, courseTitle);;
 
-        await addRole({ body: { courseID: resp.insertId, userID: ownerID, role: 'PROFESSOR' }});
-
-        return res.status(201).send({ course_id: resp.insertId });
+        return res.status(201).send({ course_id: insertId });
     } catch (e) {
         console.error(e);
         return res.status(500).send({ msg: 'Internal Server Error' });
