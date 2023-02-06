@@ -1,7 +1,6 @@
 import React from 'react';
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
-import UserStore from './stores/UserStore';
 import logoImg from "./ISULogo.png";
 
 import DataStore from '../../utilities/data/DataStore';
@@ -53,28 +52,15 @@ class LoginForm extends React.Component {
         try {
 
             const res = await userAPI.login(this.state.netid, this.state.password);
-
-            // const res = await fetch('/api/user/login', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({
-            //         netId: this.state.netid,
-            //         password: this.state.password 
-            //     })
-            // });
-            const result = await res.json();
-            if(result?.sessionId) {
-                UserStore.isLoggedIn = true;
-                UserStore.netid = result.netid
-            }
-
-            else if(result && result.success === false) {
+            if(res.accepted) {
+                DataStore.set("netID", this.state.netid);
+                DataStore.set("userID", res.userID);
+                DataStore.set("sessionID", res.sessionID);
+            } else {
                 this.resetForm();
                 alert(result.msg);
             }
-            console.log(UserStore.isLoggedIn);
+            console.log(res.accepted);
         }
 
         catch(e) {
