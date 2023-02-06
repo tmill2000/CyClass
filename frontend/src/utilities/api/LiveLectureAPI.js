@@ -1,12 +1,10 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/22/2022
- * UPDATED:	11/22/2022
+ * UPDATED:	02/05/2023
  */
 
 import axios from "axios";
-
-import DataStore from "../data/DataStore";
 
 /**
  * Interface for the API related to live lectures.
@@ -16,9 +14,11 @@ class LiveLectureAPI {
 	/**
 	 * Creates a new API interface for a live lecture of the specified lecture ID.
 	 * @param {Number} lectureID 
+	 * @param {Number} userID
 	 */
-	constructor(lectureID) {
+	constructor(lectureID, userID) {
 		this.lectureID = lectureID;
+		this.userID = userID;
 		this.eventTarget = new EventTarget();
 	}
 
@@ -54,19 +54,13 @@ class LiveLectureAPI {
 			throw new Error("No lecture was specified");
 		}
 
-		// Get current user ID
-		const userID = DataStore.get("userID");
-		if (userID == null) {
-			throw new Error("No user is logged in (no userID in DataStore)");
-		}
-
 		// Build URL
 		const location = window.location;
 		const protocol = location.protocol == "https:" ? "wss:" : "ws:";
 		const port = location.port != '' ? `:${location.port}` : ""
 		const searchParams = new URLSearchParams();
 		searchParams.append("lectureId", this.lectureID);
-		searchParams.append("userId", userID);
+		searchParams.append("userId", this.userID);
 		const url = `${protocol}//${location.hostname}${port}?${searchParams}`;
 
 		// Open connection
@@ -186,17 +180,11 @@ class LiveLectureAPI {
 			throw new Error("No WebSocket connection was established");
 		}
 
-		// Get current user ID
-		const userID = DataStore.get("userID");
-		if (userID == null) {
-			throw new Error("No user is logged in (no userID in DataStore)");
-		}
-
 		// Send message
 		this.websocket.send(JSON.stringify({
 			type: "message",
 			payload: {
-				sender_id: userID,
+				sender_id: this.userID,
 				body: body,
 				is_anonymous: anonymous,
 				lecture_id: this.lectureID,
@@ -293,7 +281,7 @@ class LiveLectureCloseEvent extends Event {
 
 /**
  * Represents a new message to a live lecture. Contains the following properties:
- * - `lectureID`
+ * - `lectureID`:
  * - `messageID`
  * - `body`
  * - `userID`

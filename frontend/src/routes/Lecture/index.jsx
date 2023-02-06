@@ -43,7 +43,7 @@ function Lecture(props) {
 		lectureAPI = null;
 	}
 	if (lectureAPI == null && lectureID != null) {
-		lectureAPI = new LiveLectureAPI(lectureID);
+		lectureAPI = new LiveLectureAPI(lectureID, DataStore.get("userID"));
 	}
 
 	// Define lecture data and data version state

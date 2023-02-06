@@ -1,12 +1,10 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/22/2022
- * UPDATED:	11/22/2022
+ * UPDATED:	02/05/2023
  */
 
 import axios from "axios";
-
-import DataStore from "../data/DataStore";
 
 import defaultProfileImg from "../../components/ProfileIcon/profileIconIMG.jpg";
 
@@ -18,8 +16,8 @@ const userDataCache = {}
 class UserAPI {
 
 	/**
-	 * Attempts a login using the given username and password. Will error if a user is already logged in. If successful,
-	 * returned Promise will resolve to the following:
+	 * Attempts a login using the given username and password. If successfully, the returned Promise will resolve to the
+	 * following object:
 	 * - `accepted` - boolean if login was accepted
 	 * - `userID` - userID of user, if accepted
 	 * - `sessionID` - new sessionID, if accepted
@@ -29,21 +27,12 @@ class UserAPI {
 	 */
 	login(username, password) {
 
-		// Make sure no one is logged in
-		if (DataStore.get("sessionID") != null) {
-			throw new Error("User is already logged in");
-		}
-
 		// Perform login
 		return axios.post("/api/user/login", {
 				netId: username,
 				password: password
 			})
 			.then((res) => {
-
-				// Store
-				DataStore.set("userID", res.data.userId);
-				DataStore.set("sessionID", res.data.sessionId);
 
 				// Return formatted data
 				return {
@@ -65,7 +54,38 @@ class UserAPI {
 				}
 
 				// Otherwise, log and propogate
-				console.error("Failed to perform login request:", err);
+				console.error("Failed to perform login:", err);
+				throw err;
+
+			});
+
+	}
+
+	/**
+	 * Attempts a logout of the given session. If successful, returned Promise will resolve to a boolean describing if
+	 * the request was successful.
+	 * @param {String} sessionID 
+	 * @return Promise
+	 */
+	logout(sessionID) {
+
+		// Perform logout
+		return axios.post("/api/user/logout", {})
+			.then((res) => {
+
+				// Return success
+				return true;
+
+			})
+			.catch((err) => {
+
+				// Return failure if due to invalid session
+				if (err.response?.status == 403) {
+					return false;
+				}
+
+				// Otherwise, log and propogate
+				console.error("Failed to perform logout:", err);
 				throw err;
 
 			});

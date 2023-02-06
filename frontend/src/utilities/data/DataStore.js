@@ -4,6 +4,7 @@
  * UPDATED:	02/05/2023
  */
 
+import React from "react";
 import { configureStore, createReducer, createAction } from "@reduxjs/toolkit";
 import { Provider, useSelector } from "react-redux";
 
