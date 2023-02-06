@@ -1,3 +1,10 @@
+/*****************************************************************************/
+/* GLOBAL TYPE */
+
+* {
+	user-select: none;
+}
+
 body {
 	margin: 0px;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -5,6 +12,7 @@ body {
 
 textarea {
 	font-family: inherit;
+	user-select: auto;
 }
 
 a {
@@ -15,8 +23,15 @@ a:active {
 	color: inherit;
 }
 
+/*****************************************************************************/
+/* GLOBAL CLASS */
+
 .overflow-ellipsis {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+
+.selectable {
+	user-select: text;
 }

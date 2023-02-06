@@ -1,83 +1,47 @@
 /**
- * AUTHOR:	Brandon Burt
+ * AUTHOR:	Brandon Burt, Adam Walters
  * CREATED:	11/05/2022
- * UPDATED:	11/05/2022
+ * UPDATED:	02/05/2023
  */
 
- import React from "react";
- import { observer } from 'mobx-react';
- import UserStore from "./stores/UserStore";
- import LoginForm from "./LoginForm";
- import SubmitButton from "./SubmitButton";
+import React from "react";
+import LoginForm from "./LoginForm";
+import SubmitButton from "./SubmitButton";
+
+import DataStore, { useDataStoreValue } from "../../utilities/data/DataStore";
+import UserAPI from "../../utilities/api/UserAPI";
  
 import { Link } from "react-router-dom";
 
  import "./styles.css";
 
+ const userAPI = new UserAPI();
+
  function Login(props) {
-	
-	//API call to check if the user is logged in or not
-	async function componentDidMount(){
-		try {
-			let res = await fetch('/isLoggedIn', {
-				method: 'post',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				}
-			});
-
-			let result = await res.json();
-
-			if (result && result.success){
-				UserStore.loading = false;
-				UserStore.isLoggedIn = true;
-				UserStore.netid = result.netid;
-			}
-			else {
-				UserStore.loading = false;
-				UserStore.isLoggedIn = false;
-
-			}
-
-		}
-
-		catch(e) {
-			UserStore.loading = false;
-			UserStore.isLoggedIn = false;
-		}
-	}
 
 	//API call for user to logout of applcation
-	async function doLogout(){
+	const doLogout = () => {
 		try {
-			let res = await fetch('/logout', {
-				method: 'post',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				}
-			});
-
-			let result = await res.json();
-
-			if (result && result.success){
-				UserStore.isLoggedIn = false;
-				UserStore.netid = '';
+			
+			const res = userAPI.logout(DataStore.get("sessionID"));
+			if (res){
+				DataStore.clear("netID");
+				DataStore.clear("userID");
+				DataStore.clear("sessionID");
 			}
-	
 		}
 
 		catch(e) {
 			console.log(e);
 		}
 	}
-	//If logged in return...
-	if(UserStore.isLoggedIn){
+
+	const sessionID = useDataStoreValue("sessionID");
+	if(sessionID){
 		return (
 			<div className="login">
 				<div className="container">
-					Welcome {UserStore.netid}
+					Welcome {DataStore.get("netID")}
 
 					<Link to="/lecture">
 						<SubmitButton
@@ -88,7 +52,7 @@ import { Link } from "react-router-dom";
 					<SubmitButton
 						text={'Log out'}
 						disabled={false}
-						onClick={ () => this.doLogout() }
+						onClick={doLogout}
 					/>
 				</div>
 			</div>
@@ -106,4 +70,4 @@ import { Link } from "react-router-dom";
  }
 
  //observer() allows app to listen to changes in the UserStore
- export default observer(Login);
+ export default Login;
