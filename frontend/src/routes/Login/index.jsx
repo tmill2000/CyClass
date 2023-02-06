@@ -36,12 +36,12 @@ import { Link } from "react-router-dom";
 		}
 	}
 
-	const netID = useDataStoreValue("netID");
-	if(netID){
+	const sessionID = useDataStoreValue("sessionID");
+	if(sessionID){
 		return (
 			<div className="login">
 				<div className="container">
-					Welcome {netID}
+					Welcome {DataStore.get("netID")}
 
 					<Link to="/lecture">
 						<SubmitButton
