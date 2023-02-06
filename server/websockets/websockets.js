@@ -1,5 +1,6 @@
 const { containsPortillos } = require("../utils/removePortillos");
 const addMessage = require('./addMessage');
+const pollService = require('../api/poll/services/pollService');
 
 const webSockets = new Map(); // userID: webSocket
 const lectures = new Map(); // lectureId: [ userId ]
@@ -24,7 +25,7 @@ const handleRequest = (webSocket, req) => {
   }
   console.log('connected user: ' + userId + ' to lecture: ' + lectureId);
 
-  webSocket.on('message', (message) => {
+  webSocket.on('message', async (message) => {
     const messageObj = JSON.parse(message)
     if(containsPortillos(JSON.stringify(messageObj))){
       return;
@@ -36,7 +37,7 @@ const handleRequest = (webSocket, req) => {
         is_anonymous: isAnonymous, 
         lecture_id: lectureId, 
         parent_id: parentId } = messageObj.payload;
-      const insertId = addMessage(
+      const insertId = await addMessage(
         senderId, 
         body, 
         isAnonymous, 
@@ -45,7 +46,20 @@ const handleRequest = (webSocket, req) => {
       );
       messageObj.payload.message_id = insertId
     } else if (messageObj.type === 'poll'){
-      // TODO
+      const {
+        sender_id: senderId,
+        lecture_id: lectureId,
+        question_text: questionText,
+        poll_choices: pollChoices
+      } = messageObj.payload
+      const pollInfo =  await pollService.addPoll(
+        senderId,
+        lectureId,
+        questionText,
+        pollChoices
+      )
+      messageObj.payload.pollInfo = pollInfo
+      messageObj.payload.poll_choices = messageObj.payload.poll_choices.map((choice) => ({choice_text: choice.choice_text}))
     } else {
       return;
     }

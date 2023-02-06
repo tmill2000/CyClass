@@ -12,11 +12,11 @@ const userService = require('./services/userService')
  */
 const addUser = async (req, res) => {
     try {
-        const { netid: netid, password: password } = req.body;
+        const { netid: netid, password: password, first_name: firstName, last_name: lastName } = req.body;
         if (!netid || !password) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-        const insertId = await userService.addUser(netid, password)
+        const insertId = await userService.addUser(netid, password, firstName, lastName)
         return res.status(201).send({ user_id: insertId });
     } catch (e) {
         console.error(e);

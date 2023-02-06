@@ -37,13 +37,14 @@ const loginInfo = async (netId, password) => {
  * Function to add a user
  * @param {*} netid
  * @param {*} password
- * @param {*} res 
+ * @param {*} firstName
+ * @param {*} lastName
  * @returns user_id of the user if successful, otherwise a 500 error
  */
- const addUser = async (netid, password) => {
+ const addUser = async (netid, password, firstName, lastName) => {
     try {
-        const query = 'INSERT INTO users (netid, password) VALUES (?, ?);';
-        const response = await runQuery(query, [netid, password]);
+        const query = 'INSERT INTO users (netid, password, first_name, last_name) VALUES (?, ?, ?, ?);';
+        const response = await runQuery(query, [netid, password, firstName, lastName]);
         return response.insertId
     } catch (e) {
         console.error(e);
