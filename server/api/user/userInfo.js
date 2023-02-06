@@ -60,7 +60,7 @@ const login = async (req, res) => {
             res.status(200).send({ userId: rows[0].user_id, sessionId: session.sessionId, userRoles: roles });
         }
         else {
-            res.send({ msg: 'Incorrect username or password' });
+            res.status(401).send({ msg: 'Incorrect Username or Password' });
         }
     } catch (err) {
         console.error(err)

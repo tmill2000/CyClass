@@ -23,7 +23,7 @@ const getPollResponse = async (req, res) => {
             user_id: resp[0].user_id,
             response_id: resp[0].response_id,
             poll_id: resp[0].poll_id,
-            timestamp: new Date(resp[0].timestamp).getTime(),
+            timestamp: new Date(resp[0].timestamp).toISOString(),
         });
     } catch (e) {
         console.error(e);

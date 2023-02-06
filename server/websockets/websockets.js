@@ -45,6 +45,7 @@ const handleRequest = (webSocket, req) => {
         parentId
       );
       messageObj.payload.message_id = insertId
+      messageObj.payload.timestamp = new Date().toISOString()
     } else if (messageObj.type === 'poll'){
       const {
         sender_id: senderId,
@@ -59,6 +60,7 @@ const handleRequest = (webSocket, req) => {
         pollChoices
       )
       messageObj.payload.pollInfo = pollInfo
+      messageObj.payload.timestamp = new Date().toISOString()
       messageObj.payload.poll_choices = messageObj.payload.poll_choices.map((choice) => ({choice_text: choice.choice_text}))
     } else {
       return;
