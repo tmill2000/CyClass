@@ -6,7 +6,7 @@ Express Application for Senior Design Team 40
 ## Running Locally
 Create a .env file in the server folder with the following content
 ```
-PORT=6000
+PORT=80
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=password
@@ -17,5 +17,8 @@ SESSION_SECRET=test
 NODE_ENV=devl
 ```
 ```
-npm run start
+## From /server  directory run
+docker compose -f "docker-compose.yml" down
+docker compose -f "docker-compose.yml" up -d --build
+nodemon server.js
 ```
