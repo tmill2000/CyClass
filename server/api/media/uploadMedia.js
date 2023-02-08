@@ -2,6 +2,8 @@ const fs = require('fs');
 
 const mediaService = require('./services/mediaService');
 
+const { isInCourse } = require('../../utils/permissions')
+
 /**
  * @param {*} req 
  * req.query = {
@@ -17,10 +19,15 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
     try {
         const {
             media_id: mediaID,
+            course_id: courseId
         } = req.query;
 
-        if (!mediaID) {
+        if (!mediaID || !courseId) {
             return res.status(400).send({ msg: "Invalid Body" });
+        }
+        
+        if(!isInCourse(courseId, req.session)){
+            return res.status(401).send({ msg: 'Not In Course: Unauthorized to add media' })
         }
 
         const fileType = req.get('Content-Type')?.split('/')[1];
