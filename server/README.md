@@ -3,6 +3,7 @@ Express Application for Senior Design Team 40
 ## Pre-Reqs
 - Node 16
 - Docker
+- nodemon library installed (preferrably globally)
 ## Running Locally
 Create a .env file in the server folder with the following content
 ```
