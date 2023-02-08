@@ -1,5 +1,5 @@
 const pollService = require('./services/pollService')
-
+const { hasCoursePermissions } = require('../../utils/permissions')
 
 /**
  * 
@@ -9,7 +9,15 @@ const pollService = require('./services/pollService')
  */
 const closePoll = async (req, res) => {
     try {
-        const {  poll_id: pollId } = req.query;
+        const {  poll_id: pollId, course_id: courseId } = req.query;
+
+        if (!pollId || !courseId) {
+            return res.status(400).send({ msg: "No poll_id Provided" })
+        }
+        if(!hasCoursePermissions(courseId, req.session)){
+            return res.status(401).send({ msg: 'Unauthorized: Cannot close poll' })
+        }
+
         if (!pollId) {
             return res.status(400).send({ msg: "No poll_id Provided" })
         }

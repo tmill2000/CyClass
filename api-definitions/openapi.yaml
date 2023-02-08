@@ -270,6 +270,11 @@ paths:
           name: lecture_id
           schema:
             type: integer
+        - in: query
+          required: true
+          name: course_id
+          schema:
+            type: integer
         - in: header
           name: x-session-id
           schema:
@@ -294,6 +299,8 @@ paths:
                     example: Lecture 15
         '400':
           description: Invalid Parameters
+        '401':
+          description: Unauthorized
         '403':
           description: Invalid Session
         '500':
@@ -314,12 +321,11 @@ paths:
           application/json:
             schema:
               properties:
-                course_id:
-                  type: integer
-                  example: 2
                 title:
                   type: string
                   example: Lecture 1
+                course_id:  
+                  type: integer
         required: true
       responses:
         '201':
@@ -334,6 +340,8 @@ paths:
                     example: 1
         '400':
           description: Invalid Body
+        '401':
+          description: Unauthorized
         '403':
           description: Invalid Session
         '500':
@@ -348,6 +356,11 @@ paths:
         - in: query
           required: true
           name: lecture_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: course_id
           schema:
             type: integer
         - in: header
@@ -368,9 +381,10 @@ paths:
                     example: 2
                   live:
                     type: boolean
+        '401':
+          description: Unauthorized
         '500':
           description: Internal Server Error
-
   /role:
     get:
       tags:
@@ -411,6 +425,8 @@ paths:
                     example: PROFESSOR | TA | STUDENT
         '400':
           description: Invalid Parameters
+        '401':
+          description: Unauthorized
         '403':
           description: Invalid Session
         '500':
@@ -431,10 +447,10 @@ paths:
           application/json:
             schema:
               properties:
-                courseId:
+                course_id:
                   type: integer
                   example: 2
-                userID:
+                user_id:
                   type: integer
                   example: 2
                 role:
@@ -454,6 +470,8 @@ paths:
                     example: 1
         '400':
           description: Invalid Body
+        '401':
+          description: Unauthorized
         '403':
           description: Invalid Session
         '500':
@@ -523,13 +541,12 @@ paths:
           application/json:
             schema:
               properties:
-                choiceId:
+                course_id:
+                  type: integer
+                choice_id:
                   type: integer
                   example: 44
-                userID:
-                  type: integer
-                  example: 88
-                pollId:
+                poll_id:
                   type: string
                   example: 91
         required: true
@@ -546,6 +563,8 @@ paths:
                     example: 24
         '400':
           description: Invalid Body
+        '401':
+          description: Unauthorized
         '403':
           description: Invalid Session
         '500':
@@ -565,11 +584,19 @@ paths:
           name: poll_id
           schema:
             type: string
+          required: true
+        - in: query
+          name: course_id
+          schema:
+            type: string
+          required: true
       responses:
         '204':
           description: Success
         '400':
           description: Invalid Body
+        '401':
+          description: Unauthorized
         '403':
           description: Invalid Session
         '500':
@@ -644,7 +671,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  sender_id:
+                  course_id:
                     type: integer
                   lecture_id:
                     type: integer
@@ -677,6 +704,8 @@ paths:
                         type: integer
           '400':
             description: Invalid Body
+          '401':
+            description: Unauthorized
           '403':
             description: Invalid Session
           '500':
@@ -716,6 +745,8 @@ paths:
                   sender_id:
                     type: integer
                     example: 4
+                  course_id:
+                    type: integer
                   lecture_id: 
                     type: integer 
                     example: 3
@@ -777,6 +808,8 @@ paths:
                     example: 1
         '400':
           description: Invalid Body
+        '401':
+          description: Unauthorized
         '403':
           description: Invalid Session
         '500':
@@ -863,6 +896,11 @@ paths:
           name: media_id
           schema:
             type: integer
+        - in: query
+          required: true
+          name: course_id
+          schema:
+            type: integer
         - in: header
           required: true
           name: Content-Type
@@ -895,6 +933,12 @@ paths:
                   msg:
                     type: string
                     example: "Image successfully saved"
+        '401':
+            description: Unauthorized
+        '403':
+            description: Invalid Session
+        '500':
+            description: Internal Server Error
 
 components:
   schemas:

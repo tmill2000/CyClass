@@ -1,5 +1,5 @@
-const { runQuery } = require('../../utils/db_connection');
 const pollResponseService = require('./services/pollResponseService')
+const { isInCourse } = require('../../utils/permissions')
 
 /**
  * @param {*} req
@@ -13,11 +13,18 @@ const pollResponseService = require('./services/pollResponseService')
  */
 const addPollResponse = async (req, res) => {
     try {
-        const { choiceId, userID, pollId } = req.body;
-        if (!choiceId || !userID || !pollId) {
+        const { choice_id: choiceId, poll_id: pollId, course_id: courseId } = req.body;
+        const userId = req.session.userid;
+        if (!choiceId || !userId || !pollId || !courseId) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-        const insertId = await pollResponseService.addPollResponse(choiceId, userID, pollId)
+        if(!isInCourse(courseId, req.session)){
+            return res.status(401).send({ msg: 'Not in course: unable to respond to poll.'})
+        }
+        if (!choiceId || !userId || !pollId) {
+            return res.status(400).send({ msg: "Invalid Body" })
+        }
+        const insertId = await pollResponseService.addPollResponse(choiceId, userId, pollId)
         return res.status(201).send({ pollResponseID: insertId });
     } catch (e) {
         console.error(e);
