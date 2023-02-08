@@ -21,9 +21,6 @@ const addPollResponse = async (req, res) => {
         if(!isInCourse(courseId, req.session)){
             return res.status(401).send({ msg: 'Not in course: unable to respond to poll.'})
         }
-        if (!choiceId || !userId || !pollId) {
-            return res.status(400).send({ msg: "Invalid Body" })
-        }
         const insertId = await pollResponseService.addPollResponse(choiceId, userId, pollId)
         return res.status(201).send({ pollResponseID: insertId });
     } catch (e) {

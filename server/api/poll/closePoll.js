@@ -17,10 +17,6 @@ const closePoll = async (req, res) => {
         if(!hasCoursePermissions(courseId, req.session)){
             return res.status(401).send({ msg: 'Unauthorized: Cannot close poll' })
         }
-
-        if (!pollId) {
-            return res.status(400).send({ msg: "No poll_id Provided" })
-        }
         await pollService.closePoll(pollId)
         return res.status(204).send();
     } catch (e) {
