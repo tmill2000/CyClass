@@ -1,0 +1,17 @@
+.poll-icon-container {
+    width: fit-content;
+    vertical-align: middle;
+}
+
+.poll-icon-label{
+    color:grey;
+}
+
+
+.poll-header-container{
+    vertical-align: middle;
+}
+
+.poll-header-title{
+    font-size: large;
+}

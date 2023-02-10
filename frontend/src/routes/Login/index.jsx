@@ -15,6 +15,7 @@
 import { Link } from "react-router-dom";
 
  import "./styles.css";
+import PollHeader from "../../components/Poll/PollHeader";
 
  function Login(props) {
 	
@@ -101,7 +102,8 @@ import { Link } from "react-router-dom";
 		<div className="login">
 			<div className="container">
 				<LoginForm />
-				<PopUp header="Poll Creation" trigger_button_name="Create Poll" content="INSERT CONTENT" submit_button_name="Post Poll"></PopUp>
+				<PopUp header=<PollHeader title="Example Poll Title" profile_name="Maruf" profile_role="Professor"></PollHeader> 
+				trigger_button_name="Create Poll" content="INSERT CONTENT" submit_button_name="Post Poll"></PopUp>
 			</div>
 		</div>
 	);
