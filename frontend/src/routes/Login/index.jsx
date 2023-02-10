@@ -9,6 +9,8 @@
  import UserStore from "./stores/UserStore";
  import LoginForm from "./LoginForm";
  import SubmitButton from "./SubmitButton";
+
+ import PopUp from "../../components/PopUp/PopUp";
  
 import { Link } from "react-router-dom";
 
@@ -99,6 +101,7 @@ import { Link } from "react-router-dom";
 		<div className="login">
 			<div className="container">
 				<LoginForm />
+				<PopUp header="Poll Creation" trigger_button_name="Create Poll" content="INSERT CONTENT" submit_button_name="Post Poll"></PopUp>
 			</div>
 		</div>
 	);
