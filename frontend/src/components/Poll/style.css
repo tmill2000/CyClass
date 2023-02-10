@@ -1,17 +1,16 @@
 .poll-icon-container {
     width: fit-content;
+    display: inline-flex;
+    margin-top: 0;
     vertical-align: middle;
+    margin-bottom: 3px;
+    padding-left: 3px;
 }
 
 .poll-icon-label{
-    color:grey;
-}
-
-
-.poll-header-container{
-    vertical-align: middle;
-}
-
-.poll-header-title{
-    font-size: large;
+    color:rgb(97, 97, 97);
+    padding-left: 4px;
+    font-style: bold;
+    font-size: 11px;
+    padding-top: 1px;
 }

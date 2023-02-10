@@ -1,20 +1,25 @@
 .popup {
     font-size: 12px;
-    background-color: rgb(180, 177, 177);
+    background-color: rgb(247, 243, 243);
+    border-color: gray;
+    border-style: solid;
+    width: calc(100vw - 480px);
   }
+
   .popup > .header {
-    width: 100%;
     border-bottom: 1px solid gray;
     font-size: 18px;
-    text-align: center;
+    text-align: left;
     padding: 5px;
     color: black;
   }
+
   .popup > .content {
     width: 100%;
     padding: 10px 5px;
     color: black;
   }
+
   .popup > .actions {
     width: 100%;
     padding: 10px 5px;
