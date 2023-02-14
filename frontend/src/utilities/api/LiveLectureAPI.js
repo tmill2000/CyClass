@@ -205,6 +205,41 @@ class LiveLectureAPI {
 	}
 
 	/**
+	 * Creates a new poll with the specified prompt that will be open for the specified number of minutes (or null if
+	 * indefinite / manually closed) and has the specified choice options. Assumes a live lecture connection has been
+	 * established.
+	 * @param {string} prompt 
+	 * @param {number?} openTime
+	 * @param {{ text: string, correct: boolean }[]} choices
+	 */
+	createPoll(prompt, openTime, choices) {
+
+		// Verify connection
+		if (this.websocket == null) {
+			throw new Error("No WebSocket connection was established");
+		}
+
+		// Map choices to backend format
+		const choiceArray = [];
+		for (const choice of choices) {
+			choiceArray.push({
+				choice_text: choice.text,
+				is_correct_choice: choice.correct
+			});
+		};
+
+		// Send message
+		this.websocket.send(JSON.stringify({
+			type: "poll",
+			payload: {
+				question_text: prompt,
+				poll_choices: choiceArray
+			}
+		}));
+
+	}
+
+	/**
 	 * Responds to the given poll, setting the specified choice as the logged-in user's response. Returns a Promise that
 	 * will resolve if the operation was successful.
 	 * @param {number} pollID 
@@ -271,6 +306,61 @@ class LiveLectureAPI {
 	}
 
 	/**
+	 * Returns the poll participation statistics for the given poll. Note that this API method requires elevated account
+	 * permissions (students will not be able to invoke this successfully). Returns a Promise that will fulfill to the
+	 * following object:
+	 * - `totalResponses` (number)
+	 * - `correctResponses` (number)
+	 * - `responses`: ```[
+	 *       {
+	 *           userID: number,
+	 *           choiceID: number,
+	 *           correct: boolean
+	 *       },
+	 *       ...
+	 *   ]```
+	 * @param {number} pollID 
+	 * @return Promise
+	 */
+	getPollParticipation(pollID) {
+
+		// Perform get
+		return axios.get("/api/poll/metrics", {
+				params: {
+					course_id: this.courseID,
+					poll_id: this.pollID
+				}
+			})
+			.then((res) => {
+
+				// Make base object
+				const result = {
+					totalResponses: res.data.totalRespondants,
+					correctResponses: res.data.correctResponses,
+					responses: [],
+				};
+
+				// Add all responses in converted format
+				for (const i of res.data.userResponses) {
+					result.responses.push({
+						userID: i.user_id,
+						choiceID: i.poll_choice_id,
+						correct: i.is_correct_choice
+					});
+				}
+
+				// Return complete result object
+				return result;
+
+			})
+			.catch((err) => {
+				console.error("Failed to get poll participation:", err);
+				throw err;
+			})
+
+	}
+
+	/**
 	 * Binds the given callback to execute whenever a live connection is opened successfully. Callback is passed a
 	 * {@link LiveLectureOpenEvent}.
 	 * @param {Function} callback 
@@ -325,7 +415,7 @@ class LiveLectureAPI {
 
 /**
  * Represents the successful WebSocket connection to a live lecture. Contains the following properties:
- * - `lectureID`
+ * - `lectureID` (number)
  */
 class LiveLectureOpenEvent extends Event {
 
@@ -338,10 +428,10 @@ class LiveLectureOpenEvent extends Event {
 
 /**
  * Represents the closing of a WebSocket connection to a live lecture. Contains the following properties:
- * - `lectureID`
- * - `closeCode`
- * - `closeReason`
- * - `dueToError`
+ * - `lectureID` (number)
+ * - `closeCode` (number)
+ * - `closeReason` (string)
+ * - `dueToError` (boolean)
  */
 class LiveLectureCloseEvent extends Event {
 
@@ -357,11 +447,11 @@ class LiveLectureCloseEvent extends Event {
 
 /**
  * Represents a new message to a live lecture. Contains the following properties:
- * - `lectureID`:
- * - `messageID`
- * - `body`
- * - `userID`
- * - `isAnonymous`
+ * - `lectureID`: (number)
+ * - `messageID` (number)
+ * - `body` (string)
+ * - `userID` (number)
+ * - `isAnonymous` (boolean)
  * - `time` ({@link Date})
  */
 class LiveLectureMessageEvent extends Event {
