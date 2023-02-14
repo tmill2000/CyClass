@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/22/2022
- * UPDATED:	02/05/2023
+ * UPDATED:	02/14/2023
  */
 
 import axios from "axios";
@@ -13,21 +13,29 @@ class LiveLectureAPI {
 
 	/**
 	 * Creates a new API interface for a live lecture of the specified lecture ID.
-	 * @param {Number} lectureID 
 	 * @param {Number} userID
+	 * @param {Number} courseID
+	 * @param {Number} lectureID 
 	 */
-	constructor(lectureID, userID) {
-		this.lectureID = lectureID;
+	constructor(userID, courseID, lectureID) {
 		this.userID = userID;
+		this.courseID = courseID;
+		this.lectureID = lectureID;
 		this.eventTarget = new EventTarget();
 	}
 
 	/**
-	 * Returns the lecture ID associated with this API instance.
-	 * @returns lecture ID
+	 * Returns if the given lecture parameters match this lecture.
+	 * @param {Number} userID
+	 * @param {Number} courseID
+	 * @param {Number} lectureID 
+	 * @returns if matching lecture
 	 */
-	getLectureID() {
-		return this.lectureID;
+	isLecture(userID, courseID, lectureID) {
+
+		// Return if all are same
+		return this.userID === userID && this.courseID === courseID && this.lectureID === lectureID;
+
 	}
 
 	/**
@@ -59,8 +67,9 @@ class LiveLectureAPI {
 		const protocol = location.protocol == "https:" ? "wss:" : "ws:";
 		const port = location.port != '' ? `:${location.port}` : ""
 		const searchParams = new URLSearchParams();
-		searchParams.append("lectureId", this.lectureID);
 		searchParams.append("userId", this.userID);
+		searchParams.append("courseID", this.courseID);
+		searchParams.append("lectureId", this.lectureID);
 		const url = `${protocol}//${location.hostname}${port}?${searchParams}`;
 
 		// Open connection
@@ -187,6 +196,7 @@ class LiveLectureAPI {
 				sender_id: this.userID,
 				body: body,
 				is_anonymous: anonymous,
+				course_id: this.courseID,
 				lecture_id: this.lectureID,
 				parent_id: null
 			}

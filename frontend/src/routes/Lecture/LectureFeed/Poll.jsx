@@ -14,6 +14,9 @@ import "./styles.css";
 
 function Poll(props) {
 
+	// Make URL for results (/results plus query params)
+	const resultsURL = "results" + window.location.search;
+
 	// Component
 	return (
 		<div className={`poll ${props.me ? "me" : ""}`}>
@@ -28,7 +31,7 @@ function Poll(props) {
 							</div>
 							<div className="line" />
 						</div>
-						<Link className="results-button" to="results">VIEW PARTICIPATION</Link>
+						<Link className="results-button" to={resultsURL}>VIEW PARTICIPATION</Link>
 					</div>
 				</div>
 			</div>
