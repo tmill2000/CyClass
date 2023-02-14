@@ -1,23 +1,25 @@
 const { containsPortillos } = require("../utils/removePortillos");
 const addMessage = require('./addMessage');
 const pollService = require('../api/poll/services/pollService');
+const roleService = require('../api/role/services/roleService');
 
 const webSockets = new Map(); // userID: webSocket
 const lectures = new Map(); // lectureId: [ userId ]
 const ownerMap = new Map();
 
-const handleRequest = (webSocket, req) => {
+const handleRequest = async (webSocket, req) => {
   const len = req.url.length
-  const roles = req.session.user_roles
   const url = new URLSearchParams(req.url.substring(2, len));
-  const userId = Number(req.session.userid)
+  const userId = Number(url.get('userId'))
   const lectureId = Number(url.get('lectureId'));
   const courseId = Number(url.get('courseId'));
   if (!userId || !lectureId || !courseId) {
     webSocket.send("Missing Parameters");
     webSocket.close();
+    return
   }
-  if (roles.filter((role) => (role.course_id === courseId) && (role.role === 'PROFESSOR'))) {
+  const roles = await roleService.getCourseRolesByUser(userId);
+  if (roles.filter((role) => (role.course_id === courseId) && (role.role === 'PROFESSOR')).length) {
     if (!ownerMap.has(lectureId)) {
       ownerMap.set(lectureId, new Set());
       ownerMap.get(lectureId).add(userId);
@@ -49,7 +51,7 @@ const handleRequest = (webSocket, req) => {
         is_anonymous: isAnonymous,
         parent_id: parentId } = messageObj.payload;
       const insertId = await addMessage(
-        req.session.userid,
+        userId,
         body,
         isAnonymous,
         lectureId,
@@ -63,7 +65,7 @@ const handleRequest = (webSocket, req) => {
         poll_choices: pollChoices
       } = messageObj.payload
       const pollInfo = await pollService.addPoll(
-        req.session.userid,
+        userId,
         lectureId,
         questionText,
         pollChoices
@@ -77,19 +79,23 @@ const handleRequest = (webSocket, req) => {
         is_anonymous,
       } = messageObj.payload;
 
-      const owner = ownerMap.get(lectureId)
-      const toUserWebSocket = webSockets.get(owner);
-      if (toUserWebSocket) {
-        toUserWebSocket.send(JSON.stringify({
-          userId,
-          body,
-          is_anonymous,
-          lecture_id: lectureId
-        }))
-      } else {
+      const owners = ownerMap.get(lectureId)
+      if (!owners) {
         const user = webSockets.get(userId);
         user.send(JSON.stringify({ msg: "Course Owner is not online." }))
+        return;
       }
+      owners.forEach((owner) => {
+        const toUserWebSocket = webSockets.get(owner);
+        if (toUserWebSocket) {
+          toUserWebSocket.send(JSON.stringify({
+            userId,
+            body,
+            is_anonymous,
+            lecture_id: lectureId
+          }))
+        }
+      })
       return;
     } else {
       return;
@@ -106,9 +112,9 @@ const handleRequest = (webSocket, req) => {
   webSocket.on('close', () => {
     webSockets.delete(userId);
     lectures.get(lectureId).delete(userId);
-    if(ownerMap.get(lectureId) === userId){
+    if (ownerMap.get(lectureId) === userId) {
       ownerMap.get(lectureId).delete(userId);
-      if(ownerMap.get(lectureId).size === 0) {
+      if (ownerMap.get(lectureId).size === 0) {
         ownerMap.delete(lectureId);
       }
     }

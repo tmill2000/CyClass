@@ -55,7 +55,7 @@ app.get('/*', function(req, res) {
 
 
 const webSocketServer = new (require('ws')).Server({ noServer: true });
-webSocketServer.on('connection', validateSession(req), websockets.handleRequest)
+webSocketServer.on('connection', websockets.handleRequest)
 
 let server;
 if (port == 443) {
