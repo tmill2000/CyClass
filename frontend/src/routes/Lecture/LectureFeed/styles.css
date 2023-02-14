@@ -133,3 +133,64 @@
 	font-weight: bolder;
 	color: #FFF;
 }
+
+.lfeed .poll .option {
+	background: none;
+	background-color: rgba(0, 136, 136, 0);
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 0.4rem;
+	width: 100%;
+}
+.lfeed .poll .option.selected {
+	background-color: rgba(0, 136, 136, 0.2);
+}
+.lfeed .poll .option.selected.correct {
+	background-color: rgba(0, 136, 0, 0.2);
+}
+.lfeed .poll .option.selected.wrong {
+	background-color: rgba(136, 0, 0, 0.2);
+}
+
+.lfeed .poll .option .select-box {
+	display: inline-block;
+	width: 1.2rem;
+	height: 1.2rem;
+	border: 0.2rem solid #888;
+	border-radius: 0.2rem;
+	margin-right: 0.6rem;
+}
+.lfeed .poll .option.selected .select-box {
+	background-color: #088;
+	border-color: #088;
+}
+.lfeed .poll .option.selected.correct .select-box {
+	background-color: #080;
+	border-color: #080;
+}
+.lfeed .poll .option.selected.wrong .select-box {
+	background-color: #800;
+	border-color: #800;
+}
+
+.lfeed .poll .option-text {
+	font-size: 1rem;
+}
+.lfeed .poll .option-text.label {
+	flex-grow: 1;
+	color: #066;
+	text-align: right;
+	font-weight: bolder;
+}
+.lfeed .poll .selected.correct .option-text,
+.lfeed .poll .correct .option-text.label {
+	color: #060;
+}
+.lfeed .poll .selected.wrong .option-text,
+.lfeed .poll .wrong .option-text.label {
+	color: #600;
+}

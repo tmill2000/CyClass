@@ -68,7 +68,7 @@ class LiveLectureAPI {
 		const port = location.port != '' ? `:${location.port}` : ""
 		const searchParams = new URLSearchParams();
 		searchParams.append("userId", this.userID);
-		searchParams.append("courseID", this.courseID);
+		searchParams.append("courseId", this.courseID);
 		searchParams.append("lectureId", this.lectureID);
 		const url = `${protocol}//${location.hostname}${port}?${searchParams}`;
 
@@ -118,7 +118,7 @@ class LiveLectureAPI {
 			let lectureEvent = null;
 			switch (msg.type) {
 			case "message":
-				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, msg.payload.body, msg.payload.sender_id, msg.payload.is_anonymous, Date.now());
+				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, msg.payload.body, msg.payload.sender_id, msg.payload.is_anonymous, new Date(msg.payload.timestamp));
 				break;
 			}
 			if (lectureEvent != null) {
@@ -150,7 +150,7 @@ class LiveLectureAPI {
 	 * @param {Number?} beforeTimestamp 
 	 * @return Promise
 	 */
-	fetchHistory(beforeTimestamp, onFailure) {
+	fetchHistory(beforeTimestamp) {
 
 		// Perform get
 		return axios.get("/api/message/messagesByLecture", {
@@ -164,7 +164,7 @@ class LiveLectureAPI {
 				// Dispatch an event for each message
 				for (const index in res.data) {
 					const msg = res.data[index];
-					const event = new LiveLectureMessageEvent(this.lectureID, msg.message_id, msg.body, msg.sender_id, msg.is_anonymous, msg.timestamp);
+					const event = new LiveLectureMessageEvent(this.lectureID, msg.message_id, msg.body, msg.sender_id, msg.is_anonymous, new Date(msg.timestamp));
 					this.eventTarget.dispatchEvent(event);
 				}
 
@@ -201,6 +201,72 @@ class LiveLectureAPI {
 				parent_id: null
 			}
 		}));
+
+	}
+
+	/**
+	 * Responds to the given poll, setting the specified choice as the logged-in user's response. Returns a Promise that
+	 * will resolve if the operation was successful.
+	 * @param {number} pollID 
+	 * @param {number} choiceID 
+	 * @return Promise
+	 */
+	respondToPoll(pollID, choiceID) {
+
+		// Perform post
+		return axios.post("/api/poll-response", {
+				course_id: this.courseID,
+				poll_id: pollID,
+				choice_id: choiceID
+			})
+			.then((res) => {})
+			.catch((err) => {
+				console.error("Failed to respond to poll:", err);
+				throw err;
+			})
+
+	}
+
+	/**
+	 * Returns the user's response (a `choiceID`) to the given poll. Returns a Promise that will resolve with the an
+	 * object of the following format (unless an error occurs):
+	 * - `choiceID?` (number or null if not responded yet)
+	 * - `correct?` (boolean or null if not responded/available yet)
+	 * @param {number} pollID 
+	 * @return Promise
+	 */
+	getPollResponse(pollID) {
+
+		// Perform get
+		return axios.get("/api/poll/metrics", {
+				params: {
+					course_id: this.courseID,
+					poll_id: this.pollID
+				}
+			})
+			.then((res) => {
+
+				// Find response in response list
+				for (const i of res.data.userResponses) {
+					if (i.user_id == this.userID) {
+						return {
+							choiceID: i.poll_choice_id,
+							correct: i.is_correct_choice
+						}
+					}
+				}
+
+				// Didn't find, so return all null
+				return {
+					choiceID: null,
+					correct: null
+				}
+
+			})
+			.catch((err) => {
+				console.error("Failed to get poll response:", err);
+				throw err;
+			})
 
 	}
 
@@ -296,18 +362,18 @@ class LiveLectureCloseEvent extends Event {
  * - `body`
  * - `userID`
  * - `isAnonymous`
- * - `timestamp`
+ * - `time` ({@link Date})
  */
 class LiveLectureMessageEvent extends Event {
 
-	constructor(lectureID, messageID, body, userID, isAnonymous, timestamp) {
+	constructor(lectureID, messageID, body, userID, isAnonymous, time) {
 		super("message");
 		this.lectureID = lectureID;
 		this.messageID = messageID;
 		this.body = body;
 		this.userID = userID;
 		this.isAnonymous = isAnonymous;
-		this.timestamp = timestamp;
+		this.time = time;
 	}
 
 }

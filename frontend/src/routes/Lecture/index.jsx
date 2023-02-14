@@ -100,7 +100,7 @@ function Lecture(props) {
 					},
 					me: event.userID == meUserID,
 					text: event.body,
-					time: event.timestamp
+					time: event.time
 				});
 
 				// Update version
@@ -130,7 +130,7 @@ function Lecture(props) {
 			<div style={{ display: "flex" }}>
             	<LiveLectureLeftMenu />
 				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
-					<LectureFeed messages={lectureData.messages} />
+					<LectureFeed api={lectureAPI} messages={lectureData.messages} />
 					<NewMessageEntry api={lectureAPI} />
 				</div>
 			</div>
