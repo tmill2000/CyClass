@@ -45,3 +45,50 @@
 .poll-form-question-input-label{
     font-size: 15px;
 }
+
+.poll-form-answer-button-group{
+    display: flex;
+    flex-direction: column;
+}
+
+.poll-form-answer-entry-group{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    vertical-align: center;
+    
+}
+
+.poll-form-answer-label{
+    font-size: 25px;
+}
+
+.poll-form-answer-group{
+    display: flex;
+    flex-direction: row;
+    margin-left: 20px;
+}
+
+.poll-form-individual-answer-entry-group{
+    display: flex;
+    flex-direction: row;
+    margin-left: 20px;
+}
+
+.poll-form-individual-answer-entry{
+    background-color: white;
+    font-size: 20px;
+    margin-top: 8px;
+    width: calc(80vw - 300px);
+}
+
+.poll-form-individual-answer-label{
+    background-color: white;
+    font-size: 19px;
+    border-style: solid;
+    border-width: 1px;
+    padding-left: 9px;
+    padding-right: 5px;
+    width: 20px;
+    margin-top: 8px;
+}
