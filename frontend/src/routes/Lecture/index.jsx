@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createRef } from "react";
+import { Navigate, useParams } from "react-router-dom";
 
 import DataStore from "../../utilities/data/DataStore";
 import LiveLectureAPI from "../../utilities/api/LiveLectureAPI";
@@ -11,6 +12,7 @@ import LectureFeed from "./LectureFeed";
 import NewMessageEntry from "./NewMessageEntry";
 import LiveLectureTitle from "./LiveLectureTitle";
 import LiveLectureLeftMenu from "./LiveLectureLeftMenu";
+import ErrorPage from "../ErrorPage";
 
 const userAPI = new UserAPI();
 let lectureAPI = null;
@@ -19,31 +21,30 @@ const lectureDataMap = {};
 
 function Lecture(props) {
 
-	// Get lecture from URL and validate it
-	const searchParams = new URLSearchParams(window.location.search);
-	let lectureID = searchParams.get("id");
-	if (lectureID != null) {
-		lectureID = parseInt(lectureID);
-		if (lectureID == NaN) {
-			lectureID = null;
-		}
+	// Get lecture and course IDs from path params and validate them
+	const pathParams = useParams();
+	const lectureID = parseInt(pathParams.lectureID);
+	if (isNaN(lectureID)) {
+		return <ErrorPage code={400} text="Invalid lecture number" />;
 	}
-	if (lectureID == null) {
+	const courseID = parseInt(pathParams.courseID);
+	if (isNaN(courseID)) {
+		return <ErrorPage code={400} text="Invalid course number" />;
+	}
 
-		// Log
-		console.error("Lecture ID not specified in URL or is not a number");
-
-		// TODO:  display some sort of error
-
+	// Get user ID, verifying logged-in
+	const userID = DataStore.get("userID");
+	if (userID == null) {
+		return <Navigate to="/login" />;
 	}
 
 	// Make new API instance, clearing previous state if API still exists for a different lecture (for some reason)
-	if (lectureAPI != null && lectureAPI.getLectureID() != lectureID) {
+	if (lectureAPI != null && !lectureAPI.isLecture(userID, courseID, lectureID)) {
 		lectureAPI.closeLive();
 		lectureAPI = null;
 	}
-	if (lectureAPI == null && lectureID != null) {
-		lectureAPI = new LiveLectureAPI(lectureID, DataStore.get("userID"));
+	if (lectureAPI == null) {
+		lectureAPI = new LiveLectureAPI(userID, courseID, lectureID);
 	}
 
 	// Define lecture data and data version state
@@ -99,7 +100,7 @@ function Lecture(props) {
 					},
 					me: event.userID == meUserID,
 					text: event.body,
-					time: event.timestamp
+					time: event.time
 				});
 
 				// Update version
@@ -129,7 +130,7 @@ function Lecture(props) {
 			<div style={{ display: "flex" }}>
             	<LiveLectureLeftMenu />
 				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
-					<LectureFeed messages={lectureData.messages} />
+					<LectureFeed api={lectureAPI} messages={lectureData.messages} />
 					<NewMessageEntry api={lectureAPI} />
 				</div>
 			</div>

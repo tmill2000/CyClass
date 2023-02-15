@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/06/2022
- * UPDATED:	02/05/2023
+ * UPDATED:	02/14/2023
  * 
  * PROPS:
  * - messages: Message[]
@@ -15,7 +15,7 @@
  *       },
  *       me: boolean,
  *       text: string,
- *       time: number    <= UTC timestamp (milliseconds)
+ *       time: Date
  *   }
  */
 
@@ -31,7 +31,7 @@ const MAX_CONDENSE_TIME_DIFF = 120; // (seconds)
 function LectureFeed(props) {
 
 	// Preprocess messages, condensing if neighboring messages are from the same person and similar times
-	const messages = (props.messages || {}).map((x) => x).sort((x, y) => x.time - y.time);
+	const messages = (props.messages || {}).map((x) => x).sort((x, y) => x.time.getTime() - y.time.getTime());
 	const feedList = [];
 	for (let i = 0; i < messages.length; i++) {
 		let showUser = true, showTime = true;
@@ -56,7 +56,33 @@ function LectureFeed(props) {
 		<div className="lfeed" style={props.style || {}}>
 			<div className="feed">
 				{feedList}
-				<Poll time={Date.now()} user={{ name: "Test User", role: "Student" }} />
+				<Poll
+					id={1}
+					time={new Date()}
+					user={{ name: "Test User", role: "Student" }}
+					prompt="If temperature diffuses uniformly and water boils at 100 degrees Celsius, what is the precise circumference of the Sun within 3 significant digits?"
+					options={[
+						{
+							choiceID: 1,
+							text: "5.23 x 10^5"
+						},
+						{
+							choiceID: 2,
+							text: "9.72 x 10^15"
+						},
+						{
+							choiceID: 3,
+							text: "2.45 x 10^25"
+						},
+						{
+							choiceID: 4,
+							text: "2"
+						}
+					]}
+					selected={4}
+					correct={null}
+					api={props.api}
+				/>
 			</div>
 		</div>
 	);

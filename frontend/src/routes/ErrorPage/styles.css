@@ -1,0 +1,20 @@
+.error-title {
+	text-align: center;
+	margin-top: 4rem;
+	margin-bottom: 0.3em;
+}
+
+.error-reason {
+	text-align: center;
+	color: #555;
+	margin-top: 0px;
+	margin-bottom: 4rem;
+}
+
+.error-link {
+	text-align: center;
+	font-size: 1.2em;
+	display: block;
+	color: #0059ff;
+	font-weight: bold;
+}

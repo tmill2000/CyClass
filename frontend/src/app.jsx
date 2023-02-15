@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	10/24/2022
- * UPDATED:	02/05/2023
+ * UPDATED:	02/14/2023
  */
 
 import React from "react";
@@ -13,6 +13,7 @@ import "./app.css";
 
 import DataStore, { DataStoreProvider } from "./utilities/data/DataStore";
 
+import ErrorPage from "./routes/ErrorPage";
 import Home from "./routes/Home";
 import Lecture from "./routes/Lecture";
 import Login from "./routes/Login";
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
 			<TopBar />
 			<Outlet />
 		</div>,
+		errorElement: <div>
+			<TopBar />
+			<ErrorPage />
+		</div>,
 		children: [
 			{
 				path: "",
@@ -46,7 +51,7 @@ const router = createBrowserRouter([
 				element: <Login />
 			},
 			{
-				path: "lecture",
+				path: "course/:courseID/lecture/:lectureID",
 				element: <Lecture />
 			}
 		]
