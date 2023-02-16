@@ -58,7 +58,7 @@ describe('getLecture', () => {
             lectures.set(1, 1)
             await isLectureLive(req, res);
             expect(res.status).toBeCalledWith(200)
-    
+            lectures.delete(1)
         })
     })
     
