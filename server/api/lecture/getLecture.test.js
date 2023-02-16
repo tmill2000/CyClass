@@ -2,7 +2,6 @@ const { getLecture, isLectureLive }  = require('./getLecture')
 const lectureService = require('./services/lectureService')
 const { getMockReq, getMockRes } = require('@jest-mock/express');
 const { studentSession, noAssociationSession } = require('../../test/mock/mockStudentUserSession');
-const { lectures } = require('../../websockets/websockets')
 
 const { res, mockClear } = getMockRes()
 describe('getLecture', () => {
@@ -55,10 +54,8 @@ describe('getLecture', () => {
         it('should return 200 for success', async () => {
             const req = getMockReq({ query: { course_id: 1, lecture_id: 1 }})
             req.session = studentSession
-            lectures.set(1, 1)
             await isLectureLive(req, res);
             expect(res.status).toBeCalledWith(200)
-            lectures.delete(1)
         })
     })
     
