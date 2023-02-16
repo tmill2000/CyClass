@@ -7,6 +7,7 @@ npm ci
 npm run build
 
 cd ../server
+npm run test
 # Build and deploy
-npm ci --omit=dev
+npm ci
 cat .env.sudo | sudo -S /usr/bin/pm2 restart server.js
