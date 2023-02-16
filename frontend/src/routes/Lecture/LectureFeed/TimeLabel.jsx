@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	02/05/2023
- * UPDATED:	02/14/2023
+ * UPDATED:	02/16/2023
  */
 
 import React from "react";
@@ -20,7 +20,8 @@ function TimeLabel(props) {
 	}
 
 	// Compute elapsed time from now (in seconds)
-	const elapsed = (Date.now() - props.time.getTime()) / 1000;
+	const date = props.time;
+	const elapsed = (Date.now() - date.getTime()) / 1000;
 
 	// Set relative text
 	let timeText;
