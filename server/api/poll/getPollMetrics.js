@@ -18,17 +18,17 @@ const getPollMetrics = async (req, res) => {
             return res.status(401).send({msg: 'User is not associated with course'})
         }
         const isFaculty = course[0].role === 'PROFESSOR' || course[0].role === 'TA'
-        const resp = await pollService.getPollMetrics(pollId, isFaculty)
+        const resp = await pollService.getPollMetrics(pollId)
         if(!isFaculty){
             const userResp = resp.filter((response) => Number(response.user_id) === Number(req.session.userid))
             return res.status(200).send({
                 totalRespondants: userResp.length,
-                correctResponses: userResp?.[0]?.is_correct_choice ?? 0,
-                userResponse: userResp.length ? {
+                correctResponses: userResp?.[0]?.is_correct_choice ? 1 : 0,
+                userResponses: userResp.length ? [{
                     user_id: userResp[0]?.user_id,
                     poll_choice_id: userResp[0]?.poll_choice_id,
                     is_correct_choice: !!userResp[0]?.is_correct_choice
-                } : []
+                }] : []
             })
         }
         const numCorrect = resp.filter((response) => response.is_correct_choice).length
