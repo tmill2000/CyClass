@@ -1,5 +1,5 @@
 const studentSession = {
-    userId: 1,
+    userid: 1,
     sessionId: "isV9mhw70IJbRPWGcU+xYA==",
     user_roles: [
         {
@@ -12,7 +12,7 @@ const studentSession = {
 }
 
 const professorSession = {
-    userId: 1,
+    userid: 1,
     sessionId: "isV9mhw70IJbRPWGcU+xYA==",
     user_roles: [
         {
@@ -25,7 +25,7 @@ const professorSession = {
 }
 
 const noAssociationSession = {
-    userId: 1,
+    userid: 1,
     sessionId: "isV9mhw70IJbRPWGcU+xYA==",
     user_roles: []
 }
