@@ -24,11 +24,11 @@ const getPollMetrics = async (req, res) => {
             return res.status(200).send({
                 totalRespondants: userResp.length,
                 correctResponses: userResp?.[0]?.is_correct_choice ? 1 : 0,
-                userResponse: userResp.length ? {
+                userResponses: userResp.length ? [{
                     user_id: userResp[0]?.user_id,
                     poll_choice_id: userResp[0]?.poll_choice_id,
                     is_correct_choice: !!userResp[0]?.is_correct_choice
-                } : []
+                }] : []
             })
         }
         const numCorrect = resp.filter((response) => response.is_correct_choice).length

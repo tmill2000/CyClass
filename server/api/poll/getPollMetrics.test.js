@@ -46,7 +46,30 @@ describe('getPollMetrics', () => {
         const req = getMockReq({ query: {poll_id: 1, course_id: 1 } })
         req.session = studentSession
         const result = [
-            { user_id: 1, poll_choice_id: 1, is_correct_choice: false },
+            { user_id: 1, poll_choice_id: 1, is_correct_choice: true },
+            { user_id: 2, poll_choice_id: 2, is_correct_choice: false },
+            { user_id: 3, poll_choice_id: 2, is_correct_choice: false }
+        ]
+        const spy = jest.spyOn(pollService, 'getPollMetrics').mockResolvedValueOnce(result)
+        await getPollMetrics(req, res);
+        expect(res.status).toBeCalledWith(200);
+        expect(res.send).toBeCalledWith({ 
+            totalRespondants: 1,
+            correctResponses: 1,
+            userResponses: [{
+                user_id: 1,
+                poll_choice_id: 1,
+                is_correct_choice: true
+            }]
+        })
+        expect(spy).toBeCalledTimes(1);
+    })
+
+    it('should return 200 for success and correct items for Student when they didn\'t answer poll', async () => {
+        const req = getMockReq({ query: {poll_id: 1, course_id: 1 } })
+        req.session = studentSession
+        const result = [
+            { user_id: 0, poll_choice_id: 1, is_correct_choice: false },
             { user_id: 2, poll_choice_id: 2, is_correct_choice: true },
             { user_id: 3, poll_choice_id: 2, is_correct_choice: true }
         ]
@@ -54,13 +77,9 @@ describe('getPollMetrics', () => {
         await getPollMetrics(req, res);
         expect(res.status).toBeCalledWith(200);
         expect(res.send).toBeCalledWith({ 
-            totalRespondants: 1,
+            totalRespondants: 0,
             correctResponses: 0,
-            userResponse: {
-                user_id: 1,
-                poll_choice_id: 1,
-                is_correct_choice: false
-            } 
+            userResponses: []
         })
         expect(spy).toBeCalledTimes(1);
     })

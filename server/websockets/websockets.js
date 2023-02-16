@@ -97,6 +97,11 @@ const handleRequest = async (webSocket, req) => {
         }
       })
       return;
+    } else if (messageObj.type = 'poll_close'){
+      const {
+        poll_id,
+      } = messageObj.payload;
+      message.payload = { poll_id }
     } else {
       return;
     }
