@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 
  import "./styles.css";
 import PollFormHeader from "../../components/Poll/PollForm/PollFormHeader";
-import PollFormBody from "../../components/Poll/PollForm/PollFormBody";
+import PollFormPopup from "../../components/Poll/PollForm/PollFormPopup";
 
  function Login(props) {
 	
@@ -103,8 +103,9 @@ import PollFormBody from "../../components/Poll/PollForm/PollFormBody";
 		<div className="login">
 			<div className="container">
 				<LoginForm />
-				<PopUp header=<PollFormHeader profile_name="Maruf" profile_role="Professor"></PollFormHeader> 
-				trigger_button_name="Create Poll" content=<PollFormBody></PollFormBody> submit_button_name="Post Poll"></PopUp>
+				<PollFormPopup profile_name="Maruf" profile_role="Professor"></PollFormPopup>
+				{/* <PopUp header=<PollFormHeader profile_name="Maruf" profile_role="Professor"></PollFormHeader> 
+				trigger_button_name="Create Poll" content=<PollFormBody></PollFormBody> submit_button_name="Post Poll"></PopUp> */}
 			</div>
 		</div>
 	);
