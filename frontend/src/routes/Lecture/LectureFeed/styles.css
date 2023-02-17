@@ -1,41 +1,196 @@
-.lfeed-container {
-	overflow-y: scroll;
+/*****************************************************************************/
+/* FEED */
+
+.lfeed {
 	width: 100%;
 	flex-grow: 1;
+	overflow-x: hidden;
+	overflow-y: auto;
 	display: flex;
 	flex-direction: column-reverse;
 }
 
-.lfeed-feed {
+.lfeed .feed {
 	padding: 1%;
 	display: flex;
-	flex-direction: column-reverse;
+	flex-direction: column;
 	gap: 6px;
 }
 
-.lfeed-post-container {
-	width: 60%;
-}
+/*****************************************************************************/
+/* GENERIC POST */
 
-.lfeed-post-timestamp {
+.lfeed .post-timestamp {
 	margin: 6px 8px 3px 8px;
 	color: #888;
 	font-weight: lighter;
 }
 
-.lfeed-message-container {
-	width: fit-content;
-}
-
-.lfeed-message-text-container {
-	width: fit-content;
-	padding: 12px 15px;
-	border-radius: 15px;
-	filter: drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.07));
-}
-
-.lfeed-post-user-container {
+.lfeed .user-container {
 	margin-top: -7px;
 	margin-bottom: -7px;
 	padding: 0px 0px;
+	float: left;
+}
+.lfeed .me .user-container {
+	float: right;
+}
+
+.lfeed .post-bubble {
+	padding: 10px 14px;
+	border-radius: 12px;
+	filter: drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.07));
+}
+
+/*****************************************************************************/
+/* MESSAGE */
+
+.lfeed .msg {
+	width: 60%;
+	padding-left: 0%;
+	padding-right: 40%;
+}
+.lfeed .msg.me {
+	padding-left: 40%;
+	padding-right: 0%;
+}
+
+.lfeed .msg .post-container {
+	width: fit-content;
+	margin-left: 0px;
+	margin-right: auto;
+}
+.lfeed .msg.me .post-container {
+	margin-left: auto;
+	margin-right: 0px;
+}
+
+.lfeed .msg .post-bubble {
+	width: fit-content;
+	background-color: #F5F5F5;
+	margin-left: 0px;
+	margin-right: auto;
+}
+.lfeed .msg.me .post-bubble {
+	background-color: #DBF0FF;
+	margin-left: auto;
+	margin-right: 0px;
+}
+
+/*****************************************************************************/
+/* POLL */
+
+.lfeed .poll {
+	width: 100%;
+}
+
+.lfeed .poll .post-bubble {
+	background-color: #E9F8E7;
+}
+
+.lfeed .poll .poll-header {
+	display: flex;
+	gap: 1em;
+}
+
+.lfeed .poll .title-container {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.lfeed .poll .title-container .container {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+}
+
+.lfeed .poll .title-container .line {
+	margin-top: 2px;
+	height: 2px;
+	background-color: rgba(0.5, 0.5, 0.5, 0.15);
+}
+
+.lfeed .poll .title {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+.lfeed .poll .close-time {
+	font-size: 1.1em;
+	color: #555;
+}
+
+.lfeed .poll .results-button {
+	flex-grow: 0;
+	width: fit-content;
+	height: 100%;
+	padding: 6px 14px;
+	background-color: #008615;
+	border-radius: 8px;
+	font-size: 1.2em;
+	font-weight: bolder;
+	color: #FFF;
+}
+
+.lfeed .poll .option {
+	background: none;
+	background-color: rgba(0, 136, 136, 0);
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 0.4rem;
+	width: 100%;
+}
+.lfeed .poll .option.selected {
+	background-color: rgba(0, 136, 136, 0.2);
+}
+.lfeed .poll .option.selected.correct {
+	background-color: rgba(0, 136, 0, 0.2);
+}
+.lfeed .poll .option.selected.wrong {
+	background-color: rgba(136, 0, 0, 0.2);
+}
+
+.lfeed .poll .option .select-box {
+	display: inline-block;
+	width: 1.2rem;
+	height: 1.2rem;
+	border: 0.2rem solid #888;
+	border-radius: 0.2rem;
+	margin-right: 0.6rem;
+}
+.lfeed .poll .option.selected .select-box {
+	background-color: #088;
+	border-color: #088;
+}
+.lfeed .poll .option.selected.correct .select-box {
+	background-color: #080;
+	border-color: #080;
+}
+.lfeed .poll .option.selected.wrong .select-box {
+	background-color: #800;
+	border-color: #800;
+}
+
+.lfeed .poll .option-text {
+	font-size: 1rem;
+}
+.lfeed .poll .option-text.label {
+	flex-grow: 1;
+	color: #066;
+	text-align: right;
+	font-weight: bolder;
+}
+.lfeed .poll .selected.correct .option-text,
+.lfeed .poll .correct .option-text.label {
+	color: #060;
+}
+.lfeed .poll .selected.wrong .option-text,
+.lfeed .poll .wrong .option-text.label {
+	color: #600;
 }

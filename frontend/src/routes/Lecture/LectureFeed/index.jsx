@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/06/2022
- * UPDATED:	11/06/2022
+ * UPDATED:	02/14/2023
  * 
  * PROPS:
  * - messages: Message[]
@@ -15,108 +15,74 @@
  *       },
  *       me: boolean,
  *       text: string,
- *       time: number    <= UTC timestamp (milliseconds)
+ *       time: Date
  *   }
  */
 
 import React from "react";
 
-import LectureMessage from "./LectureMessage";
+import Message from "./Message";
+import Poll from "./Poll";
 
 import "./styles.css";
-
-const TEST_USER = {
-	id: 1,
-	name: "Billy Bob",
-	role: "Student"
-};
-const TEST_MESSAGE = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae est ac lectus posuere molestie vel nec libero. Suspendisse id cursus arcu, in malesuada tortor. Sed quis pellentesque mauris, sed pellentesque quam. Mauris sit amet tellus faucibus, tristique nisi eu, faucibus odio. Nulla ac pretium urna. In mauris sem, molestie ut massa vitae, gravida fermentum sapien. Etiam aliquam risus a magna ultrices posuere. Aliquam erat volutpat.`;
-const TEST_TIMESTAMP = 1667406940000;
-
-const TEST_MESSAGES = [
-	{
-		user: TEST_USER,
-		text: "short message",
-		time: Date.now(),
-		me: true
-	},
-	{
-		user: TEST_USER,
-		text: "short message",
-		time: Date.now() - 3600000 * 1
-	},
-	{
-		user: TEST_USER,
-		text: "short message",
-		time: Date.now() - 3600000 * 2,
-		me: true
-	},
-	{
-		user: TEST_USER,
-		text: "short message",
-		time: Date.now() - 3600000 * 2,
-		me: true
-	},
-	{
-		user: TEST_USER,
-		text: "short message",
-		time: Date.now() - 3600000 * 4,
-		me: true
-	},
-	{
-		user: TEST_USER,
-		text: TEST_MESSAGE,
-		time: Date.now() - 3600000 * 5,
-		me: true
-	},
-	{
-		user: TEST_USER,
-		text: TEST_MESSAGE,
-		time: Date.now() - 3600000 * 25,
-		me: true
-	},
-	{
-		user: TEST_USER,
-		text: TEST_MESSAGE,
-		time: TEST_TIMESTAMP
-	},
-	{
-		user: TEST_USER,
-		text: TEST_MESSAGE,
-		time: TEST_TIMESTAMP
-	},
-]
 
 const MAX_CONDENSE_TIME_DIFF = 120; // (seconds)
 
 function LectureFeed(props) {
 
 	// Preprocess messages, condensing if neighboring messages are from the same person and similar times
-	const messages = (props.messages || TEST_MESSAGES).map((x) => x).sort((x, y) => x.time < y.time);
+	const messages = (props.messages || {}).map((x) => x).sort((x, y) => x.time.getTime() - y.time.getTime());
 	const feedList = [];
 	for (let i = 0; i < messages.length; i++) {
 		let showUser = true, showTime = true;
 		const msg = messages[i];
 		if (i > 0) {
-			const nextMsg = messages[i - 1];
-			if (nextMsg.user.id == msg.user.id && nextMsg.time - msg.time < MAX_CONDENSE_TIME_DIFF * 1000) {
-				showUser = false;
-			}
-		}
-		if (i < messages.length - 1) {
-			const prevMsg = messages[i + 1];
+			const prevMsg = messages[i - 1];
 			if (prevMsg.user.id == msg.user.id && msg.time - prevMsg.time < MAX_CONDENSE_TIME_DIFF * 1000) {
 				showTime = false;
 			}
 		}
-		feedList.push(<LectureMessage user={showUser ? msg.user : null} time={showTime ? msg.time : null} text={msg.text} me={msg.me} />);
+		if (i < messages.length - 1) {
+			const nextMsg = messages[i + 1];
+			if (nextMsg.user.id == msg.user.id && nextMsg.time - msg.time < MAX_CONDENSE_TIME_DIFF * 1000) {
+				showUser = false;
+			}
+		}
+		feedList.push(<Message user={showUser ? msg.user : null} time={showTime ? msg.time : null} text={msg.text} me={msg.me} />);
 	}
 
 	// Component
 	return (
-		<div className="lfeed-container" style={props.style || {}}>
-			<div className="lfeed-feed">
+		<div className="lfeed" style={props.style || {}}>
+			<div className="feed">
 				{feedList}
+				<Poll
+					id={1}
+					time={new Date()}
+					user={{ name: "Test User", role: "Student" }}
+					prompt="If temperature diffuses uniformly and water boils at 100 degrees Celsius, what is the precise circumference of the Sun within 3 significant digits?"
+					options={[
+						{
+							choiceID: 1,
+							text: "5.23 x 10^5"
+						},
+						{
+							choiceID: 2,
+							text: "9.72 x 10^15"
+						},
+						{
+							choiceID: 3,
+							text: "2.45 x 10^25"
+						},
+						{
+							choiceID: 4,
+							text: "2"
+						}
+					]}
+					selected={4}
+					correct={null}
+					api={props.api}
+				/>
 			</div>
 		</div>
 	);

@@ -23,7 +23,9 @@ const getUserInfoByUserId = async (req, res) => {
 
         const resp = {
             userId: userData.user_id,
-            email: `${userData.netid}@iastate.edu`
+            email: `${userData.netid}@iastate.edu`,
+            first_name: userData.first_name,
+            last_name: userData.last_name
         }
         return res.status(200).send(resp);
     } catch (e) {
@@ -58,7 +60,7 @@ const login = async (req, res) => {
             res.status(200).send({ userId: rows[0].user_id, sessionId: session.sessionId, userRoles: roles });
         }
         else {
-            res.send({ msg: 'Incorrect username or password' });
+            res.status(401).send({ msg: 'Incorrect Username or Password' });
         }
     } catch (err) {
         console.error(err)

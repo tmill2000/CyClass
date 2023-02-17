@@ -48,7 +48,7 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
         const messages = await runQuery(query, options);
         const formattedMessages = messages.map((value) => ({
             sender_id: value.sender_id,
-            timestamp: new Date(value.timestamp).getTime(),
+            timestamp: new Date(value.timestamp).toISOString(),
             role: value.role,
             netid: value.netid,
             body: value.body,
@@ -82,7 +82,7 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
         for (const [key, value] of pollMap) {
             formattedPolls.push({
                 poll_id: key,
-                timestamp: new Date(value[0].timestamp).getTime(),
+                timestamp: new Date(value[0].timestamp).toISOString(),
                 question: value[0].question_text,
                 close_date: value[0].close_date ? new Date(value[0].close_date).getTime() : null,
                 closed: !value[0].is_open,

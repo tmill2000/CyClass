@@ -1,19 +1,19 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	10/24/2022
- * UPDATED:	11/22/2022
+ * UPDATED:	02/14/2023
  */
 
 import React from "react";
 import axios from "axios";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
-import { Provider } from "react-redux";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 
 import "./app.css";
 
-import DataStore from "./utilities/data/DataStore";
+import DataStore, { DataStoreProvider } from "./utilities/data/DataStore";
 
+import ErrorPage from "./routes/ErrorPage";
 import Home from "./routes/Home";
 import Lecture from "./routes/Lecture";
 import Login from "./routes/Login";
@@ -24,7 +24,7 @@ import TopBar from "./components/TopBar";
 axios.interceptors.request.use((config) => {
 	const sessionID = DataStore.get("sessionID");
 	if (sessionID != null) {
-		config.params = Object.assign(config.params || {}, { session_id: sessionID });
+		config.headers = Object.assign(config.headers || {}, { ["x-session-id"]: sessionID });
 	}
 	return config;
 });
@@ -33,24 +33,36 @@ axios.interceptors.request.use((config) => {
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Login /> // <Home />
-	},
-	{
-		path: "/login",
-		element: <Login />
-	},
-	{
-		path: "/lecture",
-		element: <Lecture />
-	},
+		element: <div>
+			<TopBar />
+			<Outlet />
+		</div>,
+		errorElement: <div>
+			<TopBar />
+			<ErrorPage />
+		</div>,
+		children: [
+			{
+				path: "",
+				element: <Home />
+			},
+			{
+				path: "login",
+				element: <Login />
+			},
+			{
+				path: "course/:courseID/lecture/:lectureID",
+				element: <Lecture />
+			}
+		]
+	}
 ]);
  
 // Create Root and render complete app
 createRoot(document.getElementById("root")).render(
 	//<React.StrictMode>
-		<Provider store={DataStore.getReduxStore()}>
-			<TopBar />
+		<DataStoreProvider>
 			<RouterProvider router={router} />
-		</Provider>
+		</DataStoreProvider>
 	//</React.StrictMode>
 );

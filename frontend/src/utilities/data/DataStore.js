@@ -1,15 +1,17 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/22/2022
- * UPDATED:	11/22/2022
+ * UPDATED:	02/05/2023
  */
 
+import React from "react";
 import { configureStore, createReducer, createAction } from "@reduxjs/toolkit";
+import { Provider, useSelector } from "react-redux";
 
 const LOCAL_STORAGE_KEY = "dataStore";
 
 /**
- * Class responsible for the management of saved data. The result of the import should be used directly:
+ * Class responsible for the management of locally persistent data. The result of the import should be used directly:
  * ```
  * import DataStore from "./utilities/data/DataStore";
  * ...
@@ -96,14 +98,33 @@ class DataStore {
 		this.store.dispatch(this.clearAction(key));
 	}
 
-	/**
-	 * Returns the interal Redux store.
-	 * @return Redux store
-	 */
-	getReduxStore() {
-		return this.store;
-	}
+}
+
+// DataStore global
+const ds = new DataStore();
+export default ds;
+
+/**
+ * Component that allows children elements to use the {@link useDataStoreValue()} hook.
+ */
+export function DataStoreProvider(props) {
+
+	// Component
+	return (
+		<Provider store={ds.store}>
+			{props.children}
+		</Provider>
+	);
 
 }
 
-export default new DataStore();
+/**
+ * React hook for getting the value of a DataStore key and automatically updating upon it changing.
+ * @param {String} key key of DataStore value to return/hook to
+ */
+export function useDataStoreValue(key) {
+
+	// Use redux hook, but abstract away the state part
+	return useSelector((state) => state[key]);
+
+}

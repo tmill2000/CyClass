@@ -11,6 +11,7 @@ const websockets = require('./websockets/websockets');
 const port = process.env.PORT || 443;
 const path = require('path');
 const fs = require('fs');
+const validateSession = require('./middleware/validateSession');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

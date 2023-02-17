@@ -1,4 +1,5 @@
 const lectureService = require('./services/lectureService')
+const { hasCoursePermissions } = require('../../utils/permissions')
 
 /**
  * @param {*} req 
@@ -12,9 +13,12 @@ const lectureService = require('./services/lectureService')
  */
 const addLecture = async (req, res) => {
     try {
-        const { course_id: courseId, title } = req.body;
+        const { title, course_id: courseId } = req.body;
         if (!courseId || !title) {
             return res.status(400).send({ msg: "Invalid Body" })
+        }
+        if(!hasCoursePermissions(courseId, req.session)){
+            return res.status(401).send({ msg: 'Unauthorized to create lecture' })
         }
         const insertId = await lectureService.addLecture(courseId, title);
         return res.status(201).send({ lecture_id: insertId });

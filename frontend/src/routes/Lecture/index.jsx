@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createRef } from "react";
+import { Navigate, useParams } from "react-router-dom";
 
 import DataStore from "../../utilities/data/DataStore";
 import LiveLectureAPI from "../../utilities/api/LiveLectureAPI";
@@ -11,6 +12,7 @@ import LectureFeed from "./LectureFeed";
 import NewMessageEntry from "./NewMessageEntry";
 import LiveLectureTitle from "./LiveLectureTitle";
 import LiveLectureLeftMenu from "./LiveLectureLeftMenu";
+import ErrorPage from "../ErrorPage";
 
 const userAPI = new UserAPI();
 let lectureAPI = null;
@@ -19,22 +21,30 @@ const lectureDataMap = {};
 
 function Lecture(props) {
 
-	// Get lecture from URL and validate it
-	const searchParams = new URLSearchParams(window.location.search);
-	let lectureID = searchParams.get("id");
-	if (lectureID != null) {
-		lectureID = parseInt(lectureID);
-		if (lectureID == NaN) {
-			lectureID = null;
-		}
+	// Get lecture and course IDs from path params and validate them
+	const pathParams = useParams();
+	const lectureID = parseInt(pathParams.lectureID);
+	if (isNaN(lectureID)) {
+		return <ErrorPage code={400} text="Invalid lecture number" />;
 	}
-	if (lectureID == null) {
+	const courseID = parseInt(pathParams.courseID);
+	if (isNaN(courseID)) {
+		return <ErrorPage code={400} text="Invalid course number" />;
+	}
 
-		// Log
-		console.error("Lecture ID not specified in URL or is not a number");
+	// Get user ID, verifying logged-in
+	const userID = DataStore.get("userID");
+	if (userID == null) {
+		return <Navigate to="/login" />;
+	}
 
-		// TODO:  display some sort of error
-
+	// Make new API instance, clearing previous state if API still exists for a different lecture (for some reason)
+	if (lectureAPI != null && !lectureAPI.isLecture(userID, courseID, lectureID)) {
+		lectureAPI.closeLive();
+		lectureAPI = null;
+	}
+	if (lectureAPI == null) {
+		lectureAPI = new LiveLectureAPI(userID, courseID, lectureID);
 	}
 
 	// Define lecture data and data version state
@@ -53,58 +63,56 @@ function Lecture(props) {
 	// Add effect for setting up API connection
 	useEffect(() => {
 
-		// Start by clearing previous state (API clean-up is mostly a sanity check)
-		if (lectureAPI != null) {
-			lectureAPI.closeLive();
-			lectureAPI = null;
-		}
-
 		// Stop here if invalid lecture
 		if (lectureID == null) {
 			return;
 		}
 
-		// Create API instance and bind to events
-		const meUserID = DataStore.get("userID");
-		lectureAPI = new LiveLectureAPI(lectureID);
-		lectureAPI.onLiveClose((event) => {
+		// If not live, then bind to events and go live
+		if (!lectureAPI.isLive()) {
 
-			// Check if unexpected
-			if (event.dueToError) {
+			// Bind to events
+			lectureAPI.onLiveClose((event) => {
 
-				// TODO:  display some sort of error
+				// Check if unexpected
+				if (event.dueToError) {
 
-			}
+					// TODO:  display some sort of error
 
-		});
-		lectureAPI.onMessage(async (event) => {
+				}
 
-			// Fetch user data (unless null)
-			const userData = event.userID != null ? await userAPI.getUserData(event.userID) : {	
-				name: "?",
-				role: "?"
-			};
+			});
+			const meUserID = DataStore.get("userID");
+			lectureAPI.onMessage(async (event) => {
 
-			// Add to messages array
-			lectureData.messages.push({
-				user: {
-					id: event.userID,
-					name: userData.name,
-					role: userData.role
-				},
-				me: event.userID == meUserID,
-				text: event.body,
-				time: event.timestamp
+				// Fetch user data (unless null)
+				const userData = event.userID != null ? await userAPI.getUserData(event.userID) : {	
+					name: "?",
+					role: "?"
+				};
+
+				// Add to messages array
+				lectureData.messages.push({
+					user: {
+						id: event.userID,
+						name: userData.name,
+						role: userData.role
+					},
+					me: event.userID == meUserID,
+					text: event.body,
+					time: event.time
+				});
+
+				// Update version
+				setDataVersion(lectureData.version++);
+
 			});
 
-			// Update version
-			setDataVersion(lectureData.version++);
+			// Begin accepting messages
+			lectureAPI.fetchHistory();
+			lectureAPI.openLive();
 
-		});
-
-		// Begin accepting messages
-		lectureAPI.fetchHistory();
-		lectureAPI.openLive();
+		}
 
 		// Clean up upon page leave / new lecture
 		return () => {
@@ -122,7 +130,7 @@ function Lecture(props) {
 			<div style={{ display: "flex" }}>
             	<LiveLectureLeftMenu />
 				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
-					<LectureFeed messages={lectureData.messages} />
+					<LectureFeed api={lectureAPI} messages={lectureData.messages} />
 					<NewMessageEntry api={lectureAPI} />
 				</div>
 			</div>

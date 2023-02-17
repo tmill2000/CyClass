@@ -1,12 +1,10 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/22/2022
- * UPDATED:	11/22/2022
+ * UPDATED:	02/14/2023
  */
 
 import axios from "axios";
-
-import DataStore from "../data/DataStore";
 
 /**
  * Interface for the API related to live lectures.
@@ -15,19 +13,29 @@ class LiveLectureAPI {
 
 	/**
 	 * Creates a new API interface for a live lecture of the specified lecture ID.
+	 * @param {Number} userID
+	 * @param {Number} courseID
 	 * @param {Number} lectureID 
 	 */
-	constructor(lectureID) {
+	constructor(userID, courseID, lectureID) {
+		this.userID = userID;
+		this.courseID = courseID;
 		this.lectureID = lectureID;
 		this.eventTarget = new EventTarget();
 	}
 
 	/**
-	 * Returns the lecture ID associated with this API instance.
-	 * @returns lecture ID
+	 * Returns if the given lecture parameters match this lecture.
+	 * @param {Number} userID
+	 * @param {Number} courseID
+	 * @param {Number} lectureID 
+	 * @returns if matching lecture
 	 */
-	getLectureID() {
-		return this.lectureID;
+	isLecture(userID, courseID, lectureID) {
+
+		// Return if all are same
+		return this.userID === userID && this.courseID === courseID && this.lectureID === lectureID;
+
 	}
 
 	/**
@@ -54,19 +62,14 @@ class LiveLectureAPI {
 			throw new Error("No lecture was specified");
 		}
 
-		// Get current user ID
-		const userID = DataStore.get("userID");
-		if (userID == null) {
-			throw new Error("No user is logged in (no userID in DataStore)");
-		}
-
 		// Build URL
 		const location = window.location;
 		const protocol = location.protocol == "https:" ? "wss:" : "ws:";
 		const port = location.port != '' ? `:${location.port}` : ""
 		const searchParams = new URLSearchParams();
+		searchParams.append("userId", this.userID);
+		searchParams.append("courseId", this.courseID);
 		searchParams.append("lectureId", this.lectureID);
-		searchParams.append("userId", userID);
 		const url = `${protocol}//${location.hostname}${port}?${searchParams}`;
 
 		// Open connection
@@ -115,7 +118,7 @@ class LiveLectureAPI {
 			let lectureEvent = null;
 			switch (msg.type) {
 			case "message":
-				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, msg.payload.body, msg.payload.sender_id, msg.payload.is_anonymous, Date.now());
+				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, msg.payload.body, msg.payload.sender_id, msg.payload.is_anonymous, new Date(msg.payload.timestamp));
 				break;
 			}
 			if (lectureEvent != null) {
@@ -147,7 +150,7 @@ class LiveLectureAPI {
 	 * @param {Number?} beforeTimestamp 
 	 * @return Promise
 	 */
-	fetchHistory(beforeTimestamp, onFailure) {
+	fetchHistory(beforeTimestamp) {
 
 		// Perform get
 		return axios.get("/api/message/messagesByLecture", {
@@ -161,7 +164,7 @@ class LiveLectureAPI {
 				// Dispatch an event for each message
 				for (const index in res.data) {
 					const msg = res.data[index];
-					const event = new LiveLectureMessageEvent(this.lectureID, msg.message_id, msg.body, msg.sender_id, msg.is_anonymous, msg.timestamp);
+					const event = new LiveLectureMessageEvent(this.lectureID, msg.message_id, msg.body, msg.sender_id, msg.is_anonymous, new Date(msg.timestamp));
 					this.eventTarget.dispatchEvent(event);
 				}
 
@@ -186,23 +189,174 @@ class LiveLectureAPI {
 			throw new Error("No WebSocket connection was established");
 		}
 
-		// Get current user ID
-		const userID = DataStore.get("userID");
-		if (userID == null) {
-			throw new Error("No user is logged in (no userID in DataStore)");
-		}
-
 		// Send message
 		this.websocket.send(JSON.stringify({
 			type: "message",
 			payload: {
-				sender_id: userID,
+				sender_id: this.userID,
 				body: body,
 				is_anonymous: anonymous,
+				course_id: this.courseID,
 				lecture_id: this.lectureID,
 				parent_id: null
 			}
 		}));
+
+	}
+
+	/**
+	 * Creates a new poll with the specified prompt that will be open for the specified number of minutes (or null if
+	 * indefinite / manually closed) and has the specified choice options. Assumes a live lecture connection has been
+	 * established.
+	 * @param {string} prompt 
+	 * @param {number?} openTime
+	 * @param {{ text: string, correct: boolean }[]} choices
+	 */
+	createPoll(prompt, openTime, choices) {
+
+		// Verify connection
+		if (this.websocket == null) {
+			throw new Error("No WebSocket connection was established");
+		}
+
+		// Map choices to backend format
+		const choiceArray = [];
+		for (const choice of choices) {
+			choiceArray.push({
+				choice_text: choice.text,
+				is_correct_choice: choice.correct
+			});
+		};
+
+		// Send message
+		this.websocket.send(JSON.stringify({
+			type: "poll",
+			payload: {
+				question_text: prompt,
+				poll_choices: choiceArray
+			}
+		}));
+
+	}
+
+	/**
+	 * Responds to the given poll, setting the specified choice as the logged-in user's response. Returns a Promise that
+	 * will resolve if the operation was successful.
+	 * @param {number} pollID 
+	 * @param {number} choiceID 
+	 * @return Promise
+	 */
+	respondToPoll(pollID, choiceID) {
+
+		// Perform post
+		return axios.post("/api/poll-response", {
+				course_id: this.courseID,
+				poll_id: pollID,
+				choice_id: choiceID
+			})
+			.then((res) => {})
+			.catch((err) => {
+				console.error("Failed to respond to poll:", err);
+				throw err;
+			})
+
+	}
+
+	/**
+	 * Returns the user's response (a `choiceID`) to the given poll. Returns a Promise that will resolve with the an
+	 * object of the following format (unless an error occurs):
+	 * - `choiceID?` (number or null if not responded yet)
+	 * - `correct?` (boolean or null if not responded/available yet)
+	 * @param {number} pollID 
+	 * @return Promise
+	 */
+	getPollResponse(pollID) {
+
+		// Perform get
+		return axios.get("/api/poll/metrics", {
+				params: {
+					course_id: this.courseID,
+					poll_id: this.pollID
+				}
+			})
+			.then((res) => {
+
+				// Find response in response list
+				for (const i of res.data.userResponses) {
+					if (i.user_id == this.userID) {
+						return {
+							choiceID: i.poll_choice_id,
+							correct: i.is_correct_choice
+						}
+					}
+				}
+
+				// Didn't find, so return all null
+				return {
+					choiceID: null,
+					correct: null
+				}
+
+			})
+			.catch((err) => {
+				console.error("Failed to get poll response:", err);
+				throw err;
+			})
+
+	}
+
+	/**
+	 * Returns the poll participation statistics for the given poll. Note that this API method requires elevated account
+	 * permissions (students will not be able to invoke this successfully). Returns a Promise that will fulfill to the
+	 * following object:
+	 * - `totalResponses` (number)
+	 * - `correctResponses` (number)
+	 * - `responses`: ```[
+	 *       {
+	 *           userID: number,
+	 *           choiceID: number,
+	 *           correct: boolean
+	 *       },
+	 *       ...
+	 *   ]```
+	 * @param {number} pollID 
+	 * @return Promise
+	 */
+	getPollParticipation(pollID) {
+
+		// Perform get
+		return axios.get("/api/poll/metrics", {
+				params: {
+					course_id: this.courseID,
+					poll_id: this.pollID
+				}
+			})
+			.then((res) => {
+
+				// Make base object
+				const result = {
+					totalResponses: res.data.totalRespondants,
+					correctResponses: res.data.correctResponses,
+					responses: [],
+				};
+
+				// Add all responses in converted format
+				for (const i of res.data.userResponses) {
+					result.responses.push({
+						userID: i.user_id,
+						choiceID: i.poll_choice_id,
+						correct: i.is_correct_choice
+					});
+				}
+
+				// Return complete result object
+				return result;
+
+			})
+			.catch((err) => {
+				console.error("Failed to get poll participation:", err);
+				throw err;
+			})
 
 	}
 
@@ -261,7 +415,7 @@ class LiveLectureAPI {
 
 /**
  * Represents the successful WebSocket connection to a live lecture. Contains the following properties:
- * - `lectureID`
+ * - `lectureID` (number)
  */
 class LiveLectureOpenEvent extends Event {
 
@@ -274,10 +428,10 @@ class LiveLectureOpenEvent extends Event {
 
 /**
  * Represents the closing of a WebSocket connection to a live lecture. Contains the following properties:
- * - `lectureID`
- * - `closeCode`
- * - `closeReason`
- * - `dueToError`
+ * - `lectureID` (number)
+ * - `closeCode` (number)
+ * - `closeReason` (string)
+ * - `dueToError` (boolean)
  */
 class LiveLectureCloseEvent extends Event {
 
@@ -293,23 +447,23 @@ class LiveLectureCloseEvent extends Event {
 
 /**
  * Represents a new message to a live lecture. Contains the following properties:
- * - `lectureID`
- * - `messageID`
- * - `body`
- * - `userID`
- * - `isAnonymous`
- * - `timestamp`
+ * - `lectureID`: (number)
+ * - `messageID` (number)
+ * - `body` (string)
+ * - `userID` (number)
+ * - `isAnonymous` (boolean)
+ * - `time` ({@link Date})
  */
 class LiveLectureMessageEvent extends Event {
 
-	constructor(lectureID, messageID, body, userID, isAnonymous, timestamp) {
+	constructor(lectureID, messageID, body, userID, isAnonymous, time) {
 		super("message");
 		this.lectureID = lectureID;
 		this.messageID = messageID;
 		this.body = body;
 		this.userID = userID;
 		this.isAnonymous = isAnonymous;
-		this.timestamp = timestamp;
+		this.time = time;
 	}
 
 }
