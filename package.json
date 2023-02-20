@@ -1,8 +1,0 @@
-{
-  "devDependencies": {
-    "swagger-ui-express": "^4.6.0"
-  },
-  "dependencies": {
-    "react-shapes": "^0.1.0"
-  }
-}

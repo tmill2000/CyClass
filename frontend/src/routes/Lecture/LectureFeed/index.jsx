@@ -23,6 +23,7 @@ import React from "react";
 
 import Message from "./Message";
 import Poll from "./Poll";
+import PollFormPopup from "../../../components/Poll/PollForm/PollFormPopup";
 
 import "./styles.css";
 
@@ -84,6 +85,7 @@ function LectureFeed(props) {
 					api={props.api}
 				/>
 			</div>
+			<PollFormPopup profile_name="Maruf" profile_role="Professor"></PollFormPopup>
 		</div>
 	);
 

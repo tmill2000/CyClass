@@ -2,6 +2,7 @@ import React, { createRef } from "react";
 import Popup from 'reactjs-popup';
 
 import './style.css';
+import './style_popup.css';
 import IconPoll from "../IconPoll";
 import ProfileIcon from "../../ProfileIcon";
 
@@ -15,6 +16,66 @@ export default function PollFormPopup(props){
     const poll_answer_D = createRef();
     const poll_duration = createRef();
     const poll_title_entry = createRef();
+    const correct_answers = [];
+
+    function backgroundColorA(){
+        const btnA = document.getElementById('buttonA');
+        if (btnA.style.backgroundColor === 'white' || btnA.style.backgroundColor === '' ){
+            btnA.style.backgroundColor = 'green';
+            correct_answers.push("A");
+        }
+        else{
+            btnA.style.backgroundColor = 'white';
+            correct_answers.pop("A");
+        }
+    }
+
+    function backgroundColorB(){
+        const btnB = document.getElementById('buttonB');
+        if (btnB.style.backgroundColor === 'white' || btnB.style.backgroundColor === ''){
+            btnB.style.backgroundColor = 'green';
+            correct_answers.push("B");
+        }
+        else{
+            btnB.style.backgroundColor = 'white';
+            correct_answers.pop("B");
+        }
+    }
+
+    function backgroundColorC(){
+        const btnC = document.getElementById('buttonC');
+        if (btnC.style.backgroundColor === 'white' || btnC.style.backgroundColor === ''){
+            btnC.style.backgroundColor = 'green';
+            correct_answers.push("C");
+        }
+        else{
+            btnC.style.backgroundColor = 'white';
+            correct_answers.pop("C");
+        }
+    }
+
+    function backgroundColorD(){
+        const btnD = document.getElementById('buttonD');
+        if (btnD.style.backgroundColor === 'white' || btnD.style.backgroundColor === ''){
+            btnD.style.backgroundColor = 'green';
+            correct_answers.push("D");
+        }
+        else{
+            btnD.style.backgroundColor = 'white';
+            correct_answers.pop("D");
+        }
+    }
+
+
+    const getInputs = () => {
+        console.log("INPUTS FOLLOWING: ");
+        const title = poll_title_entry.current.value.trim();
+        
+        console.log(title);
+    
+        const question = poll_question_input.current.value.trim();
+        console.log(question);
+    }
 
     return (
         <Popup 
@@ -48,15 +109,15 @@ export default function PollFormPopup(props){
                 <div className="poll-form-answer-entry-group">
                     <div className="poll-form-answer-label">Enter in your answer choices: </div>
                     <div className="poll-form-answer-group">
-                        <div className="poll-form-individual-answer-label"> A </div>
+                        <button className="poll-form-individual-answer-label" id="buttonA" onClick={backgroundColorA}> A </button>
                         <input ref={poll_answer_A} className="poll-form-individual-answer-entry"/>
-                        <div className="poll-form-individual-answer-label"> B </div>
-                        <input ref={poll_answer_B} className="poll-form-individual-answer-entry"/>
+                        <button className="poll-form-individual-answer-label" id="buttonB" onClick={backgroundColorB}> B </button>
+                        <button ref={poll_answer_B} className="poll-form-individual-answer-entry"/>
                     </div>
                     <div className="poll-form-answer-group">
-                        <div className="poll-form-individual-answer-label"> C </div>
+                        <button className="poll-form-individual-answer-label" id="buttonC" onClick={backgroundColorC}> C </button>
                         <input ref={poll_answer_C} className="poll-form-individual-answer-entry"/>
-                        <div className="poll-form-individual-answer-label"> D </div>
+                        <button className="poll-form-individual-answer-label" id="buttonD" onClick={backgroundColorD}> D </button>
                         <input ref={poll_answer_D} className="poll-form-individual-answer-entry"/>
                     </div>
                 </div>
@@ -78,17 +139,6 @@ export default function PollFormPopup(props){
         
       </Popup>
     );
-}
-
-function getInputs(){
-    console.log("INPUTS FOLLOWING: ");
-    const title = poll_title_entry.current.value.trim();
-    
-    console.log(title);
-
-    const question = poll_question_input.current.value.trim();
-    console.log(question);
-
 }
 
 
