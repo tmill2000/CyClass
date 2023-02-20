@@ -5,6 +5,8 @@
  */
  import React from 'react';
  import "./styles.css";
+ import ParticipantPill from './ParticipantPill';
+ import { Link } from "react-router-dom";
 
 
  function ParticipationForm (props) {
@@ -12,11 +14,12 @@
 	// Component
 	return (
         <div className="white-container">
-        <div style="float: left; width: 50%;">
-           <div className="header" style=" font-weight: bold; font-size: 27px; font-family: Arial; padding-left: 15px; padding-top: 9px;float:left;">Poll Participation</div>
-           <div style="font-weight: bold; font-family: Arial; color: gray; text-align: left; padding-top: 47px; padding-left: 15px;">329 participants</div>
+        <div style={{float:'left', width: '50%'}}>
+           <div className="header" style={{fontWeight:'bold', fontSize:'27px', fontFamily:'Arial', paddingLeft:'15px', paddingTop:'9px',float:'left'}}>Poll Participation</div>
+           <div style={{fontWeight: 'bold', fontFamily: 'Arial', color: 'gray', textAlign: 'left', paddingTop: '47px', paddingLeft: '15px'}}>329 participants</div>
         </div>
-        <div style="float: right; padding-top: 7px;width: 35px;">
+      <Link to="/login">
+        <div style={{float: 'right', paddingTop: '7px', width: '35px'}}>
            <a href="#" class="close-button">
               <div class="in">
                  <div class="close-button-block"></div>
@@ -28,8 +31,12 @@
               </div>
            </a>
         </div>
-        <div style="padding-top: 82px;">
-           <div style="border-top: 1px solid gray;"></div>
+       </Link>
+        <div style={{paddingTop: '82px'}}>
+           <div style={{borderTop: '1px solid gray'}}></div>
+        </div>
+        <div style={{paddingLeft: '160px'}}>
+         <ParticipantPill />
         </div>
      </div>
 	);

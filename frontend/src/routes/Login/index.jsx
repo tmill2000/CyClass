@@ -54,6 +54,12 @@ import { Link } from "react-router-dom";
 						disabled={false}
 						onClick={doLogout}
 					/>
+					<Link to="/pollParticipation">
+						<SubmitButton
+							text={'Poll Participation'}
+							disabled={false}
+						/>
+					</Link>
 				</div>
 			</div>
 		);
