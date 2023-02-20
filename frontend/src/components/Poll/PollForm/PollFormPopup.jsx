@@ -6,7 +6,6 @@ import './style_popup.css';
 import IconPoll from "../IconPoll";
 import ProfileIcon from "../../ProfileIcon";
 
-// How to use: <PopUp header="Poll Creation" trigger_button_name="Create Poll" content="INSERT CONTENT" submit_button_name="Post Poll"></PopUp>
 
 export default function PollFormPopup(props){
     const poll_question_input = createRef();
@@ -16,17 +15,26 @@ export default function PollFormPopup(props){
     const poll_answer_D = createRef();
     const poll_duration = createRef();
     const poll_title_entry = createRef();
-    const correct_answers = [];
+    let pollA = false;
+    let pollB = false;
+    let pollC = false;
+    let pollD = false;
+
+    const onSelect = () => {
+		if (props.api != null ) {
+			props.api.createPoll(poll_question_input.current.value.trim(), 10, getInputs());
+		}
+	};
 
     function backgroundColorA(){
         const btnA = document.getElementById('buttonA');
         if (btnA.style.backgroundColor === 'white' || btnA.style.backgroundColor === '' ){
             btnA.style.backgroundColor = 'green';
-            correct_answers.push("A");
+            pollA = true;
         }
         else{
             btnA.style.backgroundColor = 'white';
-            correct_answers.pop("A");
+            pollA = false;
         }
     }
 
@@ -34,11 +42,11 @@ export default function PollFormPopup(props){
         const btnB = document.getElementById('buttonB');
         if (btnB.style.backgroundColor === 'white' || btnB.style.backgroundColor === ''){
             btnB.style.backgroundColor = 'green';
-            correct_answers.push("B");
+            pollB = true;
         }
         else{
             btnB.style.backgroundColor = 'white';
-            correct_answers.pop("B");
+            pollB = false;
         }
     }
 
@@ -46,11 +54,11 @@ export default function PollFormPopup(props){
         const btnC = document.getElementById('buttonC');
         if (btnC.style.backgroundColor === 'white' || btnC.style.backgroundColor === ''){
             btnC.style.backgroundColor = 'green';
-            correct_answers.push("C");
+            pollC = true;
         }
         else{
             btnC.style.backgroundColor = 'white';
-            correct_answers.pop("C");
+            pollC = false;
         }
     }
 
@@ -58,28 +66,31 @@ export default function PollFormPopup(props){
         const btnD = document.getElementById('buttonD');
         if (btnD.style.backgroundColor === 'white' || btnD.style.backgroundColor === ''){
             btnD.style.backgroundColor = 'green';
-            correct_answers.push("D");
+            pollD = true;
         }
         else{
             btnD.style.backgroundColor = 'white';
-            correct_answers.pop("D");
+            pollD = false;
         }
     }
 
 
     const getInputs = () => {
         console.log("INPUTS FOLLOWING: ");
-        const title = poll_title_entry.current.value.trim();
-        
-        console.log(title);
-    
-        const question = poll_question_input.current.value.trim();
-        console.log(question);
+        const some = [poll_answer_A, poll_answer_B, poll_answer_C, poll_answer_D];
+        const correct = [pollA, pollB, pollC, pollD];
+        let message = [];
+        for (let i =0; i < 4; i++){
+            if (some[i].current.value.trim() != ''){
+                message.push([some[i].current.value.trim(), correct[i]]);
+            }
+        }
+        return message;
     }
 
     return (
         <Popup 
-        trigger={<button className="button"> Create Poll </button>}
+        trigger={<button className="button-LLLM-new-post">NEW POLL</button>}
         modal
         nested
       >
@@ -112,7 +123,7 @@ export default function PollFormPopup(props){
                         <button className="poll-form-individual-answer-label" id="buttonA" onClick={backgroundColorA}> A </button>
                         <input ref={poll_answer_A} className="poll-form-individual-answer-entry"/>
                         <button className="poll-form-individual-answer-label" id="buttonB" onClick={backgroundColorB}> B </button>
-                        <button ref={poll_answer_B} className="poll-form-individual-answer-entry"/>
+                        <input ref={poll_answer_B} className="poll-form-individual-answer-entry"/>
                     </div>
                     <div className="poll-form-answer-group">
                         <button className="poll-form-individual-answer-label" id="buttonC" onClick={backgroundColorC}> C </button>
@@ -131,7 +142,7 @@ export default function PollFormPopup(props){
               <button className="button"
                 onClick={() => {
                   close();
-                  getInputs();
+                  onSelect();
                 }}>Submit Poll</button>
             </div>
           </div>

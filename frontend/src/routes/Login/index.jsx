@@ -14,8 +14,6 @@ import UserAPI from "../../utilities/api/UserAPI";
 import { Link } from "react-router-dom";
 
  import "./styles.css";
-import PollFormHeader from "../../components/Poll/PollForm/PollFormHeader";
-import PollFormPopup from "../../components/Poll/PollForm/PollFormPopup";
 
  const userAPI = new UserAPI();
 
@@ -65,9 +63,6 @@ import PollFormPopup from "../../components/Poll/PollForm/PollFormPopup";
 		<div className="login">
 			<div className="container">
 				<LoginForm />
-				<PollFormPopup profile_name="Maruf" profile_role="Professor"></PollFormPopup>
-				{/* <PopUp header=<PollFormHeader profile_name="Maruf" profile_role="Professor"></PollFormHeader> 
-				trigger_button_name="Create Poll" content=<PollFormBody></PollFormBody> submit_button_name="Post Poll"></PopUp> */}
 			</div>
 		</div>
 	);

@@ -7,7 +7,7 @@ import './style.css';
 
 export default (props) => (
   <Popup 
-    trigger={<button className="button"> {props.trigger_button_name} </button>}
+    trigger={<button className="button-LLLM-new-post">NEW POLL</button>}
     modal
     nested
   >
