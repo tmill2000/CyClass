@@ -1,0 +1,51 @@
+.popup {
+    font-size: 12px;
+    background-color: rgb(247, 243, 243);
+    border-color: gray;
+    border-style: solid;
+    width: calc(100vw - 480px);
+  }
+
+  .popup > .header {
+    border-bottom: 1px solid gray;
+    font-size: 18px;
+    text-align: left;
+    padding: 5px;
+    color: black;
+  }
+
+  .popup > .content {
+    width: 100%;
+    padding: 10px 5px;
+    color: black;
+  }
+
+  .popup > .actions {
+    width: 100%;
+    padding: 10px 5px;
+    margin: auto;
+    text-align: center;
+  }
+  .popup > .close {
+    cursor: pointer;
+    position: absolute;
+    display: block;
+    padding: 2px 5px;
+    line-height: 20px;
+    right: -10px;
+    top: -10px;
+    font-size: 24px;
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #cfcece;
+  }
+
+.button-LLLM-new-post {
+    margin-top: 10px;
+    border-radius: 10%;
+    border-color: rgb(0, 140, 255);
+    background-color: rgb(0, 140, 255);
+    color: white;
+    height: 35px;
+    width: 100px;
+}

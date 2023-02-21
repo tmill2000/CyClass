@@ -223,11 +223,10 @@ class LiveLectureAPI {
 		const choiceArray = [];
 		for (const choice of choices) {
 			choiceArray.push({
-				choice_text: choice.text,
-				is_correct_choice: choice.correct
+				choice_text: choice[0],
+				is_correct_choice: choice[1]
 			});
 		};
-
 		// Send message
 		this.websocket.send(JSON.stringify({
 			type: "poll",
@@ -236,7 +235,6 @@ class LiveLectureAPI {
 				poll_choices: choiceArray
 			}
 		}));
-
 	}
 
 	/**
