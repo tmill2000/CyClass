@@ -21,11 +21,7 @@ export default function PollFormPopup(props){
 
     const onSelect = () => {
 		if (props.api != null ) {
-<<<<<<< HEAD
 			props.api.createPoll(poll_question_input.current.value.trim(), null, getInputs());
-=======
-			props.api.createPoll(poll_question_input.current.value.trim(), 10, getInputs());
->>>>>>> master
 		}
 	};
 
