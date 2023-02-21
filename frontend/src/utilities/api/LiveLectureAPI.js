@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/22/2022
- * UPDATED:	02/14/2023
+ * UPDATED:	02/21/2023
  */
 
 import axios from "axios";
@@ -110,7 +110,7 @@ class LiveLectureAPI {
 				msg = JSON.parse(event.data);
 			} catch (err) {
 				console.error("Invalid JSON from WebSocket:", err);
-				console.error("JSON body:", event.data);
+				console.error("Invalid JSON body:", event.data);
 				return;
 			}
 
@@ -118,8 +118,41 @@ class LiveLectureAPI {
 			let lectureEvent = null;
 			switch (msg.type) {
 			case "message":
+
+				// Make message event
 				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, msg.payload.body, msg.payload.sender_id, msg.payload.is_anonymous, new Date(msg.payload.timestamp));
 				break;
+
+			case "poll":
+
+				// Map choices to frontend format, checking for issues
+				let valid = true;
+				const choices = msg.payload.poll_choices.map((choice, index) => {
+					const id = msg.payload.pollInfo.pollChoiceIds[index];
+					if (id == null) {
+						console.error(`Received invalid poll from WebSocket: missing respective choice ID for choice with text "${choice.choice_text}"`);
+						valid = false;
+						return {};
+					}
+					return {
+						id: id,
+						text: choice.choice_text
+					};
+				});
+				if (!valid) {
+					return;
+				}
+
+				// Make poll event
+				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, msg.payload.question_text, false, new Date(msg.payload.timestamp), choices);
+				break;
+
+			case "poll_close":
+
+				// Make poll updated event
+				lectureEvent = new LiveLecturePollUpdatedEvent(this.lectureID, msg.payload.poll_id, true);
+				break;
+
 			}
 			if (lectureEvent != null) {
 				this.eventTarget.dispatchEvent(lectureEvent);
@@ -146,7 +179,7 @@ class LiveLectureAPI {
 	/**
 	 * Fetches the live lecture history. If a timestamp is specified, then only messages before that timestamp will be
 	 * fetched (within a server-defined limit). Otherwise, it will fetch the most recent messages. Does not resolve to
-	 * any value.
+	 * any value, but will instead dispatch events for each fetched message as if it had streamed in live.
 	 * @param {Number?} beforeTimestamp 
 	 * @return Promise
 	 */
@@ -161,11 +194,31 @@ class LiveLectureAPI {
 			})
 			.then((res) => {
 
-				// Dispatch an event for each message
-				for (const index in res.data) {
-					const msg = res.data[index];
-					const event = new LiveLectureMessageEvent(this.lectureID, msg.message_id, msg.body, msg.sender_id, msg.is_anonymous, new Date(msg.timestamp));
-					this.eventTarget.dispatchEvent(event);
+				// Go through each "message"
+				for (const msg of res.data) {
+
+					// Use id field to infer type of message
+					if (msg.message_id != null) {
+
+						// Dispatch message
+						const event = new LiveLectureMessageEvent(this.lectureID, msg.message_id, msg.body, msg.sender_id, msg.is_anonymous, new Date(msg.timestamp));
+						this.eventTarget.dispatchEvent(event);
+
+					} else if (msg.poll_id != null) {
+
+						// Transform choices into frontend format
+						const choices = msg.choices.map((choice) => ({
+							id: choice.poll_choice_id,
+							text: choice.text,
+							correct: choice.is_correct || null
+						}));
+
+						// Dispatch poll
+						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, msg.question, !msg.is_open, new Date(msg.timestamp), choices);
+						this.eventTarget.dispatchEvent(event);
+
+					}
+
 				}
 
 			})
@@ -219,21 +272,15 @@ class LiveLectureAPI {
 			throw new Error("No WebSocket connection was established");
 		}
 
-		// Map choices to backend format
-		const choiceArray = [];
-		for (const choice of choices) {
-			choiceArray.push({
-				choice_text: choice.text,
-				is_correct_choice: choice.correct
-			});
-		};
-
-		// Send message
+		// Send message with mapped values
 		this.websocket.send(JSON.stringify({
 			type: "poll",
 			payload: {
 				question_text: prompt,
-				poll_choices: choiceArray
+				poll_choices: choices.map(choice => ({
+					choice_text: choice.text,
+					is_correct_choice: choice.correct
+				}))
 			}
 		}));
 
@@ -281,7 +328,7 @@ class LiveLectureAPI {
 			})
 			.then((res) => {
 
-				// Find response in response list
+				// Try to find response in response list
 				for (const i of res.data.userResponses) {
 					if (i.user_id == this.userID) {
 						return {
@@ -333,24 +380,16 @@ class LiveLectureAPI {
 			})
 			.then((res) => {
 
-				// Make base object
-				const result = {
+				// Transform into frontend format and return
+				return {
 					totalResponses: res.data.totalRespondants,
 					correctResponses: res.data.correctResponses,
-					responses: [],
-				};
-
-				// Add all responses in converted format
-				for (const i of res.data.userResponses) {
-					result.responses.push({
+					responses: res.data.userResponses.map((i) => ({
 						userID: i.user_id,
 						choiceID: i.poll_choice_id,
 						correct: i.is_correct_choice
-					});
-				}
-
-				// Return complete result object
-				return result;
+					}))
+				};
 
 			})
 			.catch((err) => {
@@ -411,6 +450,40 @@ class LiveLectureAPI {
 		this.eventTarget.removeEventListener("message", callback);
 	}
 
+	/**
+	 * Binds the given callback to execute whenever a new poll is received from a live connection or from a prior API
+	 * call. Callback is passed a {@link LiveLecturePollEvent}.
+	 * @param {Function} callback 
+	 */
+	onPoll(callback) {
+		this.eventTarget.addEventListener("poll", callback);
+	}
+
+	/**
+	 * Unbinds the callback previously bound using `onPoll()`.
+	 * @param {Function} callback 
+	 */
+	removeOnPoll(callback) {
+		this.eventTarget.removeEventListener("poll", callback);
+	}
+
+	/**
+	 * Binds the given callback to execute whenever a poll update is received from a live connection. Callback is passed
+	 * a {@link LiveLecturePollUpdatedEvent}.
+	 * @param {Function} callback 
+	 */
+	onPollUpdated(callback) {
+		this.eventTarget.addEventListener("pollUpdated", callback);
+	}
+
+	/**
+	 * Unbinds the callback previously bound using `onPollUpdated()`.
+	 * @param {Function} callback 
+	 */
+	removeOnPollUpdated(callback) {
+		this.eventTarget.removeEventListener("pollUpdated", callback);
+	}
+
 }
 
 /**
@@ -468,9 +541,51 @@ class LiveLectureMessageEvent extends Event {
 
 }
 
+/**
+ * Represents a new poll to a live lecture. Contains the following properties:
+ * - `lectureID`: (number)
+ * - `pollID` (number)
+ * - `prompt` (string)
+ * - `closed` (boolean)
+ * - `time` ({@link Date})
+ * - `choices` (`{ id: number, text: string, correct?: boolean }[]`, won't have correct if not closed)
+ */
+class LiveLecturePollEvent extends Event {
+
+	constructor(lectureID, pollID, prompt, closed, time, choices) {
+		super("poll");
+		this.lectureID = lectureID;
+		this.pollID = pollID;
+		this.prompt = prompt;
+		this.closed = closed;
+		this.time = time;
+		this.choices = choices;
+	}
+
+}
+
+/**
+ * Represents a poll having some sort of status update in a live lecture. Contains the following properties:
+ * - `lectureID`: (number)
+ * - `pollID` (number)
+ * - `closed` (boolean)
+ */
+class LiveLecturePollUpdatedEvent extends Event {
+
+	constructor(lectureID, pollID, closed) {
+		super("pollUpdated");
+		this.lectureID = lectureID;
+		this.pollID = pollID;
+		this.closed = closed;
+	}
+
+}
+
 export {
 	LiveLectureOpenEvent,
 	LiveLectureCloseEvent,
-	LiveLectureMessageEvent
+	LiveLectureMessageEvent,
+	LiveLecturePollEvent,
+	LiveLecturePollUpdatedEvent
 };
 export default LiveLectureAPI;
