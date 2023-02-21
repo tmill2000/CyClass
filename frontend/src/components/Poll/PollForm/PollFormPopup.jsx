@@ -14,7 +14,6 @@ export default function PollFormPopup(props){
     const poll_answer_C = createRef();
     const poll_answer_D = createRef();
     const poll_duration = createRef();
-    const poll_title_entry = createRef();
     let pollA = false;
     let pollB = false;
     let pollC = false;
@@ -98,25 +97,21 @@ export default function PollFormPopup(props){
           <div className="popup">
             <button className="close" onClick={close}>&times;</button>
             <div className="header">         
-            <div className='poll-form-header-container'>
-                <div className='poll-form-header-left-aligned'>
-                    <IconPoll></IconPoll>
-                    <ProfileIcon profile_name={props.profile_name} profile_role={props.profile_role}></ProfileIcon>
-                    <div className='poll-form-header-title'>
-                        <div className='poll-form-header-input-label'>Poll Title:</div>
-                        <textarea ref={poll_title_entry} className='poll-form-header-input-field'/>
+                <div className='poll-form-header-container'>
+                    <div className='poll-form-header-left-aligned'>
+                        <IconPoll></IconPoll>
+                        <ProfileIcon profile_name={props.profile_name} profile_role={props.profile_role}></ProfileIcon>
+                        <div className='poll-form-header-title'>
+                            <div className='poll-form-header-input-label'>Poll Question:</div>
+                            <textarea ref={poll_question_input} className='poll-form-header-input-field'/>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
             <ColoredLine color="grey" height="5"/>
             <div className="content">
               {' '}
               <div>
-                <div className="poll-form-question-field">
-                    <div className="poll-form-question-input-label">Poll Question:</div>
-                    <input ref={poll_question_input} className="poll-form-question-input-field"/>
-                </div>
                 <div className="poll-form-answer-entry-group">
                     <div className="poll-form-answer-label">Enter in your answer choices: </div>
                     <div className="poll-form-answer-group">

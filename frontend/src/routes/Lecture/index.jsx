@@ -129,7 +129,7 @@ function Lecture(props) {
             <LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
 
 			<div style={{ display: "flex" }}>
-            	<LiveLectureLeftMenu userID={userID} api={lectureAPI}/>
+            	<LiveLectureLeftMenu userIDname={userID.name} userIDrole={userID.role} api={lectureAPI}/>
 				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
 					<LectureFeed api={lectureAPI} messages={lectureData.messages} />
 					<NewMessageEntry api={lectureAPI} />

@@ -31,7 +31,7 @@ const LiveLectureLeftMenu = (props) => {
                 <button className="button-LLLM-raise-hand">
                 {/* <img src={handIcon} className="hand-icon-LLLM"></img> */}
                 RAISE HAND</button>
-                <PollFormPopup profile_name={props.userID.name} profile_role={props.userID.role} api={props.lectureAPI}></PollFormPopup>
+                <PollFormPopup profile_name={props.userIDname} profile_role={props.userIDrole} api={props.api}></PollFormPopup>
             </div>
         </div>
     );
