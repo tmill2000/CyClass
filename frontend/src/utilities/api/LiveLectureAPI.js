@@ -229,7 +229,7 @@ class LiveLectureAPI {
 						const choices = msg.choices.map((choice) => ({
 							id: choice.poll_choice_id,
 							text: choice.text,
-							correct: choice.is_correct || null
+							correct: choice.is_correct_choice
 						}));
 
 						// Dispatch poll

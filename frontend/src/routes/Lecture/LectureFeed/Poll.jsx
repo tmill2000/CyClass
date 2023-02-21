@@ -84,7 +84,7 @@ function Poll(props) {
 							{choices.map(x => <PollOption key={x.id.toString()}
 								onSelect={!props.closed ? () => onSelect(x.id) : null}
 								selected={x.id == selected}
-								correct={x.correct != null ? x.correct : null}>
+								correct={props.closed ? x.correct == true : null}>
 								{x.text}
 							</PollOption>)}
 						</div>
