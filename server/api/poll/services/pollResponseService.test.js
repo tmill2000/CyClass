@@ -21,7 +21,7 @@ describe("pollResponseService", () => {
 
     describe("addPollResponse",  () => {
         it('should return response', async () => {
-            jest.spyOn(db, 'runQuery').mockResolvedValueOnce({ insertId: 1});
+            jest.spyOn(db, 'runQuery').mockResolvedValueOnce([]).mockResolvedValueOnce({ insertId: 1});
             const res = await addPollResponse(1, 1, 1);
             expect(res).toBe(1)
         })
