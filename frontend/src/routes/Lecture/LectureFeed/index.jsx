@@ -1,22 +1,11 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/06/2022
- * UPDATED:	02/14/2023
+ * UPDATED:	02/21/2023
  * 
  * PROPS:
- * - messages: Message[]
- * 
- * OBJECT FORMAT:
- * - Message: {
- *       user: {
- *           id: number,
- *           name: string,
- *           role: string,
- *       },
- *       me: boolean,
- *       text: string,
- *       time: Date
- *   }
+ * - messages: object[] (use object from LectureState)
+ * - polls: object[] (use object from LectureState)
  */
 
 import React from "react";
@@ -30,60 +19,60 @@ const MAX_CONDENSE_TIME_DIFF = 120; // (seconds)
 
 function LectureFeed(props) {
 
-	// Preprocess messages, condensing if neighboring messages are from the same person and similar times
-	const messages = (props.messages || {}).map((x) => x).sort((x, y) => x.time.getTime() - y.time.getTime());
+	// Make list for feed elements
 	const feedList = [];
-	for (let i = 0; i < messages.length; i++) {
-		let showUser = true, showTime = true;
-		const msg = messages[i];
-		if (i > 0) {
-			const prevMsg = messages[i - 1];
-			if (prevMsg.user.id == msg.user.id && msg.time - prevMsg.time < MAX_CONDENSE_TIME_DIFF * 1000) {
-				showTime = false;
+
+	// Add messages to feed list, not making the message elements just yet (want to see if can condense first)
+	for (const msg of (props.messages || {})) {
+		feedList.push({
+			type: "msg",
+			msg: msg,
+			element: null,
+			time: msg.time.getTime()
+		});
+	}
+
+	// Add polls to feed list
+	for (const poll of (props.polls || {})) {
+		feedList.push({
+			type: "poll",
+			element: <Poll key={`poll_${poll.id}`} id={poll.id} time={poll.time} prompt={poll.prompt} choices={poll.choices} closed={poll.closed} api={props.api} />,
+			time: poll.time.getTime()
+		});
+	}
+
+	// Sort feed list by time
+	feedList.sort((x, y) => x.time - y.time)
+
+	// Now that the feed list ordering is known, go through messages in feed list and generate condensed elements
+	for (let i = 0; i < feedList.length; i++) {
+		const listEntry = feedList[i];
+		if (listEntry.type == "msg") {
+			let showUser = true, showTime = true;
+			const msg = listEntry.msg
+			if (i > 0) {
+				const prevEntry = feedList[i - 1];
+				if (prevEntry.type == "msg" && prevEntry.msg.user.id == msg.user.id && listEntry.time - prevEntry.time < MAX_CONDENSE_TIME_DIFF * 1000) {
+					showTime = false;
+				}
 			}
-		}
-		if (i < messages.length - 1) {
-			const nextMsg = messages[i + 1];
-			if (nextMsg.user.id == msg.user.id && nextMsg.time - msg.time < MAX_CONDENSE_TIME_DIFF * 1000) {
-				showUser = false;
+			if (i < feedList.length - 1) {
+				const nextEntry = feedList[i + 1];
+				if (nextEntry.type == "msg" && nextEntry.msg.user.id == msg.user.id && nextEntry.time - listEntry.time < MAX_CONDENSE_TIME_DIFF * 1000) {
+					showUser = false;
+				}
 			}
+			console.log(msg);
+			listEntry.element = <Message key={`msg_${msg.id}`} user={showUser ? msg.user : null} me={msg.me} time={showTime ? msg.time : null} text={msg.text} />;
 		}
-		feedList.push(<Message user={showUser ? msg.user : null} time={showTime ? msg.time : null} text={msg.text} me={msg.me} />);
 	}
 
 	// Component
 	return (
 		<div className="lfeed" style={props.style || {}}>
-			<div className="feed">
-				{feedList}
-				<Poll
-					id={1}
-					time={new Date()}
-					user={{ name: "Test User", role: "Student" }}
-					prompt="If temperature diffuses uniformly and water boils at 100 degrees Celsius, what is the precise circumference of the Sun within 3 significant digits?"
-					options={[
-						{
-							choiceID: 1,
-							text: "5.23 x 10^5"
-						},
-						{
-							choiceID: 2,
-							text: "9.72 x 10^15"
-						},
-						{
-							choiceID: 3,
-							text: "2.45 x 10^25"
-						},
-						{
-							choiceID: 4,
-							text: "2"
-						}
-					]}
-					selected={4}
-					correct={null}
-					api={props.api}
-				/>
-			</div>
+			<ul className="feed">
+				{feedList.sort((x, y) => x.time - y.time).map(x => x.element)}
+			</ul>
 		</div>
 	);
 

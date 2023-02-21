@@ -11,6 +11,8 @@ import axios from "axios";
  */
 class LiveLectureAPI {
 
+	eventTarget = new EventTarget()
+
 	/**
 	 * Creates a new API interface for a live lecture of the specified lecture ID.
 	 * @param {Number} userID
@@ -21,7 +23,6 @@ class LiveLectureAPI {
 		this.userID = userID;
 		this.courseID = courseID;
 		this.lectureID = lectureID;
-		this.eventTarget = new EventTarget();
 	}
 
 	/**
@@ -74,35 +75,44 @@ class LiveLectureAPI {
 
 		// Open connection
 		console.log("Connecting to WebSocket...");
-		this.websocket = new WebSocket(url);
+		const websocket = new WebSocket(url);
+		this.websocket = websocket;
 
 		// Set event handlers
-		this.websocket.onopen = (event) => {
+		let closeWasError = false;
+		websocket.onopen = (event) => {
 			console.log("WebSocket connection established");
+
+			// If already cleared from object, auto-close
+			if (this.websocket != websocket) {
+				websocket.close();
+				return;
+			}
 
 			// Dispatch
 			const lectureEvent = new LiveLectureOpenEvent(this.lectureID);
 			this.eventTarget.dispatchEvent(lectureEvent);
 
 		};
-		this.websocket.onclose = (event) => {
-			console.log("WebSocket connection closed");
+		websocket.onclose = (event) => {
+			console.log(`WebSocket connection closed (${event.code})`);
 
 			// Clear var
 			this.websocket = null;
 
 			// Dispatch
-			const lectureEvent = new LiveLectureCloseEvent(this.lectureID, event);
+			const lectureEvent = new LiveLectureCloseEvent(this.lectureID, event, closeWasError);
 			this.eventTarget.dispatchEvent(lectureEvent);
 
 		}
-		this.websocket.onerror = (event) => {
+		websocket.onerror = (event) => {
 
-			// Log (close event should also be fired regardless)
+			// Record and log (close event should also be fired afterward regardless)
+			closeWasError = true
 			console.error("WebSocket errored:", event)
 
 		}
-		this.websocket.onmessage = (event) => {
+		websocket.onmessage = (event) => {
 
 			// Parse JSON
 			let msg;
@@ -144,7 +154,7 @@ class LiveLectureAPI {
 				}
 
 				// Make poll event
-				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, msg.payload.question_text, false, new Date(msg.payload.timestamp), choices);
+				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, msg.payload.question_text, null, false, new Date(msg.payload.timestamp), choices);
 				break;
 
 			case "poll_close":
@@ -169,9 +179,17 @@ class LiveLectureAPI {
 	 */
 	closeLive() {
 
-		// Close connection, if exists
+		// Check for a connection
 		if (this.websocket != null) {
-			this.websocket.close();
+
+			// Extract and clear
+			const websocket = this.websocket
+			this.websocket = null
+
+			// Close if OPEN (if CONNECTING, will auto-close since .websocket was cleared; see "onopen" handler)
+			if (websocket.readyState == WebSocket.OPEN) {
+				websocket.close();
+			}
 		}
 
 	}
@@ -214,7 +232,7 @@ class LiveLectureAPI {
 						}));
 
 						// Dispatch poll
-						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, msg.question, !msg.is_open, new Date(msg.timestamp), choices);
+						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, msg.question, null, !msg.is_open, new Date(msg.timestamp), choices);
 						this.eventTarget.dispatchEvent(event);
 
 					}
@@ -508,22 +526,22 @@ class LiveLectureOpenEvent extends Event {
  */
 class LiveLectureCloseEvent extends Event {
 
-	constructor(lectureID, closeEvent) {
+	constructor(lectureID, closeEvent, dueToError) {
 		super("close");
 		this.lectureID = lectureID;
 		this.closeCode = closeEvent.code;
 		this.closeReason = closeEvent.reason;
-		this.dueToError = closeEvent.code != 1000;
+		this.dueToError = dueToError;
 	}
 
 }
 
 /**
  * Represents a new message to a live lecture. Contains the following properties:
- * - `lectureID`: (number)
+ * - `lectureID` (number)
  * - `messageID` (number)
  * - `body` (string)
- * - `userID` (number)
+ * - `userID` (number?)
  * - `isAnonymous` (boolean)
  * - `time` ({@link Date})
  */
@@ -543,20 +561,22 @@ class LiveLectureMessageEvent extends Event {
 
 /**
  * Represents a new poll to a live lecture. Contains the following properties:
- * - `lectureID`: (number)
+ * - `lectureID` (number)
  * - `pollID` (number)
  * - `prompt` (string)
+ * - `userID` (number?)
  * - `closed` (boolean)
  * - `time` ({@link Date})
  * - `choices` (`{ id: number, text: string, correct?: boolean }[]`, won't have correct if not closed)
  */
 class LiveLecturePollEvent extends Event {
 
-	constructor(lectureID, pollID, prompt, closed, time, choices) {
+	constructor(lectureID, pollID, prompt, userID, closed, time, choices) {
 		super("poll");
 		this.lectureID = lectureID;
 		this.pollID = pollID;
 		this.prompt = prompt;
+		this.userID = userID;
 		this.closed = closed;
 		this.time = time;
 		this.choices = choices;
@@ -566,7 +586,7 @@ class LiveLecturePollEvent extends Event {
 
 /**
  * Represents a poll having some sort of status update in a live lecture. Contains the following properties:
- * - `lectureID`: (number)
+ * - `lectureID` (number)
  * - `pollID` (number)
  * - `closed` (boolean)
  */
