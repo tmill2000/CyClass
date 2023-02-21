@@ -2,7 +2,6 @@ import React, { useState, useEffect, createRef } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import DataStore from "../../utilities/data/DataStore";
 
-import PollFormPopup from "../../components/Poll/PollForm/PollFormPopup";
 import ErrorPage from "../ErrorPage";
 
 import LectureFeed from "./LectureFeed";
