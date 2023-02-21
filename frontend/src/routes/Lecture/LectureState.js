@@ -82,6 +82,21 @@ export default class LectureState {
 			this.setStateVersion(++this.version);
 
 		});
+		this.api.onPollUpdated(async (event) => {
+
+			// Look for poll in array
+			const index = this.polls.findIndex(x => x.id == event.pollID);
+			if (index >= 0) {
+
+				// Update object
+				this.polls[index].closed = event.closed;
+
+				// Update version
+				this.setStateVersion(++this.version);
+
+			}
+
+		});
 
 		// On close-due-to-errors, auto-restart
 		this.api.onLiveClose((event) => {
@@ -99,14 +114,20 @@ export default class LectureState {
 
 	}
 
-	start(setStateVersionHook) {
+	start(setStateVersionHook, navigateHook) {
 
-		// Store hook
+		// Store hooks
 		this.setStateVersion = setStateVersionHook
+		this.navigate = navigateHook
 
 		// Begin accepting messages if not live
 		if (!this.api.isLive()) {
-			this.api.fetchHistory();
+			this.api.fetchHistory()
+				.catch((err) => {
+					if (err?.response?.status == 403) {
+						this.navigate("/login?expired");
+					}
+				});
 			this.api.openLive();
 		}
 

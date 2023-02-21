@@ -10,6 +10,8 @@
 
 import React from "react";
 
+import DataStore from "../../../utilities/data/DataStore";
+
 import Message from "./Message";
 import Poll from "./Poll";
 
@@ -36,7 +38,7 @@ function LectureFeed(props) {
 	for (const poll of (props.polls || {})) {
 		feedList.push({
 			type: "poll",
-			element: <Poll key={`poll_${poll.id}`} id={poll.id} time={poll.time} prompt={poll.prompt} choices={poll.choices} closed={poll.closed} api={props.api} />,
+			element: <Poll key={`poll_${poll.id}`} id={poll.id} time={poll.time} prompt={poll.prompt} choices={poll.choices} closed={poll.closed} api={props.api} elevated={props.elevated}/>,
 			time: poll.time.getTime()
 		});
 	}
@@ -62,7 +64,6 @@ function LectureFeed(props) {
 					showUser = false;
 				}
 			}
-			console.log(msg);
 			listEntry.element = <Message key={`msg_${msg.id}`} user={showUser ? msg.user : null} me={msg.me} time={showTime ? msg.time : null} text={msg.text} />;
 		}
 	}

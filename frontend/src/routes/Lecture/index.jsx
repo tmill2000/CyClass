@@ -1,16 +1,14 @@
 import React, { useState, useEffect, createRef } from "react";
-import { Navigate, useParams } from "react-router-dom";
-
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import DataStore from "../../utilities/data/DataStore";
 
+import PollFormPopup from "../../components/Poll/PollForm/PollFormPopup";
 import ErrorPage from "../ErrorPage";
 
 import LectureFeed from "./LectureFeed";
 import NewMessageEntry from "./NewMessageEntry";
 import LiveLectureTitle from "./LiveLectureTitle";
 import LiveLectureLeftMenu from "./LiveLectureLeftMenu";
-import ErrorPage from "../ErrorPage";
-import PollFormPopup from "../../components/Poll/PollForm/PollFormPopup";
 
 import LectureState from "./LectureState";
 
@@ -29,10 +27,17 @@ function Lecture(props) {
 		return <ErrorPage code={400} text="Invalid course number" />;
 	}
 
-	// Get user ID, verifying logged-in
+	// Get user ID and permission level, verifying logged-in
 	const userID = DataStore.get("userID");
 	if (userID == null) {
 		return <Navigate to="/login" />;
+	}
+	let isElevatedUser = false;
+	for (const course of JSON.parse(DataStore.get("courses") || "[]")) {
+		if (course.id == courseID) {
+			isElevatedUser = course.role == "PROFESSOR" || course.role == "TA"
+			break;
+		}
 	}
 
 	// Get/generate lecture state
@@ -43,13 +48,14 @@ function Lecture(props) {
 		lectureState = new LectureState(userID, courseID, lectureID);
 	}
 
-	// Create version hook
+	// Create hooks
 	const [stateVersion, setStateVersion] = useState(lectureState.version);
+	const navigate = useNavigate();
 
 	// Add effect for setting up API connection
 	useEffect(() => {
 		if (lectureState != null) {
-			lectureState.start(setStateVersion);
+			lectureState.start(setStateVersion, navigate);
 			return () => {
 				lectureState.stop();
 				lectureState = null;
@@ -63,9 +69,9 @@ function Lecture(props) {
 		<div>
             <LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
 			<div style={{ display: "flex" }}>
-            	<LiveLectureLeftMenu userIDname={userID.name} userIDrole={userID.role} api={lectureAPI}/>
+            	<LiveLectureLeftMenu userIDname={userID.name} userIDrole={userID.role} api={api} elevated={isElevatedUser}/>
 				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
-					<LectureFeed api={api} messages={lectureState.messages} polls={lectureState.polls} />
+					<LectureFeed api={api} elevated={isElevatedUser} messages={lectureState.messages} polls={lectureState.polls} />
 					<NewMessageEntry api={api} />
 				</div>
 			</div>

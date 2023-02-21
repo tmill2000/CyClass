@@ -118,16 +118,23 @@
 	font-weight: bold;
 }
 
-.lfeed .poll .results-button {
+.lfeed .poll .button {
 	flex-grow: 0;
 	width: fit-content;
 	height: 100%;
 	padding: 6px 14px;
-	background-color: #008615;
+	border: none;
 	border-radius: 8px;
 	font-size: 1.2em;
 	font-weight: bolder;
 	color: #FFF;
+	cursor: pointer;
+}
+.lfeed .poll .button.results {
+	background-color: #008615;
+}
+.lfeed .poll .button.close {
+	background-color: #d60000;
 }
 
 .lfeed .poll .option {
@@ -141,6 +148,7 @@
 	align-items: center;
 	padding: 0.4rem;
 	width: 100%;
+	transition: all 0.2s;
 }
 .lfeed .poll .option:disabled {
 	cursor: default;

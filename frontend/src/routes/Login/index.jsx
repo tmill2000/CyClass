@@ -11,11 +11,13 @@ import DataStore, { useDataStoreValue } from "../../utilities/data/DataStore";
 import UserAPI from "../../utilities/api/UserAPI";
 
  
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
  import "./styles.css";
 
  const userAPI = new UserAPI();
+
+ let invalidSessionID = null;
 
  function Login(props) {
 
@@ -28,6 +30,7 @@ import { Link } from "react-router-dom";
 				DataStore.clear("netID");
 				DataStore.clear("userID");
 				DataStore.clear("sessionID");
+				DataStore.clear("courses");
 			}
 		}
 
@@ -37,7 +40,10 @@ import { Link } from "react-router-dom";
 	}
 
 	const sessionID = useDataStoreValue("sessionID");
-	if(sessionID){
+	if (invalidSessionID == null && new URLSearchParams(window.location.search).has("expired")) {
+		invalidSessionID = sessionID
+	}
+	if (sessionID && sessionID != invalidSessionID) {
 		return (
 			<div className="login">
 				<div className="container">

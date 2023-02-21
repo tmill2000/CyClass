@@ -123,6 +123,7 @@ class LiveLectureAPI {
 				console.error("Invalid JSON body:", event.data);
 				return;
 			}
+			console.log("New WebSocket message:", msg.type);
 
 			// Create and dispatch event depending on type of message
 			let lectureEvent = null;
@@ -232,7 +233,7 @@ class LiveLectureAPI {
 						}));
 
 						// Dispatch poll
-						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, msg.question, null, !msg.is_open, new Date(msg.timestamp), choices);
+						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, msg.question, null, msg.closed, new Date(msg.timestamp), choices);
 						this.eventTarget.dispatchEvent(event);
 
 					}
@@ -304,6 +305,45 @@ class LiveLectureAPI {
 	}
 
 	/**
+	 * Closes the given poll. Returns a Promise that will resolve if the operation was successful.
+	 * @param {number} pollID
+	 * @return Promise
+	 */
+	closePoll(pollID) {
+
+		// Verify connection
+		if (this.websocket == null) {
+			throw new Error("No WebSocket connection was established");
+		}
+
+		// Perform patch
+		return axios.patch("/api/poll/close", {}, {
+				params: {
+					course_id: this.courseID,
+					poll_id: pollID
+				}
+			})
+			.then((res) => {
+
+				// Also send through websocket
+				if (this.websocket != null) {
+					this.websocket.send(JSON.stringify({
+						type: "poll_close",
+						payload: {
+							poll_id: pollID
+						}
+					}));
+				}
+
+			})
+			.catch((err) => {
+				console.error("Failed to close poll:", err);
+				throw err;
+			})
+
+	}
+
+	/**
 	 * Responds to the given poll, setting the specified choice as the logged-in user's response. Returns a Promise that
 	 * will resolve if the operation was successful.
 	 * @param {number} pollID 
@@ -340,7 +380,7 @@ class LiveLectureAPI {
 		return axios.get("/api/poll/metrics", {
 				params: {
 					course_id: this.courseID,
-					poll_id: this.pollID
+					poll_id: pollID
 				}
 			})
 			.then((res) => {
