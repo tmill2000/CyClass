@@ -71,7 +71,7 @@ if (port == 443) {
   });
 } else {
   server = app.listen(port, () => {
-    console.log(`Server Listening on Port ${port}`);
+    // console.log(`Server Listening on Port ${port}`);
   });
 }
 

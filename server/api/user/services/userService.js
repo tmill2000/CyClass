@@ -26,6 +26,7 @@ const loginInfo = async (netId, password) => {
     try {
         const query = 'SELECT * FROM users WHERE netid = ? AND password = ?';
         const rows = await runQuery(query, [netId, password]);
+        console.log(rows)
         return rows
     } catch (err) {
         console.error(err)

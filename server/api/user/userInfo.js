@@ -11,11 +11,13 @@ const crypto = require('crypto');
  */
 const getUserInfoByUserId = async (req, res) => {
     try {
+        console.log('here')
         const userId = req?.query?.id;
         if (!userId) {
             return res.status(400).send({ msg: 'Invalid Parameters' })
         }
         const rows = await userService.getUserInfoByUserId(userId)
+        console.log(rows)
         if (!rows?.length) {
             return res.status(200).send({ msg: 'No user found' });
         }
@@ -46,17 +48,21 @@ const login = async (req, res) => {
         if (!netId || !password) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
+        console.log(netId, password)
         const rows = await userService.loginInfo(netId, password)
         if (!rows) {
             return res.status(401).send({msg: 'Incorrect Username or Password'})
         }
         if (netId == rows[0]?.netid && password == rows[0]?.password) {
+            console.log('here')
             session = req.session;
             session.userid = rows[0].user_id;
             session.netId = netId;
             session.sessionId = crypto.randomBytes(16).toString('base64');
+            console.log('here2')
             const roles = await roleService.getCourseRolesByUser(session.userid)
             session.user_roles = roles
+            console.log('here3')
             res.status(200).send({ userId: rows[0].user_id, sessionId: session.sessionId, userRoles: roles });
         }
         else {

@@ -23,13 +23,19 @@ const makeDb = () => {
 
 const runQuery = async (query, inserts) => {
     const db = makeDb();
+    console.log(db)
+
     try {
         const cleanQuery = mysql.format(query, inserts);
+        console.log(cleanQuery)
         const rows = await db.query(cleanQuery);
+        console.log(rows)
         return rows;
     } catch (e) {
+        console.log(e)
         throw e;
     } finally {
+        if(db)
         await db.close();
     }
 }
