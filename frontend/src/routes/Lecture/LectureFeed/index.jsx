@@ -72,7 +72,7 @@ function LectureFeed(props) {
 	return (
 		<div className="lfeed" style={props.style || {}}>
 			<ul className="feed">
-				{feedList.sort((x, y) => x.time - y.time).map(x => x.element)}
+				{feedList.map(x => x.element)}
 			</ul>
 		</div>
 	);
