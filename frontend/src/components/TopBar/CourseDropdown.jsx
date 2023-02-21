@@ -9,7 +9,7 @@
  * OBJECT FORMAT:
  * - Course: {
  *       id: name,
- *       title: name,
+ *       name: name,
  *       notifs: number
  *   }
  */
@@ -41,6 +41,15 @@ function CourseDropdown(props) {
 		}
 	}
 
+	// Look for current course
+	let currCourseTitle = "View Courses"
+	for (const course of props.courses) {
+		if (course.current) {
+			currCourseTitle = course.name
+			break;
+		}
+	}
+
 	// Dynamic styles
 	const dropdownStyle = {
 		height: props.expanded ? `calc(100% + ${dropdownListHeight}px)` : "100%" 
@@ -59,7 +68,7 @@ function CourseDropdown(props) {
 				<div className="topbar-dropdown-image-container">
 					<img className="topbar-dropdown-arrow" src={arrowImg} style={arrowStyle}/>
 				</div>
-				<span className="topbar-dropdown-title overflow-ellipsis">S E 491 - Senior Design Part 1</span>
+				<span className="topbar-dropdown-title overflow-ellipsis">{currCourseTitle}</span>
 			</div>
 			<div className="topbar-dropdown-bottom">
 				{dropdownList}

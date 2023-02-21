@@ -49,12 +49,12 @@ import { Link, Navigate } from "react-router-dom";
 				<div className="container">
 					Welcome {DataStore.get("netID")}
 
-					<Link to="/lecture">
+					{/* <Link to="/lecture">
 						<SubmitButton
 							text={'Go to Lecture'}
 							disabled={false}
 						/>
-					</Link>
+					</Link> */}
 					<SubmitButton
 						text={'Log out'}
 						disabled={false}
