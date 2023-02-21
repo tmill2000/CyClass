@@ -9,6 +9,8 @@ import LectureFeed from "./LectureFeed";
 import NewMessageEntry from "./NewMessageEntry";
 import LiveLectureTitle from "./LiveLectureTitle";
 import LiveLectureLeftMenu from "./LiveLectureLeftMenu";
+import ErrorPage from "../ErrorPage";
+import PollFormPopup from "../../components/Poll/PollForm/PollFormPopup";
 
 import LectureState from "./LectureState";
 
@@ -61,7 +63,7 @@ function Lecture(props) {
 		<div>
             <LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
 			<div style={{ display: "flex" }}>
-            	<LiveLectureLeftMenu />
+            	<LiveLectureLeftMenu userIDname={userID.name} userIDrole={userID.role} api={lectureAPI}/>
 				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
 					<LectureFeed api={api} messages={lectureState.messages} polls={lectureState.polls} />
 					<NewMessageEntry api={api} />

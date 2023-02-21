@@ -301,7 +301,6 @@ class LiveLectureAPI {
 				}))
 			}
 		}));
-
 	}
 
 	/**
