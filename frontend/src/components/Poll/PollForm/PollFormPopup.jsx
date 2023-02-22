@@ -75,7 +75,9 @@ export default function PollFormPopup(props){
 
 
     const getInputs = () => {
-        console.log("INPUTS FOLLOWING: ");
+        console.log("************");
+        console.log(props.profile_name);
+        console.log(props.profile_role);
         const some = [poll_answer_A, poll_answer_B, poll_answer_C, poll_answer_D];
         const correct = [pollA, pollB, pollC, pollD];
         let message = [];
@@ -134,7 +136,7 @@ export default function PollFormPopup(props){
             </div>
             </div>
             <div className="actions">
-              <button className="button"
+              <button className="button-LLLM-new-post"
                 onClick={() => {
                   close();
                   onSelect();
