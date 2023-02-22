@@ -28,7 +28,7 @@ function Poll(props) {
 							</div>
 							<div className="line" />
 						</div>
-						<Link className="results-button" to="results">VIEW PARTICIPATION</Link>
+						<Link className="results-button" to="/pollParticipation">VIEW PARTICIPATION</Link>
 					</div>
 				</div>
 			</div>

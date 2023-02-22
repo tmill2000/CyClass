@@ -18,7 +18,7 @@
            <div className="header" style={{fontWeight:'bold', fontSize:'27px', fontFamily:'Arial', paddingLeft:'15px', paddingTop:'9px',float:'left'}}>Poll Participation</div>
            <div style={{fontWeight: 'bold', fontFamily: 'Arial', color: 'gray', textAlign: 'left', paddingTop: '47px', paddingLeft: '15px'}}>329 participants</div>
         </div>
-      <Link to="/login">
+      <Link to="/lecture">
         <div style={{float: 'right', paddingTop: '7px', width: '35px'}}>
            <a href="#" class="close-button">
               <div class="in">
@@ -36,7 +36,7 @@
            <div style={{borderTop: '1px solid gray'}}></div>
         </div>
         <div style={{paddingLeft: '160px'}}>
-         <ParticipantPill />
+         <ParticipantPill profile_name={props.me ? "You" : props.user.name}></ParticipantPill>
         </div>
      </div>
 	);
