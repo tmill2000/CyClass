@@ -1,4 +1,5 @@
 const pollService = require('./services/pollService')
+const { hasCoursePermissions } = require('../../utils/permissions')
 /**
  * 
  * @param {*} req 
@@ -6,9 +7,13 @@ const pollService = require('./services/pollService')
  */
 const addPoll = async (req, res) => {
     try {
-        const { sender_id: senderId, lecture_id: lectureId, question_text: questionText, poll_choices: pollChoices } = req.body
-        if (!senderId || !lectureId || !questionText || !pollChoices) {
+        const { lecture_id: lectureId, question_text: questionText, poll_choices: pollChoices, course_id: courseId } = req.body
+        const senderId = req.session.userid;
+        if (!senderId || !lectureId || !questionText || !pollChoices || !courseId) {
             return res.status(400).send({ msg: 'Invalid Body' })
+        }
+        if(!hasCoursePermissions(courseId, req.session)){
+            return res.status(401).send({ msg: 'Unauthorized: Cannot create poll' })
         }
         const resp = await pollService.addPoll(senderId, lectureId, questionText, pollChoices);
         return res.status(201).send(resp);

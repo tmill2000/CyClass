@@ -1,4 +1,5 @@
 const roleService = require('./services/roleService')
+const { hasCoursePermissions } = require('../../utils/permissions')
 
 /**
  * @param {*} req 
@@ -12,11 +13,15 @@ const roleService = require('./services/roleService')
  */
 const addRole = async (req, res) => {
     try {
-        const { courseId, userID, role } = req.body;
-        if (!courseId || !userID || !['PROFESSOR', 'TA', 'STUDENT'].includes(role)) {
+        const { course_id: courseId, user_id: userId, role } = req.body;
+        
+        if (!courseId || !userId || !['PROFESSOR', 'TA', 'STUDENT'].includes(role)) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-        const insertId = await roleService.addRole(courseId, userID, role)
+        if(!hasCoursePermissions(courseId, req.session)){
+            return res.status(401).send({msg: 'Unauthorized: Cannot add role.'})
+        }
+        const insertId = await roleService.addRole(courseId, userId, role)
         return res.status(201).send({ rollID: insertId });
     } catch (e) {
         console.error(e);

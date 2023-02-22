@@ -3,19 +3,21 @@
  * CREATED:	11/05/2022
  * UPDATED:	02/05/2023
  */
-
 import React from "react";
 import LoginForm from "./LoginForm";
 import SubmitButton from "./SubmitButton";
 
 import DataStore, { useDataStoreValue } from "../../utilities/data/DataStore";
 import UserAPI from "../../utilities/api/UserAPI";
+
  
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
  import "./styles.css";
 
  const userAPI = new UserAPI();
+
+ let invalidSessionID = null;
 
  function Login(props) {
 
@@ -28,6 +30,7 @@ import { Link } from "react-router-dom";
 				DataStore.clear("netID");
 				DataStore.clear("userID");
 				DataStore.clear("sessionID");
+				DataStore.clear("courses");
 			}
 		}
 
@@ -37,18 +40,21 @@ import { Link } from "react-router-dom";
 	}
 
 	const sessionID = useDataStoreValue("sessionID");
-	if(sessionID){
+	if (invalidSessionID == null && new URLSearchParams(window.location.search).has("expired")) {
+		invalidSessionID = sessionID
+	}
+	if (sessionID && sessionID != invalidSessionID) {
 		return (
 			<div className="login">
 				<div className="container">
 					Welcome {DataStore.get("netID")}
 
-					<Link to="/lecture">
+					{/* <Link to="/lecture">
 						<SubmitButton
 							text={'Go to Lecture'}
 							disabled={false}
 						/>
-					</Link>
+					</Link> */}
 					<SubmitButton
 						text={'Log out'}
 						disabled={false}

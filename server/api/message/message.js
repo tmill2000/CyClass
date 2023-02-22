@@ -1,6 +1,7 @@
 const { v4 } = require('uuid');
 
 const messageService = require('./services/messageService');
+const { isInCourse } = require('../../utils/permissions')
 
 /**
  * 
@@ -27,9 +28,11 @@ const addMessage = async (req, res) => { //TODO: Update open-api spec
             has_media: hasMedia = false,
         } = req.body;
         const senderId = req.session.userid;
-
-        if (!body || !lectureId || (hasMedia && !courseId)) {
+        if (!body || !lectureId || !courseId || (hasMedia && !courseId)) {
             return res.status(400).send({ msg: "Invalid Body" })
+        }
+        if(!isInCourse(courseId, req.session)){
+            return res.status(401).send({ msg: 'Not in Course: Unable to send message.' })
         }
         const msgInsertId = await messageService.addMessage(
             senderId,

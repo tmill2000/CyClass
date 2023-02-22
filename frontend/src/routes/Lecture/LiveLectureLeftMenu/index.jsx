@@ -5,6 +5,8 @@ import "./style.css";
 import FilterBox from "../FilterBox";
 import handIcon from "./handIcon.png"
 
+import PollFormPopup from "../../../components/Poll/PollForm/PollFormPopup";
+
 const LiveLectureLeftMenu = (props) => {
 
     return (
@@ -29,9 +31,7 @@ const LiveLectureLeftMenu = (props) => {
                 <button className="button-LLLM-raise-hand">
                 {/* <img src={handIcon} className="hand-icon-LLLM"></img> */}
                 RAISE HAND</button>
-            </div>
-            <div className="post-LLLM">
-                <button className="button-LLLM-new-post">NEW POLL</button>
+                {props.elevated ? <PollFormPopup profile_name={props.userIDname} profile_role={props.userIDrole} api={props.api}></PollFormPopup> : null}
             </div>
         </div>
     );
