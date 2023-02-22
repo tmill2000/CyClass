@@ -21,6 +21,7 @@ class UserAPI {
 	 * - `accepted` - boolean if login was accepted
 	 * - `userID` - userID of user, if accepted
 	 * - `sessionID` - new sessionID, if accepted
+	 * - `courses` - `{ id: number, name: string, role: string }[]` (if accepted)
 	 * @param {String} username 
 	 * @param {String} password 
 	 * @return Promise
@@ -38,7 +39,12 @@ class UserAPI {
 				return {
 					accepted: true,
 					userID: res.data.userId,
-					sessionID: res.data.sessionId
+					sessionID: res.data.sessionId,
+					courses: res.data.userRoles.map(role => ({
+						id: role.course_id,
+						name: role.course_name,
+						role: role.role
+					}))
 				};
 
 			})
@@ -49,7 +55,8 @@ class UserAPI {
 					return {
 						accepted: false,
 						userID: null,
-						sessionID: null
+						sessionID: null,
+						courses: null
 					};
 				}
 

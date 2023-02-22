@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	02/14/2023
- * UPDATED:	02/14/2023
+ * UPDATED:	02/21/2023
  * 
  * PROPS:
  * - onSelect: function
@@ -26,7 +26,7 @@ function PollOption(props) {
 
 	// Component
 	return (
-		<button className={`option ${props.selected ? "selected" : ""} ${correctClass}`} onClick={props.onSelect}>
+		<button className={`option ${props.selected ? "selected" : ""} ${correctClass}`} onClick={props.onSelect} disabled={props.onSelect == null}>
 			<div className="select-box" />
 			<span className="option-text">{props.children}</span>
 			<span className="option-text label">{correctLabel}</span>

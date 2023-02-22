@@ -11,6 +11,7 @@
  */
 
 import React from "react";
+import { Link } from "react-router-dom";
 
 import "./styles.css";
 
@@ -21,10 +22,10 @@ function CourseOption(props) {
 
 	// Component
 	return (
-		<a className="topbar-dropdown-option" href={`/course/${props.course.id || 0}`}>
+		<Link className="topbar-dropdown-option" to={`/course/${props.course.id || 0}/lecture/1`}>
 			<span className={`topbar-dropdown-course-notifs ${notifExtraClass}`}>{props.course.notifs || 0}</span>
 			<span className="topbar-dropdown-option-title overflow-ellipsis">{props.course.name || "???"}</span>
-		</a>
+		</Link>
 	);
 
 }

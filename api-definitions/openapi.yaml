@@ -984,7 +984,7 @@ components:
         close_date:
           type: string
           nullable: true
-        is_open:
+        closed:
           type: boolean
         choices:
           type: array
@@ -997,7 +997,7 @@ components:
               text:
                 type: string
                 example: 9.82m/s^2
-              is_correct:
+              is_correct_choice:
                 type: boolean
                 example: true
     User:

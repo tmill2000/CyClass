@@ -5,36 +5,15 @@
  */
 
 import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+import { useDataStoreValue } from "../../utilities/data/DataStore";
 
 import CourseDropdown from "./CourseDropdown";
 
 import "./styles.css";
 import logoImg from "./logo.png";
 import UserDropdown from "./UserDropdown";
-
-const TEST_COURSE_LIST = [
-	{
-		id: 0,
-		name: "CPR E 281 - Digital Logic",
-		notifs: 13
-	},
-	{
-		id: 1,
-		name: "S E 309 - Mitra Squad",
-		notifs: 0
-	},
-	{
-		id: 2,
-		name: "COM S 336 - Introduction to Computer Graphics",
-		notifs: 4
-	},
-	{
-		id: 3,
-		name: "S E 491 - Senior Design Part 1",
-		notifs: 0,
-		current: true
-	}
-]
 
 function isDescendant(parent, descendant) {
 	for (const child of parent.children) {
@@ -50,8 +29,22 @@ function TopBar(props) {
 	// Refs
 	const topBarRef = React.createRef();
 
-	// State hooks
+	// Various hooks
 	const [currDropdown, setCurrDropdown] = React.useState(null);
+	const courses = JSON.parse(useDataStoreValue("courses") || "[]");
+	const location = useLocation();
+	const netID = useDataStoreValue("netID");
+
+	// Get course list and decide on current using URL
+	let currCourse = null;
+	const currCourseResult = /course\/([0-9]+)/.exec(location.pathname);
+	if (currCourseResult != null) {
+		currCourse = parseInt(currCourseResult[1]);
+	}
+	for (const course of courses) {
+		course.notifs = 0;
+		course.current = course.id == currCourse;
+	}
 
 	// Effects
 	useEffect(() => {
@@ -67,11 +60,11 @@ function TopBar(props) {
 	// Component
 	return (
 		<div ref={topBarRef} className="topbar">
-			<CourseDropdown courses={TEST_COURSE_LIST} expanded={currDropdown == "course"} onClick={(e) => setCurrDropdown(currDropdown == "course" ? null : "course")} />
+			<CourseDropdown courses={courses} expanded={currDropdown == "course"} onClick={(e) => setCurrDropdown(currDropdown == "course" ? null : "course")} />
 			<div className="topbar-logo-container">
 				<img className="topbar-logo" src={logoImg} />
 			</div>
-			<UserDropdown name="Student McClass" email="stuclass@iastate.edu" expanded={currDropdown == "user"} onClick={(e) => setCurrDropdown(currDropdown == "user" ? null : "user")} />
+			<UserDropdown name={netID} email="" expanded={currDropdown == "user"} onClick={(e) => setCurrDropdown(currDropdown == "user" ? null : "user")} />
 		</div>
 	);
 
