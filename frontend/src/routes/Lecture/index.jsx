@@ -38,6 +38,7 @@ function Lecture(props) {
 			break;
 		}
 	}
+	isElevatedUser=true;
 
 	// Get/generate lecture state
 	if (lectureState == null || lectureState.lectureID != lectureID) {

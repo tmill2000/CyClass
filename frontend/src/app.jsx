@@ -57,7 +57,7 @@ const router = createBrowserRouter([
 			}
 			,
 			{
-				path: "pollParticipation",
+				path: "course/:courseID/lecture/:lectureID/results",
 				element: <ParticipationForm />
 			}
 		]
