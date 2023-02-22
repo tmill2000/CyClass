@@ -136,7 +136,7 @@ export default function PollFormPopup(props){
             </div>
             </div>
             <div className="actions">
-              <button className="button"
+              <button className="button-LLLM-new-post"
                 onClick={() => {
                   close();
                   onSelect();
