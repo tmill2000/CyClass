@@ -19,6 +19,7 @@ import Lecture from "./routes/Lecture";
 import Login from "./routes/Login";
 
 import TopBar from "./components/TopBar";
+import ParticipationForm from "./routes/Polls/PollParticipationForm";
 
 // Set up axios to insert session ID into all requests
 axios.interceptors.request.use((config) => {
@@ -53,6 +54,11 @@ const router = createBrowserRouter([
 			{
 				path: "course/:courseID/lecture/:lectureID",
 				element: <Lecture />
+			}
+			,
+			{
+				path: "course/:courseID/lecture/:lectureID/results",
+				element: <ParticipationForm />
 			}
 		]
 	}

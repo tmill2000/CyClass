@@ -15,7 +15,7 @@ function Message(props) {
 
 	// Component
 	return (
-		<div className={`msg ${props.me ? "me" : ""}`}>
+		<li className={`msg ${props.me ? "me" : ""}`}>
 			<div className="post-container">
 				<TimeLabel time={props.time}/>
 				<div className="post-bubble">
@@ -27,7 +27,7 @@ function Message(props) {
 				<ProfileIcon profile_name={props.me ? "You" : props.user.name} profile_role={props.user.role} flipped={true} />
 			</div>
 			: null}
-		</div>
+		</li>
 	);
 
 }

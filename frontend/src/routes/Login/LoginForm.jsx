@@ -56,6 +56,7 @@ class LoginForm extends React.Component {
                 DataStore.set("netID", this.state.netid);
                 DataStore.set("userID", res.userID);
                 DataStore.set("sessionID", res.sessionID);
+                DataStore.set("courses", JSON.stringify(res.courses));
             } else {
                 this.resetForm();
                 alert(result.msg);

@@ -21,7 +21,7 @@ export default function PollFormPopup(props){
 
     const onSelect = () => {
 		if (props.api != null ) {
-			props.api.createPoll(poll_question_input.current.value.trim(), 10, getInputs());
+			props.api.createPoll(poll_question_input.current.value.trim(), null, getInputs());
 		}
 	};
 
@@ -75,13 +75,15 @@ export default function PollFormPopup(props){
 
 
     const getInputs = () => {
-        console.log("INPUTS FOLLOWING: ");
         const some = [poll_answer_A, poll_answer_B, poll_answer_C, poll_answer_D];
         const correct = [pollA, pollB, pollC, pollD];
         let message = [];
         for (let i =0; i < 4; i++){
             if (some[i].current.value.trim() != ''){
-                message.push([some[i].current.value.trim(), correct[i]]);
+                message.push({
+                    text: some[i].current.value.trim(),
+                    correct: correct[i]
+                });
             }
         }
         return message;
@@ -134,7 +136,7 @@ export default function PollFormPopup(props){
             </div>
             </div>
             <div className="actions">
-              <button className="button"
+              <button className="button-LLLM-new-post"
                 onClick={() => {
                   close();
                   onSelect();
