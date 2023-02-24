@@ -22,10 +22,12 @@ router.get('/course', validateSession, course.getCourse)
 router.get('/message', validateSession, message.getMessage);
 router.get('/lecture', validateSession, lecture.getLecture);
 router.get('/lecture/live', validateSession, lecture.isLectureLive);
+router.get('/lecture/lecturesByCourse', validateSession, lecture.getLecturesByCourseId)
 router.get('/poll-response', validateSession, poll.getPollResponse);
 router.get('/role', validateSession, role.getRole)
 router.get('/download-media', validateSession, media.downloadMedia)
 router.get('/poll/metrics', validateSession, poll.getPollMetrics)
+router.get('/poll', validateSession, poll.getPollById)
 //Post Requests
 router.post('/user/logout', validateSession, user.logout);
 router.post('/user/login', user.login);

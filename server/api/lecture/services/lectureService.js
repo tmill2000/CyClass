@@ -23,7 +23,7 @@ const addLecture = async (courseId, title) => {
  * @param {*} res 
  * @returns course data if successful
  */
- const getLecture = async (lectureId) => {
+const getLecture = async (lectureId) => {
     try {
         const query = 'SELECT * from lectures WHERE lecture_id = ?;';
         const resp = await runQuery(query, [lectureId]);
@@ -34,7 +34,19 @@ const addLecture = async (courseId, title) => {
     }
 }
 
+const getLectureByCourseId = async (courseId) => {
+    try {
+        const query = 'SELECT * from lectures where course_id = ?;';
+        const resp = await runQuery(query, [courseId]);
+        return resp
+    } catch (e) {
+        console.error(e)
+        throw e
+    }
+}
+
 module.exports = {
     addLecture,
-    getLecture
+    getLecture,
+    getLectureByCourseId
 }

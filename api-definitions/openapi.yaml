@@ -346,6 +346,49 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
+  /lecture/lecturesByCourse:
+    get:
+      tags:
+        - lecture
+      summary: get Lecture info by Course Id
+      operationId: getLectureInfoByCourseId
+      parameters:
+        - in: query
+          required: true
+          name: course_id
+          schema:
+            type: integer
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    lecture_id:
+                      type: integer
+                      example: 2
+                    course_id:
+                      type: integer
+                      example: 1
+                    title:
+                      type: string
+                      example: Lecture 15
+        '400':
+          description: Invalid Parameters
+        '401':
+          description: Unauthorized
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
   /lecture/live:
     get:
       tags:
@@ -655,6 +698,66 @@ paths:
         '500':
           description: Internal Server Error
   /poll:
+    get:
+      tags:
+        - poll
+      summary: get poll info by poll id
+      description: get a polls info by their id
+      operationId: getPollById
+      parameters:
+        - in: query
+          required: true
+          name: poll_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: course_id
+          schema:
+            type: integer
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  poll_id:
+                    type: integer
+                  close_date:
+                    type: string
+                  closed:
+                    type: boolean
+                  sender_id:
+                    type: integer
+                  timestamp:
+                    type: string
+                  poll_choices:
+                    type: array
+                    items:
+                      properties:
+                        poll_choice_id:
+                          type: integer 
+                        question_text:
+                          type: string
+                        choice_text:
+                          type: string
+                        is_correct_choice:
+                          type: boolean
+        '400':
+          description: Invalid Parameters
+        '401':
+          description: Unauthorized
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
     post:
         tags:
           - poll
