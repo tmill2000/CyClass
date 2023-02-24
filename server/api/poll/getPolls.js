@@ -12,7 +12,7 @@ const getPollById = async (req, res) => {
         const {  poll_id: pollId, course_id: courseId } = req.query;
 
         if (!pollId || !courseId) {
-            return res.status(400).send({ msg: "No poll_id Provided" })
+            return res.status(400).send({ msg: "Missing Parameters" })
         }
         if(!isInCourse(courseId, req.session)){
             return res.status(401).send({ msg: 'Unauthorized' })
