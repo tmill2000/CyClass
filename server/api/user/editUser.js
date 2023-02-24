@@ -2,10 +2,11 @@ const patch = require('../utils/patchService');
 
 const editUser = async (req, res) => {
     try {
-        const { netid: netid, password: password, first_name: firstName, last_name: lastName } = req.body;
+        const { user_id: userId } = req.body;
 
-        // call patch service
+        await patch.genericPatch("users", req.body, "user_id", userId);
 
+        return res.status(200).send({ msg: `Updated user: ${userId}`});
 
     } catch (e) {
         console.error(e);

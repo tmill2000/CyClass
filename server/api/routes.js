@@ -44,7 +44,8 @@ router.post('/poll', validateSession, poll.addPoll);
 //Put Requests
 
 //Patch
-router.patch('/poll/close', validateSession, validatePatch.canEditGivenUser, poll.closePoll)
+router.patch('/poll/close', validateSession, poll.closePoll)
+router.patch('/user', validateSession, validatePatch.canEditGivenUser, user.editUser)
 
 
 module.exports = router;
