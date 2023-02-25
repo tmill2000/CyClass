@@ -4,6 +4,8 @@ const canEditGivenUser = async (req, res, next) => {
     try {
         const { user_id: userId } = req.body;
 
+        return res.status(500).send({ userId });
+
         if (process.env.NODE_ENV === 'devl') {
             next();
         } else if (!userId || userId !== req.session.userid) {
@@ -14,7 +16,7 @@ const canEditGivenUser = async (req, res, next) => {
 
     } catch (e) {
         console.error(e);
-        return res.status(500).send({ msg: 'Internal Server Error' });
+        return res.status(500).send({ msg: 'Internal Server Error on Patch Perm Validate' });
     }
 }
 
