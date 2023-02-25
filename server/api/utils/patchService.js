@@ -20,6 +20,8 @@ const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVa
         const joinedUpdates = updatesToMake.join(", ");
         const query = `UPDATE ${tableName} SET ${joinedUpdates} WHERE ${whereClauseCol} = ?`;
 
+        return res.status(200).send({ query});
+
         const resp = await runQuery(query, [...insertValues, whereClauseVal]);
         return resp;
 
