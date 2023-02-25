@@ -15,6 +15,8 @@ const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVa
             insertValues.push(objKey, newValsObj[objKey]);
         });
 
+        // TODO: function to make sure keys in newValsObj don't allow for sql injection
+
         const joinedUpdates = updatesToMake.join(", ");
         const query = `UPDATE ${tableName} SET ${joinedUpdates} WHERE ${whereClauseCol} = ?`;
 
