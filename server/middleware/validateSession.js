@@ -1,5 +1,5 @@
 module.exports = (req, res, next) => {
-    if(!req.session?.userid){
+    if(!req.session?.userid && process.env.NODE_ENV !== 'devl'){
         return res.status(403).send({msg: 'No Session: Please Log In'})
     }
     const xSessionId = req.headers['x-session-id']

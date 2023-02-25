@@ -10,6 +10,7 @@ const role = require('./role/router');
 const poll = require('./poll/router');
 const media = require('./media/router');
 
+const validatePatch = require('../middleware/validatePatchPermissions')
 const validateSession = require('../middleware/validateSession');
 
 const router = express.Router()
@@ -46,6 +47,7 @@ router.post('/poll', validateSession, poll.addPoll);
 
 //Patch
 router.patch('/poll/close', validateSession, poll.closePoll)
+router.patch('/user', validateSession, validatePatch.canEditGivenUser, user.editUser)
 
 
 module.exports = router;
