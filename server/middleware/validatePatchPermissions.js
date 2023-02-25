@@ -5,7 +5,7 @@ const canEditGivenUser = async (req, res, next) => {
         const { user_id: userId } = req.body;
 
         if (process.env.NODE_ENV === 'devl') {
-            
+            next();
         } else if (!userId || userId !== req.session.userid) {
             return res.status(403).send({ msg: 'Forbidden to update this record' });
         }
