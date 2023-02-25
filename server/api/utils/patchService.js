@@ -10,6 +10,7 @@ const { runQuery } = require('../../utils/db_connection');
 const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVal) => {
     const updatesToMake = [], insertValues = [];
     try {
+        return res.status(200).send("in generic");
         Object.keys(newValsObj).forEach((objKey) => {
             updatesToMake.push(`? = ?`);
             insertValues.push(objKey, newValsObj[objKey]);
@@ -20,7 +21,7 @@ const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVa
         const joinedUpdates = updatesToMake.join(", ");
         const query = `UPDATE ${tableName} SET ${joinedUpdates} WHERE ${whereClauseCol} = ?`;
 
-        return res.status(200).send({ query});
+        return res.status(200).send({ query });
 
         const resp = await runQuery(query, [...insertValues, whereClauseVal]);
         return resp;
