@@ -4,7 +4,7 @@ const editUser = async (req, res) => {
     try {
         const { user_id: userId } = req.body;
 
-        return res.status(200).send("in edit");
+        return res.status(200).send({bod: req.body});
 
         await patch.genericPatch("users", req.body, "user_id", userId);
 
