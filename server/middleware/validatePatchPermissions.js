@@ -8,11 +8,9 @@ const canEditGivenUser = async (req, res, next) => {
             next();
         } else if (!userId || userId !== req.session.userid) {
             return res.status(403).send({ msg: 'Forbidden to update this record' });
+        } else {
+            next();
         }
-
-        return res.status(500).send({ msg: "can edit" });
-        
-        next();
 
     } catch (e) {
         console.error(e);
