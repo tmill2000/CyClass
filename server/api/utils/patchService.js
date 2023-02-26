@@ -8,7 +8,7 @@ const { runQuery } = require('../../utils/db_connection');
  * @param {*} whereClauseVal Value to base WHERE statement on
  */
 const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVal) => {
-    return res.status(200).send("in generic");
+    return res.status(200).send(newValsObj);
     const updatesToMake = [], insertValues = [];
     try {
         Object.keys(newValsObj).forEach((objKey) => {
