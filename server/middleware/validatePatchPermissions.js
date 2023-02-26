@@ -4,13 +4,13 @@ const canEditGivenUser = async (req, res, next) => {
     try {
         const { user_id: userId } = req.body;
 
-        return res.status(500).send({ userId });
-
         if (process.env.NODE_ENV === 'devl') {
             next();
         } else if (!userId || userId !== req.session.userid) {
             return res.status(403).send({ msg: 'Forbidden to update this record' });
         }
+
+        return res.status(500).send({ msg: "can edit" });
         
         next();
 
