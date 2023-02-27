@@ -477,7 +477,7 @@ paths:
     post:
       tags:
         - role
-      summary: Adds a new role to the system
+      summary: Assigns the logged in user a new role to the system
       parameters:
         - in: header
           name: x-session-id
@@ -519,6 +519,41 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
+  /role/{join_code}:
+    post:
+        tags:
+          - role
+        summary: Assigns a new role for the logged in user to the system by join cod
+        parameters:
+          - in: header
+            name: x-session-id
+            schema:
+              type: string
+            required: true
+          - in: path
+            name: join_code
+            schema:
+              type: string
+            required: true
+        responses:
+          '201':
+            description: Success
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    rollID:
+                      type: integer
+                      example: 1
+          '400':
+            description: Invalid Body
+          '401':
+            description: Unauthorized
+          '403':
+            description: Invalid Session
+          '500':
+            description: Internal Server Error
   /poll-response:
     get:
       tags:
