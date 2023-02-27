@@ -10,4 +10,4 @@ cd ../server
 # Build and deploy
 npm ci
 npm run test -- --silent
-cat .env.sudo | sudo -S /usr/bin/pm2 restart server.js
+cat .env.sudo | sudo -S /usr/bin/pm2 restart server.js > server.log 2>&1
