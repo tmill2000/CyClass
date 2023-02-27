@@ -8,7 +8,6 @@ const { runQuery } = require('../../utils/db_connection');
  * @param {*} whereClauseVal Value to base WHERE statement on
  */
 const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVal) => {
-    return res.status(200).send(newValsObj);
     const updatesToMake = [], insertValues = [];
     try {
         Object.keys(newValsObj).forEach((objKey) => {
@@ -20,8 +19,6 @@ const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVa
 
         const joinedUpdates = updatesToMake.join(", ");
         const query = `UPDATE ${tableName} SET ${joinedUpdates} WHERE ${whereClauseCol} = ?`;
-
-        return res.status(200).send({ query });
 
         const resp = await runQuery(query, [...insertValues, whereClauseVal]);
         return resp;
