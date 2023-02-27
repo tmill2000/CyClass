@@ -4,9 +4,9 @@ const editUser = async (req, res) => {
     try {
         const { user_id: userId } = req.body;
 
-        await patch.genericPatch("users", req.body, "user_id", userId);
+        const patchRes = await patch.genericPatch("users", req.body, "user_id", userId);
 
-        return res.status(200).send({ msg: `Updated user: ${userId}`});
+        return res.status(200).send({ patchRes });
 
     } catch (e) {
         console.error(e);
