@@ -1,7 +1,9 @@
 CREATE TABLE courses (
     course_id int PRIMARY KEY AUTO_INCREMENT,
     owner_id int NOT NULL,
-    course_name varchar(100)
+    course_name varchar(100),
+    join_code VARCHAR(255) NOT NULL,
+    closed BOOLEAN
 );
 
 CREATE TABLE lectures (

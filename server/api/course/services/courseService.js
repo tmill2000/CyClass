@@ -1,18 +1,19 @@
 const { runQuery } = require('../../../utils/db_connection');
+const { v4 } = require('uuid');
 
 const roleService = require('../../role/services/roleService');
 
 
 /**
- * Function to add a course
+ * 
  * @param {*} ownerID 
  * @param {*} courseTitle 
- * @returns course_id of the course if successful, otherwise a 500 error
+ * @returns 
  */
 const addCourse = async (ownerID, courseTitle) => {
     try {
-        const query = 'INSERT INTO courses (owner_id, course_name) VALUES (?, ?);';
-        const resp = await runQuery(query, [ownerID, courseTitle]);
+        const query = 'INSERT INTO courses (owner_id, course_name, join_code) VALUES (?, ?, ?);';
+        const resp = await runQuery(query, [ownerID, courseTitle, v4()]);
 
         await roleService.addRole(resp.insertId, ownerID, 'PROFESSOR');
 
@@ -24,14 +25,9 @@ const addCourse = async (ownerID, courseTitle) => {
 }
 
 /**
- * Function to get a course
- * @param {*} req 
- *  req.query = {
- *    course_id: int
- *    session_id: string
- *  }
- * @param {*} res 
- * @returns course data if successful, otherwise a 500 or 400 error
+ * 
+ * @param {*} courseId 
+ * @returns 
  */
  const getCourse = async (courseId) => {
     try {
@@ -44,7 +40,24 @@ const addCourse = async (ownerID, courseTitle) => {
     }
 }
 
+/**
+ * 
+ * @param {*} joinCode 
+ * @returns 
+ */
+const getCourseByJoinCode = async (joinCode) => {
+    try {
+        const query = 'SELECT course_id, closed from courses WHERE join_code = ?;';
+        const [resp] = await runQuery(query, [joinCode]);
+        return resp
+    } catch (e) {
+        console.error(e);
+        throw e
+    }
+}
+
 module.exports = {
     addCourse,
-    getCourse
+    getCourse,
+    getCourseByJoinCode
 }
