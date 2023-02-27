@@ -552,6 +552,8 @@ paths:
             description: Unauthorized
           '403':
             description: Invalid Session
+          '404':
+            description: Not Found
           '500':
             description: Internal Server Error
   /poll-response:

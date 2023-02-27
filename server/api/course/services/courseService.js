@@ -47,7 +47,7 @@ const addCourse = async (ownerID, courseTitle) => {
  */
 const getCourseByJoinCode = async (joinCode) => {
     try {
-        const query = 'SELECT course_id from courses WHERE join_code = ?;';
+        const query = 'SELECT course_id, closed from courses WHERE join_code = ?;';
         const [resp] = await runQuery(query, [joinCode]);
         return resp
     } catch (e) {
