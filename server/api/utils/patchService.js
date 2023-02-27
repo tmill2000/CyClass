@@ -1,5 +1,17 @@
 const { runQuery } = require('../../utils/db_connection');
 
+const editableFields = {
+    courses: [],
+    lectures: [],
+    media_metadata: [],
+    messages: [],
+    poll_choices: [],
+    poll_responses: [],
+    polls: [],
+    roles: [],
+    users: ["netid", "password", "first_name", "last_name"]
+}
+
 /**
  * Service to update data objects
  * @param {*} tableName Name of table, should be hard-coded in calling backend function to avoid SQL injection
@@ -11,11 +23,12 @@ const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVa
     const updatesToMake = [], insertValues = [];
     try {
         Object.keys(newValsObj).forEach((objKey) => {
+            // Check to ensure all included fields are eligible to be edited
+            if (!editableFields[tableName].includes(objKey)) return
+
             updatesToMake.push(`${objKey} = ?`);
             insertValues.push(newValsObj[objKey]);
         });
-
-        // TODO: function to make sure keys in newValsObj don't allow for sql injection
 
         const joinedUpdates = updatesToMake.join(", ");
         const query = `UPDATE ${tableName} SET ${joinedUpdates} WHERE ${whereClauseCol} = ?`;
