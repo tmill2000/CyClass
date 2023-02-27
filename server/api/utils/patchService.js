@@ -11,8 +11,8 @@ const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVa
     const updatesToMake = [], insertValues = [];
     try {
         Object.keys(newValsObj).forEach((objKey) => {
-            updatesToMake.push(`? = ?`);
-            insertValues.push(objKey, newValsObj[objKey]);
+            updatesToMake.push(`${objKey} = ?`);
+            insertValues.push(newValsObj[objKey]);
         });
 
         // TODO: function to make sure keys in newValsObj don't allow for sql injection
