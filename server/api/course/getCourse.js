@@ -21,7 +21,9 @@ const getCourse = async (req, res) => {
         return res.status(200).send({ 
             course_id: resp[0].course_id,
             owner_id: resp[0].owner_id,
-            course_name: resp[0].course_name
+            course_name: resp[0].course_name,
+            closed: !!resp[0].closed,
+            join_code: resp[0].join_code
         });
     } catch (e) {
         console.error(e);

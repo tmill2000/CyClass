@@ -1,15 +1,11 @@
 const courseService = require('./services/courseService')
-
+const { v4 } = require('uuid')
 
 /**
- * Function to add a course
+ * 
  * @param {*} req 
- *  req.body = {
- *    ownerId: int,
- *    courseTitle: string
- *  }
  * @param {*} res 
- * @returns course_id of the course if successful, otherwise a 500 error
+ * @returns 
  */
 const addCourse = async (req, res) => {
     try {
@@ -17,9 +13,10 @@ const addCourse = async (req, res) => {
         if (!ownerID || !courseTitle) {
             return res.status(400).send({ msg: "Invalid Body" })
         }
-        const insertId = await courseService.addCourse(ownerID, courseTitle);;
+        const joinCode = v4();
+        const insertId = await courseService.addCourse(ownerID, courseTitle, joinCode);
 
-        return res.status(201).send({ course_id: insertId });
+        return res.status(201).send({ course_id: insertId, join_code: joinCode });
     } catch (e) {
         console.error(e);
         return res.status(500).send({ msg: 'Internal Server Error' });

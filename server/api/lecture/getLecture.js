@@ -45,7 +45,25 @@ const isLectureLive = async (req, res) => {
     return res.status(200).send({ lectureId, live: lectures.has(Number(lectureId)) })
 }
 
+const getLecturesByCourseId = async (req, res) => {
+    try {
+        const { course_id: courseId } = req.query;
+        if (!courseId) {
+            return res.status(400).send({ msg: "Missing Parameters" })
+        }
+        if (!isInCourse(courseId, req.session)) {
+            return res.status(401).send({ msg: 'Must be associated with course to retrieve lecture info.' })
+        }
+        const resp = await lectureService.getLecturesByCourseId(courseId);
+        return res.status(200).send(resp);
+    } catch (e) {
+        console.error(e);
+        return res.status(500).send({ msg: 'Internal Server Error' });
+    }
+}
+
 module.exports = {
     getLecture,
-    isLectureLive
+    isLectureLive,
+    getLecturesByCourseId
 }

@@ -11,8 +11,8 @@ const downloadMedia = async (req, res) => { //TODO: Add open-api spec
             return res.status(400).send({ msg: 'Missing media_id or course_id query params' });
         }
 
-        const response = await mediaService.metadataForDownload(req.session.userid, mediaID);
-        const { file_type: fileType, user_in_course: userInCourse, received } = response[0];
+        const [response] = await mediaService.metadataForDownload(req.session.userid, mediaID);
+        const { file_type: fileType, user_in_course: userInCourse, received } = response;
 
         if (!received || ! fileType) {
             return res.status(404).send({ msg: 'Media not available' });
@@ -32,6 +32,7 @@ const downloadMedia = async (req, res) => { //TODO: Add open-api spec
         };
 
         res.sendFile(`${mediaID}.${fileType}`, options, (err) => {
+            /* istanbul ignore next */
             if (err) {
                 console.log(err)
             } else {

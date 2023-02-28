@@ -5,6 +5,8 @@ server.cert
 server.key
 .vscode
 senior design.session.sql
+sandbox.js
+*.log
 
 # Frontend Build
 /www/bundle.js

@@ -10,6 +10,7 @@ const role = require('./role/router');
 const poll = require('./poll/router');
 const media = require('./media/router');
 
+const validatePatch = require('../middleware/validatePatchPermissions')
 const validateSession = require('../middleware/validateSession');
 
 const router = express.Router()
@@ -22,10 +23,12 @@ router.get('/course', validateSession, course.getCourse)
 router.get('/message', validateSession, message.getMessage);
 router.get('/lecture', validateSession, lecture.getLecture);
 router.get('/lecture/live', validateSession, lecture.isLectureLive);
+router.get('/lecture/lecturesByCourse', validateSession, lecture.getLecturesByCourseId)
 router.get('/poll-response', validateSession, poll.getPollResponse);
 router.get('/role', validateSession, role.getRole)
 router.get('/download-media', validateSession, media.downloadMedia)
 router.get('/poll/metrics', validateSession, poll.getPollMetrics)
+router.get('/poll', validateSession, poll.getPollById)
 //Post Requests
 router.post('/user/logout', validateSession, user.logout);
 router.post('/user/login', user.login);
@@ -37,6 +40,7 @@ router.post('/role', validateSession, role.addRole);
 router.post('/poll-response', validateSession, poll.addPollResponse);
 router.post('/upload-media', validateSession, bodyParser.raw({ type: ['image/jpeg', 'image/png'], limit: '5mb' }), media.uploadMedia); //TODO: Very vulnerable to malicious files
 router.post('/poll', validateSession, poll.addPoll);
+router.post('/role/:join_code', validateSession, role.addRoleByJoinCode)
 
 //Delete Requests
 
@@ -44,6 +48,7 @@ router.post('/poll', validateSession, poll.addPoll);
 
 //Patch
 router.patch('/poll/close', validateSession, poll.closePoll)
+router.patch('/user', validateSession, validatePatch.canEditGivenUser, user.editUser)
 
 
 module.exports = router;

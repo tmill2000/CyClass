@@ -432,7 +432,7 @@ class LiveLectureAPI {
 		return axios.get("/api/poll/metrics", {
 				params: {
 					course_id: this.courseID,
-					poll_id: this.pollID
+					poll_id: pollID
 				}
 			})
 			.then((res) => {

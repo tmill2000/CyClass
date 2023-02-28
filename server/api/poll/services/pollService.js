@@ -73,8 +73,15 @@ const closePoll = async (pollId) => {
     await runQuery(query, [false, pollId])
 }
 
+const getPollById = async (pollId) => {
+    const query = 'SELECT * from polls INNER JOIN poll_choices ON polls.poll_id = poll_choices.poll_id where polls.poll_id = ?'
+    const resp = await runQuery(query, [pollId])
+    return resp
+}
+
 module.exports = {
     addPoll,
     getPollMetrics,
-    closePoll
+    closePoll,
+    getPollById
 }
