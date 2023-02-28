@@ -40,31 +40,31 @@ describe('downloadMedia', () => {
 
     })
 
-    // it('should return 200 for success', async () => {
-    //     const req = getMockReq({ query: { course_id: 1, media_id: 'file' }})
-    //     req.session = professorSession
-    //     req.get = jest.fn().mockReturnValue('x/png')
-    //     jest.spyOn(mediaService, 'authUpload').mockResolvedValueOnce([{user_id: 1, course_id: 1, received: true}])
-    //     fs.existsSync = jest.fn().mockReturnValue(false)
-    //     fs.mkdirSync = jest.fn().mockReturnValue()
-    //     fs.writeFile = jest.fn().mockReturnValue()
-    //     jest.spyOn(mediaService, 'updateMediaMetadataOnReceived').mockResolvedValueOnce()
-    //     await uploadMedia(req, res);
-    //     expect(res.status).toBeCalledWith(200)
-    // })
+    it('should return 200 for success', async () => {
+        const req = getMockReq({ query: { course_id: 1, media_id: 'file' }})
+        req.session = professorSession
+        req.get = jest.fn().mockReturnValue('x/png')
+        jest.spyOn(mediaService, 'authUpload').mockResolvedValueOnce([{user_id: 1, course_id: 1, received: true}])
+        fs.existsSync = jest.fn().mockReturnValue(false)
+        fs.mkdirSync = jest.fn().mockReturnValue()
+        fs.writeFile = jest.fn().mockReturnValue()
+        jest.spyOn(mediaService, 'updateMediaMetadataOnReceived').mockResolvedValueOnce()
+        await uploadMedia(req, res);
+        expect(res.status).toBeCalledWith(200)
+    })
 
-    // it('should return 200 for success', async () => {
-    //     const req = getMockReq({ query: { course_id: 1, media_id: 'file' }})
-    //     req.session = professorSession
-    //     req.get = jest.fn().mockReturnValue('x/png')
-    //     jest.spyOn(mediaService, 'authUpload').mockResolvedValueOnce([{user_id: 1, course_id: 1, received: true}])
-    //     fs.existsSync = jest.fn().mockReturnValue(true)
-    //     fs.mkdirSync = jest.fn().mockReturnValue()
-    //     fs.writeFile = jest.fn().mockReturnValue()
-    //     jest.spyOn(mediaService, 'updateMediaMetadataOnReceived').mockResolvedValueOnce()
-    //     await uploadMedia(req, res);
-    //     expect(res.status).toBeCalledWith(200)
-    // })
+    it('should return 200 for success', async () => {
+        const req = getMockReq({ query: { course_id: 1, media_id: 'file' }})
+        req.session = professorSession
+        req.get = jest.fn().mockReturnValue('x/png')
+        jest.spyOn(mediaService, 'authUpload').mockResolvedValueOnce([{user_id: 1, course_id: 1, received: true}])
+        fs.existsSync = jest.fn().mockReturnValue(true)
+        fs.mkdirSync = jest.fn().mockReturnValue()
+        fs.writeFile = jest.fn().mockReturnValue()
+        jest.spyOn(mediaService, 'updateMediaMetadataOnReceived').mockResolvedValueOnce()
+        await uploadMedia(req, res);
+        expect(res.status).toBeCalledWith(200)
+    })
     
     it('should return 500 for for Server error', async () => {
         const req = getMockReq({ query: { course_id: 1, media_id: 'file' }})
