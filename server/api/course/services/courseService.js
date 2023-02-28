@@ -1,5 +1,4 @@
 const { runQuery } = require('../../../utils/db_connection');
-const { v4 } = require('uuid');
 
 const roleService = require('../../role/services/roleService');
 
@@ -10,13 +9,12 @@ const roleService = require('../../role/services/roleService');
  * @param {*} courseTitle 
  * @returns 
  */
-const addCourse = async (ownerID, courseTitle) => {
+const addCourse = async (ownerID, courseTitle, joinCode) => {
     try {
-        const query = 'INSERT INTO courses (owner_id, course_name, join_code) VALUES (?, ?, ?);';
-        const resp = await runQuery(query, [ownerID, courseTitle, v4()]);
+        const query = 'INSERT INTO courses (owner_id, course_name, join_code, closed) VALUES (?, ?, ?, ?);';
+        const resp = await runQuery(query, [ownerID, courseTitle, joinCode, false]);
 
         await roleService.addRole(resp.insertId, ownerID, 'PROFESSOR');
-
         return resp.insertId
     } catch (e) {
         console.error(e);

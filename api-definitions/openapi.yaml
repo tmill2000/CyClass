@@ -210,6 +210,10 @@ paths:
                   course_name:
                     type: string
                     example: EE 201
+                  join_code:
+                    type: string
+                  closed:
+                    type: boolean
         '400':
           description: Invalid Parameters
         '403':
@@ -251,6 +255,8 @@ paths:
                   course_id:
                     type: integer
                     example: 1
+                  join_code:
+                    type: string
         '400':
           description: Invalid Body
         '403':

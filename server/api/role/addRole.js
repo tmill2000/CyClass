@@ -3,14 +3,10 @@ const courseService = require('../course/services/courseService')
 const { hasCoursePermissions } = require('../../utils/permissions')
 
 /**
+ * 
  * @param {*} req 
- * req.body = {
- *  courseID: int,
- *  userID: int,
- *  role: enum('PROFESSOR', 'TA', 'STUDENT'),
- * }
  * @param {*} res 
- * @returns rollID of created roll
+ * @returns 
  */
 const addRole = async (req, res) => {
     try {
@@ -29,7 +25,12 @@ const addRole = async (req, res) => {
         return res.status(500).send({ msg: 'Internal Server Error' });
     }
 }
-
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 const addRoleByJoinCode = async (req, res) => {
     try {
         const { join_code: joinCode } = req.params;
@@ -37,7 +38,7 @@ const addRoleByJoinCode = async (req, res) => {
             return res.status(400).send('Invalid Parameters')
         }
         const course = await courseService.getCourseByJoinCode(joinCode)
-        if(!!course.closed){
+        if(course.closed){
             return res.status(404).send({msg: 'Course Missing or Closed'})
         }
         const insertId = await roleService.addRole(course.course_id, req.session.userid, 'STUDENT')

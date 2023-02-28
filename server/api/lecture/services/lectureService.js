@@ -34,7 +34,7 @@ const getLecture = async (lectureId) => {
     }
 }
 
-const getLectureByCourseId = async (courseId) => {
+const getLecturesByCourseId = async (courseId) => {
     try {
         const query = 'SELECT * from lectures where course_id = ?;';
         const resp = await runQuery(query, [courseId]);
@@ -48,5 +48,5 @@ const getLectureByCourseId = async (courseId) => {
 module.exports = {
     addLecture,
     getLecture,
-    getLectureByCourseId
+    getLecturesByCourseId
 }
