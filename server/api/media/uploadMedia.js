@@ -29,27 +29,24 @@ const uploadMedia = async (req, res) => { //TODO: Add open-api spec
         if(!isInCourse(courseId, req.session)){
             return res.status(401).send({ msg: 'Not In Course: Unauthorized to add media' })
         }
-
         const fileType = req.get('Content-Type')?.split('/')[1];
-
         if (!["png", "jpg", "jpeg"].includes(fileType)) {
             return res.status(400).send({ msg: "Missing valid Content-Type header" });
         }
 
-        const response = await mediaService.authUpload(mediaID);
-        const { course_id: courseID, user_id: userID, received } = response[0];
+        const [response] = await mediaService.authUpload(mediaID);
+        const { course_id: courseID, user_id: userID, received } = response;
 
-        if (userID !== req.session.userid || received) {
+        if (userID !== req.session.userid || !received) {
             return res.status(403).send({ msg: "Forbidden to upload file to this mediaID" });
         }
 
         const dir = `../../sdmay23-40_media/${courseID}`;
-
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true }); 
         }
-
         fs.writeFile(`${dir}/${mediaID}.${fileType}`, req.body, (error) => {
+            /* istanbul ignore next */
             if (error) {
                 throw error;
             }

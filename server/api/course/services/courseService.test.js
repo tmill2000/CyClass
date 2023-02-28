@@ -1,5 +1,5 @@
 
-const { getCourse, addCourse } = require('./courseService')
+const { getCourse, addCourse, getCourseByJoinCode } = require('./courseService')
 const roleService = require('../../role/services/roleService')
 const db = require ('../../../utils/db_connection');
 
@@ -29,6 +29,18 @@ describe("courseService", () => {
         it('should throw error', async () => {
             jest.spyOn(db, 'runQuery').mockRejectedValueOnce(new Error());
             await expect(getCourse(-1)).rejects.toThrow()
+        })
+    })
+
+    describe("getCourseByJoinCode",  () => {
+        it('should return response', async () => {
+            jest.spyOn(db, 'runQuery').mockResolvedValueOnce([{course_id: 1, closed: false}]);
+            const res = await getCourseByJoinCode('ajsjfh-akdsjhf-adnfj');
+            expect(res).toEqual({course_id: 1, closed: false})
+        })
+        it('should throw error', async () => {
+            jest.spyOn(db, 'runQuery').mockRejectedValueOnce(new Error());
+            await expect(getCourseByJoinCode(-1)).rejects.toThrow()
         })
     })
 })

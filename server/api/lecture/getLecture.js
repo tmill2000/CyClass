@@ -54,7 +54,7 @@ const getLecturesByCourseId = async (req, res) => {
         if (!isInCourse(courseId, req.session)) {
             return res.status(401).send({ msg: 'Must be associated with course to retrieve lecture info.' })
         }
-        const resp = await lectureService.getLectureByCourseId(courseId);
+        const resp = await lectureService.getLecturesByCourseId(courseId);
         return res.status(200).send(resp);
     } catch (e) {
         console.error(e);
