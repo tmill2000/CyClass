@@ -25,6 +25,7 @@ function Lecture(props) {
 	if (isNaN(courseID)) {
 		return <ErrorPage code={400} text="Invalid course number" />;
 	}
+	const netID = DataStore.get("netID");
 
 	// Get user ID and permission level, verifying logged-in
 	const userID = DataStore.get("userID");
@@ -32,8 +33,10 @@ function Lecture(props) {
 		return <Navigate to="/login" />;
 	}
 	let isElevatedUser = false;
+	let user_role;
 	for (const course of JSON.parse(DataStore.get("courses") || "[]")) {
 		if (course.id == courseID) {
+			user_role = course.role;
 			isElevatedUser = course.role == "PROFESSOR" || course.role == "TA"
 			break;
 		}
@@ -68,7 +71,7 @@ function Lecture(props) {
 		<div>
             <LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
 			<div style={{ display: "flex" }}>
-            	<LiveLectureLeftMenu userIDname={userID.name} userIDrole={userID.role} api={api} elevated={isElevatedUser}/>
+            	<LiveLectureLeftMenu userIDname={netID} userIDrole={user_role} api={api} elevated={isElevatedUser}/>
 				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
 					<LectureFeed api={api} elevated={isElevatedUser} messages={lectureState.messages} polls={lectureState.polls} />
 					<NewMessageEntry api={api} />
