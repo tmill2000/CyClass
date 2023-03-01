@@ -1,26 +1,25 @@
-const lectureService = require('./services/lectureService')
-const { lectures } = require('../../websockets/websockets')
-const { isInCourse } = require('../../utils/permissions')
-
+const lectureService = require("./services/lectureService");
+const { lectures } = require("../../websockets/websockets");
+const { isInCourse } = require("../../utils/permissions");
 
 /**
  * Function to get a course
- * @param {*} req 
+ * @param {*} req
  *  req.query = {
  *    lecture_id: int
  *    session_id: string
  *  }
- * @param {*} res 
+ * @param {*} res
  * @returns course data if successful, otherwise a 500 or 400 error
  */
 const getLecture = async (req, res) => {
     try {
         const { lecture_id: lectureId, course_id: courseId } = req.query;
         if (!lectureId || !courseId) {
-            return res.status(400).send({ msg: "Missing Parameters" })
+            return res.status(400).send({ msg: "Missing Parameters" });
         }
         if (!isInCourse(courseId, req.session)) {
-            return res.status(401).send({ msg: 'Must be associated with course to retrieve lecture info.' })
+            return res.status(401).send({ msg: "Must be associated with course to retrieve lecture info." });
         }
         const resp = await lectureService.getLecture(lectureId);
         return res.status(200).send({
@@ -30,40 +29,40 @@ const getLecture = async (req, res) => {
         });
     } catch (e) {
         console.error(e);
-        return res.status(500).send({ msg: 'Internal Server Error' });
+        return res.status(500).send({ msg: "Internal Server Error" });
     }
-}
+};
 
 const isLectureLive = async (req, res) => {
     const { lecture_id: lectureId, course_id: courseId } = req.query;
     if (!lectureId || !courseId) {
-        return res.status(400).send('Missing Parameters')
+        return res.status(400).send("Missing Parameters");
     }
     if (!isInCourse(courseId, req.session)) {
-        return res.status(401).send({ msg: 'Must be associated with course to retrieve lecture info.' })
+        return res.status(401).send({ msg: "Must be associated with course to retrieve lecture info." });
     }
-    return res.status(200).send({ lectureId, live: lectures.has(Number(lectureId)) })
-}
+    return res.status(200).send({ lectureId, live: lectures.has(Number(lectureId)) });
+};
 
 const getLecturesByCourseId = async (req, res) => {
     try {
         const { course_id: courseId } = req.query;
         if (!courseId) {
-            return res.status(400).send({ msg: "Missing Parameters" })
+            return res.status(400).send({ msg: "Missing Parameters" });
         }
         if (!isInCourse(courseId, req.session)) {
-            return res.status(401).send({ msg: 'Must be associated with course to retrieve lecture info.' })
+            return res.status(401).send({ msg: "Must be associated with course to retrieve lecture info." });
         }
         const resp = await lectureService.getLecturesByCourseId(courseId);
         return res.status(200).send(resp);
     } catch (e) {
         console.error(e);
-        return res.status(500).send({ msg: 'Internal Server Error' });
+        return res.status(500).send({ msg: "Internal Server Error" });
     }
-}
+};
 
 module.exports = {
     getLecture,
     isLectureLive,
     getLecturesByCourseId
-}
+};

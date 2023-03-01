@@ -1,52 +1,52 @@
-const { runQuery } = require('../../../utils/db_connection');
+const { runQuery } = require("../../../utils/db_connection");
 
 /**
- * @param {*} courseId 
- * @param {*} title 
- * @param {*} res 
+ * @param {*} courseId
+ * @param {*} title
+ * @param {*} res
  * @returns lecture_id of created lecture
  */
 const addLecture = async (courseId, title) => {
     try {
-        const query = 'INSERT INTO lectures (course_id, title) VALUES (?, ?);';
+        const query = "INSERT INTO lectures (course_id, title) VALUES (?, ?);";
         const resp = await runQuery(query, [courseId, title]);
-        return resp.insertId
+        return resp.insertId;
     } catch (e) {
         console.error(e);
-        throw e
+        throw e;
     }
-}
+};
 
 /**
  * Function to get a course
- * @param {*} lectureId 
- * @param {*} res 
+ * @param {*} lectureId
+ * @param {*} res
  * @returns course data if successful
  */
-const getLecture = async (lectureId) => {
+const getLecture = async lectureId => {
     try {
-        const query = 'SELECT * from lectures WHERE lecture_id = ?;';
+        const query = "SELECT * from lectures WHERE lecture_id = ?;";
         const resp = await runQuery(query, [lectureId]);
-        return resp
+        return resp;
     } catch (e) {
         console.error(e);
-        throw e
+        throw e;
     }
-}
+};
 
-const getLecturesByCourseId = async (courseId) => {
+const getLecturesByCourseId = async courseId => {
     try {
-        const query = 'SELECT * from lectures where course_id = ?;';
+        const query = "SELECT * from lectures where course_id = ?;";
         const resp = await runQuery(query, [courseId]);
-        return resp
+        return resp;
     } catch (e) {
-        console.error(e)
-        throw e
+        console.error(e);
+        throw e;
     }
-}
+};
 
 module.exports = {
     addLecture,
     getLecture,
     getLecturesByCourseId
-}
+};

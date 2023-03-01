@@ -1,5 +1,5 @@
-const pollResponseService = require('./services/pollResponseService')
-const { isInCourse } = require('../../utils/permissions')
+const pollResponseService = require("./services/pollResponseService");
+const { isInCourse } = require("../../utils/permissions");
 
 /**
  * @param {*} req
@@ -8,7 +8,7 @@ const { isInCourse } = require('../../utils/permissions')
  *  userID: int,
  *  pollId: int,
  * }
- * @param {*} res 
+ * @param {*} res
  * @returns pollResponseID of created poll response
  */
 const addPollResponse = async (req, res) => {
@@ -16,19 +16,19 @@ const addPollResponse = async (req, res) => {
         const { choice_id: choiceId, poll_id: pollId, course_id: courseId } = req.body;
         const userId = req.session.userid;
         if (!choiceId || !userId || !pollId || !courseId) {
-            return res.status(400).send({ msg: "Invalid Body" })
+            return res.status(400).send({ msg: "Invalid Body" });
         }
-        if(!isInCourse(courseId, req.session)){
-            return res.status(401).send({ msg: 'Not in course: unable to respond to poll.'})
+        if (!isInCourse(courseId, req.session)) {
+            return res.status(401).send({ msg: "Not in course: unable to respond to poll." });
         }
-        const insertId = await pollResponseService.addPollResponse(choiceId, userId, pollId)
+        const insertId = await pollResponseService.addPollResponse(choiceId, userId, pollId);
         return res.status(201).send({ pollResponseID: insertId });
     } catch (e) {
         console.error(e);
-        return res.status(500).send({ msg: 'Internal Server Error' });
+        return res.status(500).send({ msg: "Internal Server Error" });
     }
-}
+};
 
 module.exports = {
-    addPollResponse,
-}
+    addPollResponse
+};
