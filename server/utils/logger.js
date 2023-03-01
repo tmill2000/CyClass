@@ -1,7 +1,21 @@
 const fs = require('fs');
 
-const writeLog = (content) => {
-    console.log("writing")
+const logTypes = {
+    debug: "./debug.log",
+    error: "./error.log",
+    general: "./general.log"
+}
+
+/**
+ * Utility function to output logs to file on server
+ * When run locally, log files will be at same level as logger.js
+ * When run on server, log files will be at same level as server.js
+ * @param {String} logType Should be one of ["debug", "error", "general"] If not or undefined, will default to general
+ * @param {*} content Content to be formatted and written to selected log file
+ */
+const writeLog = (logType, content) => {
+    const logFileName = logTypes[logType] || logTypes["general"];
+    console.log(logFileName);
     let contentToWrite = content;
     if ( typeof contentToWrite === 'object' ) {
         contentToWrite = JSON.stringify(contentToWrite, null, "\t");
@@ -9,7 +23,7 @@ const writeLog = (content) => {
 
     contentToWrite = `\n\n${new Date().toISOString()}\t`.concat(contentToWrite);
 
-    fs.appendFileSync("./app.log", contentToWrite);
+    fs.appendFileSync(logFileName, contentToWrite);
 };
 
 module.exports = { writeLog };
