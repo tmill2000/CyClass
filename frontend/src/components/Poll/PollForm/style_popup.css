@@ -4,6 +4,7 @@
     border-color: gray;
     border-style: solid;
     width: calc(100vw - 480px);
+    border-radius: 10px;
   }
 
   .popup > .header {

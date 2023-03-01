@@ -9,5 +9,6 @@ npm run build
 cd ../server
 # Build and deploy
 npm ci
-npm run test -- --silent
+npm run lint:fix
+npm run test
 cat .env.sudo | sudo -S /usr/bin/pm2 restart server.js
