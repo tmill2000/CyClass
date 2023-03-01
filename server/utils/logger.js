@@ -6,6 +6,8 @@ const logTypes = {
     general: "./general.log"
 }
 
+// TODO: Function to delete log file(s) on server restart?
+
 /**
  * Utility function to output logs to file on server
  * When run locally, log files will be at same level as logger.js
