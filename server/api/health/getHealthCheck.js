@@ -1,5 +1,7 @@
+const { writeLog } = require("../../utils/logger");
+
 const getHealthCheck = async (_req, res) => {
-   console.log("in health");
+   writeLog("in health");
    return res.status(200).send({ status: 'UP' });
 }
 
