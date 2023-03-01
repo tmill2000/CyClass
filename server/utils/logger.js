@@ -1,10 +1,10 @@
-const fs = require('fs');
+const fs = require("fs");
 
 const logTypes = {
     debug: "./debug.log",
     error: "./error.log",
     general: "./general.log"
-}
+};
 
 // TODO: Function to delete log file(s) on server restart?
 
@@ -19,7 +19,7 @@ const writeLog = (logType, content) => {
     const logFileName = logTypes[logType] || logTypes["general"];
     console.log(logFileName);
     let contentToWrite = content;
-    if ( typeof contentToWrite === 'object' ) {
+    if (typeof contentToWrite === "object") {
         contentToWrite = JSON.stringify(contentToWrite, null, "\t");
     }
 

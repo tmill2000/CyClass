@@ -1,7 +1,7 @@
-const addCourse = require('./addCourse');
-const getCourse = require('./getCourse');
+const addCourse = require("./addCourse");
+const getCourse = require("./getCourse");
 
 module.exports = {
     ...addCourse,
     ...getCourse
-}
+};
