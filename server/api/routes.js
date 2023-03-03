@@ -54,5 +54,6 @@ router.post("/role/:join_code", validateSession, role.addRoleByJoinCode);
 //Patch
 router.patch("/poll/close", validateSession, poll.closePoll);
 router.patch("/user", validateSession, validatePatch.canEditGivenUser, user.editUser);
+router.patch("/user", validateSession, validatePatch.canEditGivenMessage, message.editMessage);
 
 module.exports = router;

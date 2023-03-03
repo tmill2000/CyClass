@@ -1,3 +1,6 @@
+const { runQuery } = require("../utils/db_connection");
+const { isInCourse } = require("../utils/permissions");
+
 const canEditGivenUser = async (req, res, next) => {
     if (process.env.NODE_ENV === "devl") next();
 
@@ -17,6 +20,22 @@ const canEditGivenUser = async (req, res, next) => {
     }
 };
 
+const canEditGivenMessage = async (req, res, next) => {
+    if (process.env.NODE_ENV === "devl") next();
+
+    const { message_id: messageId } = req.body;
+
+    const courseQuery =
+        "SELECT course_id FROM lectures WHERE lecture_id = (SELECT lecture_id FROM messages WHERE message_id = ?);";
+    const rawQueryResp = await runQuery(courseQuery, [messageId]);
+    const { course_id: courseId } = rawQueryResp[0];
+
+    if (isInCourse(courseId, req.session)) next();
+
+    return res.status(403).send({ msg: "Forbidden to update this record" });
+};
+
 module.exports = {
-    canEditGivenUser
+    canEditGivenUser,
+    canEditGivenMessage
 };
