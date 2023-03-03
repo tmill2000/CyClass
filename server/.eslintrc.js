@@ -17,7 +17,6 @@ module.exports = {
         "no-plusplus": "off",
         "no-continue": "off",
         "no-useless-catch": "off",
-        "no-use-before-define": "off",
         "no-underscore-dangle": "off",
         "prettier/prettier": "error"
     }
