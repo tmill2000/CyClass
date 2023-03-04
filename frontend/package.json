@@ -7,8 +7,7 @@
 	"scripts": {
 		"build": "webpack",
 		"watch": "webpack --watch",
-		"start": "webpack serve --open",
-		"cypress:open": "cypress open"
+		"start": "webpack serve --open"
 	},
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.9.0",
