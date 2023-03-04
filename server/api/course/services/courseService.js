@@ -54,17 +54,17 @@ const getCourseByJoinCode = async joinCode => {
 };
 
 /**
- * 
- * @param {*} courseId 
+ *
+ * @param {*} courseId
  */
-const closeCourse = async (courseId) => {
+const closeCourse = async courseId => {
     try {
-        const query = 'UPDATE course SET closed = ? where course_id = ?'
-        await runQuery(query, [true, courseId])
+        const query = "UPDATE course SET closed = ? where course_id = ?";
+        await runQuery(query, [true, courseId]);
     } catch (e) {
-        throw e
+        throw e;
     }
-}
+};
 
 module.exports = {
     addCourse,

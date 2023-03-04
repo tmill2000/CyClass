@@ -2,10 +2,10 @@ const courseService = require("./services/courseService");
 const { hasCoursePermissions } = require("../../utils/permissions");
 const { writeLog } = require("../../utils/logger");
 /**
- * 
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ *
+ * @param {*} req
+ * @param {*} res
+ * @returns
  */
 const closeCourse = async (req, res) => {
     try {

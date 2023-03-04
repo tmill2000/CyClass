@@ -46,7 +46,7 @@ describe("courseService", () => {
         it("should return", async () => {
             jest.spyOn(db, "runQuery").mockResolvedValueOnce();
             const res = await closeCourse(1);
-            expect(res).toBeUndefined()
+            expect(res).toBeUndefined();
         });
         it("should throw error", async () => {
             jest.spyOn(db, "runQuery").mockRejectedValueOnce(new Error());

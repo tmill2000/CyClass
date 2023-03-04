@@ -31,7 +31,7 @@ describe("closePoll", () => {
         expect(spy).toBeCalledTimes(1);
     });
     it("should return 500 for Server Error", async () => {
-        const req = getMockReq({ query: {course_id: 1 } });
+        const req = getMockReq({ query: { course_id: 1 } });
         req.session = professorSession;
         const spy = jest.spyOn(courseService, "closeCourse").mockRejectedValueOnce(new Error());
         await closeCourse(req, res);
