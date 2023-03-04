@@ -52,6 +52,7 @@ router.post("/role/:join_code", validateSession, role.addRoleByJoinCode);
 //Put Requests
 
 //Patch
+router.patch("/course/close", validateSession, course.closeCourse)
 router.patch("/poll/close", validateSession, poll.closePoll);
 router.patch("/user", validateSession, validatePatch.canEditGivenUser, user.editUser);
 router.patch("/user", validateSession, validatePatch.canEditGivenMessage, message.editMessage);
