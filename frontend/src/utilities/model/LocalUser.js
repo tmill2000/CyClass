@@ -5,7 +5,7 @@
  */
 
 import UserAPI from "../api/UserAPI";
-import DataStore from "../data/DataStore";
+import DataStore, { useDataStoreValue } from "../data/DataStore";
 
 const MISSING = "_m_";
 const VERSION = 1;
@@ -32,10 +32,10 @@ export default class LocalUser {
 				userID: DataStore.get("userID") || MISSING,
 				sessionID: DataStore.get("sessionID") || MISSING,
 				courses: DataStore.get("courses") || MISSING,
-				version: DataStore.get("version") || MISSING,
+				version: DataStore.get("userVersion") || MISSING,
 			};
-			for (const value of userData) {
-				if (value === MISSING) {
+			for (const key in userData) {
+				if (userData[key] === MISSING) {
 					return null;
 				}
 			}
@@ -60,10 +60,20 @@ export default class LocalUser {
 	 */
 	static set(userData) {
 
-		// If given null, clear current
+		// Check if clearing
 		if (userData == null) {
+
+			// Remove from storage
+			DataStore.clear("netID");
+			DataStore.clear("userID");
+			DataStore.clear("sessionID");
+			DataStore.clear("courses");
+			DataStore.clear("userVersion");
+
+			// Clear current and return
 			currentUser = null;
 			return;
+
 		}
 
 		// Make a new LocalUser and assign properties
@@ -73,15 +83,15 @@ export default class LocalUser {
 		user.sessionID = userData.sessionID;
 		user.courses = userData.courses;
 
+		// Set current
+		currentUser = user;
+
 		// Record in local storage
 		DataStore.set("netID", user.netID);
 		DataStore.set("userID", user.userID);
 		DataStore.set("sessionID", user.sessionID);
 		DataStore.set("courses", user.courses);
-		DataStore.set("version", VERSION);
-
-		// Set current
-		currentUser = user;
+		DataStore.set("userVersion", VERSION);
 
 	}
 
@@ -131,6 +141,30 @@ export default class LocalUser {
 
 		// Clear user
 		LocalUser.set(null);
+
+	}
+
+	/**
+	 * React hook for various values of the currently logged-in LocalUser. Since this is static and independent of the
+	 * {@link current} LocalUser object, this is valid even if no user is logged-in. Will error if the specified value
+	 * doesn't exist.
+	 * @param {"netID"|"userID"|"sessionID"|"courses"} value
+	 * @return {any}
+	 */
+	static useValue(value) {
+
+		// Hook and return proper value
+		switch (value) {
+			case "courses":
+				useDataStoreValue("courses");
+				return LocalUser.current?.getCourses() || [];
+			case "netID":
+			case "userID":
+			case "sessionID":
+				return useDataStoreValue(value);
+			default:
+				throw new Error(`Invalid LocalUser value "${value}"`);
+		}
 
 	}
 	

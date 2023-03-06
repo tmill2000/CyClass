@@ -11,15 +11,12 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import UserAPI from "../../utilities/api/UserAPI";
+import LocalUser from "../../utilities/model/LocalUser";
 
 import UserOption from "./UserOption";
 
 import "./styles.css";
 import userBadgeImg from "./userbadge.png";
-import DataStore from "../../utilities/data/DataStore";
-
-const userAPI = new UserAPI();
 
 function UserDropdown(props) {
 
@@ -38,11 +35,9 @@ function UserDropdown(props) {
 	// Functions
 	const toggleLogin = () => {
 		if (props.name != null) {
-			userAPI.logout(DataStore.get("sessionID"))
-				.finally(() => navigate("/login"));
-		} else {
-			navigate("/login");
+			LocalUser.logout();
 		}
+		navigate("/login");
 	};
 
 	// Component

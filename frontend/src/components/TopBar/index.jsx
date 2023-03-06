@@ -7,7 +7,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-import { useDataStoreValue } from "../../utilities/data/DataStore";
+import LocalUser from "../../utilities/model/LocalUser";
 
 import CourseDropdown from "./CourseDropdown";
 
@@ -31,9 +31,9 @@ function TopBar(props) {
 
 	// Various hooks
 	const [currDropdown, setCurrDropdown] = React.useState(null);
-	const courses = useDataStoreValue("courses") || [];
+	const courses = structuredClone(LocalUser.useValue("courses"));
 	const location = useLocation();
-	const netID = useDataStoreValue("netID");
+	const netID = LocalUser.useValue("netID");
 
 	// Get course list and decide on current using URL
 	let currCourse = null;

@@ -26,7 +26,7 @@ import LocalUser from "../../utilities/model/LocalUser";
 		}
 	}
 
-	const sessionID = useDataStoreValue("sessionID");
+	const sessionID = LocalUser.useValue("sessionID");
 	if (invalidSessionID == null && new URLSearchParams(window.location.search).has("expired")) {
 		invalidSessionID = sessionID
 	}

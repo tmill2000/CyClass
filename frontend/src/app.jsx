@@ -11,7 +11,8 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 
 import "./app.css";
 
-import DataStore, { DataStoreProvider } from "./utilities/data/DataStore";
+import { DataStoreProvider } from "./utilities/data/DataStore";
+import LocalUser from "./utilities/model/LocalUser";
 
 import ErrorPage from "./routes/ErrorPage";
 import Home from "./routes/Home";
@@ -24,7 +25,7 @@ import ParticipationForm from "./routes/Polls/PollParticipationForm";
 
 // Set up axios to insert session ID into all requests
 axios.interceptors.request.use((config) => {
-	const sessionID = DataStore.get("sessionID");
+	const sessionID = LocalUser.current?.sessionID;
 	if (sessionID != null) {
 		config.headers = Object.assign(config.headers || {}, { ["x-session-id"]: sessionID });
 	}
