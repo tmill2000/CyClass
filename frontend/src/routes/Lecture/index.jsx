@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createRef } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import DataStore from "../../utilities/data/DataStore";
+
+import LocalUser from "../../utilities/model/LocalUser";
 
 import ErrorPage from "../ErrorPage";
 
@@ -28,19 +29,14 @@ function Lecture(props) {
 	const netID = DataStore.get("netID");
 
 	// Get user ID and permission level, verifying logged-in
-	const userID = DataStore.get("userID");
+	const userID = LocalUser.current?.userID;
 	if (userID == null) {
 		return <Navigate to="/login" />;
+	} else if (!LocalUser.current.isInCourse(courseID)) {
+		return <ErrorPage code={403} text="You are not a member of that course" />;
 	}
-	let isElevatedUser = false;
-	let user_role;
-	for (const course of JSON.parse(DataStore.get("courses") || "[]")) {
-		if (course.id == courseID) {
-			user_role = course.role;
-			isElevatedUser = course.role == "PROFESSOR" || course.role == "TA"
-			break;
-		}
-	}
+	const user_role = LocalUser.current.getCourseRole(courseID);
+	const isElevatedUser = user_role == "Professor" || user_role == "TA";
 
 	// Get/generate lecture state
 	if (lectureState == null || lectureState.lectureID != lectureID) {

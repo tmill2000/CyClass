@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	10/24/2022
- * UPDATED:	02/14/2023
+ * UPDATED:	03/06/2023
  */
 
 import React from "react";
@@ -15,6 +15,7 @@ import DataStore, { DataStoreProvider } from "./utilities/data/DataStore";
 
 import ErrorPage from "./routes/ErrorPage";
 import Home from "./routes/Home";
+import Course from "./routes/Course";
 import Lecture from "./routes/Lecture";
 import Login from "./routes/Login";
 
@@ -52,10 +53,13 @@ const router = createBrowserRouter([
 				element: <Login />
 			},
 			{
+				path: "course/:courseID",
+				element: <Course />
+			},
+			{
 				path: "course/:courseID/lecture/:lectureID",
 				element: <Lecture />
-			}
-			,
+			},
 			{
 				path: "course/:courseID/lecture/:lectureID/results",
 				element: <ParticipationForm />

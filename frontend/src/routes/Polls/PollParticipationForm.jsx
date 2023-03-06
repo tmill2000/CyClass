@@ -1,7 +1,7 @@
 /**
- * AUTHOR:	Brandon Burt
+ * AUTHOR:	Brandon Burt, Adam Walters
  * CREATED:	02/05/2023
- * UPDATED:	02/11/2023
+ * UPDATED:	03/06/2023
  */
  import React, { useEffect, useState } from 'react';
  import "./styles.css";
@@ -10,7 +10,7 @@
 
  import ErrorPage from "../ErrorPage";
 
- import DataStore from '../../utilities/data/DataStore';
+ import LocalUser from '../../utilities/model/LocalUser';
  import LiveLectureAPI from '../../utilities/api/LiveLectureAPI';
  import UserAPI from '../../utilities/api/UserAPI';
 
@@ -40,7 +40,7 @@
     }
 
     // Get user ID and permission level, verifying logged-in
-    const userID = DataStore.get("userID");
+    const userID = LocalUser.current?.userID;
     if (userID == null) {
         return <Navigate to="/login" />;
     }

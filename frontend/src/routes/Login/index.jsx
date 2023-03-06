@@ -1,21 +1,15 @@
 /**
  * AUTHOR:	Brandon Burt, Adam Walters
  * CREATED:	11/05/2022
- * UPDATED:	02/05/2023
+ * UPDATED:	03/06/2023
  */
 import React from "react";
 import LoginForm from "./LoginForm";
 import SubmitButton from "./SubmitButton";
 
-import DataStore, { useDataStoreValue } from "../../utilities/data/DataStore";
-import UserAPI from "../../utilities/api/UserAPI";
-
- 
-import { Link, Navigate } from "react-router-dom";
+import LocalUser from "../../utilities/model/LocalUser";
 
  import "./styles.css";
-
- const userAPI = new UserAPI();
 
  let invalidSessionID = null;
 
@@ -24,14 +18,7 @@ import { Link, Navigate } from "react-router-dom";
 	//API call for user to logout of applcation
 	const doLogout = () => {
 		try {
-			
-			const res = userAPI.logout(DataStore.get("sessionID"));
-			if (res){
-				DataStore.clear("netID");
-				DataStore.clear("userID");
-				DataStore.clear("sessionID");
-				DataStore.clear("courses");
-			}
+			LocalUser.logout();
 		}
 
 		catch(e) {
@@ -43,11 +30,12 @@ import { Link, Navigate } from "react-router-dom";
 	if (invalidSessionID == null && new URLSearchParams(window.location.search).has("expired")) {
 		invalidSessionID = sessionID
 	}
-	if (sessionID && sessionID != invalidSessionID) {
+	
+	if (sessionID && sessionID != invalidSessionID && LocalUser.current != null) {
 		return (
 			<div className="login">
 				<div className="container">
-					Welcome {DataStore.get("netID")}
+					Welcome {LocalUser.current.netID}
 
 					{/* <Link to="/lecture">
 						<SubmitButton

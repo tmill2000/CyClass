@@ -3,10 +3,7 @@ import InputField from './InputField';
 import SubmitButton from './SubmitButton';
 import logoImg from "./ISULogo.png";
 
-import DataStore from '../../utilities/data/DataStore';
-import UserAPI from '../../utilities/api/UserAPI';
-
-const userAPI = new UserAPI();
+import LocalUser from '../../utilities/model/LocalUser';
 
 class LoginForm extends React.Component {
 
@@ -51,17 +48,11 @@ class LoginForm extends React.Component {
 
         try {
 
-            const res = await userAPI.login(this.state.netid, this.state.password);
-            if(res.accepted) {
-                DataStore.set("netID", this.state.netid);
-                DataStore.set("userID", res.userID);
-                DataStore.set("sessionID", res.sessionID);
-                DataStore.set("courses", JSON.stringify(res.courses));
-            } else {
+            const res = await LocalUser.login(this.state.netid, this.state.password);
+            if (!res) { // (invalid credentials)
                 this.resetForm();
-                alert(result.msg);
             }
-            console.log(res.accepted);
+            console.log(res);
         }
 
         catch(e) {

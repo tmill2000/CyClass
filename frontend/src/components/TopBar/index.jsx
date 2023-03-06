@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	10/24/2022
- * UPDATED:	10/24/2022
+ * UPDATED:	03/06/2023
  */
 
 import React, { useEffect } from "react";
@@ -31,7 +31,7 @@ function TopBar(props) {
 
 	// Various hooks
 	const [currDropdown, setCurrDropdown] = React.useState(null);
-	const courses = JSON.parse(useDataStoreValue("courses") || "[]");
+	const courses = useDataStoreValue("courses") || [];
 	const location = useLocation();
 	const netID = useDataStoreValue("netID");
 
