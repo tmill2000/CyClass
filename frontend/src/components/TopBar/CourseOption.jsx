@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	10/24/2022
- * UPDATED:	10/24/2022
+ * UPDATED:	03/06/2023
  * 
  * PROPS:
  * - course: Course
@@ -22,7 +22,7 @@ function CourseOption(props) {
 
 	// Component
 	return (
-		<Link className="topbar-dropdown-option" to={`/course/${props.course.id || 0}/lecture/1`}>
+		<Link className="topbar-dropdown-option" to={`/course/${props.course.id || 0}`}>
 			<span className={`topbar-dropdown-course-notifs ${notifExtraClass}`}>{props.course.notifs || 0}</span>
 			<span className="topbar-dropdown-option-title overflow-ellipsis">{props.course.name || "???"}</span>
 		</Link>
