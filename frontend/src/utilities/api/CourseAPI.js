@@ -66,6 +66,32 @@ class CourseAPI {
 
 	}
 
+	/**
+	 * Attempts to create a new lecture, returning a Promise that resolves to the new lecture's ID if successful
+	 * (rejects otherwise).
+	 * @param {string} title 
+	 * @returns {Promise<number>}
+	 */
+	newLecture(title) {
+
+		// Perform post
+		return axios.post("/api/lecture", {
+			title: title,
+			course_id: this.id
+		})
+			.then((res) => {
+
+				// Return new lecture ID
+				return res.data.lecture_id;
+
+			})
+			.catch((err) => {
+				console.error("Failed to create new lecture for course:", err);
+				throw err;
+			});
+
+	}
+
 };
 
 export default CourseAPI;

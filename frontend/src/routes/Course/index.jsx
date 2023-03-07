@@ -5,7 +5,7 @@
 */
 
 import React, { useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 import LocalUser from "../../utilities/model/LocalUser";
 import CourseAPI from "../../utilities/api/CourseAPI";
@@ -13,6 +13,7 @@ import CourseAPI from "../../utilities/api/CourseAPI";
 import ErrorPage from "../ErrorPage";
 
 import LecturePost from "./LecturePost";
+import NewLecturePopUp from "./NewLecturePopUp";
 import "./styles.css";
 
 function Course(props) {
@@ -31,14 +32,17 @@ function Course(props) {
 	} else if (!LocalUser.current.isInCourse(courseID)) {
 		return <ErrorPage code={403} text="You are not a member of that course" />;
 	}
+	const role = LocalUser.current.getCourseRole(courseID);
+	const isElevated = role == "Professor" || role == "TA";
 
 	// Hooks
 	const [lectures, setLectures] = useState(null);
 	const [error, setError] = useState(null);
+	const [newLecturePopup, setNewLecturePopup] = useState(false);
 
 	// Load lectures
+	const api = new CourseAPI(courseID);
 	useEffect(() => {
-		const api = new CourseAPI(courseID);
 		api.getAllLectures()
 			.then((lectures) => setLectures(lectures))
 			.catch((err) => setError("Failed to get lectures"));
@@ -69,7 +73,9 @@ function Course(props) {
 				{lectures != null ? posts : <div style={{textAlign: "center", fontSize: "1.5em", fontStyle: "italic"}}>Loading ...</div>}
 			</div>
 			<div className="create-panel">
+				{isElevated ? <button className="button new-lecture" onClick={() => setNewLecturePopup(!newLecturePopup)}>NEW LECTURE</button> : null }
 			</div>
+			{isElevated ? <NewLecturePopUp api={api} visible={newLecturePopup} onClose={() => setNewLecturePopup(false)} /> : null }
 		</div>
 	);
 
