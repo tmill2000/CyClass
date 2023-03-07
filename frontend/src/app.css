@@ -23,8 +23,21 @@ a:active {
 	color: inherit;
 }
 
+div#main {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	overflow: hidden;
+}
+
 /*****************************************************************************/
 /* GLOBAL CLASS */
+
+.page {
+	flex-grow: 1;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
 
 .overflow-ellipsis {
 	overflow: hidden;

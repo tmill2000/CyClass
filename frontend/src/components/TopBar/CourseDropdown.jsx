@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	10/24/2022
- * UPDATED:	10/24/2022
+ * UPDATED:	03/06/2023
  * 
  * PROPS:
  * - courses: Course[]
@@ -33,10 +33,10 @@ function CourseDropdown(props) {
 	const dropdownList = [];
 	let dropdownListHeight = 0;
 	for (let i = 0; i < props.courses.length; i++) {
-		dropdownList.push(<CourseOption course={props.courses[i]} />);
+		dropdownList.push(<CourseOption key={i} course={props.courses[i]} />);
 		dropdownListHeight += COURSE_HEIGHT;
 		if (i < props.courses.length - 1) {
-			dropdownList.push(<div className="topbar-dropdown-separator" />);
+			dropdownList.push(<div key={-i} className="topbar-dropdown-separator" />);
 			dropdownListHeight += COURSE_SEPARATOR_HEIGHT;
 		}
 	}

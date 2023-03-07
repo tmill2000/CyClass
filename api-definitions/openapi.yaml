@@ -263,6 +263,33 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
+  /course/close:
+    patch:
+      tags:
+        - course
+      summary: closes a courses join code
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: course_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Invalid Body
+        '401':
+          description: Unauthorized
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
   /lecture:
     get:
       tags:
