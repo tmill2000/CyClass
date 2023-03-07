@@ -35,7 +35,7 @@ const uploadMedia = async (req, res) => {
         const [response] = await mediaService.authUpload(mediaID);
         const { course_id: courseID, user_id: userID, received } = response;
 
-        if (userID !== req.session.userid || !received) {
+        if (userID !== req.session.userid || received) {
             return res.status(403).send({ msg: "Forbidden to upload file to this mediaID" });
         }
 
