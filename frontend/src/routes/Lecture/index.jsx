@@ -63,7 +63,7 @@ function Lecture(props) {
 	// Return component
 	const api = lectureState.api
 	return (
-		<div>
+		<div className="page">
             <LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
 			<div style={{ display: "flex" }}>
             	<LiveLectureLeftMenu userIDname={LocalUser.current.netID} userIDrole={user_role} api={api} elevated={isElevatedUser}/>

@@ -11,6 +11,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 
 import "./app.css";
 
+import "./utilities/extensions";
 import { DataStoreProvider } from "./utilities/data/DataStore";
 import LocalUser from "./utilities/model/LocalUser";
 
@@ -36,11 +37,11 @@ axios.interceptors.request.use((config) => {
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <div>
+		element: <div id="main">
 			<TopBar />
 			<Outlet />
 		</div>,
-		errorElement: <div>
+		errorElement: <div id="main">
 			<TopBar />
 			<ErrorPage />
 		</div>,
