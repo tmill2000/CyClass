@@ -48,7 +48,7 @@ function Course(props) {
 			.then((lectures) => setLectures(lectures))
 			.catch((err) => {
 				if (err.response?.status == 403) {
-					navigate("/login");
+					navigate("/login?expired");
 				} else {
 					setError(err.response?.status || 500);
 				}
