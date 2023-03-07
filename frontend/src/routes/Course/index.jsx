@@ -5,7 +5,7 @@
 */
 
 import React, { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams, useNavigate } from "react-router-dom";
 
 import LocalUser from "../../utilities/model/LocalUser";
 import CourseAPI from "../../utilities/api/CourseAPI";
@@ -39,18 +39,25 @@ function Course(props) {
 	const [lectures, setLectures] = useState(null);
 	const [error, setError] = useState(null);
 	const [newLecturePopup, setNewLecturePopup] = useState(false);
+	const navigate = useNavigate();
 
 	// Load lectures
 	const api = new CourseAPI(courseID);
 	useEffect(() => {
 		api.getAllLectures()
 			.then((lectures) => setLectures(lectures))
-			.catch((err) => setError("Failed to get lectures"));
+			.catch((err) => {
+				if (err.response?.status == 403) {
+					navigate("/login");
+				} else {
+					setError(err.response?.status || 500);
+				}
+			});
 	}, [ courseID ]);
 
 	// If an error was set, make page that
 	if (error != null) {
-		return <ErrorPage code={500} text={error} />
+		return <ErrorPage code={error} text={"Failed to get lectures"} />
 	}
 
 	// Make lectures into posts (unless null)
