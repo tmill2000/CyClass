@@ -2,7 +2,7 @@
 /* MAIN */
 
 .course {
-	padding: 20px calc((100% - 1200px) / 2.0);
+	padding: 20px calc((100% - 1400px) / 2.0);
 	background-color: #DDD;
 	white-space: nowrap;
 	position: relative;
