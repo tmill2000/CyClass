@@ -77,6 +77,7 @@ class LoginForm extends React.Component {
 			    </div>
                 <div className="username-container">
                     <InputField
+                       class="username"
                        type="text"
                        placeholder="Username"
                        value={this.state.netid ? this.state.netid : ''}
@@ -85,6 +86,7 @@ class LoginForm extends React.Component {
                 </div>
                 <div className="password-container">
                     <InputField
+                    class="password"
                     type="password"
                     placeholder="Password"
                     value={this.state.password ? this.state.password : ''}
@@ -94,11 +96,14 @@ class LoginForm extends React.Component {
                 <div className="forgotpassword-container">
                     <a className="forgotPassword" href="">Forgot password?</a>
                 </div>
-                    <SubmitButton
+                <div className="submitBtn-container">
+                <SubmitButton
+                    class="loginNow"
                     text="Sign in"
                     disabled={this.state.buttonDisabled}
                     onClick={ () => this.doLogin() }
-                    />
+                    /> 
+                </div>
             </div>
         );
     }
