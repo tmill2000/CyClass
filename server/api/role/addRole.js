@@ -44,6 +44,7 @@ const addRoleByJoinCode = async (req, res) => {
         const insertId = await roleService.addRole(course.course_id, req.session.userid, "STUDENT");
         return res.status(201).send({ rollID: insertId });
     } catch (e) {
+        return res.status(500).send(e);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };
