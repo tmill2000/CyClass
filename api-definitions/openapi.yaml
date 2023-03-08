@@ -32,12 +32,6 @@ paths:
       summary: Add a new user to the system
       description: Add a new user to the system
       operationId: addUser
-      parameters:
-        - in: header
-          name: x-session-id
-          schema:
-            type: string
-          required: true
       requestBody:
         description: Create a new user in the system
         content:
