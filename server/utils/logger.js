@@ -17,7 +17,7 @@ const logTypes = {
  */
 const writeLog = (logType, content) => {
     const logFileName = logTypes[logType] || logTypes["general"];
-    console.log(logFileName);
+
     let contentToWrite = content;
     if (typeof contentToWrite === "object") {
         contentToWrite = JSON.stringify(contentToWrite, null, "\t");

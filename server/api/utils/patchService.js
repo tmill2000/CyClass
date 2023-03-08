@@ -2,7 +2,7 @@ const { runQuery } = require("../../utils/db_connection");
 
 const editableFields = {
     courses: [],
-    lectures: [],
+    lectures: ["title"],
     media_metadata: [],
     messages: ["message_title", "is_anonymous", "body"],
     poll_choices: [],

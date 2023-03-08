@@ -3,41 +3,50 @@ const { writeLog } = require("../utils/logger");
 const { isInCourse } = require("../utils/permissions");
 
 const canEditGivenUser = async (req, res, next) => {
-    if (process.env.NODE_ENV === "devl") next();
+    const { user_id: userId } = req.body;
 
-    try {
-        const { user_id: userId } = req.body;
-
-        if (process.env.NODE_ENV === "devl") {
-            next();
-        } else if (!userId || userId !== req.session.userid) {
-            return res.status(403).send({ msg: "Forbidden to update this record" });
-        } else {
-            next();
-        }
-    } catch (e) {
-        console.error(e);
-        return res.status(500).send({ msg: "Internal Server Error on Patch Perm Validate" });
+    if (process.env.NODE_ENV === "devl" || (userId && userId === req.session.userid)) {
+        next();
+        return;
+    } else {
+        return res.status(403).send({ msg: "Forbidden to update this record" });
     }
 };
 
 const canEditGivenMessage = async (req, res, next) => {
-    if (process.env.NODE_ENV === "devl") next();
+    if (process.env.NODE_ENV === "devl") {
+        next();
+        return;
+    }
 
     const { message_id: messageId } = req.body;
 
     const courseQuery =
         "SELECT course_id FROM lectures WHERE lecture_id = (SELECT lecture_id FROM messages WHERE message_id = ?);";
     const rawQueryResp = await runQuery(courseQuery, [messageId]);
-    writeLog("debug", rawQueryResp);
+
     const { course_id: courseId } = rawQueryResp[0];
 
-    if (isInCourse(courseId, req.session)) next();
+    if (isInCourse(courseId, req.session)) {
+        next();
+        return;
+    }
 
     return res.status(403).send({ msg: "Forbidden to update this record" });
 };
 
+const canEditGivenLecture = async (req, res, next) => {
+    if (process.env.NODE_ENV === "devl") {
+        next();
+        return;
+    }
+
+    const lectureQuery =
+        "SELECT role FROM roles WHERE course_id = (SELECT course_id FROM lectures WHERE lecture_id = ?) AND user_id = ?;";
+};
+
 module.exports = {
     canEditGivenUser,
-    canEditGivenMessage
+    canEditGivenMessage,
+    canEditGivenLecture
 };

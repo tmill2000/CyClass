@@ -16,7 +16,7 @@ const validateSession = require("../middleware/validateSession");
 const router = express.Router();
 
 //Get Requests
-router.get("/health", health.getHealthCheck);
+router.get("/health", validatePatch.canEditGivenLecture, health.getHealthCheck);
 router.get("/user", validateSession, user.getUserInfoByUserId);
 router.get("/message/messagesByLecture", validateSession, message.getMessagesAndPollsByLectureId);
 router.get("/course", validateSession, course.getCourse);
@@ -55,6 +55,7 @@ router.post("/role/:join_code", validateSession, role.addRoleByJoinCode);
 router.patch("/course/close", validateSession, course.closeCourse);
 router.patch("/poll/close", validateSession, poll.closePoll);
 router.patch("/user", validateSession, validatePatch.canEditGivenUser, user.editUser);
-router.patch("/user", validateSession, validatePatch.canEditGivenMessage, message.editMessage);
+router.patch("/message", validateSession, validatePatch.canEditGivenMessage, message.editMessage);
+router.patch("/lecture", validateSession, validatePatch.canEditGivenLecture, lecture.editLecture);
 
 module.exports = router;
