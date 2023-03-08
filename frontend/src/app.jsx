@@ -17,6 +17,7 @@ import ErrorPage from "./routes/ErrorPage";
 import Home from "./routes/Home";
 import Lecture from "./routes/Lecture";
 import Login from "./routes/Login";
+import SignUp from "./routes/SignUp";
 
 import TopBar from "./components/TopBar";
 import ParticipationForm from "./routes/Polls/PollParticipationForm";
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
 			{
 				path: "course/:courseID/lecture/:lectureID/results",
 				element: <ParticipationForm />
+			},
+			{
+				path: "signup",
+				element: <SignUp />
 			}
 		]
 	}

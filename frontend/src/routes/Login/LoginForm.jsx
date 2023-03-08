@@ -6,6 +6,8 @@ import logoImg from "./ISULogo.png";
 import DataStore from '../../utilities/data/DataStore';
 import UserAPI from '../../utilities/api/UserAPI';
 
+import { Navigate } from "react-router-dom";
+
 const userAPI = new UserAPI();
 
 class LoginForm extends React.Component {
@@ -36,6 +38,12 @@ class LoginForm extends React.Component {
             buttonDisabled: false
         })
     }
+
+    doSignUpNaviation() {
+		return (
+			<Navigate to="/login" />
+		)
+	}
 
     async doLogin() {
         if(!this.state.netid){
@@ -98,6 +106,11 @@ class LoginForm extends React.Component {
                     text="Sign in"
                     disabled={this.state.buttonDisabled}
                     onClick={ () => this.doLogin() }
+                    />
+                    <SubmitButton
+                    text="Sign Up"
+                    disabled={this.state.buttonDisabled}
+                    onClick={ () => this.doSignUpNaviation()}
                     />
             </div>
         );
