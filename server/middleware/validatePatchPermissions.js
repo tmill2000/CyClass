@@ -41,8 +41,31 @@ const canEditGivenLecture = async (req, res, next) => {
         return;
     }
 
+    const { lecture_id: lectureId } = req.body;
+
+    // eslint-disable-next-line prettier/prettier
     const lectureQuery =
-        "SELECT role FROM roles WHERE course_id = (SELECT course_id FROM lectures WHERE lecture_id = ?) AND user_id = ?;";
+        `SELECT EXISTS (
+            SELECT * FROM roles 
+            WHERE course_id = (
+                SELECT course_id FROM lectures WHERE lecture_id = ?
+            ) 
+            AND user_id = ? 
+            AND role = 'PROFESSOR'
+        ) AS is_owner 
+        FROM lectures WHERE lecture_id = ?;
+        `;
+
+    const lectureQueryRes = await runQuery(lectureQuery, [lectureId, req.session.userid, lectureId]);
+    const isOwner = lectureQueryRes[0].is_owner;
+
+    if (isOwner) {
+        writeLog("debug", isOwner);
+        next();
+        return;
+    }
+
+    return res.status(403).send({ msg: "Forbidden to update this record" });
 };
 
 module.exports = {

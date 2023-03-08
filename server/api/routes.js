@@ -32,7 +32,7 @@ router.get("/poll", validateSession, poll.getPollById);
 //Post Requests
 router.post("/user/logout", validateSession, user.logout);
 router.post("/user/login", user.login);
-router.post("/course", validateSession, course.addCourse);
+router.post("/course", validateSession, course.addCourse); // TODO: add logic to prevent just anybody from creating courses?
 router.post("/lecture", validateSession, lecture.addLecture);
 router.post("/user", validateSession, user.addUser);
 router.post("/message", validateSession, message.addMessage);
