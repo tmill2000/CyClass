@@ -8,6 +8,8 @@ import UserAPI from '../../utilities/api/UserAPI';
 
 const userAPI = new UserAPI();
 
+import './style.css';
+
 class SignUpForm extends React.Component {
 
     constructor(props) {
@@ -90,7 +92,7 @@ class SignUpForm extends React.Component {
     
     render() {
         return (
-            <div className="signup-Form ">
+            <div className="signup-Form">
                 <div className="signup-logo-container">
 				    <img className="signup-logo" src={logoImg} />
 			    </div>
@@ -135,7 +137,7 @@ class SignUpForm extends React.Component {
                     />
                 </div>
                     <SubmitButton
-                    text="Sign in"
+                    text="Sign Up"
                     disabled={this.state.buttonDisabled}
                     onClick={ () => this.doSignup() }
                     />

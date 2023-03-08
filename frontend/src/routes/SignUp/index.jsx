@@ -54,10 +54,8 @@ import { Link, Navigate } from "react-router-dom";
 	}
 	//If not logged in return...
 	return (
-		<div className="login">
-			<div className="container">
-				<SignUpForm />
-			</div>
+		<div className="signup">
+			<SignUpForm />
 		</div>
 	);
 
