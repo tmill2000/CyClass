@@ -59,7 +59,7 @@ const getCourseByJoinCode = async joinCode => {
  */
 const closeCourse = async courseId => {
     try {
-        const query = "UPDATE course SET closed = ? where course_id = ?";
+        const query = "UPDATE courses SET closed = ? where course_id = ?";
         await runQuery(query, [true, courseId]);
     } catch (e) {
         throw e;
