@@ -38,7 +38,7 @@ const addRoleByJoinCode = async (req, res) => {
             return res.status(400).send("Invalid Parameters");
         }
         const course = await courseService.getCourseByJoinCode(joinCode);
-        return res.status(200).send({course})
+        return res.status(200).send({course: JSON.stringify(course)})
         if (course.closed) {
             return res.status(404).send({ msg: "Course Missing or Closed" });
         }
