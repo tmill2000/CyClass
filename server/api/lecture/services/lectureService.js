@@ -8,7 +8,7 @@ const { runQuery } = require("../../../utils/db_connection");
  */
 const addLecture = async (courseId, title) => {
     try {
-        const query = "INSERT INTO lectures (course_id, title) VALUES (?, ?);";
+        const query = "INSERT INTO lectures (course_id, title, timestamp) VALUES (?, ?, NOW());";
         const resp = await runQuery(query, [courseId, title]);
         return resp.insertId;
     } catch (e) {
