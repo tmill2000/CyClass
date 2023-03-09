@@ -44,7 +44,7 @@ describe("downloadMedia", () => {
         const req = getMockReq({ query: { course_id: 1, media_id: "file" } });
         req.session = professorSession;
         req.get = jest.fn().mockReturnValue("x/png");
-        jest.spyOn(mediaService, "authUpload").mockResolvedValueOnce([{ user_id: 1, course_id: 1, received: true }]);
+        jest.spyOn(mediaService, "authUpload").mockResolvedValueOnce([{ user_id: 1, course_id: 1, received: false }]);
         fs.existsSync = jest.fn().mockReturnValue(false);
         fs.mkdirSync = jest.fn().mockReturnValue();
         fs.writeFile = jest.fn().mockReturnValue();
@@ -57,7 +57,7 @@ describe("downloadMedia", () => {
         const req = getMockReq({ query: { course_id: 1, media_id: "file" } });
         req.session = professorSession;
         req.get = jest.fn().mockReturnValue("x/png");
-        jest.spyOn(mediaService, "authUpload").mockResolvedValueOnce([{ user_id: 1, course_id: 1, received: true }]);
+        jest.spyOn(mediaService, "authUpload").mockResolvedValueOnce([{ user_id: 1, course_id: 1, received: false }]);
         fs.existsSync = jest.fn().mockReturnValue(true);
         fs.mkdirSync = jest.fn().mockReturnValue();
         fs.writeFile = jest.fn().mockReturnValue();
