@@ -36,7 +36,7 @@ class UserAPI {
 
 		// Perform signup
 		return axios.post("/api/user", {
-				netId: username,
+				netid: username,
 				password: password,
 				first_name: firstname,
 				last_name: lastname
