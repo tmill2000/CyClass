@@ -1,26 +1,25 @@
-const { runQuery } = require('../../../utils/db_connection');
-
+const { runQuery } = require("../../../utils/db_connection");
 
 /**
  * Function to get a course
- * @param {*} messageId 
- * @param {*} res 
+ * @param {*} messageId
+ * @param {*} res
  * @returns course data if successful, otherwise a 500 or 400 error
  */
-const getMessage = async (messageId) => {
+const getMessage = async messageId => {
     try {
-        const query = 'SELECT * from messages WHERE message_id = ?;';
+        const query = "SELECT * from messages WHERE message_id = ?;";
         const resp = await runQuery(query, [messageId]);
-        return resp
+        return resp;
     } catch (e) {
         console.error(e);
-        throw e
+        throw e;
     }
-}
+};
 /**
- * 
- * @param {*} lectureId 
- * @param {*} timestamp 
+ *
+ * @param {*} lectureId
+ * @param {*} timestamp
  * @returns messages and polls
  */
 const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
@@ -43,10 +42,10 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
         WHERE
             messages.lecture_id = ?
     `;
-        query += timestamp ? 'AND messages.timestamp < ? LIMIT 50;' : 'LIMIT 50;';
+        query += timestamp ? "AND messages.timestamp < ? LIMIT 50;" : "LIMIT 50;";
         const options = timestamp ? [lectureId, timestamp] : [lectureId];
         const messages = await runQuery(query, options);
-        const formattedMessages = messages.map((value) => ({
+        const formattedMessages = messages.map(value => ({
             sender_id: value.sender_id,
             timestamp: new Date(value.timestamp).toISOString(),
             role: value.role,
@@ -71,13 +70,13 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
             ON polls.poll_id = poll_choices.poll_id
         WHERE 
             polls.lecture_id = ?
-    `
-        query += timestamp ? 'AND polls.timestamp < ? LIMIT 50;' : 'LIMIT 50;';
+    `;
+        query += timestamp ? "AND polls.timestamp < ? LIMIT 50;" : "LIMIT 50;";
         const polls = await runQuery(query, options);
         const pollMap = new Map();
-        polls.forEach((value) => {
-            pollMap.set(value.poll_id, [...(pollMap.get(value.poll_id) ?? []), value])
-        })
+        polls.forEach(value => {
+            pollMap.set(value.poll_id, [...(pollMap.get(value.poll_id) ?? []), value]);
+        });
         const formattedPolls = [];
         for (const [key, value] of pollMap) {
             formattedPolls.push({
@@ -86,24 +85,24 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
                 question: value[0].question_text,
                 close_date: value[0].close_date ? new Date(value[0].close_date).toISOString() : null,
                 closed: !value[0].is_open,
-                choices: value.map((item) => ({
+                choices: value.map(item => ({
                     poll_choice_id: item.poll_choice_id,
                     text: item.choice_text,
                     is_correct_choice: !!item.is_correct_choice
                 }))
-            })
+            });
         }
         const data = formattedPolls.concat(formattedMessages).sort((a, b) => a.timestamp - b.timestamp);
-        return data
+        return data;
     } catch (err) {
         console.error(err);
-        throw err
+        throw err;
     }
-}
+};
 
 /**
- * 
- * @param {*} senderId 
+ *
+ * @param {*} senderId
  * @param {*} body
  * @param {*} isAnonymous
  * @param {*} lectureId
@@ -121,35 +120,30 @@ const addMessage = async (senderId, body, isAnonymous, lectureId, parentID) => {
             parent_id) VALUES
             (
                 ?, ?, NOW(), ?, ?, ?
-            );`
-        const resp = await runQuery(query, [
-            senderId,
-            lectureId,
-            isAnonymous,
-            body,
-            parentID ?? null,
-        ]);
-        return resp.insertId
+            );`;
+        const resp = await runQuery(query, [senderId, lectureId, isAnonymous, body, parentID ?? null]);
+        return resp.insertId;
     } catch (e) {
         console.error(e);
-        throw e
+        throw e;
     }
-}
+};
 
 const addMediaMetadata = async (mediaID, courseID, userID, msgID) => {
     try {
-        const mediaQuery = `INSERT INTO media_metadata ( media_id, course_id, user_id, message_id, received, timestamp ) VALUES ( ?, ?, ?, ?, ?, NOW());`;
+        const mediaQuery =
+            "INSERT INTO media_metadata ( media_id, course_id, user_id, message_id, received, timestamp ) VALUES ( ?, ?, ?, ?, ?, NOW());";
         await runQuery(mediaQuery, [mediaID, courseID, userID, msgID, false]);
         return mediaID;
     } catch (e) {
         console.error(e);
-        throw e
+        throw e;
     }
-}
+};
 
 module.exports = {
     getMessage,
     getMessagesAndPollsByLectureId,
     addMessage,
     addMediaMetadata
-}
+};

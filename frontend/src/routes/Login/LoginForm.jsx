@@ -8,7 +8,9 @@ import UserAPI from '../../utilities/api/UserAPI';
 
 import { Navigate } from "react-router-dom";
 
-const userAPI = new UserAPI();
+
+import LocalUser from '../../utilities/model/LocalUser';
+
 
 class LoginForm extends React.Component {
 
@@ -39,9 +41,9 @@ class LoginForm extends React.Component {
         })
     }
 
-    doSignUpNaviation() {
+    async doSignUpNaviation() {
 		return (
-			<Navigate to="/login" />
+			<Navigate to="/signup" />
 		)
 	}
 
@@ -59,17 +61,11 @@ class LoginForm extends React.Component {
 
         try {
 
-            const res = await userAPI.login(this.state.netid, this.state.password);
-            if(res.accepted) {
-                DataStore.set("netID", this.state.netid);
-                DataStore.set("userID", res.userID);
-                DataStore.set("sessionID", res.sessionID);
-                DataStore.set("courses", JSON.stringify(res.courses));
-            } else {
+            const res = await LocalUser.login(this.state.netid, this.state.password);
+            if (!res) { // (invalid credentials)
                 this.resetForm();
-                alert(result.msg);
             }
-            console.log(res.accepted);
+            console.log(res);
         }
 
         catch(e) {
@@ -109,7 +105,7 @@ class LoginForm extends React.Component {
                     />
                     <SubmitButton
                     text="Sign Up"
-                    disabled={this.state.buttonDisabled}
+                    disabled={false}
                     onClick={ () => this.doSignUpNaviation()}
                     />
             </div>

@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	10/24/2022
- * UPDATED:	02/14/2023
+ * UPDATED:	03/06/2023
  */
 
 import React from "react";
@@ -11,10 +11,13 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 
 import "./app.css";
 
-import DataStore, { DataStoreProvider } from "./utilities/data/DataStore";
+import "./utilities/extensions";
+import { DataStoreProvider } from "./utilities/data/DataStore";
+import LocalUser from "./utilities/model/LocalUser";
 
 import ErrorPage from "./routes/ErrorPage";
 import Home from "./routes/Home";
+import Course from "./routes/Course";
 import Lecture from "./routes/Lecture";
 import Login from "./routes/Login";
 import SignUp from "./routes/SignUp";
@@ -25,7 +28,7 @@ import ParticipationForm from "./routes/Polls/PollParticipationForm";
 
 // Set up axios to insert session ID into all requests
 axios.interceptors.request.use((config) => {
-	const sessionID = DataStore.get("sessionID");
+	const sessionID = LocalUser.current?.sessionID;
 	if (sessionID != null) {
 		config.headers = Object.assign(config.headers || {}, { ["x-session-id"]: sessionID });
 	}
@@ -36,11 +39,11 @@ axios.interceptors.request.use((config) => {
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <div>
+		element: <div id="main">
 			<TopBar />
 			<Outlet />
 		</div>,
-		errorElement: <div>
+		errorElement: <div id="main">
 			<TopBar />
 			<ErrorPage />
 		</div>,
@@ -54,10 +57,13 @@ const router = createBrowserRouter([
 				element: <Login />
 			},
 			{
+				path: "course/:courseID",
+				element: <Course />
+			},
+			{
 				path: "course/:courseID/lecture/:lectureID",
 				element: <Lecture />
-			}
-			,
+			},
 			{
 				path: "course/:courseID/lecture/:lectureID/results",
 				element: <ParticipationForm />

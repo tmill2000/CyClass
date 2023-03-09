@@ -1,16 +1,16 @@
-const { runQuery } = require('../../utils/db_connection');
+const { runQuery } = require("../../utils/db_connection");
 
 const editableFields = {
     courses: [],
     lectures: [],
     media_metadata: [],
-    messages: [],
+    messages: ["message_title", "is_anonymous", "body"],
     poll_choices: [],
     poll_responses: [],
     polls: [],
     roles: [],
     users: ["netid", "password", "first_name", "last_name"]
-}
+};
 
 /**
  * Service to update data objects
@@ -20,11 +20,12 @@ const editableFields = {
  * @param {*} whereClauseVal Value to base WHERE statement on
  */
 const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVal) => {
-    const updatesToMake = [], insertValues = [];
+    const updatesToMake = [],
+        insertValues = [];
     try {
-        Object.keys(newValsObj).forEach((objKey) => {
+        Object.keys(newValsObj).forEach(objKey => {
             // Check to ensure all included fields are eligible to be edited
-            if (!editableFields[tableName].includes(objKey)) return
+            if (!editableFields[tableName].includes(objKey)) return;
 
             updatesToMake.push(`${objKey} = ?`);
             insertValues.push(newValsObj[objKey]);
@@ -35,13 +36,12 @@ const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVa
 
         const resp = await runQuery(query, [...insertValues, whereClauseVal]);
         return resp;
-
     } catch (e) {
         console.error(e);
-        throw e
+        throw e;
     }
-}
+};
 
 module.exports = {
     genericPatch
-}
+};

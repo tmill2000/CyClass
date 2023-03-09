@@ -1,14 +1,20 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/22/2022
- * UPDATED:	02/05/2023
+ * UPDATED:	03/06/2023
  */
 
 import axios from "axios";
 
 import defaultProfileImg from "../../components/ProfileIcon/profileIconIMG.jpg";
 
-const userDataCache = {}
+const ROLE_MAP = {
+	"PROFESSOR": "Professor",
+	"TA": "TA",
+	"STUDENT": "Student"
+};
+
+const userDataCache = {};
 
 /**
  * Interface for the API related to users.
@@ -81,6 +87,16 @@ class UserAPI {
 				password: password
 			})
 			.then((res) => {
+
+				// Make role strings more readable
+				for (const role of res.data.userRoles) {
+					const prettyRole = ROLE_MAP[role.role];
+					if (prettyRole != null) {
+						role.role = prettyRole;
+					} else {
+						console.error(`Unexpected role for user in course "${role.name}": ${role.role}`);
+					}
+				}
 
 				// Return formatted data
 				return {
@@ -187,6 +203,6 @@ class UserAPI {
 
 	}
 
-}
+};
 
 export default UserAPI;

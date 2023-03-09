@@ -25,52 +25,87 @@ export default function PollFormPopup(props){
 		}
 	};
 
-    function backgroundColorA(){
+    function backgroundColor(letter){
         const btnA = document.getElementById('buttonA');
-        if (btnA.style.backgroundColor === 'white' || btnA.style.backgroundColor === '' ){
-            btnA.style.backgroundColor = 'green';
+        const entryA = document.getElementById('entryA');
+        const btnB = document.getElementById('buttonB');
+        const entryB = document.getElementById('entryB');
+        const btnC = document.getElementById('buttonC');
+        const entryC = document.getElementById('entryC');
+        const btnD = document.getElementById('buttonD');
+        const entryD = document.getElementById('entryD');
+        if (letter === 'A'){
+            btnA.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
+            entryA.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
             pollA = true;
+            pollB = false;
+            pollC = false;
+            pollD = false;
+            btnB.style.backgroundColor = 'white';
+            entryB.style.backgroundColor = 'white';
+            btnC.style.backgroundColor = 'white';
+            entryC.style.backgroundColor = 'white';
+            btnD.style.backgroundColor = 'white';
+            entryD.style.backgroundColor = 'white';
         }
-        else{
-            btnA.style.backgroundColor = 'white';
+        else if (letter === 'B'){
+            btnB.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
+            entryB.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
+            pollB = true;
             pollA = false;
+            pollC = false;
+            pollD = false;
+            btnA.style.backgroundColor = 'white';
+            entryA.style.backgroundColor = 'white';
+            btnC.style.backgroundColor = 'white';
+            entryC.style.backgroundColor = 'white';
+            btnD.style.backgroundColor = 'white';
+            entryD.style.backgroundColor = 'white';
         }
+        else if (letter === 'C'){
+            btnC.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
+            entryC.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
+            pollC = true;
+            pollB = false;
+            pollA = false;
+            pollD = false;
+            btnB.style.backgroundColor = 'white';
+            entryB.style.backgroundColor = 'white';
+            btnA.style.backgroundColor = 'white';
+            entryA.style.backgroundColor = 'white';
+            btnD.style.backgroundColor = 'white';
+            entryD.style.backgroundColor = 'white';
+        }
+        else if (letter == 'D') {
+            btnD.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
+            entryD.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
+            pollD = true;
+            pollB = false;
+            pollC = false;
+            pollA = false;
+            btnB.style.backgroundColor = 'white';
+            entryB.style.backgroundColor = 'white';
+            btnC.style.backgroundColor = 'white';
+            entryC.style.backgroundColor = 'white';
+            btnA.style.backgroundColor = 'white';
+            entryA.style.backgroundColor = 'white';
+        }
+    }
+
+    function backgroundColorA(){
+        backgroundColor('A');
     }
 
     function backgroundColorB(){
-        const btnB = document.getElementById('buttonB');
-        if (btnB.style.backgroundColor === 'white' || btnB.style.backgroundColor === ''){
-            btnB.style.backgroundColor = 'green';
-            pollB = true;
-        }
-        else{
-            btnB.style.backgroundColor = 'white';
-            pollB = false;
-        }
+        backgroundColor('B');
     }
 
     function backgroundColorC(){
-        const btnC = document.getElementById('buttonC');
-        if (btnC.style.backgroundColor === 'white' || btnC.style.backgroundColor === ''){
-            btnC.style.backgroundColor = 'green';
-            pollC = true;
-        }
-        else{
-            btnC.style.backgroundColor = 'white';
-            pollC = false;
-        }
+        backgroundColor('C');
     }
 
     function backgroundColorD(){
-        const btnD = document.getElementById('buttonD');
-        if (btnD.style.backgroundColor === 'white' || btnD.style.backgroundColor === ''){
-            btnD.style.backgroundColor = 'green';
-            pollD = true;
-        }
-        else{
-            btnD.style.backgroundColor = 'white';
-            pollD = false;
-        }
+        backgroundColor('D');
     }
 
 
@@ -118,15 +153,15 @@ export default function PollFormPopup(props){
                     <div className="poll-form-answer-label">Enter in your answer choices: </div>
                     <div className="poll-form-answer-group">
                         <button className="poll-form-individual-answer-label" id="buttonA" onClick={backgroundColorA}> A </button>
-                        <input ref={poll_answer_A} className="poll-form-individual-answer-entry"/>
+                        <input ref={poll_answer_A} className="poll-form-individual-answer-entry" id="entryA"/>
                         <button className="poll-form-individual-answer-label" id="buttonB" onClick={backgroundColorB}> B </button>
-                        <input ref={poll_answer_B} className="poll-form-individual-answer-entry"/>
+                        <input ref={poll_answer_B} className="poll-form-individual-answer-entry" id="entryB"/>
                     </div>
                     <div className="poll-form-answer-group">
                         <button className="poll-form-individual-answer-label" id="buttonC" onClick={backgroundColorC}> C </button>
-                        <input ref={poll_answer_C} className="poll-form-individual-answer-entry"/>
+                        <input ref={poll_answer_C} className="poll-form-individual-answer-entry" id="entryC"/>
                         <button className="poll-form-individual-answer-label" id="buttonD" onClick={backgroundColorD}> D </button>
-                        <input ref={poll_answer_D} className="poll-form-individual-answer-entry"/>
+                        <input ref={poll_answer_D} className="poll-form-individual-answer-entry" id="entryD"/>
                     </div>
                 </div>
                 <div className="poll-form-time-available-group">

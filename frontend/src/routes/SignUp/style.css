@@ -5,6 +5,9 @@ width: 424px;
 height: 429px;
 text-align: center;
 background: #fff;
+justify-content: center;
+display: flex;
+flex-direction: column;
 }
 
 .signup.username-container {
@@ -27,7 +30,7 @@ background: #fff;
 }
 
 .singup-logo {
-	position: relative;
+	/* position: relative; */
     width: 100px;
 	/* max-width: 35%;
   max-height: 40%; */

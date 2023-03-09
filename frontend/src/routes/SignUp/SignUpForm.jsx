@@ -93,9 +93,7 @@ class SignUpForm extends React.Component {
     render() {
         return (
             <div className="signup-Form">
-                <div className="signup-logo-container">
-				    <img className="signup-logo" src={logoImg} />
-			    </div>
+				{/* <img className="signup-logo" src={logoImg} style="width: 100px;"/> */}
                 <div className="username-container">
                     <InputField
                        type="text"

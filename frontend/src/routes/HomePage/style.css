@@ -1,17 +1,31 @@
 .home-container {
     display: flex;
     flex-direction: row;
+    vertical-align: center;
+    justify-content: center;
+    margin-top: 30px;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .cc-container {
-    max-width: 25%;
+    /* max-width: 25%; */
     border-style: solid;
     border-width: 2px;
     border-color: rgb(56, 54, 54);
-    border-radius: 2px;
+    border-radius: 5px;
+    height: 150px;
+    width: 200px;
+    margin-right: 10px;
+    vertical-align: center;
+    align-items: center;
+    text-align: center;
 }
 
 .cc-title {
-    font-size: 20px;
+    font-size: 25px;
     color: white;
+    font-style: bold;
+    vertical-align: center;
+    text-align: center;
 }
