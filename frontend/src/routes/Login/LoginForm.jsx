@@ -42,9 +42,7 @@ class LoginForm extends React.Component {
     }
 
     async doSignUpNaviation() {
-		return (
-			<Navigate to="/signup" />
-		)
+		window.location.pathname = "/signup";
 	}
 
     async doLogin() {
@@ -106,7 +104,7 @@ class LoginForm extends React.Component {
                     <SubmitButton
                     text="Sign Up"
                     disabled={false}
-                    onClick={ () => this.doSignUpNaviation()}
+                    onClick={ () => this.doSignUpNaviation() }
                     />
             </div>
         );
