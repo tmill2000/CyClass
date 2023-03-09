@@ -26,14 +26,15 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
     try {
         let query = `
         SELECT
-            messages.sender_id,
-            messages.timestamp,
-            roles.role,
-            users.netid,
-            messages.body,
-            messages.is_anonymous,
-            messages.parent_id,
-            messages.message_id
+            DISTINCT
+                messages.sender_id,
+                messages.timestamp,
+                roles.role,
+                users.netid,
+                messages.body,
+                messages.is_anonymous,
+                messages.parent_id,
+                messages.message_id
         FROM messages
             inner join roles
             on messages.sender_id = roles.user_id
@@ -57,6 +58,7 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
         }));
         query = `
         SELECT
+        DISTINCT
             polls.poll_id,
             polls.timestamp,
             polls.question_text,
