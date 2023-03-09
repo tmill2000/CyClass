@@ -36,7 +36,15 @@ const getLecture = async lectureId => {
 
 const getLecturesByCourseId = async courseId => {
     try {
-        const query = "SELECT * from lectures where course_id = ?;";
+        const query = `
+        SELECT DISTINCT title, owner_id, netid, lecture_id, lectures.course_id, timestamp from 
+            lectures 
+        inner join courses on 
+            courses.course_id = lectures.course_id 
+        inner join users on 
+            users.user_id = courses.owner_id 
+        where 
+            lectures.course_id = ?;`;
         const resp = await runQuery(query, [courseId]);
         return resp;
     } catch (e) {

@@ -1,22 +1,25 @@
 CREATE TABLE courses (
     course_id int PRIMARY KEY AUTO_INCREMENT,
     owner_id int NOT NULL,
-    course_name varchar(100)
+    course_name varchar(100),
+    join_code VARCHAR(255) NOT NULL,
+    closed BOOLEAN
 );
 
 CREATE TABLE lectures (
 	lecture_id int PRIMARY KEY AUTO_INCREMENT,
     course_id int NOT NULL,
     title varchar(100),
+    timestamp datetime NOT NULL,
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 
 CREATE TABLE users (
 	user_id int PRIMARY KEY AUTO_INCREMENT,
     netid varchar(24) NOT NULL,
-    password varchar(30) NOT NULL,
     first_name varchar(255),
     last_name varchar(255),
+    password varchar(30) NOT NULL
 );
 
 CREATE TABLE roles (
@@ -76,12 +79,11 @@ CREATE TABLE poll_responses (
 CREATE TABLE media_metadata (
     media_id varchar(36) PRIMARY KEY,
     file_type varchar(5),
-    course_id int NOT NULL, -- TODO: refactor to find this through msg_id -> lecture_id -> course_id
+    course_id int NOT NULL,
     message_id int NOT NULL,
-    user_id int NOT NULL,-- TODO: refactor to not use in here, look at associated msg's user_id
+    user_id int NOT NULL,
     received boolean NOT NULL,
     timestamp datetime NOT NULL
 );
 
 SET GLOBAL time_zone = 'UTC';
-INSERT INTO users (netid, password) VALUES ('twmiller', 'pw');

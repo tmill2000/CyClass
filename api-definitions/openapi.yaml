@@ -408,6 +408,12 @@ paths:
                     title:
                       type: string
                       example: Lecture 15
+                    owner_id:
+                      type: integer
+                    timestamp:
+                      type: string
+                    netId:
+                      type: string
         '400':
           description: Invalid Parameters
         '401':

@@ -10,6 +10,7 @@ CREATE TABLE lectures (
 	lecture_id int PRIMARY KEY AUTO_INCREMENT,
     course_id int NOT NULL,
     title varchar(100),
+    timestamp datetime NOT NULL,
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 
