@@ -3,7 +3,14 @@ import InputField from './InputField';
 import SubmitButton from './SubmitButton';
 import logoImg from "./ISULogo.png";
 
+import DataStore from '../../utilities/data/DataStore';
+import UserAPI from '../../utilities/api/UserAPI';
+
+import { Navigate } from "react-router-dom";
+
+
 import LocalUser from '../../utilities/model/LocalUser';
+
 
 class LoginForm extends React.Component {
 
@@ -33,6 +40,12 @@ class LoginForm extends React.Component {
             buttonDisabled: false
         })
     }
+
+    async doSignUpNaviation() {
+		return (
+			<Navigate to="/signup" />
+		)
+	}
 
     async doLogin() {
         if(!this.state.netid){
@@ -89,6 +102,11 @@ class LoginForm extends React.Component {
                     text="Sign in"
                     disabled={this.state.buttonDisabled}
                     onClick={ () => this.doLogin() }
+                    />
+                    <SubmitButton
+                    text="Sign Up"
+                    disabled={false}
+                    onClick={ () => this.doSignUpNaviation()}
                     />
             </div>
         );

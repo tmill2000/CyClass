@@ -1,7 +1,6 @@
 import React, { useState, useEffect, createRef } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-
-import LocalUser from "../../utilities/model/LocalUser";
+import DataStore from "../../utilities/data/DataStore";
 
 import ErrorPage from "../ErrorPage";
 
@@ -26,16 +25,22 @@ function Lecture(props) {
 	if (isNaN(courseID)) {
 		return <ErrorPage code={400} text="Invalid course number" />;
 	}
+	const netID = DataStore.get("netID");
 
 	// Get user ID and permission level, verifying logged-in
-	const userID = LocalUser.current?.userID;
+	const userID = DataStore.get("userID");
 	if (userID == null) {
 		return <Navigate to="/login" />;
-	} else if (!LocalUser.current.isInCourse(courseID)) {
-		return <ErrorPage code={403} text="You are not a member of that course" />;
 	}
-	const user_role = LocalUser.current.getCourseRole(courseID);
-	const isElevatedUser = user_role == "Professor" || user_role == "TA";
+	let isElevatedUser = false;
+	let user_role;
+	for (const course of JSON.parse(DataStore.get("courses") || "[]")) {
+		if (course.id == courseID) {
+			user_role = course.role;
+			isElevatedUser = course.role == "PROFESSOR" || course.role == "TA"
+			break;
+		}
+	}
 
 	// Get/generate lecture state
 	if (lectureState == null || lectureState.lectureID != lectureID) {
@@ -63,10 +68,10 @@ function Lecture(props) {
 	// Return component
 	const api = lectureState.api
 	return (
-		<div className="page">
+		<div>
             <LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
 			<div style={{ display: "flex" }}>
-            	<LiveLectureLeftMenu userIDname={LocalUser.current.netID} userIDrole={user_role} api={api} elevated={isElevatedUser}/>
+            	<LiveLectureLeftMenu userIDname={netID} userIDrole={user_role} api={api} elevated={isElevatedUser}/>
 				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
 					<LectureFeed api={api} elevated={isElevatedUser} messages={lectureState.messages} polls={lectureState.polls} />
 					<NewMessageEntry api={api} />

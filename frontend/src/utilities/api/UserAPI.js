@@ -26,6 +26,53 @@ class UserAPI {
 	 * following object:
 	 * - `accepted` - boolean if login was accepted
 	 * - `userID` - userID of user, if accepted
+	 * @param {String} username 
+	 * @param {String} password 
+	 * @param {String} firstname 
+	 * @param {String} lastname 
+	 * @return Promise
+	 */
+	signup(username, password, firstname, lastname) {
+
+		// Perform signup
+		return axios.post("/api/user", {
+				netid: username,
+				password: password,
+				first_name: firstname,
+				last_name: lastname
+			})
+			.then((res) => {
+
+				// Return formatted data
+				return {
+					accepted: true,
+					userID: res.data.userId
+				};
+
+			})
+			.catch((err) => {
+
+				// Return rejection if cannot connect to DB
+				if (err.response?.status == 401) {
+					return {
+						accepted: false,
+						userID: null,
+					};
+				}
+
+				// Otherwise, log and propogate
+				console.error("Failed to perform signup:", err);
+				throw err;
+
+			});
+
+	}
+
+	/**
+	 * Attempts a login using the given username and password. If successfully, the returned Promise will resolve to the
+	 * following object:
+	 * - `accepted` - boolean if login was accepted
+	 * - `userID` - userID of user, if accepted
 	 * - `sessionID` - new sessionID, if accepted
 	 * - `courses` - `{ id: number, name: string, role: string }[]` (if accepted)
 	 * @param {String} username 

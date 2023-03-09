@@ -20,6 +20,8 @@ import Home from "./routes/Home";
 import Course from "./routes/Course";
 import Lecture from "./routes/Lecture";
 import Login from "./routes/Login";
+import SignUp from "./routes/SignUp";
+import HomePage from "./routes/HomePage";
 
 import TopBar from "./components/TopBar";
 import ParticipationForm from "./routes/Polls/PollParticipationForm";
@@ -65,6 +67,14 @@ const router = createBrowserRouter([
 			{
 				path: "course/:courseID/lecture/:lectureID/results",
 				element: <ParticipationForm />
+			},
+			{
+				path: "signup",
+				element: <SignUp />
+			},
+			{
+				path: "home",
+				element: <HomePage />
 			}
 		]
 	}
