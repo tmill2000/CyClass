@@ -92,6 +92,41 @@ class CourseAPI {
 
 	}
 
+	/**
+	 * Attempts to add the current signed in user to the course
+	 * they provide via url. 
+	 * @param {string} url 
+	 * @returns {Promise<number>}
+	 */
+	addCourseByUrl(url) {
+		return axios.post("/role/:join_code", {
+			join_code: url	
+		})
+		.then((res) => {
+
+			return {
+				accepted: true,
+				rollID: res.data.rollID
+			};
+
+		})
+		.catch((err) => {
+
+			// Return rejection if cannot connect to DB
+			if (err.response?.status == 401) {
+				return {
+					accepted: false,
+					rollID: null
+				};
+			}
+
+			// Otherwise, log and propogate
+			console.error("Failed to perform coursa addition:", err);
+			throw err;
+
+		});
+	}
+
 };
 
 export default CourseAPI;
