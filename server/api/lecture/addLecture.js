@@ -17,6 +17,7 @@ const addLecture = async (req, res) => {
         if (!courseId || !title) {
             return res.status(400).send({ msg: "Invalid Body" });
         }
+        console.log(req.session)
         if (!hasCoursePermissions(courseId, req.session)) {
             return res.status(401).send({ msg: "Unauthorized to create lecture" });
         }
