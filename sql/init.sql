@@ -88,15 +88,15 @@ CREATE TABLE media_metadata (
 
 SET GLOBAL time_zone = 'UTC';
 
-INSERT INTO courses (course_id, owner_id, course_name) VALUES ('1', '1', 'Lib 160');
-INSERT INTO courses (course_id, owner_id, course_name) VALUES ('2', '2', 'CPRE 491');
+INSERT INTO courses (course_id, owner_id, course_name, join_code) VALUES ('1', '1', 'Lib 160', '123');
+INSERT INTO courses (course_id, owner_id, course_name, join_code) VALUES ('2', '2', 'CPRE 491', '1234');
 
 
 
-INSERT INTO lectures (lecture_id, course_id, title)
-VALUES ('1', (select course_id from courses where course_name='Lib 160'), 'Lib 160 Lecture 1');
-INSERT INTO lectures (lecture_id, course_id, title)
-VALUES ('2', (select course_id from courses where course_name='CPRE 491'), 'CPRE 491 Lecture 1');
+INSERT INTO lectures (lecture_id, course_id, title, timestamp)
+VALUES ('1', (select course_id from courses where course_name='Lib 160'), 'Lib 160 Lecture 1', '2023-03-01');
+INSERT INTO lectures (lecture_id, course_id, title, timestamp)
+VALUES ('2', (select course_id from courses where course_name='CPRE 491'), 'CPRE 491 Lecture 1', '2023-03-01');
 
 
 
