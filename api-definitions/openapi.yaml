@@ -176,10 +176,6 @@ paths:
                       type: integer
                     course_name:
                       type: string    
-        '400':
-          description: Invalid Body
-        '401':
-          description: Incorrect Username or Password
         '500':
           description: Internal Server Error
   /user/logout:
