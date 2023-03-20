@@ -150,6 +150,38 @@ paths:
           description: Incorrect Username or Password
         '500':
           description: Internal Server Error
+  /user/courses:
+    get:
+      tags:
+        - user
+      summary: gets courses for a given user
+      operationId: getCoursesByUser
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object  
+                  properties:
+                    course_id: 
+                      type: integer
+                    course_name:
+                      type: string    
+        '400':
+          description: Invalid Body
+        '401':
+          description: Incorrect Username or Password
+        '500':
+          description: Internal Server Error
   /user/logout:
     post:
       tags:
