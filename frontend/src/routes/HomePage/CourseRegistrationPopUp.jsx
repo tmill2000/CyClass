@@ -21,7 +21,7 @@ export default function CourseRegistrationPopup(props){
 
     getURL = async () => {
         const typed_url = input_url.current.value.trim();
-        if (props.api == null || typed_url == "") {
+        if (typed_url == "") {
             console.log("URL is empty.")
             return;
         }

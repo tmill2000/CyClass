@@ -6,9 +6,17 @@ import DataStore from '../../utilities/data/DataStore';
 import ErrorPage from "../ErrorPage";
 
 import './style.css';
+import CourseRegistrationPopup from "./CourseRegistrationPopUp";
 
 function HomePage(props) {
+	const colors = ["red", "blue", "green", "brown"]
 
+	const courses = structuredClone(LocalUser.useValue("courses"));
+	// Dropdown list generation
+	const dropdownList = [];
+	for (let i = 0; i < courses.length; i++) {
+		dropdownList.push(<CourseComponent courseTitle={courses[i]} color={colors[i]} />);
+	}
 	// Get lecture and course IDs from path params and validate them
 	// const pathParams = useParams();
 	// const lectureID = parseInt(pathParams.lectureID);
@@ -35,8 +43,8 @@ function HomePage(props) {
 
 	return (
 		<div className="home-container">
-			<CourseComponent color="red" courseTitle="Com S 492"></CourseComponent>
-			<CourseComponent color="blue" courseTitle="Com S 417"></CourseComponent>
+			<CourseRegistrationPopup></CourseRegistrationPopup>
+			{dropdownList}
 		</div>
 	);
 
