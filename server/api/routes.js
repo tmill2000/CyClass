@@ -18,6 +18,7 @@ const router = express.Router();
 //Get Requests
 router.get("/health", health.getHealthCheck);
 router.get("/user", validateSession, user.getUserInfoByUserId);
+router.get("/user/courses", validateSession, user.getCoursesByUser);
 router.get("/message/messagesByLecture", validateSession, message.getMessagesAndPollsByLectureId);
 router.get("/course", validateSession, course.getCourse);
 router.get("/message", validateSession, message.getMessage);

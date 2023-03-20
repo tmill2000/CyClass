@@ -1,5 +1,6 @@
 const roleService = require("../role/services/roleService");
 const userService = require("./services/userService");
+const { writeLog } = require("../../utils/logger");
 const crypto = require("crypto");
 
 /**
@@ -76,4 +77,21 @@ const logout = async (req, res) => {
     return res.status(200).send({ msg: "Logged Out" });
 };
 
-module.exports = { getUserInfoByUserId, login, logout };
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+const getCoursesByUser = async (req, res) => {
+    try {
+        const roles = await roleService.getCourseRolesByUser(req.session.userid);
+        const courses = new Set(roles.map((role) => ({ course_name: role.course_name, course_id: role.course_id })))
+        return res.status(200).send(courses)
+    } catch (e) {
+        writeLog("error", e.message)
+        return res.status(500).send({ msg: 'Internal Server Error' })
+    }
+}
+
+module.exports = { getUserInfoByUserId, login, logout, getCoursesByUser };
