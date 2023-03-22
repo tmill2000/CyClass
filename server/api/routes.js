@@ -30,6 +30,7 @@ router.get("/role", validateSession, role.getRole);
 router.get("/download-media", validateSession, media.downloadMedia);
 router.get("/poll/metrics", validateSession, poll.getPollMetrics);
 router.get("/poll", validateSession, poll.getPollById);
+
 //Post Requests
 router.post("/user/logout", validateSession, user.logout);
 router.post("/user/login", user.login);
@@ -49,13 +50,12 @@ router.post("/poll", validateSession, poll.addPoll);
 router.post("/role/:join_code", validateSession, role.addRoleByJoinCode);
 
 //Delete Requests
-
-//Put Requests
+router.delete("/message", validateSession, message.deleteMessage);
 
 //Patch
 router.patch("/course/close", validateSession, course.closeCourse);
 router.patch("/poll/close", validateSession, poll.closePoll);
 router.patch("/user", validateSession, validatePatch.canEditGivenUser, user.editUser);
-router.patch("/user", validateSession, validatePatch.canEditGivenMessage, message.editMessage);
+router.patch("/message", validateSession, validatePatch.canEditGivenMessage, message.editMessage);
 
 module.exports = router;

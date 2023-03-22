@@ -1,4 +1,10 @@
-const { addMessage, addMediaMetadata, getMessage, getMessagesAndPollsByLectureId } = require("./messageService");
+const {
+    addMessage,
+    addMediaMetadata,
+    getMessage,
+    getMessagesAndPollsByLectureId,
+    deleteMessage
+} = require("./messageService");
 const db = require("../../../utils/db_connection");
 
 jest.mock("../../../utils/db_connection");
@@ -124,6 +130,18 @@ describe("messageService", () => {
         it("should throw error", async () => {
             jest.spyOn(db, "runQuery").mockRejectedValueOnce(new Error());
             await expect(getMessagesAndPollsByLectureId(-1, null)).rejects.toThrow();
+        });
+    });
+
+    describe("deleteMessage", () => {
+        it("should return response", async () => {
+            jest.spyOn(db, "runQuery").mockResolvedValueOnce();
+            const res = await deleteMessage(1);
+            expect(res).toBeUndefined();
+        });
+        it("should throw error", async () => {
+            jest.spyOn(db, "runQuery").mockRejectedValueOnce(new Error());
+            await expect(deleteMessage(-1)).rejects.toThrow();
         });
     });
 });

@@ -1,4 +1,5 @@
 const { runQuery } = require("../../../utils/db_connection");
+const { writeLog } = require("../../../utils/logger");
 
 /**
  * Function to get a course
@@ -143,9 +144,22 @@ const addMediaMetadata = async (mediaID, courseID, userID, msgID) => {
     }
 };
 
+const deleteMessage = async messageId => {
+    try {
+        const mediaQuery = "DELETE FROM media_metadata WHERE message_id = ?";
+        const messageQuery = "DELETE FROM messages WHERE message_id = ?";
+        await runQuery(mediaQuery, [messageId]);
+        await runQuery(messageQuery, [messageId]);
+    } catch (e) {
+        writeLog("error", JSON.stringify(e));
+        throw e;
+    }
+};
+
 module.exports = {
     getMessage,
     getMessagesAndPollsByLectureId,
     addMessage,
-    addMediaMetadata
+    addMediaMetadata,
+    deleteMessage
 };
