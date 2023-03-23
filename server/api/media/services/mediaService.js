@@ -1,14 +1,14 @@
 const { runQuery } = require("../../../utils/db_connection");
 
 /**
- * @typedef Media
- * @property {string} media_id
- * @property {string} file_type
- * @property {number} course_id
- * @property {number} message_id
- * @property {number} user_id
- * @property {boolean} received
- * @property {string} timestamp
+ * @typedef {Object} Media
+ * @property {?string} media_id
+ * @property {?string} file_type
+ * @property {?number} course_id
+ * @property {?number} message_id
+ * @property {?number} user_id
+ * @property {?boolean} received
+ * @property {?string} timestamp
  */
 
 /**

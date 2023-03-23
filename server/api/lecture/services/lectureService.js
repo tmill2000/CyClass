@@ -2,7 +2,7 @@ const { runQuery } = require("../../../utils/db_connection");
 
 
 /**
- * @typedef Lecture
+ * @typedef {Object} Lecture
  * @property {?number} lecture_id
  * @property {?number} course_id
  * @property {?string} title

@@ -2,33 +2,33 @@ const { runQuery } = require("../../../utils/db_connection");
 const { writeLog } = require("../../../utils/logger");
 
 /**
- * @typedef Message
- * @property {number} message_id
- * @property {number} parent_id
- * @property {number} sender_id
- * @property {number} lecture_id
- * @property {string} timestamp
- * @property {string} message_title
- * @property {boolean} is_anonymous
- * @property {string} body
+ * @typedef {Object} Message
+ * @property {?number} message_id
+ * @property {?number} parent_id
+ * @property {?number} sender_id
+ * @property {?number} lecture_id
+ * @property {?string} timestamp
+ * @property {?string} message_title
+ * @property {?boolean} is_anonymous
+ * @property {?string} body
  */
 
 /**
- * @typedef Poll
- * @property {number} poll_id
- * @property {string} timestamp
- * @property {string} question
- * @property {string} close_date
- * @property {boolean} closed
- * @property {PollChoice[]} choices
+ * @typedef {Object} Poll
+ * @property {?number} poll_id
+ * @property {?string} timestamp
+ * @property {?string} question
+ * @property {?string} close_date
+ * @property {?boolean} closed
+ * @property {?PollChoice[]} choices
  * 
  */
 
 /**
- * @typedef PollChoice
- * @property {number} poll_choice_id
- * @property {string} text
- * @property {boolean} is_correct_choice
+ * @typedef  {Object} PollChoice
+ * @property {?number} poll_choice_id
+ * @property {?string} text
+ * @property {?boolean} is_correct_choice
  */
 
 /**
