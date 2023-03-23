@@ -31,6 +31,7 @@ describe("addPoll", () => {
             body: {
                 lecture_id: 1,
                 question_text: "foo",
+                poll_type: "MULTIPLE_CHOICE",
                 poll_choices: [
                     { is_correct_choice: true, choice_text: "bar" },
                     { is_correct_choice: false, choice_text: "buzz" }
@@ -47,6 +48,7 @@ describe("addPoll", () => {
             body: {
                 lecture_id: 1,
                 question_text: "foo",
+                poll_type: "MULTIPLE_CHOICE",
                 poll_choices: [
                     { is_correct_choice: true, choice_text: "bar" },
                     { is_correct_choice: false, choice_text: "buzz" }
@@ -65,6 +67,7 @@ describe("addPoll", () => {
             body: {
                 lecture_id: 1,
                 question_text: "foo",
+                poll_type: "MULTIPLE_CHOICE",
                 poll_choices: [
                     { is_correct_choice: true, choice_text: "bar" },
                     { is_correct_choice: false, choice_text: "buzz" }
