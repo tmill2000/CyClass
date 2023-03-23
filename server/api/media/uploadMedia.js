@@ -5,14 +5,14 @@ const mediaService = require("./services/mediaService");
 const { isInCourse } = require("../../utils/permissions");
 
 /**
- * @param {*} req
+ * @param {Express.Request} req
  * req.query = {
  *    media_id: String
  * }
  * req.headers = {
  *    Content-Type must be set to correct image MIME type
  * }
- * @param {*} res
+ * @param {Express.Response} res
  * @returns guid of uploaded media
  */
 const uploadMedia = async (req, res) => {

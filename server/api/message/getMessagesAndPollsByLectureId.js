@@ -1,5 +1,11 @@
 const messageService = require("./services/messageService");
 
+/**
+ *
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
+ */
 const getMessagesAndPollsByLectureId = async (req, res) => {
     try {
         const { lecture_id: lectureId, timestamp } = req.query;

@@ -1,11 +1,12 @@
 const courseService = require("./services/courseService");
 const { hasCoursePermissions } = require("../../utils/permissions");
 const { writeLog } = require("../../utils/logger");
+
 /**
  *
- * @param {*} req
- * @param {*} res
- * @returns
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const closeCourse = async (req, res) => {
     try {

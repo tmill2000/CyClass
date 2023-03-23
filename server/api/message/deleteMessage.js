@@ -2,6 +2,12 @@ const { hasCoursePermissions } = require("../../utils/permissions");
 const messageService = require("./services/messageService");
 const { writeLog } = require("../../utils/logger");
 
+/**
+ *
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
+ */
 const deleteMessage = async (req, res) => {
     try {
         const { message_id: messageId, course_id: courseId } = req.query;

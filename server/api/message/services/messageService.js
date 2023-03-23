@@ -2,10 +2,39 @@ const { runQuery } = require("../../../utils/db_connection");
 const { writeLog } = require("../../../utils/logger");
 
 /**
+ * @typedef Message
+ * @property {number} message_id
+ * @property {number} parent_id
+ * @property {number} sender_id
+ * @property {number} lecture_id
+ * @property {string} timestamp
+ * @property {string} message_title
+ * @property {boolean} is_anonymous
+ * @property {string} body
+ */
+
+/**
+ * @typedef Poll
+ * @property {number} poll_id
+ * @property {string} timestamp
+ * @property {string} question
+ * @property {string} close_date
+ * @property {boolean} closed
+ * @property {PollChoice[]} choices
+ * 
+ */
+
+/**
+ * @typedef PollChoice
+ * @property {number} poll_choice_id
+ * @property {string} text
+ * @property {boolean} is_correct_choice
+ */
+
+/**
  * Function to get a course
- * @param {*} messageId
- * @param {*} res
- * @returns course data if successful, otherwise a 500 or 400 error
+ * @param {number} messageId
+ * @returns {Promise<Message[]>}
  */
 const getMessage = async messageId => {
     try {
@@ -19,9 +48,9 @@ const getMessage = async messageId => {
 };
 /**
  *
- * @param {*} lectureId
- * @param {*} timestamp
- * @returns messages and polls
+ * @param {number} lectureId
+ * @param {string} timestamp
+ * @returns {Promise<(Message & Poll)[]}
  */
 const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
     try {
@@ -105,12 +134,12 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
 
 /**
  *
- * @param {*} senderId
- * @param {*} body
- * @param {*} isAnonymous
- * @param {*} lectureId
- * @param {*} parentID
- * @returns message_id of created message
+ * @param {number} senderId
+ * @param {string} body
+ * @param {boolean} isAnonymous
+ * @param {nuber} lectureId
+ * @param {number} parentID
+ * @returns {Promise<number>}
  */
 const addMessage = async (senderId, body, isAnonymous, lectureId, parentID) => {
     try {
@@ -132,6 +161,14 @@ const addMessage = async (senderId, body, isAnonymous, lectureId, parentID) => {
     }
 };
 
+/**
+ * 
+ * @param {string} mediaID 
+ * @param {number} courseID 
+ * @param {number} userID 
+ * @param {number} msgID 
+ * @returns {Promise<string>}
+ */
 const addMediaMetadata = async (mediaID, courseID, userID, msgID) => {
     try {
         const mediaQuery =
@@ -144,6 +181,10 @@ const addMediaMetadata = async (mediaID, courseID, userID, msgID) => {
     }
 };
 
+/**
+ * 
+ * @param {number} messageId 
+ */
 const deleteMessage = async messageId => {
     try {
         const mediaQuery = "DELETE FROM media_metadata WHERE message_id = ?";

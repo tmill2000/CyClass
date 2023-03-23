@@ -3,14 +3,10 @@ const { lectures } = require("../../websockets/websockets");
 const { isInCourse } = require("../../utils/permissions");
 
 /**
- * Function to get a course
- * @param {*} req
- *  req.query = {
- *    lecture_id: int
- *    session_id: string
- *  }
- * @param {*} res
- * @returns course data if successful, otherwise a 500 or 400 error
+ *
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const getLecture = async (req, res) => {
     try {
@@ -33,6 +29,12 @@ const getLecture = async (req, res) => {
     }
 };
 
+/**
+ *
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
+ */
 const isLectureLive = async (req, res) => {
     const { lecture_id: lectureId, course_id: courseId } = req.query;
     if (!lectureId || !courseId) {
@@ -44,6 +46,12 @@ const isLectureLive = async (req, res) => {
     return res.status(200).send({ lectureId, live: lectures.has(Number(lectureId)) });
 };
 
+/**
+ *
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
+ */
 const getLecturesByCourseId = async (req, res) => {
     try {
         const { course_id: courseId } = req.query;

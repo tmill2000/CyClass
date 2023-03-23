@@ -1,6 +1,17 @@
 const { runQuery } = require("../../../utils/db_connection");
 
 /**
+ * @typedef Media
+ * @property {string} media_id
+ * @property {string} file_type
+ * @property {number} course_id
+ * @property {number} message_id
+ * @property {number} user_id
+ * @property {boolean} received
+ * @property {string} timestamp
+ */
+
+/**
  * @param {string} mediaID
  * @returns course_id and user_id associated with given mediaID
  */

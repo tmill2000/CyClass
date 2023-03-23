@@ -1,10 +1,18 @@
 const { runQuery } = require("../../../utils/db_connection");
 
+
 /**
- * @param {*} courseId
- * @param {*} title
- * @param {*} res
- * @returns lecture_id of created lecture
+ * @typedef Lecture
+ * @property {?number} lecture_id
+ * @property {?number} course_id
+ * @property {?string} title
+ * @property {?string} timestamp
+ */
+
+/**
+ * @param {number} courseId
+ * @param {string} title
+ * @returns {Promise<number>}
  */
 const addLecture = async (courseId, title) => {
     try {
@@ -18,10 +26,8 @@ const addLecture = async (courseId, title) => {
 };
 
 /**
- * Function to get a course
- * @param {*} lectureId
- * @param {*} res
- * @returns course data if successful
+ * @param {number} lectureId
+ * @returns {Promise<Lecture[]>}
  */
 const getLecture = async lectureId => {
     try {
@@ -34,6 +40,10 @@ const getLecture = async lectureId => {
     }
 };
 
+/**
+ * @param {number} courseId
+ * @returns {Promise<Lecture[]>}
+ */
 const getLecturesByCourseId = async courseId => {
     try {
         const query = `

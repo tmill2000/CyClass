@@ -1,14 +1,9 @@
 const courseService = require("./services/courseService");
 
 /**
- * Function to get a course
- * @param {*} req
- *  req.query = {
- *    course_id: int
- *    session_id: string
- *  }
- * @param {*} res
- * @returns course data if successful, otherwise a 500 or 400 error
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const getCourse = async (req, res) => {
     try {

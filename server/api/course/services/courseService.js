@@ -3,10 +3,20 @@ const { runQuery } = require("../../../utils/db_connection");
 const roleService = require("../../role/services/roleService");
 
 /**
- *
- * @param {*} ownerID
- * @param {*} courseTitle
- * @returns
+ * @typedef {Object} Course
+ * @property {?string} course_id 
+ * @property {?number} closed
+ * @property {?number} owner_id
+ * @property {?number} join_code
+ * @property {?number} course_name
+ */
+
+
+/**
+ * @param {number} ownerID
+ * @param {string} courseTitle
+ * @param {string} joinCode
+ * @returns {Promise<number>}
  */
 const addCourse = async (ownerID, courseTitle, joinCode) => {
     try {
@@ -23,8 +33,8 @@ const addCourse = async (ownerID, courseTitle, joinCode) => {
 
 /**
  *
- * @param {*} courseId
- * @returns
+ * @param {number} courseId
+ * @returns {Promise<Course[]>}
  */
 const getCourse = async courseId => {
     try {
@@ -39,8 +49,8 @@ const getCourse = async courseId => {
 
 /**
  *
- * @param {*} joinCode
- * @returns
+ * @param {string} joinCode
+ * @returns {Promise<Course>}
  */
 const getCourseByJoinCode = async joinCode => {
     try {
@@ -55,7 +65,7 @@ const getCourseByJoinCode = async joinCode => {
 
 /**
  *
- * @param {*} courseId
+ * @param {number} courseId
  */
 const closeCourse = async courseId => {
     try {
@@ -72,3 +82,4 @@ module.exports = {
     getCourseByJoinCode,
     closeCourse
 };
+
