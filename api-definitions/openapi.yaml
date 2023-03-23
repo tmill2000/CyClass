@@ -878,6 +878,10 @@ paths:
                     type: integer
                   question_text:
                     type: string
+                  close_date:
+                    type: string
+                    nullable: true
+                    example: "string | null"
                   poll_choices:
                     type: array
                     items:
