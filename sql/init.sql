@@ -51,6 +51,7 @@ CREATE TABLE polls (
     timestamp datetime NOT NULL,
     question_text varchar(512),
     close_date datetime,
+    poll_type enum("MULTIPLE_CHOICE", "MULTIPLE_SELECT") NOT NULL,
     FOREIGN KEY (sender_id) REFERENCES users(user_id),
 	FOREIGN KEY (lecture_id) REFERENCES lectures(lecture_id)
 );
@@ -112,104 +113,104 @@ CREATE TABLE post_comments (
 
 SET GLOBAL time_zone = 'UTC';
 
--- INSERT INTO courses (course_id, owner_id, course_name, join_code) VALUES ('1', '1', 'Lib 160', '123');
--- INSERT INTO courses (course_id, owner_id, course_name, join_code) VALUES ('2', '2', 'CPRE 491', '1234');
+INSERT INTO courses (course_id, owner_id, course_name, join_code) VALUES ('1', '1', 'Lib 160', '123');
+INSERT INTO courses (course_id, owner_id, course_name, join_code) VALUES ('2', '2', 'CPRE 491', '1234');
 
 
 
--- INSERT INTO lectures (lecture_id, course_id, title, timestamp)
--- VALUES ('1', (select course_id from courses where course_name='Lib 160'), 'Lib 160 Lecture 1', '2023-03-01');
--- INSERT INTO lectures (lecture_id, course_id, title, timestamp)
--- VALUES ('2', (select course_id from courses where course_name='CPRE 491'), 'CPRE 491 Lecture 1', '2023-03-01');
+INSERT INTO lectures (lecture_id, course_id, title, timestamp)
+VALUES ('1', (select course_id from courses where course_name='Lib 160'), 'Lib 160 Lecture 1', '2023-03-01');
+INSERT INTO lectures (lecture_id, course_id, title, timestamp)
+VALUES ('2', (select course_id from courses where course_name='CPRE 491'), 'CPRE 491 Lecture 1', '2023-03-01');
 
 
 
--- INSERT INTO users (user_id, netid, password) VALUES ('123', 'maruf', 'maruf');
--- INSERT INTO users (user_id, netid, password) VALUES ('1234', 'maruf_TA', 'maruf_TA');
--- INSERT INTO users (user_id, netid, password) VALUES ('12345', 'student', 'student');
+INSERT INTO users (user_id, netid, password) VALUES ('123', 'maruf', 'maruf');
+INSERT INTO users (user_id, netid, password) VALUES ('1234', 'maruf_TA', 'maruf_TA');
+INSERT INTO users (user_id, netid, password) VALUES ('12345', 'student', 'student');
 
 
 
--- INSERT INTO roles (role_id, course_id, user_id, role)
--- VALUES ('1',
--- (select course_id from courses where course_name='Lib 160'),
--- (select user_id from users where netid='maruf'),
--- 'PROFESSOR');
+INSERT INTO roles (role_id, course_id, user_id, role)
+VALUES ('1',
+(select course_id from courses where course_name='Lib 160'),
+(select user_id from users where netid='maruf'),
+'PROFESSOR');
 
--- INSERT INTO roles (role_id, course_id, user_id, role)
--- VALUES ('2',
--- (select course_id from courses where course_name='Lib 160'),
--- (select user_id from users where netid='maruf_TA'),
--- 'TA');
+INSERT INTO roles (role_id, course_id, user_id, role)
+VALUES ('2',
+(select course_id from courses where course_name='Lib 160'),
+(select user_id from users where netid='maruf_TA'),
+'TA');
 
--- INSERT INTO roles (role_id, course_id, user_id, role)
--- VALUES ('3',
--- (select course_id from courses where course_name='Lib 160'),
--- (select user_id from users where netid='student'),
--- 'STUDENT');
-
-
-
--- INSERT INTO messages (message_id, sender_id, lecture_id, timestamp, body)
--- VALUES ('1',
--- (select user_id from users where netid='maruf'),
--- (select lecture_id from lectures where title='Lib 160 Lecture 1'),
--- CURRENT_TIMESTAMP, 'Hello students, this message is from the Prof' );
-
--- INSERT INTO messages (message_id, sender_id, lecture_id, timestamp, body)
--- VALUES ('2',
--- (select user_id from users where netid='maruf_TA'),
--- (select lecture_id from lectures where title='Lib 160 Lecture 1'),
--- CURRENT_TIMESTAMP, 'Hello students, this message if from the TA' );
-
--- INSERT INTO messages (message_id, sender_id, lecture_id, timestamp, body)
--- VALUES ('3',
--- (select user_id from users where netid='student'),
--- (select lecture_id from lectures where title='Lib 160 Lecture 1'),
--- CURRENT_TIMESTAMP, 'Hello everyone' );
+INSERT INTO roles (role_id, course_id, user_id, role)
+VALUES ('3',
+(select course_id from courses where course_name='Lib 160'),
+(select user_id from users where netid='student'),
+'STUDENT');
 
 
 
--- INSERT INTO polls (poll_id, sender_id, lecture_id, timestamp, question_text)
--- VALUES ('1', (select user_id from users where netid='maruf'),
--- (select lecture_id from lectures where title='Lib 160 Lecture 1'),
--- CURRENT_TIMESTAMP, 'What is 1+1?');
+INSERT INTO messages (message_id, sender_id, lecture_id, timestamp, body)
+VALUES ('1',
+(select user_id from users where netid='maruf'),
+(select lecture_id from lectures where title='Lib 160 Lecture 1'),
+CURRENT_TIMESTAMP, 'Hello students, this message is from the Prof' );
 
+INSERT INTO messages (message_id, sender_id, lecture_id, timestamp, body)
+VALUES ('2',
+(select user_id from users where netid='maruf_TA'),
+(select lecture_id from lectures where title='Lib 160 Lecture 1'),
+CURRENT_TIMESTAMP, 'Hello students, this message if from the TA' );
 
--- INSERT INTO polls (poll_id, sender_id, lecture_id, timestamp, question_text)
--- VALUES ('1', (select user_id from users where netid='maruf'),
--- (select lecture_id from lectures where title='Lib 160 Lecture 1'),
--- CURRENT_TIMESTAMP, 'What is 1+1?');
-
--- INSERT INTO polls (poll_id, sender_id, lecture_id, timestamp, question_text)
--- VALUES ('2', (select user_id from users where netid='maruf_TA'),
--- (select lecture_id from lectures where title='Lib 160 Lecture 1'),
--- CURRENT_TIMESTAMP, 'What is 2+2?');
-
-
-
--- INSERT INTO poll_responses (poll_response_id, response, poll_id)
--- VALUES ('1', 'The answer is B',
--- (select poll_id from polls where question_text='What is 1+1?'));
-
--- INSERT INTO poll_responses (poll_response_id, response, poll_id)
--- VALUES ('2', 'The answer is D',
--- (select poll_id from polls where question_text='What is 2+2?'));
+INSERT INTO messages (message_id, sender_id, lecture_id, timestamp, body)
+VALUES ('3',
+(select user_id from users where netid='student'),
+(select lecture_id from lectures where title='Lib 160 Lecture 1'),
+CURRENT_TIMESTAMP, 'Hello everyone' );
 
 
 
--- INSERT INTO poll_choices (poll_choice_id, poll_id, choice_text, is_correct_choice)
--- VALUES ('1', (select poll_id from polls where question_text='What is 1+1?'),
--- 'A) 1
---  B) 2
---  C) 3
---  D) 4',
---  FALSE);
+INSERT INTO polls (poll_id, sender_id, lecture_id, timestamp, question_text)
+VALUES ('1', (select user_id from users where netid='maruf'),
+(select lecture_id from lectures where title='Lib 160 Lecture 1'),
+CURRENT_TIMESTAMP, 'What is 1+1?');
 
--- INSERT INTO poll_choices (poll_choice_id, poll_id, choice_text, is_correct_choice)
--- VALUES ('2', (select poll_id from polls where question_text='What is 2+2?'),
--- 'A) 1
---  B) 2
---  C) 3
---  D) 4',
---  FALSE);
+
+INSERT INTO polls (poll_id, sender_id, lecture_id, timestamp, question_text)
+VALUES ('1', (select user_id from users where netid='maruf'),
+(select lecture_id from lectures where title='Lib 160 Lecture 1'),
+CURRENT_TIMESTAMP, 'What is 1+1?');
+
+INSERT INTO polls (poll_id, sender_id, lecture_id, timestamp, question_text)
+VALUES ('2', (select user_id from users where netid='maruf_TA'),
+(select lecture_id from lectures where title='Lib 160 Lecture 1'),
+CURRENT_TIMESTAMP, 'What is 2+2?');
+
+
+
+INSERT INTO poll_responses (poll_response_id, response, poll_id)
+VALUES ('1', 'The answer is B',
+(select poll_id from polls where question_text='What is 1+1?'));
+
+INSERT INTO poll_responses (poll_response_id, response, poll_id)
+VALUES ('2', 'The answer is D',
+(select poll_id from polls where question_text='What is 2+2?'));
+
+
+
+INSERT INTO poll_choices (poll_choice_id, poll_id, choice_text, is_correct_choice)
+VALUES ('1', (select poll_id from polls where question_text='What is 1+1?'),
+'A) 1
+ B) 2
+ C) 3
+ D) 4',
+ FALSE);
+
+INSERT INTO poll_choices (poll_choice_id, poll_id, choice_text, is_correct_choice)
+VALUES ('2', (select poll_id from polls where question_text='What is 2+2?'),
+'A) 1
+ B) 2
+ C) 3
+ D) 4',
+ FALSE);

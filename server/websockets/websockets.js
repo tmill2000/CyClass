@@ -52,8 +52,20 @@ const handleRequest = async (webSocket, req) => {
             messageObj.payload.message_id = insertId;
             messageObj.payload.timestamp = new Date().toISOString();
         } else if (messageObj.type === "poll") {
-            const { question_text: questionText, poll_choices: pollChoices } = messageObj.payload;
-            const pollInfo = await pollService.addPoll(userId, lectureId, questionText, pollChoices);
+            const {
+                question_text: questionText,
+                poll_choices: pollChoices,
+                poll_type: pollType,
+                close_date: closeDate
+            } = messageObj.payload;
+            const pollInfo = await pollService.addPoll(
+                userId,
+                lectureId,
+                questionText,
+                pollChoices,
+                pollType,
+                closeDate
+            );
             messageObj.payload.pollInfo = pollInfo;
             messageObj.payload.timestamp = new Date().toISOString();
             messageObj.payload.poll_choices = messageObj.payload.poll_choices.map(choice => ({

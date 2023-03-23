@@ -6,10 +6,11 @@ const { runQuery } = require("../../../utils/db_connection");
  * @param {number} lectureId
  * @param {string} questionText
  * @param {PollChoice[]} pollChoices []
+ * @param {string} pollType
  * @param {?string} closeDate
  * @returns
  */
-const addPoll = async (senderId, lectureId, questionText, pollChoices, closeDate) => {
+const addPoll = async (senderId, lectureId, questionText, pollChoices, pollType, closeDate) => {
     try {
         let query = `INSERT INTO polls 
                     (
@@ -17,15 +18,17 @@ const addPoll = async (senderId, lectureId, questionText, pollChoices, closeDate
                         lecture_id,
                         timestamp,
                         question_text,
-                        close_date
+                        close_date,
+                        poll_type
                     ) VALUES (
                         ?,
                         ?,
                         NOW(),
                         ?,
+                        ?,
                         ?
                     );`;
-        const resp = await runQuery(query, [senderId, lectureId, questionText, closeDate]);
+        const resp = await runQuery(query, [senderId, lectureId, questionText, closeDate, pollType]);
         const choiceIds = [];
         for (const pollChoice of pollChoices) {
             const { choice_text: choiceText, is_correct_choice: isCorrectChoice } = pollChoice;
@@ -68,7 +71,7 @@ const getPollMetrics = async pollId => {
  * @param {*} pollId
  */
 const closePoll = async pollId => {
-    const query = "UPDATE polls SET is_open = ?, close_date = NOW() WHERE poll_id = ?;";
+    const query = "UPDATE polls SET close_date = NOW() WHERE poll_id = ?;";
     await runQuery(query, [false, pollId]);
 };
 

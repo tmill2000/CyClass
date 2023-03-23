@@ -21,7 +21,7 @@ const { writeLog } = require("../../../utils/logger");
  * @property {?string} close_date
  * @property {?boolean} closed
  * @property {?PollChoice[]} choices
- * 
+ *
  */
 
 /**
@@ -93,7 +93,7 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
             polls.timestamp,
             polls.question_text,
             polls.close_date,
-            polls.is_open,
+            polls.poll_type,
             poll_choices.poll_choice_id,
             poll_choices.choice_text,
             poll_choices.is_correct_choice
@@ -116,7 +116,7 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
                 timestamp: new Date(value[0].timestamp).toISOString(),
                 question: value[0].question_text,
                 close_date: value[0].close_date ? new Date(value[0].close_date).toISOString() : null,
-                closed: !value[0].is_open,
+                poll_type: value[0].poll_type,
                 choices: value.map(item => ({
                     poll_choice_id: item.poll_choice_id,
                     text: item.choice_text,
@@ -162,11 +162,11 @@ const addMessage = async (senderId, body, isAnonymous, lectureId, parentID) => {
 };
 
 /**
- * 
- * @param {string} mediaID 
- * @param {number} courseID 
- * @param {number} userID 
- * @param {number} msgID 
+ *
+ * @param {string} mediaID
+ * @param {number} courseID
+ * @param {number} userID
+ * @param {number} msgID
  * @returns {Promise<string>}
  */
 const addMediaMetadata = async (mediaID, courseID, userID, msgID) => {
@@ -182,8 +182,8 @@ const addMediaMetadata = async (mediaID, courseID, userID, msgID) => {
 };
 
 /**
- * 
- * @param {number} messageId 
+ *
+ * @param {number} messageId
  */
 const deleteMessage = async messageId => {
     try {
