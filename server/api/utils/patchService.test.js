@@ -8,7 +8,11 @@ describe("patchService", () => {
     describe("genericPatch", () => {
 
         it("Return with 200", async () => {
-            jest.spyOn(db, "runQuery").mockRejectedValueOnce()
+            jest.spyOn(db, "runQuery").mockRejectedValueOnce([
+                {
+                    
+                }
+            ])
             const res = await genericPatch()
             expect(res).toBe()
         });
