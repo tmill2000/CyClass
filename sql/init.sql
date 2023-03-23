@@ -50,6 +50,10 @@ CREATE TABLE polls (
     lecture_id int NOT NULL,
     timestamp datetime NOT NULL,
     question_text varchar(512),
+<<<<<<< HEAD
+=======
+    is_open boolean,
+>>>>>>> ab104d1021c770ed727536755f02d82307a3229f
     close_date datetime,
     FOREIGN KEY (sender_id) REFERENCES users(user_id),
 	FOREIGN KEY (lecture_id) REFERENCES lectures(lecture_id)
@@ -168,6 +172,12 @@ SET GLOBAL time_zone = 'UTC';
 -- (select lecture_id from lectures where title='Lib 160 Lecture 1'),
 -- CURRENT_TIMESTAMP, 'Hello everyone' );
 
+
+
+-- INSERT INTO polls (poll_id, sender_id, lecture_id, timestamp, question_text)
+-- VALUES ('1', (select user_id from users where netid='maruf'),
+-- (select lecture_id from lectures where title='Lib 160 Lecture 1'),
+-- CURRENT_TIMESTAMP, 'What is 1+1?');
 
 
 -- INSERT INTO polls (poll_id, sender_id, lecture_id, timestamp, question_text)

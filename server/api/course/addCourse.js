@@ -3,9 +3,9 @@ const { v4 } = require("uuid");
 
 /**
  *
- * @param {*} req
- * @param {*} res
- * @returns
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const addCourse = async (req, res) => {
     try {

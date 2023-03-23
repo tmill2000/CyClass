@@ -1,14 +1,10 @@
 const messageService = require("./services/messageService");
 
 /**
- * Function to get a course
- * @param {*} req
- *  req.query = {
- *    message_id: int
- *    session_id: string
- *  }
- * @param {*} res
- * @returns course data if successful, otherwise a 500 or 400 error
+ *
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const getMessage = async (req, res) => {
     try {

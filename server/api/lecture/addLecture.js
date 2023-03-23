@@ -2,14 +2,10 @@ const lectureService = require("./services/lectureService");
 const { hasCoursePermissions } = require("../../utils/permissions");
 
 /**
- * @param {*} req
- * req.body = {
- *    course_id: int,
- *    title: string
- *    session_id: int
- * }
- * @param {*} res
- * @returns lecture_id of created lecture
+ *
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const addLecture = async (req, res) => {
     try {

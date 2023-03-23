@@ -26,6 +26,7 @@ describe("addRole", () => {
             const req = getMockReq({ body: { course_id: 1, user_id: 1, role: "PROFESSOR" } });
             req.session = professorSession;
             jest.spyOn(roleService, "addRole").mockResolvedValueOnce(1);
+            jest.spyOn(courseService, "getCourse").mockResolvedValueOnce([{ course_name: "test" }]);
             await addRole(req, res);
             expect(res.status).toBeCalledWith(201);
         });

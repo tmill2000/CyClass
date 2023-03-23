@@ -150,6 +150,34 @@ paths:
           description: Incorrect Username or Password
         '500':
           description: Internal Server Error
+  /user/courses:
+    get:
+      tags:
+        - user
+      summary: gets courses for a given user
+      operationId: getCoursesByUser
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object  
+                  properties:
+                    course_id: 
+                      type: integer
+                    course_name:
+                      type: string    
+        '500':
+          description: Internal Server Error
   /user/logout:
     post:
       tags:
@@ -981,6 +1009,38 @@ paths:
                     example: 1
         '400':
           description: Invalid Body
+        '401':
+          description: Unauthorized
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - message
+      summary: deletes message from system
+      parameters:
+        - in: query
+          required: true
+          name: message_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: course_id
+          schema:
+            type: integer
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+          
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Invalid Request
         '401':
           description: Unauthorized
         '403':

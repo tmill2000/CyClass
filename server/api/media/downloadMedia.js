@@ -1,5 +1,11 @@
 const mediaService = require("./services/mediaService");
 
+/**
+ *
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
+ */
 const downloadMedia = async (req, res) => {
     //TODO: Add open-api spec
     try {

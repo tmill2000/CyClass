@@ -1,4 +1,5 @@
 const { containsPortillos } = require("../utils/removePortillos");
+const { writeLog } = require("../utils/logger");
 const addMessage = require("./addMessage");
 const pollService = require("../api/poll/services/pollService");
 const roleService = require("../api/role/services/roleService");
@@ -38,7 +39,7 @@ const handleRequest = async (webSocket, req) => {
         set.add(userId);
         lectures.set(lectureId, set);
     }
-    console.log("connected user: " + userId + " to lecture: " + lectureId);
+    writeLog("general", "connected user: " + userId + " to lecture: " + lectureId);
 
     webSocket.on("message", async message => {
         const messageObj = JSON.parse(message);
@@ -107,9 +108,9 @@ const handleRequest = async (webSocket, req) => {
         }
         if (lectures.get(lectureId).size === 0) {
             lectures.delete(lectureId);
-            console.log("deleted lecture: " + lectureId);
+            writeLog("general", "deleted lecture socket: " + lectureId);
         }
-        console.log("disconnected user: " + userId);
+        writeLog("general", "disconnected user: " + userId);
     });
 };
 

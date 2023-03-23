@@ -1,5 +1,11 @@
 const patch = require("../utils/patchService");
 
+/**
+ *
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
+ */
 const editMessage = async (req, res) => {
     try {
         const { message_id: messageId } = req.body;
