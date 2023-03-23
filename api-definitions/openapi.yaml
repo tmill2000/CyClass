@@ -830,8 +830,8 @@ paths:
                     type: integer
                   close_date:
                     type: string
-                  closed:
-                    type: boolean
+                  poll_type:
+                    type: string
                   sender_id:
                     type: integer
                   timestamp:
@@ -1221,8 +1221,8 @@ components:
         close_date:
           type: string
           nullable: true
-        closed:
-          type: boolean
+        poll_type:
+          type: string
         choices:
           type: array
           items:
