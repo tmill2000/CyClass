@@ -2,13 +2,14 @@ const { runQuery } = require("../../../utils/db_connection");
 
 /**
  *
- * @param {*} senderId
- * @param {*} lectureId
- * @param {*} questionText
- * @param {*} pollChoices []
+ * @param {number} senderId
+ * @param {number} lectureId
+ * @param {string} questionText
+ * @param {PollChoice[]} pollChoices []
+ * @param {?string} closeDate
  * @returns
  */
-const addPoll = async (senderId, lectureId, questionText, pollChoices) => {
+const addPoll = async (senderId, lectureId, questionText, pollChoices, closeDate) => {
     try {
         let query = `INSERT INTO polls 
                     (
@@ -16,15 +17,15 @@ const addPoll = async (senderId, lectureId, questionText, pollChoices) => {
                         lecture_id,
                         timestamp,
                         question_text,
-                        is_open
+                        close_date
                     ) VALUES (
                         ?,
                         ?,
                         NOW(),
                         ?,
-                        true
+                        ?
                     );`;
-        const resp = await runQuery(query, [senderId, lectureId, questionText]);
+        const resp = await runQuery(query, [senderId, lectureId, questionText, closeDate]);
         const choiceIds = [];
         for (const pollChoice of pollChoices) {
             const { choice_text: choiceText, is_correct_choice: isCorrectChoice } = pollChoice;

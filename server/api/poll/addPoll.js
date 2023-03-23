@@ -11,7 +11,8 @@ const addPoll = async (req, res) => {
             lecture_id: lectureId,
             question_text: questionText,
             poll_choices: pollChoices,
-            course_id: courseId
+            course_id: courseId,
+            close_date: closeDate
         } = req.body;
         const senderId = req.session.userid;
         if (!senderId || !lectureId || !questionText || !pollChoices || !courseId) {
@@ -20,7 +21,7 @@ const addPoll = async (req, res) => {
         if (!hasCoursePermissions(courseId, req.session)) {
             return res.status(401).send({ msg: "Unauthorized: Cannot create poll" });
         }
-        const resp = await pollService.addPoll(senderId, lectureId, questionText, pollChoices);
+        const resp = await pollService.addPoll(senderId, lectureId, questionText, pollChoices, closeDate);
         return res.status(201).send(resp);
     } catch (e) {
         console.error(e);
