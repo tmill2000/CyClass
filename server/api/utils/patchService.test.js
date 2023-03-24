@@ -8,24 +8,11 @@ describe("patchService", () => {
     describe("genericPatch", () => {
 
         it("should return response", async () => {
-            jest.spyOn(db, "runQuery").mockResolvedValueOnce([
-                {
-                    message_id: 1,
-                    parent_id: null,
-                    sender_id: 1,
-                    lecture_id: 1,
-                    timestamp: "2023-3-28 17:41:28",
-                    body: "body"
-                }
-            ]);
-            const res = await genericPatch(null, null, null, 'new body');
+            jest.spyOn(db, "runQuery").mockResolvedValueOnce([]);
+            // const res = await genericPatch(tableName, newValsObj, whereClauseCol, whereClauseVal);
+            const res = await genericPatch(messages, messages.body, body, 'new body');
             expect(res).toEqual([
                 {
-                    message_id: 1,
-                    parent_id: null,
-                    sender_id: 1,
-                    lecture_id: 1,
-                    timestamp: "2023-3-28 17:41:28",
                     body: "new body"
                 }
             ]);
