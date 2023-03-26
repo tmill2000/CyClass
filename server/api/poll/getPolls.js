@@ -2,10 +2,9 @@ const pollService = require("./services/pollService");
 const { isInCourse } = require("../../utils/permissions");
 
 /**
- *
- * @param {*} req
- * @param {*} res
- * @returns
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const getPollById = async (req, res) => {
     try {

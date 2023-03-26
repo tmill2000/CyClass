@@ -1,10 +1,17 @@
 const { runQuery } = require("../../../utils/db_connection");
 
 /**
- * Takes in a user id and returns that users email address
- *
- * @param {*} userId
- * @returns object containing the user_id and email
+ * @typedef {Object} User
+ * @param {number} user_id
+ * @param {string} netid
+ * @param {string} first_name
+ * @param {string} last_name
+ * @param {string} password
+ */
+
+/**
+ * @param {number} userId
+ * @returns {Promise<User[]>}
  */
 const getUserInfoByUserId = async userId => {
     try {
@@ -16,11 +23,10 @@ const getUserInfoByUserId = async userId => {
         throw e;
     }
 };
+
 /**
- *
- * @param {*} netId
- * @param {*} password
- * @returns user login info on server
+ * @param {number} userId
+ * @returns {Promise<User[]>}
  */
 const loginInfo = async (netId, password) => {
     try {
@@ -34,12 +40,11 @@ const loginInfo = async (netId, password) => {
 };
 
 /**
- * Function to add a user
- * @param {*} netid
- * @param {*} password
- * @param {*} firstName
- * @param {*} lastName
- * @returns user_id of the user if successful, otherwise a 500 error
+ * @param {number} netid
+ * @param {string} password
+ * @param {string} firstName
+ * @param {string} lastName
+ * @returns {Promise<number>}
  */
 const addUser = async (netid, password, firstName, lastName) => {
     try {

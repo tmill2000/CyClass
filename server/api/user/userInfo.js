@@ -4,11 +4,9 @@ const { writeLog } = require("../../utils/logger");
 const crypto = require("crypto");
 
 /**
- * Takes in a user id and returns that users email address
- *
- * @param {*} req express request object
- * @param {*} res express response object
- * @returns object containing the user_id and email
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const getUserInfoByUserId = async (req, res) => {
     try {
@@ -33,13 +31,11 @@ const getUserInfoByUserId = async (req, res) => {
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };
+
 /**
- * takes in a username and password and returns the resulting user_id and created session for
- * the given login credentials
- *
- * @param {*} req express request object
- * @param {*} res express response object
- * @returns user_id and created session for future requests
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const login = async (req, res) => {
     try {
@@ -66,11 +62,11 @@ const login = async (req, res) => {
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };
+
 /**
- *
- * @param {*} req express request object
- * @param {*} res express response object
- * @returns Log out message
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const logout = async (req, res) => {
     req.session.destroy();
@@ -78,20 +74,19 @@ const logout = async (req, res) => {
 };
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
- * @returns 
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const getCoursesByUser = async (req, res) => {
     try {
         const roles = await roleService.getCourseRolesByUser(req.session.userid);
-        const courses = new Set(roles.map((role) => ({ course_name: role.course_name, course_id: role.course_id })))
-        return res.status(200).send(courses)
+        const courses = new Set(roles.map(role => ({ course_name: role.course_name, course_id: role.course_id })));
+        return res.status(200).send(courses);
     } catch (e) {
-        writeLog("error", e.message)
-        return res.status(500).send({ msg: 'Internal Server Error' })
+        writeLog("error", e.message);
+        return res.status(500).send({ msg: "Internal Server Error" });
     }
-}
+};
 
 module.exports = { getUserInfoByUserId, login, logout, getCoursesByUser };

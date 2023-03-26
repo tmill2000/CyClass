@@ -1,14 +1,9 @@
 const userService = require("./services/userService");
 
 /**
- * Function to add a user
- * @param {*} req
- *  req.body = {
- *    netid: string,
- *    password: string
- *  }
- * @param {*} res
- * @returns user_id of the user if successful, otherwise a 500 error
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const addUser = async (req, res) => {
     try {

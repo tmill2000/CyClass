@@ -1,10 +1,18 @@
 const { runQuery } = require("../../../utils/db_connection");
 
 /**
- * @param {*} choiceId
- * @param {*} userID
- * @param {*} pollId
- * @returns pollResponseID of created poll response
+ * @typedef {Object} PollResponse
+ * @param {number} poll_response_id
+ * @param {number} user_id
+ * @param {number} response_id
+ * @param {number} poll_id
+ */
+
+/**
+ * @param {number} choiceId
+ * @param {number} userID
+ * @param {number} pollId
+ * @returns {Promise<number>}
  */
 const addPollResponse = async (choiceId, userID, pollId) => {
     try {
@@ -37,8 +45,8 @@ const addPollResponse = async (choiceId, userID, pollId) => {
 
 /**
  * Function to get a course
- * @param {*} pollResponseId
- * @returns poll_response data
+ * @param {number} pollResponseId
+ * @returns {Promise<PollResponse>}
  */
 const getPollResponse = async pollResponseId => {
     try {

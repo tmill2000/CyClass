@@ -2,10 +2,9 @@ const pollService = require("./services/pollService");
 const { hasCoursePermissions } = require("../../utils/permissions");
 
 /**
- *
- * @param {*} req
- * @param {*} res
- * @returns
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const closePoll = async (req, res) => {
     try {

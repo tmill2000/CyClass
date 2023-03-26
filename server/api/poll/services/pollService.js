@@ -1,14 +1,38 @@
 const { runQuery } = require("../../../utils/db_connection");
 
 /**
- *
+ * @typedef {Object} Poll
+ * @property {?number} poll_id
+ * @property {?string} timestamp
+ * @property {?string} question
+ * @property {?string} close_date
+ * @property {?boolean} closed
+ * @property {?PollChoice[]} choices
+ */
+
+/**
+ * @typedef {Object} PollChoice
+ * @param {number} poll_choice_id
+ * @param {number} poll_id
+ * @param {string} choice_text
+ * @param {boolean} is_correct_choice
+ */
+
+/**
+ * @typedef {Object} PollMetric
+ * @param {nunber} poll_choice_id
+ * @param {number} user_id
+ * @param {boolean} is_correct_choice
+ */
+
+/**
  * @param {number} senderId
  * @param {number} lectureId
  * @param {string} questionText
- * @param {PollChoice[]} pollChoices []
+ * @param {PollChoice[]} pollChoices
  * @param {string} pollType
  * @param {?string} closeDate
- * @returns
+ * @returns {Promise<number>}
  */
 const addPoll = async (senderId, lectureId, questionText, pollChoices, pollType, closeDate) => {
     try {
@@ -47,8 +71,8 @@ const addPoll = async (senderId, lectureId, questionText, pollChoices, pollType,
 
 /**
  *
- * @param {*} pollId
- * @returns list of poll responses
+ * @param {number} pollId
+ * @returns {Promise<PollMetric[]>}
  */
 const getPollMetrics = async pollId => {
     const query = `
@@ -68,13 +92,17 @@ const getPollMetrics = async pollId => {
 
 /**
  *
- * @param {*} pollId
+ * @param {number} pollId
  */
 const closePoll = async pollId => {
     const query = "UPDATE polls SET close_date = NOW() WHERE poll_id = ?;";
     await runQuery(query, [false, pollId]);
 };
 
+/**
+ * @param {number} pollId
+ * @returns {Promise<Poll>}
+ */
 const getPollById = async pollId => {
     const query =
         "SELECT * from polls INNER JOIN poll_choices ON polls.poll_id = poll_choices.poll_id where polls.poll_id = ?";

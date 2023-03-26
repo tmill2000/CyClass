@@ -3,10 +3,9 @@ const courseService = require("../course/services/courseService");
 const { hasCoursePermissions } = require("../../utils/permissions");
 
 /**
- *
- * @param {*} req
- * @param {*} res
- * @returns
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const addRole = async (req, res) => {
     try {
@@ -36,10 +35,9 @@ const addRole = async (req, res) => {
     }
 };
 /**
- *
- * @param {*} req
- * @param {*} res
- * @returns
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const addRoleByJoinCode = async (req, res) => {
     try {

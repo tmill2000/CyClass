@@ -1,5 +1,10 @@
 const patch = require("../utils/patchService");
 
+/**
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
+ */
 const editUser = async (req, res) => {
     try {
         const { user_id: userId } = req.body;

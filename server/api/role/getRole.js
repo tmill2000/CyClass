@@ -1,14 +1,9 @@
 const roleService = require("./services/roleService");
 
 /**
- * Function to get a course
- * @param {*} req
- *  req.query = {
- *    role_id: int
- *    session_id: string
- *  }
- * @param {*} res
- * @returns role data if successful, otherwise a 500 or 400 error
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const getRole = async (req, res) => {
     try {

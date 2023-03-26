@@ -1,11 +1,18 @@
 const { runQuery } = require("../../../utils/db_connection");
 
 /**
- *
- * @param {*} courseId
- * @param {*} userId
- * @param {*} role
- * @returns id of inserted item
+ * @typedef {Object} Role
+ * @param {number} role_id
+ * @param {number} course_id
+ * @param {number} user_id
+ * @param {"PROFESSOR" | "STUDENT" | "TA"} role
+ */
+
+/**
+ * @param {number} courseId
+ * @param {number} userId
+ * @param {"PROFESSOR" | "STUDENT" | "TA"} role
+ * @returns {Promise<number>}
  */
 const addRole = async (courseId, userID, role) => {
     try {
@@ -19,10 +26,8 @@ const addRole = async (courseId, userID, role) => {
 };
 
 /**
- * Function to get a course
- * @param {*} roleId
- * @param {*} res
- * @returns role data if successful, otherwise a 500 or 400 error
+ * @param {number} roleId
+ * @returns {Promise<Role[]>}
  */
 const getRole = async roleId => {
     try {
@@ -36,10 +41,8 @@ const getRole = async roleId => {
 };
 
 /**
- * Function to get a users roles in their courses
- * @param {*} userid
- * @param {*} res
- * @returns role data if successful, otherwise a 500 or 400 error
+ * @param {number} userId
+ * @returns {Promise<Role[]>}
  */
 const getCourseRolesByUser = async userId => {
     try {
