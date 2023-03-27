@@ -78,6 +78,24 @@
 	margin-right: 0px;
 }
 
+.lfeed .attachment-list {
+	margin-top: 10px;
+	display: flex;
+}
+
+.lfeed .attachment {
+	padding: 6px;
+	background-color: #FFF;
+	border: 2px solid gray;
+	border-radius: 6px;
+	filter: drop-shadow(0, 2px, 4px, #333);
+	cursor: pointer;
+}
+.lfeed .attachment > span {
+	color: #0077ff;
+	font-weight: bold;
+}
+
 /*****************************************************************************/
 /* POLL */
 

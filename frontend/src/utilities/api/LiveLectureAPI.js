@@ -131,7 +131,12 @@ class LiveLectureAPI {
 			case "message":
 
 				// Make message event
-				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, msg.payload.body, msg.payload.sender_id, msg.payload.is_anonymous, new Date(msg.payload.timestamp));
+				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, {
+					body: msg.payload.body,
+					userID: msg.payload.sender_id,
+					isAnonymous: msg.payload.is_anonymous,
+					time: new Date(msg.payload.timestamp)
+				});
 				break;
 
 			case "poll":
@@ -155,13 +160,20 @@ class LiveLectureAPI {
 				}
 
 				// Make poll event
-				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, msg.payload.question_text, null, false, new Date(msg.payload.timestamp), choices);
+				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, {
+					propmt: msg.payload.question_text,
+					closed: false,
+					time: new Date(msg.payload.timestamp),
+					choices: choices
+				});
 				break;
 
 			case "poll_close":
 
 				// Make poll updated event
-				lectureEvent = new LiveLecturePollUpdatedEvent(this.lectureID, msg.payload.poll_id, true);
+				lectureEvent = new LiveLecturePollUpdatedEvent(this.lectureID, msg.payload.poll_id, {
+					closed: true
+				});
 				break;
 
 			}
@@ -220,7 +232,12 @@ class LiveLectureAPI {
 					if (msg.message_id != null) {
 
 						// Dispatch message
-						const event = new LiveLectureMessageEvent(this.lectureID, msg.message_id, msg.body, msg.sender_id, msg.is_anonymous, new Date(msg.timestamp));
+						const event = new LiveLectureMessageEvent(this.lectureID, msg.message_id, {
+							body: msg.body,
+							userID: msg.sender_id,
+							isAnonymous: msg.is_anonymous,
+							time: new Date(msg.timestamp)
+						});
 						this.eventTarget.dispatchEvent(event);
 
 					} else if (msg.poll_id != null) {
@@ -233,7 +250,12 @@ class LiveLectureAPI {
 						}));
 
 						// Dispatch poll
-						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, msg.question, null, msg.closed, new Date(msg.timestamp), choices);
+						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, {
+							propmt: msg.question,
+							closed: msg.closed,
+							time: new Date(msg.timestamp),
+							choices: choices
+						});
 						this.eventTarget.dispatchEvent(event);
 
 					}
@@ -322,6 +344,27 @@ class LiveLectureAPI {
 			}));
 
 		}
+
+	}
+
+	/**
+	 * Sends a request to download the file attached to a message. Returns a Promise that will resolve if successful.
+	 * @param {string} attachmentID 
+	 * @returns {Promise<void>}
+	 */
+	downloadAttachment(attachmentID) {
+
+		// Make request
+		return axios.get("/api/download-media", {
+			params: {
+				course_id: this.courseID,
+				media_id: mediaID
+			}
+		})
+			.catch((err) => {
+				console.error("Failed to download attachment:", err);
+				throw err;
+			});
 
 	}
 
@@ -635,14 +678,14 @@ class LiveLectureCloseEvent extends Event {
  */
 class LiveLectureMessageEvent extends Event {
 
-	constructor(lectureID, messageID, body, userID, isAnonymous, time) {
+	constructor(lectureID, messageID, data) {
 		super("message");
 		this.lectureID = lectureID;
 		this.messageID = messageID;
-		this.body = body;
-		this.userID = userID;
-		this.isAnonymous = isAnonymous;
-		this.time = time;
+		this.body = data.body;
+		this.userID = data.userID;
+		this.isAnonymous = data.isAnonymous;
+		this.time = data.time;
 	}
 
 }
@@ -659,15 +702,15 @@ class LiveLectureMessageEvent extends Event {
  */
 class LiveLecturePollEvent extends Event {
 
-	constructor(lectureID, pollID, prompt, userID, closed, time, choices) {
+	constructor(lectureID, pollID, data) {
 		super("poll");
 		this.lectureID = lectureID;
 		this.pollID = pollID;
-		this.prompt = prompt;
-		this.userID = userID;
-		this.closed = closed;
-		this.time = time;
-		this.choices = choices;
+		this.prompt = data.prompt;
+		this.userID = data.userID;
+		this.closed = data.closed;
+		this.time = data.time;
+		this.choices = data.choices;
 	}
 
 }
@@ -680,11 +723,11 @@ class LiveLecturePollEvent extends Event {
  */
 class LiveLecturePollUpdatedEvent extends Event {
 
-	constructor(lectureID, pollID, closed) {
+	constructor(lectureID, pollID, data) {
 		super("pollUpdated");
 		this.lectureID = lectureID;
 		this.pollID = pollID;
-		this.closed = closed;
+		this.closed = data.closed;
 	}
 
 }
