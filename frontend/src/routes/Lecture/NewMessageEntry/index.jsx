@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/30/2022
- * UPDATED:	11/30/2022
+ * UPDATED:	03/27/2023
  * 
  * PROPS:
  * - api: LiveLectureAPI
@@ -11,6 +11,7 @@ import React, { createRef } from "react";
 
 import Button from "../../../components/Button/Button";
 
+import attachmentImg from "./attachment.png";
 import "./styles.css";
 
 function NewMessageEntry(props) {
@@ -33,7 +34,8 @@ function NewMessageEntry(props) {
 			<div className="lme-line" />
 			<textarea ref={textBoxRef} className="lme-textbox" />
 			<div className="lme-buttonarea">
-				<Button buttonStyle="btn--post--solid" buttonSize="btn--medium" onClick={sendMsg}>SEND</Button>
+				
+				<button className="lme-button send-button" onClick={sendMsg}>SEND</button>
 			</div>
 		</div>
 	);
