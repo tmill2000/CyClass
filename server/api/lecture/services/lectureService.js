@@ -50,7 +50,7 @@ const getLecturesByCourseId = async courseId => {
             lectures 
         inner join courses on 
             courses.course_id = lectures.course_id 
-        inner join users on 
+        left join users on 
             users.user_id = courses.owner_id 
         where 
             lectures.course_id = ?;`;
