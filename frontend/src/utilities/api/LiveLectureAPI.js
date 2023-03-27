@@ -253,26 +253,75 @@ class LiveLectureAPI {
 	 * established.
 	 * @param {String} body 
 	 * @param {Boolean} anonymous 
+	 * @param {File?} attachment 
 	 */
-	sendMessage(body, anonymous) {
+	sendMessage(body, anonymous, attachment) {
 
 		// Verify connection
 		if (this.websocket == null) {
 			throw new Error("No WebSocket connection was established");
 		}
 
-		// Send message
-		this.websocket.send(JSON.stringify({
-			type: "message",
-			payload: {
-				sender_id: this.userID,
-				body: body,
-				is_anonymous: anonymous,
-				course_id: this.courseID,
-				lecture_id: this.lectureID,
-				parent_id: null
-			}
-		}));
+		// Check if including an attachment (temp fix since WebSocket doesn't support)
+		if (attachment != null) {
+
+			// Read in file
+			const reader = new FileReader();
+			reader.onload = (e) => {
+
+				// Send using API
+				axios.post("/api/message", {
+					body: body,
+					is_anonymous: anonymous,
+					course_id: this.courseID,
+					lecture_id: this.lectureID,
+					parent_id: null,
+					has_media: true
+				})
+					.then((res) => {
+	
+						// Then use media ID and loaded file to upload
+						axios.post("/api/upload-media", reader.result, {
+							params: {
+								media_id: res.data.mediaId,
+								course_id: this.courseID
+							},
+							headers: {
+								"Content-Type": attachment.type
+							}
+						})
+							.catch((err) => {
+								console.error("Failed to upload attachment:", err);
+							});
+	
+					})
+					.catch((err) => {
+						console.error("Failed to send message:", err);
+						throw err;
+					});
+
+			};
+			reader.onerror = (e) => {
+				console.error("Failed to read file: " + attachment.name);
+			};
+			reader.readAsBinaryString(attachment);
+
+		} else {
+
+			// Send message through WebSocket
+			this.websocket.send(JSON.stringify({
+				type: "message",
+				payload: {
+					sender_id: this.userID,
+					body: body,
+					is_anonymous: anonymous,
+					course_id: this.courseID,
+					lecture_id: this.lectureID,
+					parent_id: null
+				}
+			}));
+
+		}
 
 	}
 
@@ -339,7 +388,7 @@ class LiveLectureAPI {
 			.catch((err) => {
 				console.error("Failed to close poll:", err);
 				throw err;
-			})
+			});
 
 	}
 

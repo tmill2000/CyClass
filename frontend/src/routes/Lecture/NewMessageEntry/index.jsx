@@ -7,7 +7,7 @@
  * - api: LiveLectureAPI
  */
 
-import React, { createRef } from "react";
+import React, { createRef, useState } from "react";
 
 import Button from "../../../components/Button/Button";
 
@@ -16,15 +16,24 @@ import "./styles.css";
 
 function NewMessageEntry(props) {
 
-	// Refs
+	// Refs and state
 	const textBoxRef = createRef();
+	const [selectedFile, setSelectedFile] = useState(null);
 
-	// Click handler
+	// Click handlers
+	const attachFile = (e) => {
+		if (selectedFile == null) {
+			document.getElementById("file-select").click();
+		} else {
+			setSelectedFile(null);
+		}
+	}
 	const sendMsg = (e) => {
 		const msg = textBoxRef.current.value.trim();
 		if (msg != "") {
-			props.api.sendMessage(msg, false);
+			props.api.sendMessage(msg, false, selectedFile);
 			textBoxRef.current.value = "";
+			setSelectedFile(null);
 		}
 	};
 
@@ -34,8 +43,10 @@ function NewMessageEntry(props) {
 			<div className="lme-line" />
 			<textarea ref={textBoxRef} className="lme-textbox" />
 			<div className="lme-buttonarea">
-				
-				<button className="lme-button send-button" onClick={sendMsg}>SEND</button>
+				<input id="file-select" type="file" style={{display: "none"}} onChange={(e) => setSelectedFile(e.target.files != null ? e.target.files[0] : null)} />
+				<span className="lme-selected-file" style={{display: selectedFile != null ? "block" : "none"}}><strong>Attached:</strong> {selectedFile?.name}</span>
+				<button id="attach-button" className={"lme-circlebutton" + (selectedFile != null ? " attached" : "")} onClick={attachFile}><img src={attachmentImg} /></button>
+				<button id="send-button" className="lme-button" onClick={sendMsg}>SEND</button>
 			</div>
 		</div>
 	);
