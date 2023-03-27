@@ -38,7 +38,8 @@ const { writeLog } = require("../../../utils/logger");
  */
 const getMessage = async messageId => {
     try {
-        const query = "SELECT * from messages WHERE message_id = ?;";
+        const query =
+            "SELECT messages.*, media_id, file_type from messages left join media_metadata on messages.message_id = media_metadata.message_id WHERE messages.message_id = ?;";
         const resp = await runQuery(query, [messageId]);
         return resp;
     } catch (e) {
@@ -64,12 +65,16 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
                 messages.body,
                 messages.is_anonymous,
                 messages.parent_id,
-                messages.message_id
+                messages.message_id,
+                media_id,
+                file_type
         FROM messages
             inner join roles
             on messages.sender_id = roles.user_id
             inner join users 
             on messages.sender_id = users.user_id
+            left join media_metadata
+            on messages.message_id = media_metadata.message_id
         WHERE
             messages.lecture_id = ?
     `;
@@ -84,7 +89,9 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
             body: value.body,
             is_anonymous: !!value.is_anonymous,
             parent_id: value.parent_id,
-            message_id: value.message_id
+            message_id: value.message_id,
+            media_id: value.media_id,
+            file_type: value.file_type
         }));
         query = `
         SELECT

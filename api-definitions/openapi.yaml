@@ -964,6 +964,12 @@ paths:
                   body: 
                     type: string
                     example: 'Hello everyone!'
+                  media_id:
+                    type: string
+                    example: string | null
+                  file_type:
+                    type: string
+                    example: string | null
         '400':
           description: Invalid Parameters
         '403':
@@ -1206,6 +1212,12 @@ components:
         message_id:
           type: integer
           example: 2
+        media_id:
+          type: string
+          example: string | null
+        file_type:
+          type: string
+          example: string | null
     Poll:
       type: object
       properties:
