@@ -6,6 +6,21 @@
 
 import axios from "axios";
 
+const ATTACHMENT_TYPES = {
+	"image/png": {
+		extension: ".png"
+	},
+	"image/jpeg": {
+		extension: ".jpeg"
+	},
+	"application/pdf": {
+		extension: ".pdf"
+	},
+	"text/plain": {
+		extension: ".txt"
+	}
+}
+
 /**
  * Interface for the API related to live lectures.
  */
@@ -236,7 +251,11 @@ class LiveLectureAPI {
 							body: msg.body,
 							userID: msg.sender_id,
 							isAnonymous: msg.is_anonymous,
-							time: new Date(msg.timestamp)
+							time: new Date(msg.timestamp),
+							attachments: msg.media_id != null ? [{
+								id: msg.media_id,
+								type: msg.file_type
+							}] : null
 						});
 						this.eventTarget.dispatchEvent(event);
 
@@ -267,6 +286,24 @@ class LiveLectureAPI {
 				console.error("Failed to fetch lecture history:", err);
 				throw err;
 			})
+
+	}
+
+	/**
+	 * Returns if the provided attachment is able to be uploaded and is acceptable, as well as a string reason if not
+	 * acceptable.
+	 * @param {File} attachment 
+	 * @returns {[boolean, string?]}
+	 */
+	isAttachmentAcceptable(attachment) {
+
+		// Valid type
+		if (ATTACHMENT_TYPES[attachment.type] == null) {
+			return [false, "Unsupported file type"]
+		}
+
+		// Passed, so return success
+		return [true, null]
 
 	}
 
@@ -326,7 +363,7 @@ class LiveLectureAPI {
 			reader.onerror = (e) => {
 				console.error("Failed to read file: " + attachment.name);
 			};
-			reader.readAsBinaryString(attachment);
+			reader.readAsArrayBuffer(attachment);
 
 		} else {
 
@@ -348,19 +385,36 @@ class LiveLectureAPI {
 	}
 
 	/**
-	 * Sends a request to download the file attached to a message. Returns a Promise that will resolve if successful.
+	 * Sends a request to retrieve the file attached to a message. Returns a Promise that will resolve to the loaded
+	 * File if successful.
 	 * @param {string} attachmentID 
-	 * @returns {Promise<void>}
+	 * @returns {Promise<File>}
 	 */
-	downloadAttachment(attachmentID) {
+	getAttachment(attachmentID) {
 
 		// Make request
 		return axios.get("/api/download-media", {
 			params: {
 				course_id: this.courseID,
-				media_id: mediaID
-			}
+				media_id: attachmentID
+			},
+			responseType: "arraybuffer"
 		})
+			.then((res) => {
+
+				// Map MIME type to extension
+				const mimeType = res.headers["content-type"];
+				const extension = ATTACHMENT_TYPES[mimeType]?.extension ?? "";
+				if (extension == "") {
+					console.error("Unknown attachment type:", mimeType);
+				}
+
+				// Make into File and return
+				return new File([res.data], "attachment" + extension, {
+					type: mimeType
+				});
+
+			})
 			.catch((err) => {
 				console.error("Failed to download attachment:", err);
 				throw err;
@@ -675,6 +729,7 @@ class LiveLectureCloseEvent extends Event {
  * - `userID` (number?)
  * - `isAnonymous` (boolean)
  * - `time` ({@link Date})
+ * - `attachments` (`{id: number, type: string}[]`)
  */
 class LiveLectureMessageEvent extends Event {
 
@@ -686,6 +741,7 @@ class LiveLectureMessageEvent extends Event {
 		this.userID = data.userID;
 		this.isAnonymous = data.isAnonymous;
 		this.time = data.time;
+		this.attachments = data.attachments ?? []
 	}
 
 }

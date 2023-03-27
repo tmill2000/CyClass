@@ -9,8 +9,6 @@
 
 import React, { createRef, useState } from "react";
 
-import Button from "../../../components/Button/Button";
-
 import attachmentImg from "./attachment.png";
 import "./styles.css";
 
@@ -19,12 +17,27 @@ function NewMessageEntry(props) {
 	// Refs and state
 	const textBoxRef = createRef();
 	const [selectedFile, setSelectedFile] = useState(null);
+	const [fileIssue, setFileIssue] = useState("");
 
-	// Click handlers
+	// Event handlers
+	const fileInputChanged = (e) => {
+		let file = e.target.files != null ? e.target.files[0] : null;
+		if (file != null) {
+			const [isOkay, reason] = props.api.isAttachmentAcceptable(file);
+			if (!isOkay) {
+				setFileIssue(reason);
+				setSelectedFile(null);
+				return;
+			}
+		}
+		setFileIssue("");
+		setSelectedFile(file);
+	}
 	const attachFile = (e) => {
 		if (selectedFile == null) {
 			document.getElementById("file-select").click();
 		} else {
+			setFileIssue("");
 			setSelectedFile(null);
 		}
 	}
@@ -33,6 +46,7 @@ function NewMessageEntry(props) {
 		if (msg != "") {
 			props.api.sendMessage(msg, false, selectedFile);
 			textBoxRef.current.value = "";
+			setFileIssue("");
 			setSelectedFile(null);
 		}
 	};
@@ -43,8 +57,12 @@ function NewMessageEntry(props) {
 			<div className="lme-line" />
 			<textarea ref={textBoxRef} className="lme-textbox" />
 			<div className="lme-buttonarea">
-				<input id="file-select" type="file" style={{display: "none"}} onChange={(e) => setSelectedFile(e.target.files != null ? e.target.files[0] : null)} />
-				<span className="lme-selected-file" style={{display: selectedFile != null ? "block" : "none"}}><strong>Attached:</strong> {selectedFile?.name}</span>
+				{fileIssue == "" ?
+				<span className="lme-selected-file" style={{display: selectedFile != null ? "block" : "none"}}>
+					<strong>Attached:</strong> {selectedFile?.name}
+				</span>
+				: <span className="lme-file-issue">{fileIssue}</span> }
+				<input id="file-select" type="file" style={{display: "none"}} onChange={fileInputChanged} />
 				<button id="attach-button" className={"lme-circlebutton" + (selectedFile != null ? " attached" : "")} onClick={attachFile}><img src={attachmentImg} /></button>
 				<button id="send-button" className="lme-button" onClick={sendMsg}>SEND</button>
 			</div>

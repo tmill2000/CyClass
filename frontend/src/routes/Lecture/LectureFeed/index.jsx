@@ -62,7 +62,7 @@ function LectureFeed(props) {
 					showUser = false;
 				}
 			}
-			listEntry.element = <Message key={`msg_${msg.id}`} user={showUser ? msg.user : null} me={msg.me} time={showTime ? msg.time : null} text={msg.text} attachment={msg.attachment} />;
+			listEntry.element = <Message key={`msg_${msg.id}`} api={props.api} user={showUser ? msg.user : null} me={msg.me} time={showTime ? msg.time : null} text={msg.text} attachments={msg.attachments} />;
 		}
 	}
 

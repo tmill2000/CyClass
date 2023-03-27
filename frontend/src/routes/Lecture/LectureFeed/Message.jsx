@@ -21,9 +21,9 @@ function Message(props) {
 				<TimeLabel time={props.time}/>
 				<div className="post-bubble">
 					<span className="selectable">{props.text}</span>
-					{props.attachment != null ?
+					{props.attachments != null && props.attachments.length > 0 ?
 					<div className="attachment-list">
-						<Attachment id={props.attachment.id} />
+						{props.attachments.map(a => <Attachment key={a.id} api={props.api} id={a.id} type={a.type} />)}
 					</div>
 					: null}
 				</div>

@@ -82,7 +82,13 @@
 }
 
 .lme-selected-file {
-	text-overflow: ellipsis;
 	margin-top: auto;
-	color: #444
+	color: #444;
+	text-overflow: ellipsis;
+}
+
+.lme-file-issue {
+	margin-top: auto;
+	color: #ce0000;
+	font-weight: bold;
 }
