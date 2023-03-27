@@ -16,7 +16,7 @@ describe("getMessage", () => {
     });
     it("should return 200 for success", async () => {
         const req = getMockReq({ query: { message_id: 1 } });
-        const spy = jest.spyOn(messageService, "getMessage").mockResolvedValueOnce();
+        const spy = jest.spyOn(messageService, "getMessage").mockResolvedValueOnce([]);
         await getMessage(req, res);
         expect(res.status).toBeCalledWith(200);
         expect(spy).toBeCalledTimes(1);

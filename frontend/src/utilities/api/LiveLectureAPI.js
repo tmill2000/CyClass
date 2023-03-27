@@ -6,6 +6,21 @@
 
 import axios from "axios";
 
+const ATTACHMENT_TYPES = {
+	"image/png": {
+		extension: ".png"
+	},
+	"image/jpeg": {
+		extension: ".jpeg"
+	},
+	"application/pdf": {
+		extension: ".pdf"
+	},
+	"text/plain": {
+		extension: ".txt"
+	}
+}
+
 /**
  * Interface for the API related to live lectures.
  */
@@ -131,7 +146,12 @@ class LiveLectureAPI {
 			case "message":
 
 				// Make message event
-				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, msg.payload.body, msg.payload.sender_id, msg.payload.is_anonymous, new Date(msg.payload.timestamp));
+				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, {
+					body: msg.payload.body,
+					userID: msg.payload.sender_id,
+					isAnonymous: msg.payload.is_anonymous,
+					time: new Date(msg.payload.timestamp)
+				});
 				break;
 
 			case "poll":
@@ -155,13 +175,20 @@ class LiveLectureAPI {
 				}
 
 				// Make poll event
-				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, msg.payload.question_text, null, false, new Date(msg.payload.timestamp), choices);
+				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, {
+					propmt: msg.payload.question_text,
+					closed: false,
+					time: new Date(msg.payload.timestamp),
+					choices: choices
+				});
 				break;
 
 			case "poll_close":
 
 				// Make poll updated event
-				lectureEvent = new LiveLecturePollUpdatedEvent(this.lectureID, msg.payload.poll_id, true);
+				lectureEvent = new LiveLecturePollUpdatedEvent(this.lectureID, msg.payload.poll_id, {
+					closed: true
+				});
 				break;
 
 			}
@@ -220,7 +247,16 @@ class LiveLectureAPI {
 					if (msg.message_id != null) {
 
 						// Dispatch message
-						const event = new LiveLectureMessageEvent(this.lectureID, msg.message_id, msg.body, msg.sender_id, msg.is_anonymous, new Date(msg.timestamp));
+						const event = new LiveLectureMessageEvent(this.lectureID, msg.message_id, {
+							body: msg.body,
+							userID: msg.sender_id,
+							isAnonymous: msg.is_anonymous,
+							time: new Date(msg.timestamp),
+							attachments: msg.media_id != null ? [{
+								id: msg.media_id,
+								type: msg.file_type
+							}] : null
+						});
 						this.eventTarget.dispatchEvent(event);
 
 					} else if (msg.poll_id != null) {
@@ -233,7 +269,12 @@ class LiveLectureAPI {
 						}));
 
 						// Dispatch poll
-						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, msg.question, null, msg.closed, new Date(msg.timestamp), choices);
+						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, {
+							propmt: msg.question,
+							closed: msg.closed,
+							time: new Date(msg.timestamp),
+							choices: choices
+						});
 						this.eventTarget.dispatchEvent(event);
 
 					}
@@ -249,30 +290,135 @@ class LiveLectureAPI {
 	}
 
 	/**
+	 * Returns if the provided attachment is able to be uploaded and is acceptable, as well as a string reason if not
+	 * acceptable.
+	 * @param {File} attachment 
+	 * @returns {[boolean, string?]}
+	 */
+	isAttachmentAcceptable(attachment) {
+
+		// Valid type
+		if (ATTACHMENT_TYPES[attachment.type] == null) {
+			return [false, "Unsupported file type"]
+		}
+
+		// Passed, so return success
+		return [true, null]
+
+	}
+
+	/**
 	 * Sends a message to the live lecture from the currently logged-in user. Assumes a live lecture connection has been
 	 * established.
 	 * @param {String} body 
 	 * @param {Boolean} anonymous 
+	 * @param {File?} attachment 
 	 */
-	sendMessage(body, anonymous) {
+	sendMessage(body, anonymous, attachment) {
 
 		// Verify connection
 		if (this.websocket == null) {
 			throw new Error("No WebSocket connection was established");
 		}
 
-		// Send message
-		this.websocket.send(JSON.stringify({
-			type: "message",
-			payload: {
-				sender_id: this.userID,
-				body: body,
-				is_anonymous: anonymous,
+		// Check if including an attachment (temp fix since WebSocket doesn't support)
+		if (attachment != null) {
+
+			// Read in file
+			const reader = new FileReader();
+			reader.onload = (e) => {
+
+				// Send using API
+				axios.post("/api/message", {
+					body: body,
+					is_anonymous: anonymous,
+					course_id: this.courseID,
+					lecture_id: this.lectureID,
+					parent_id: null,
+					has_media: true
+				})
+					.then((res) => {
+	
+						// Then use media ID and loaded file to upload
+						axios.post("/api/upload-media", reader.result, {
+							params: {
+								media_id: res.data.mediaId,
+								course_id: this.courseID
+							},
+							headers: {
+								"Content-Type": attachment.type
+							}
+						})
+							.catch((err) => {
+								console.error("Failed to upload attachment:", err);
+							});
+	
+					})
+					.catch((err) => {
+						console.error("Failed to send message:", err);
+						throw err;
+					});
+
+			};
+			reader.onerror = (e) => {
+				console.error("Failed to read file: " + attachment.name);
+			};
+			reader.readAsArrayBuffer(attachment);
+
+		} else {
+
+			// Send message through WebSocket
+			this.websocket.send(JSON.stringify({
+				type: "message",
+				payload: {
+					sender_id: this.userID,
+					body: body,
+					is_anonymous: anonymous,
+					course_id: this.courseID,
+					lecture_id: this.lectureID,
+					parent_id: null
+				}
+			}));
+
+		}
+
+	}
+
+	/**
+	 * Sends a request to retrieve the file attached to a message. Returns a Promise that will resolve to the loaded
+	 * File if successful.
+	 * @param {string} attachmentID 
+	 * @returns {Promise<File>}
+	 */
+	getAttachment(attachmentID) {
+
+		// Make request
+		return axios.get("/api/download-media", {
+			params: {
 				course_id: this.courseID,
-				lecture_id: this.lectureID,
-				parent_id: null
-			}
-		}));
+				media_id: attachmentID
+			},
+			responseType: "arraybuffer"
+		})
+			.then((res) => {
+
+				// Map MIME type to extension
+				const mimeType = res.headers["content-type"];
+				const extension = ATTACHMENT_TYPES[mimeType]?.extension ?? "";
+				if (extension == "") {
+					console.error("Unknown attachment type:", mimeType);
+				}
+
+				// Make into File and return
+				return new File([res.data], "attachment" + extension, {
+					type: mimeType
+				});
+
+			})
+			.catch((err) => {
+				console.error("Failed to download attachment:", err);
+				throw err;
+			});
 
 	}
 
@@ -339,7 +485,7 @@ class LiveLectureAPI {
 			.catch((err) => {
 				console.error("Failed to close poll:", err);
 				throw err;
-			})
+			});
 
 	}
 
@@ -583,17 +729,19 @@ class LiveLectureCloseEvent extends Event {
  * - `userID` (number?)
  * - `isAnonymous` (boolean)
  * - `time` ({@link Date})
+ * - `attachments` (`{id: number, type: string}[]`)
  */
 class LiveLectureMessageEvent extends Event {
 
-	constructor(lectureID, messageID, body, userID, isAnonymous, time) {
+	constructor(lectureID, messageID, data) {
 		super("message");
 		this.lectureID = lectureID;
 		this.messageID = messageID;
-		this.body = body;
-		this.userID = userID;
-		this.isAnonymous = isAnonymous;
-		this.time = time;
+		this.body = data.body;
+		this.userID = data.userID;
+		this.isAnonymous = data.isAnonymous;
+		this.time = data.time;
+		this.attachments = data.attachments ?? []
 	}
 
 }
@@ -610,15 +758,15 @@ class LiveLectureMessageEvent extends Event {
  */
 class LiveLecturePollEvent extends Event {
 
-	constructor(lectureID, pollID, prompt, userID, closed, time, choices) {
+	constructor(lectureID, pollID, data) {
 		super("poll");
 		this.lectureID = lectureID;
 		this.pollID = pollID;
-		this.prompt = prompt;
-		this.userID = userID;
-		this.closed = closed;
-		this.time = time;
-		this.choices = choices;
+		this.prompt = data.prompt;
+		this.userID = data.userID;
+		this.closed = data.closed;
+		this.time = data.time;
+		this.choices = data.choices;
 	}
 
 }
@@ -631,11 +779,11 @@ class LiveLecturePollEvent extends Event {
  */
 class LiveLecturePollUpdatedEvent extends Event {
 
-	constructor(lectureID, pollID, closed) {
+	constructor(lectureID, pollID, data) {
 		super("pollUpdated");
 		this.lectureID = lectureID;
 		this.pollID = pollID;
-		this.closed = closed;
+		this.closed = data.closed;
 	}
 
 }

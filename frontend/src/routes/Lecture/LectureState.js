@@ -58,7 +58,8 @@ export default class LectureState {
 				user: await toUserInfo(event.userID, event.isAnonymous),
 				me: event.userID == this.userID,
 				text: event.body,
-				time: event.time
+				time: event.time,
+				attachments: event.attachments
 			});
 
 			// Update version
