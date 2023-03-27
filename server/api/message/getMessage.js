@@ -12,15 +12,17 @@ const getMessage = async (req, res) => {
         if (!messageId) {
             return res.status(400).send({ msg: "No message_id Provided" });
         }
-        const resp = await messageService.getMessage(messageId);
+        const [resp] = await messageService.getMessage(messageId);
         return res.status(200).send({
-            message_id: resp[0].message_id,
-            parent_id: resp[0].parent_id,
-            sender_id: resp[0].sender_id,
-            lecture_id: resp[0].lecture_id,
-            timestamp: new Date(resp[0].timestamp).toISOString(),
-            is_anonymous: resp[0].is_anonymous,
-            body: resp[0].body
+            message_id: resp.message_id,
+            parent_id: resp.parent_id,
+            sender_id: resp.sender_id,
+            lecture_id: resp.lecture_id,
+            timestamp: new Date(resp.timestamp).toISOString(),
+            is_anonymous: resp.is_anonymous,
+            body: resp.body,
+            media_id: resp.media_id,
+            file_type: resp.file_type
         });
     } catch (e) {
         console.error(e);
