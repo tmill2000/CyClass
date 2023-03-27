@@ -70,7 +70,7 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
                 file_type
         FROM messages
             inner join roles
-            on messages.sender_id = roles.user_id
+            on messages.sender_id = roles.user_id AND roles.course_id = (SELECT course_id from lectures where lecture_id = ?)
             inner join users 
             on messages.sender_id = users.user_id
             left join media_metadata
@@ -79,7 +79,7 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
             messages.lecture_id = ?
     `;
         query += timestamp ? "AND messages.timestamp < ? LIMIT 50;" : "LIMIT 50;";
-        const options = timestamp ? [lectureId, timestamp] : [lectureId];
+        const options = timestamp ? [lectureId, lectureId, timestamp] : [lectureId, lectureId];
         const messages = await runQuery(query, options);
         const formattedMessages = messages.map(value => ({
             sender_id: value.sender_id,
