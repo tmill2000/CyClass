@@ -10,8 +10,6 @@
 
 import React from "react";
 
-import DataStore from "../../../utilities/data/DataStore";
-
 import Message from "./Message";
 import Poll from "./Poll";
 
@@ -64,7 +62,7 @@ function LectureFeed(props) {
 					showUser = false;
 				}
 			}
-			listEntry.element = <Message key={`msg_${msg.id}`} user={showUser ? msg.user : null} me={msg.me} time={showTime ? msg.time : null} text={msg.text} />;
+			listEntry.element = <Message key={`msg_${msg.id}`} api={props.api} user={showUser ? msg.user : null} me={msg.me} time={showTime ? msg.time : null} text={msg.text} attachments={msg.attachments} />;
 		}
 	}
 
