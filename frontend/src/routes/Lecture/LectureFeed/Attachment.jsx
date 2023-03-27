@@ -14,8 +14,9 @@ import "./styles.css";
 const ATTACHMENT_ICONS = {
 	"image/png": imageIconImg,
 	"png": imageIconImg,
-	"image/jpg": imageIconImg,
+	"image/jpeg": imageIconImg,
 	"jpg": imageIconImg,
+	"jpeg": imageIconImg,
 	"application/pdf": pdfIconImg,
 	"pdf": pdfIconImg,
 }
