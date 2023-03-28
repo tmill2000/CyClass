@@ -3,7 +3,6 @@ const { writeLog } = require("../utils/logger");
 
 module.exports = async (senderId, body, isAnonymous, lectureId, parentId) => {
     try {
-        writeLog("error", "starting addMessage")
         const query = `INSERT INTO messages (
         sender_id, 
         lecture_id, 
