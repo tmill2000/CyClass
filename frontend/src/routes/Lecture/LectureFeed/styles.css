@@ -110,7 +110,7 @@
 	color: #0077ff;
 	font-weight: bold;
 }
-.lfeed .attachment .error {
+.lfeed .attachment .info-list > div.error {
 	color: #e00000;
 }
 
