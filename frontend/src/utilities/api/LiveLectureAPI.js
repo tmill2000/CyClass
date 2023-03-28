@@ -144,13 +144,18 @@ class LiveLectureAPI {
 			let lectureEvent = null;
 			switch (msg.type) {
 			case "message":
+			case "media_upload":
 
 				// Make message event
 				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, {
 					body: msg.payload.body,
 					userID: msg.payload.sender_id,
 					isAnonymous: msg.payload.is_anonymous,
-					time: new Date(msg.payload.timestamp)
+					time: new Date(msg.payload.timestamp),
+					attachments: msg.payload.media_id != null ? [{
+						id: msg.payload.media_id,
+						type: null
+					}] : null
 				});
 				break;
 
