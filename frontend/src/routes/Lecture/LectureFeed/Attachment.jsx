@@ -56,7 +56,7 @@ function Attachment(props) {
 		<button className="attachment" onClick={download}>
 			<img src={ATTACHMENT_ICONS[props.type] ?? DEFAULT_ATTACHMENT_ICON} />
 			<div className="info-list">
-				{failed ? <div>Download Attachment</div> : <div className="error">Download Failed</div>}
+				{!failed ? <div>Download Attachment</div> : <div className="error">Download Failed</div>}
 			</div>
 		</button>
 	);
