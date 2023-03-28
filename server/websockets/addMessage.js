@@ -1,7 +1,9 @@
 const { runQuery } = require("../utils/db_connection");
+const { writeLog } = require("../utils/logger");
 
 module.exports = async (senderId, body, isAnonymous, lectureId, parentId) => {
     try {
+        writeLog("error", "starting addMessage")
         const query = `INSERT INTO messages (
         sender_id, 
         lecture_id, 
@@ -15,6 +17,7 @@ module.exports = async (senderId, body, isAnonymous, lectureId, parentId) => {
         const res = await runQuery(query, [senderId, lectureId, isAnonymous, body, parentId ?? null]);
         return res.insertId;
     } catch (e) {
+        writeLog("error", e.message)
         console.error(e);
     }
 };
