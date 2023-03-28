@@ -8,6 +8,11 @@ const webSockets = new Map(); // userID: webSocket
 const lectures = new Map(); // lectureId: [ userId ]
 const ownerMap = new Map();
 
+/**
+ * @param {WebSocket} webSocket
+ * @param {Request} req
+ * @returns
+ */
 const handleRequest = async (webSocket, req) => {
     const len = req.url.length;
     const url = new URLSearchParams(req.url.substring(2, len));
@@ -97,6 +102,19 @@ const handleRequest = async (webSocket, req) => {
         } else if (messageObj.type === "poll_close") {
             const { poll_id } = messageObj.payload;
             message.payload = { poll_id };
+        } else if (messageObj.type === "media_upload") {
+            const { body, is_anonymous, parent_id, sender_id, message_id, lecture_id, media_id } = messageObj.payload;
+            const parsedPayload = {
+                body,
+                is_anonymous,
+                parent_id,
+                message_id,
+                sender_id,
+                lecture_id,
+                media_id
+            };
+            messageObj.payload = parsedPayload;
+            messageObj.payload.timestamp = new Date().toISOString();
         } else {
             return;
         }
