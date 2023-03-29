@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/22/2022
- * UPDATED:	02/21/2023
+ * UPDATED:	03/28/2023
  */
 
 import axios from "axios";
@@ -144,13 +144,18 @@ class LiveLectureAPI {
 			let lectureEvent = null;
 			switch (msg.type) {
 			case "message":
+			case "media_upload":
 
 				// Make message event
 				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, {
 					body: msg.payload.body,
 					userID: msg.payload.sender_id,
 					isAnonymous: msg.payload.is_anonymous,
-					time: new Date(msg.payload.timestamp)
+					time: new Date(msg.payload.timestamp),
+					attachments: msg.payload.media_id != null ? [{
+						id: msg.payload.media_id,
+						type: null
+					}] : null
 				});
 				break;
 
@@ -321,14 +326,14 @@ class LiveLectureAPI {
 			throw new Error("No WebSocket connection was established");
 		}
 
-		// Check if including an attachment (temp fix since WebSocket doesn't support)
+		// Check if including an attachment (requires special procedure)
 		if (attachment != null) {
 
 			// Read in file
 			const reader = new FileReader();
 			reader.onload = (e) => {
 
-				// Send using API
+				// POST using API
 				axios.post("/api/message", {
 					body: body,
 					is_anonymous: anonymous,
@@ -351,6 +356,26 @@ class LiveLectureAPI {
 						})
 							.catch((err) => {
 								console.error("Failed to upload attachment:", err);
+							})
+							.finally(() => {
+
+								// Stream to websocket (even if upload fails) if still connected
+								if (this.websocket != null) {
+									this.websocket.send(JSON.stringify({
+										type: "media_upload",
+										payload: {
+											sender_id: this.userID,
+											body: body,
+											is_anonymous: anonymous,
+											course_id: this.courseID,
+											lecture_id: this.lectureID,
+											parent_id: null,
+											message_id: res.data.messageId,
+											media_id: res.data.mediaId
+										}
+									}));
+								}
+
 							});
 	
 					})
@@ -367,7 +392,7 @@ class LiveLectureAPI {
 
 		} else {
 
-			// Send message through WebSocket
+			// Send message through WebSocket (backend will record)
 			this.websocket.send(JSON.stringify({
 				type: "message",
 				payload: {

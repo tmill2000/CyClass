@@ -4,7 +4,7 @@
  * UPDATED:	03/27/2023
  */
 
-import React from "react";
+import React, { useState } from "react";
 
 import imageIconImg from "./icons/image.png";
 import pdfIconImg from "./icons/pdf.png";
@@ -26,6 +26,9 @@ let processing = false;
 
 function Attachment(props) {
 
+	// State
+	const [failed, setFailed] = useState(false);
+
 	// Click handlers
 	const download = (e) => {
 		if (!processing) {
@@ -43,6 +46,7 @@ function Attachment(props) {
 						temp.parentNode.removeChild(temp);
 					}, 0);
 				})
+				.catch((err) => setFailed(true))
 				.finally(() => processing = false);
 		}
 	};
@@ -52,7 +56,7 @@ function Attachment(props) {
 		<button className="attachment" onClick={download}>
 			<img src={ATTACHMENT_ICONS[props.type] ?? DEFAULT_ATTACHMENT_ICON} />
 			<div className="info-list">
-				<div>Download Attachment</div>
+				{!failed ? <div>Download Attachment</div> : <div className="error">Download Failed</div>}
 			</div>
 		</button>
 	);

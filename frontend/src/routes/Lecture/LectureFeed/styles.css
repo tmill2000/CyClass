@@ -110,6 +110,9 @@
 	color: #0077ff;
 	font-weight: bold;
 }
+.lfeed .attachment .info-list > div.error {
+	color: #e00000;
+}
 
 /*****************************************************************************/
 /* POLL */
