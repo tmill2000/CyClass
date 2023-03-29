@@ -114,7 +114,7 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
     `;
         query += timestamp
             ? "AND polls.timestamp > ? ORDER BY polls.timestamp DESC LIMIT 50;"
-            : "ORDER BY polls.timestamp DESCLIMIT 50;";
+            : "ORDER BY polls.timestamp DESC LIMIT 50;";
         const polls = await runQuery(query, options);
         const pollMap = new Map();
         polls.forEach(value => {
