@@ -22,7 +22,7 @@ describe("courseService", () => {
         it("should return response", async () => {
             jest.spyOn(db, "runQuery").mockResolvedValueOnce([{ course_id: 1, owner_id: 1, course_name: "Title" }]);
             const res = await getCourse(1);
-            expect(res).toEqual([{ course_id: 1, owner_id: 1, course_name: "Title" }]);
+            expect(res).toEqual([{ course_id: 1, owner_id: 1, course_name: "Titl" }]);
         });
         it("should throw error", async () => {
             jest.spyOn(db, "runQuery").mockRejectedValueOnce(new Error());
