@@ -1,4 +1,5 @@
 # Pull code
+set -e
 cd ./sdmay23-40/frontend
 
 git checkout master
