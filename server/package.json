@@ -9,7 +9,7 @@
     "test": "jest test --silent --coverage",
     "test:local": "jest test --coverage",
     "build:local": "bash .bin/build_docker.sh",
-    "lint:fix": "eslint --fix **/**.js",
+    "lint:fix": "eslint --fix api/**.js middleware/**.js websockets/**.js utils/**.js",
     "lint": "eslint **/**.js"
   },
   "repository": {
