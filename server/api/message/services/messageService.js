@@ -78,7 +78,9 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
         WHERE
             messages.lecture_id = ?
     `;
-        query += timestamp ? "AND messages.timestamp < ? ORDER BY messages.timestamp DESC LIMIT 50;" : "ORDER BY messages.timestamp DESC LIMIT 50;";
+        query += timestamp
+            ? "AND messages.timestamp > ? ORDER BY messages.timestamp DESC LIMIT 50;"
+            : "ORDER BY messages.timestamp DESC LIMIT 50;";
         const options = timestamp ? [lectureId, lectureId, timestamp] : [lectureId, lectureId];
         const messages = await runQuery(query, options);
         const formattedMessages = messages.map(value => ({
@@ -110,7 +112,9 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
         WHERE 
             polls.lecture_id = ?
     `;
-        query += timestamp ? "AND polls.timestamp < ? LIMIT 50;" : "LIMIT 50;";
+        query += timestamp
+            ? "AND polls.timestamp > ? ORDER BY polls.timestamp DESC LIMIT 50;"
+            : "ORDER BY polls.timestamp DESCLIMIT 50;";
         const polls = await runQuery(query, options);
         const pollMap = new Map();
         polls.forEach(value => {
