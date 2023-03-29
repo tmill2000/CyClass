@@ -1,4 +1,5 @@
 const { runQuery } = require("../../../utils/db_connection");
+const { writeLog } = require("../../../utils/logger");
 
 /**
  * @typedef {Object} Role
@@ -20,7 +21,7 @@ const addRole = async (courseId, userID, role) => {
         const resp = await runQuery(query, [courseId, userID, role]);
         return resp.insertId;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -35,7 +36,7 @@ const getRole = async roleId => {
         const resp = await runQuery(query, [roleId]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -61,7 +62,7 @@ const getCourseRolesByUser = async userId => {
         }
         return roles;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };

@@ -1,3 +1,4 @@
+const { writeLog } = require("../../utils/logger");
 const patch = require("../utils/patchService");
 
 /**
@@ -13,7 +14,7 @@ const editUser = async (req, res) => {
 
         return res.status(200).send({ msg: "Success" });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

@@ -1,3 +1,4 @@
+const { writeLog } = require("../../utils/logger");
 const roleService = require("./services/roleService");
 
 /**
@@ -19,7 +20,7 @@ const getRole = async (req, res) => {
             role: resp[0].role
         });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

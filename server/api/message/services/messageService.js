@@ -43,7 +43,7 @@ const getMessage = async messageId => {
         const resp = await runQuery(query, [messageId]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -133,9 +133,9 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
         }
         const data = formattedPolls.concat(formattedMessages).sort((a, b) => a.timestamp - b.timestamp);
         return data;
-    } catch (err) {
-        console.error(err);
-        throw err;
+    } catch (e) {
+        writeLog("error", e.message);
+        throw e;
     }
 };
 
@@ -163,7 +163,7 @@ const addMessage = async (senderId, body, isAnonymous, lectureId, parentID) => {
         const resp = await runQuery(query, [senderId, lectureId, isAnonymous, body, parentID ?? null]);
         return resp.insertId;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -183,7 +183,7 @@ const addMediaMetadata = async (mediaID, courseID, userID, msgID) => {
         await runQuery(mediaQuery, [mediaID, courseID, userID, msgID, false]);
         return mediaID;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };

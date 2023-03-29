@@ -1,4 +1,5 @@
 const { runQuery } = require("../../../utils/db_connection");
+const { writeLog } = require("../../../utils/logger");
 
 /**
  * @typedef {Object} Lecture
@@ -19,7 +20,7 @@ const addLecture = async (courseId, title) => {
         const resp = await runQuery(query, [courseId, title]);
         return resp.insertId;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -34,7 +35,7 @@ const getLecture = async lectureId => {
         const resp = await runQuery(query, [lectureId]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -57,7 +58,7 @@ const getLecturesByCourseId = async courseId => {
         const resp = await runQuery(query, [courseId]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };

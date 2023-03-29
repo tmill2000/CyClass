@@ -1,3 +1,4 @@
+const { writeLog } = require("../../utils/logger");
 const messageService = require("./services/messageService");
 
 /**
@@ -25,7 +26,7 @@ const getMessage = async (req, res) => {
             file_type: resp.file_type
         });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

@@ -1,3 +1,4 @@
+const { writeLog } = require("../../utils/logger");
 const messageService = require("./services/messageService");
 
 /**
@@ -14,8 +15,8 @@ const getMessagesAndPollsByLectureId = async (req, res) => {
         }
         const resp = await messageService.getMessagesAndPollsByLectureId(lectureId, timestamp);
         return res.status(200).send(resp);
-    } catch (err) {
-        console.error(err);
+    } catch (e) {
+        writeLog("error", e.message);
         return res.status(500).send("Internal Server Error");
     }
 };

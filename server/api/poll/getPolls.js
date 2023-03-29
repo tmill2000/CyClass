@@ -1,5 +1,6 @@
 const pollService = require("./services/pollService");
 const { isInCourse } = require("../../utils/permissions");
+const { writeLog } = require("../../utils/logger");
 
 /**
  * @param {Express.Request} req
@@ -34,7 +35,7 @@ const getPollById = async (req, res) => {
             : {};
         return res.status(200).send(data);
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

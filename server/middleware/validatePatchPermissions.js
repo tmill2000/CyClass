@@ -16,7 +16,7 @@ const canEditGivenUser = async (req, res, next) => {
             next();
         }
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error on Patch Perm Validate" });
     }
 };

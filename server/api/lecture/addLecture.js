@@ -1,5 +1,6 @@
 const lectureService = require("./services/lectureService");
 const { hasCoursePermissions } = require("../../utils/permissions");
+const { writeLog } = require("../../utils/logger");
 
 /**
  *
@@ -19,7 +20,7 @@ const addLecture = async (req, res) => {
         const insertId = await lectureService.addLecture(courseId, title);
         return res.status(201).send({ lecture_id: insertId });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

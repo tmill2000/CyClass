@@ -1,16 +1,16 @@
 const { runQuery } = require("../../../utils/db_connection");
+const { writeLog } = require("../../../utils/logger");
 
 const roleService = require("../../role/services/roleService");
 
 /**
  * @typedef {Object} Course
- * @property {?string} course_id 
+ * @property {?string} course_id
  * @property {?number} closed
  * @property {?number} owner_id
  * @property {?number} join_code
  * @property {?number} course_name
  */
-
 
 /**
  * @param {number} ownerID
@@ -26,7 +26,7 @@ const addCourse = async (ownerID, courseTitle, joinCode) => {
         await roleService.addRole(resp.insertId, ownerID, "PROFESSOR");
         return resp.insertId;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -42,7 +42,7 @@ const getCourse = async courseId => {
         const resp = await runQuery(query, [courseId]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -58,7 +58,7 @@ const getCourseByJoinCode = async joinCode => {
         const [resp] = await runQuery(query, [joinCode]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -72,6 +72,7 @@ const closeCourse = async courseId => {
         const query = "UPDATE courses SET closed = ? where course_id = ?";
         await runQuery(query, [true, courseId]);
     } catch (e) {
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -82,4 +83,3 @@ module.exports = {
     getCourseByJoinCode,
     closeCourse
 };
-

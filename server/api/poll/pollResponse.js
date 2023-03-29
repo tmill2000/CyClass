@@ -1,5 +1,6 @@
 const pollResponseService = require("./services/pollResponseService");
 const { isInCourse } = require("../../utils/permissions");
+const { writeLog } = require("../../utils/logger");
 
 /**
  * @param {Express.Request} req
@@ -19,7 +20,7 @@ const addPollResponse = async (req, res) => {
         const insertId = await pollResponseService.addPollResponse(choiceId, userId, pollId);
         return res.status(201).send({ pollResponseID: insertId });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

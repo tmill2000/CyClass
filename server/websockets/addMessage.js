@@ -1,4 +1,5 @@
 const { runQuery } = require("../utils/db_connection");
+const { writeLog } = require("../utils/logger");
 
 module.exports = async (senderId, body, isAnonymous, lectureId, parentId) => {
     try {
@@ -15,6 +16,6 @@ module.exports = async (senderId, body, isAnonymous, lectureId, parentId) => {
         const res = await runQuery(query, [senderId, lectureId, isAnonymous, body, parentId ?? null]);
         return res.insertId;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
     }
 };

@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const util = require("util");
+const { writeLog } = require("./logger");
 
 const makeDb = () => {
     const connection = mysql.createConnection({
@@ -26,6 +27,7 @@ const runQuery = async (query, inserts) => {
         const rows = await db.query(cleanQuery);
         return rows;
     } catch (e) {
+        writeLog("error", e.message);
         throw e;
     } finally {
         await db.close();

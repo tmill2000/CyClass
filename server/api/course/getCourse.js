@@ -1,3 +1,4 @@
+const { writeLog } = require("../../utils/logger");
 const courseService = require("./services/courseService");
 
 /**
@@ -20,7 +21,7 @@ const getCourse = async (req, res) => {
             join_code: resp[0].join_code
         });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

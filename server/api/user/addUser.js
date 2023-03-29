@@ -1,3 +1,4 @@
+const { writeLog } = require("../../utils/logger");
 const userService = require("./services/userService");
 
 /**
@@ -14,7 +15,7 @@ const addUser = async (req, res) => {
         const insertId = await userService.addUser(netid, password, firstName, lastName);
         return res.status(201).send({ user_id: insertId });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };
