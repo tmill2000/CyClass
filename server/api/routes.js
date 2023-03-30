@@ -47,7 +47,7 @@ router.post(
     media.uploadMedia
 ); //TODO: Very vulnerable to malicious files
 router.post("/poll", validateSession, poll.addPoll);
-router.post("/role/:join_code", validateSession, role.addRoleByJoinCode);
+router.post("/role/join", validateSession, role.addRoleByJoinCode);
 
 //Delete Requests
 router.delete("/message", validateSession, message.deleteMessage);
