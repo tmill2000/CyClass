@@ -30,7 +30,7 @@ function HomePage(props) {
 
     const getURL = async () => {
 		const url = document.getElementById("input_url");
-        const typed_url = url.current.value.trim();
+        const typed_url = url.value.trim();
         if (typed_url == "") {
             console.log("URL is empty.")
             return;
@@ -46,7 +46,7 @@ function HomePage(props) {
 	return (
 		<div className="home-container">
 			<Popup 
-                trigger={<CourseComponent  color="gray" courseTitle="+"></CourseComponent>}
+                trigger={<button className="add-course-button">+</button>}
                 modal
                 nested
             >

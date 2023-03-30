@@ -29,3 +29,8 @@
     vertical-align: center;
     text-align: center;
 }
+
+.add-course-button {
+    font-size: 22px;
+    background-color: gray;
+}
