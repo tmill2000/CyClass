@@ -150,6 +150,34 @@ paths:
           description: Incorrect Username or Password
         '500':
           description: Internal Server Error
+  /user/courses:
+    get:
+      tags:
+        - user
+      summary: gets courses for a given user
+      operationId: getCoursesByUser
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object  
+                  properties:
+                    course_id: 
+                      type: integer
+                    course_name:
+                      type: string    
+        '500':
+          description: Internal Server Error
   /user/logout:
     post:
       tags:
@@ -802,8 +830,8 @@ paths:
                     type: integer
                   close_date:
                     type: string
-                  closed:
-                    type: boolean
+                  poll_type:
+                    type: string
                   sender_id:
                     type: integer
                   timestamp:
@@ -850,6 +878,10 @@ paths:
                     type: integer
                   question_text:
                     type: string
+                  close_date:
+                    type: string
+                    nullable: true
+                    example: "string | null"
                   poll_choices:
                     type: array
                     items:
@@ -932,6 +964,12 @@ paths:
                   body: 
                     type: string
                     example: 'Hello everyone!'
+                  media_id:
+                    type: string
+                    example: string | null
+                  file_type:
+                    type: string
+                    example: string | null
         '400':
           description: Invalid Parameters
         '403':
@@ -981,6 +1019,38 @@ paths:
                     example: 1
         '400':
           description: Invalid Body
+        '401':
+          description: Unauthorized
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - message
+      summary: deletes message from system
+      parameters:
+        - in: query
+          required: true
+          name: message_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: course_id
+          schema:
+            type: integer
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+          
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Invalid Request
         '401':
           description: Unauthorized
         '403':
@@ -1142,6 +1212,12 @@ components:
         message_id:
           type: integer
           example: 2
+        media_id:
+          type: string
+          example: string | null
+        file_type:
+          type: string
+          example: string | null
     Poll:
       type: object
       properties:
@@ -1157,8 +1233,8 @@ components:
         close_date:
           type: string
           nullable: true
-        closed:
-          type: boolean
+        poll_type:
+          type: string
         choices:
           type: array
           items:

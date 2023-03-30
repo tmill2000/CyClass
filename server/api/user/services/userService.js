@@ -1,10 +1,18 @@
 const { runQuery } = require("../../../utils/db_connection");
+const { writeLog } = require("../../../utils/logger");
 
 /**
- * Takes in a user id and returns that users email address
- *
- * @param {*} userId
- * @returns object containing the user_id and email
+ * @typedef {Object} User
+ * @param {number} user_id
+ * @param {string} netid
+ * @param {string} first_name
+ * @param {string} last_name
+ * @param {string} password
+ */
+
+/**
+ * @param {number} userId
+ * @returns {Promise<User[]>}
  */
 const getUserInfoByUserId = async userId => {
     try {
@@ -12,34 +20,32 @@ const getUserInfoByUserId = async userId => {
         const rows = await runQuery(query, [userId]);
         return rows;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
+
 /**
- *
- * @param {*} netId
- * @param {*} password
- * @returns user login info on server
+ * @param {number} userId
+ * @returns {Promise<User[]>}
  */
 const loginInfo = async (netId, password) => {
     try {
         const query = "SELECT * FROM users WHERE netid = ? AND password = ?";
         const rows = await runQuery(query, [netId, password]);
         return rows;
-    } catch (err) {
-        console.error(err);
-        throw err;
+    } catch (e) {
+        writeLog("error", e.message);
+        throw e;
     }
 };
 
 /**
- * Function to add a user
- * @param {*} netid
- * @param {*} password
- * @param {*} firstName
- * @param {*} lastName
- * @returns user_id of the user if successful, otherwise a 500 error
+ * @param {number} netid
+ * @param {string} password
+ * @param {string} firstName
+ * @param {string} lastName
+ * @returns {Promise<number>}
  */
 const addUser = async (netid, password, firstName, lastName) => {
     try {
@@ -47,7 +53,7 @@ const addUser = async (netid, password, firstName, lastName) => {
         const response = await runQuery(query, [netid, password, firstName, lastName]);
         return response.insertId;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };

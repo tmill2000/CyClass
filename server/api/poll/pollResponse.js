@@ -1,15 +1,11 @@
 const pollResponseService = require("./services/pollResponseService");
 const { isInCourse } = require("../../utils/permissions");
+const { writeLog } = require("../../utils/logger");
 
 /**
- * @param {*} req
- * req.body = {
- *  choiceId: int,
- *  userID: int,
- *  pollId: int,
- * }
- * @param {*} res
- * @returns pollResponseID of created poll response
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const addPollResponse = async (req, res) => {
     try {
@@ -24,7 +20,7 @@ const addPollResponse = async (req, res) => {
         const insertId = await pollResponseService.addPollResponse(choiceId, userId, pollId);
         return res.status(201).send({ pollResponseID: insertId });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

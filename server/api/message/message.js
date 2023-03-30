@@ -2,20 +2,13 @@ const { v4 } = require("uuid");
 
 const messageService = require("./services/messageService");
 const { isInCourse } = require("../../utils/permissions");
+const { writeLog } = require("../../utils/logger");
 
 /**
  *
- * @param {*} req
- * req.body = {
- *    body: string,
- *    lecture_id: int,
- *    course_id: int, (REQUIRED FOR MEDIA)
- *    is_anonymous: bool
- *    parent_id: <optional>int
- *    has_media: bool
- * }
- * @param {*} res
- * @returns messageId of created message & mediaId of where to post media to
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const addMessage = async (req, res) => {
     //TODO: Update open-api spec
@@ -44,7 +37,7 @@ const addMessage = async (req, res) => {
 
         return res.status(201).send({ messageId: msgInsertId, mediaId: mediaInsertId });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

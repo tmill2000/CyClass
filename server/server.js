@@ -11,6 +11,9 @@ const websockets = require("./websockets/websockets");
 const port = process.env.PORT || 443;
 const path = require("path");
 const fs = require("fs");
+const { writeLog } = require("./utils/logger");
+
+writeLog("general", `Using ${process.env.NODE_ENV} config`);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -28,7 +31,7 @@ app.use(
 
 app.use("/api", routes);
 
-app.get("/", function(req, res) {
+app.get("/", function(_req, res) {
     res.sendFile(path.join(__dirname, "../www/index.html"), function(err) {
         if (err) {
             res.status(500).send(err);
@@ -66,11 +69,11 @@ if (port == 443) {
             app
         )
         .listen(port, function() {
-            console.log(`Server Listening on Port ${port}`);
+            writeLog("general", `Server Listening on Port ${port}`);
         });
 } else {
     server = app.listen(port, () => {
-        console.log(`Server Listening on Port ${port}`);
+        writeLog("general", `Server Listening on Port ${port}`);
     });
 }
 
@@ -82,6 +85,6 @@ server.on("upgrade", (request, socket, head) => {
 
 process.on("SIGTERM", () => {
     server.close(() => {
-        console.log("Server Closed");
+        writeLog("general", "Server Closed");
     });
 });

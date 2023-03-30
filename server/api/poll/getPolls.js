@@ -1,11 +1,11 @@
 const pollService = require("./services/pollService");
 const { isInCourse } = require("../../utils/permissions");
+const { writeLog } = require("../../utils/logger");
 
 /**
- *
- * @param {*} req
- * @param {*} res
- * @returns
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const getPollById = async (req, res) => {
     try {
@@ -22,9 +22,9 @@ const getPollById = async (req, res) => {
             ? {
                   poll_id: resp[0].poll_id,
                   close_date: resp[0]?.close_date ? new Date(resp[0]?.close_date)?.toISOString() : null,
-                  closed: !!resp[0].is_open,
                   sender_id: resp[0].sender_id,
                   timestamp: new Date(resp[0].timestamp).toISOString(),
+                  poll_type: resp[0].poll_type,
                   poll_choices: resp.map(choice => ({
                       poll_choice_id: choice.poll_choice_id,
                       question_text: choice.question_text,
@@ -35,7 +35,7 @@ const getPollById = async (req, res) => {
             : {};
         return res.status(200).send(data);
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

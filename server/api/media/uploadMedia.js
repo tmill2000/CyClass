@@ -3,16 +3,17 @@ const fs = require("fs");
 const mediaService = require("./services/mediaService");
 
 const { isInCourse } = require("../../utils/permissions");
+const { writeLog } = require("../../utils/logger");
 
 /**
- * @param {*} req
+ * @param {Express.Request} req
  * req.query = {
  *    media_id: String
  * }
  * req.headers = {
  *    Content-Type must be set to correct image MIME type
  * }
- * @param {*} res
+ * @param {Express.Response} res
  * @returns guid of uploaded media
  */
 const uploadMedia = async (req, res) => {
@@ -28,7 +29,7 @@ const uploadMedia = async (req, res) => {
             return res.status(401).send({ msg: "Not In Course: Unauthorized to add media" });
         }
         const fileType = req.get("Content-Type")?.split("/")[1];
-        if (!["png", "jpg", "jpeg"].includes(fileType)) {
+        if (!["png", "jpg", "jpeg", "pdf"].includes(fileType)) {
             return res.status(400).send({ msg: "Missing valid Content-Type header" });
         }
 
@@ -54,7 +55,7 @@ const uploadMedia = async (req, res) => {
 
         return res.status(200).send({ msg: "Image successfully saved" });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

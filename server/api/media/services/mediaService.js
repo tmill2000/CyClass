@@ -1,4 +1,16 @@
 const { runQuery } = require("../../../utils/db_connection");
+const { writeLog } = require("../../../utils/logger");
+
+/**
+ * @typedef {Object} Media
+ * @property {?string} media_id
+ * @property {?string} file_type
+ * @property {?number} course_id
+ * @property {?number} message_id
+ * @property {?number} user_id
+ * @property {?boolean} received
+ * @property {?string} timestamp
+ */
 
 /**
  * @param {string} mediaID
@@ -10,7 +22,7 @@ const authUpload = async mediaID => {
         const resp = await runQuery(query, [mediaID]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -27,7 +39,7 @@ const updateMediaMetadataOnReceived = async (mediaID, fileType) => {
         const resp = await runQuery(query, [fileType, mediaID]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -48,7 +60,7 @@ const metadataForDownload = async (userID, mediaID) => {
         const resp = await runQuery(query, [userID, mediaID]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };

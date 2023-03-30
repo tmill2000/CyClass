@@ -1,14 +1,10 @@
+const { writeLog } = require("../../utils/logger");
 const userService = require("./services/userService");
 
 /**
- * Function to add a user
- * @param {*} req
- *  req.body = {
- *    netid: string,
- *    password: string
- *  }
- * @param {*} res
- * @returns user_id of the user if successful, otherwise a 500 error
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const addUser = async (req, res) => {
     try {
@@ -19,7 +15,7 @@ const addUser = async (req, res) => {
         const insertId = await userService.addUser(netid, password, firstName, lastName);
         return res.status(201).send({ user_id: insertId });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

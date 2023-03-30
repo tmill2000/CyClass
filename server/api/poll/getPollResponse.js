@@ -1,14 +1,10 @@
+const { writeLog } = require("../../utils/logger");
 const pollResponseService = require("./services/pollResponseService");
 
 /**
- * Function to get a course
- * @param {*} req
- *  req.query = {
- *    poll_response_id: int
- *    session_id: string
- *  }
- * @param {*} res
- * @returns poll_response data if successful, otherwise a 500 or 400 error
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const getPollResponse = async (req, res) => {
     try {
@@ -25,7 +21,7 @@ const getPollResponse = async (req, res) => {
             timestamp: new Date(resp[0].timestamp).toISOString()
         });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

@@ -1,5 +1,12 @@
+const { writeLog } = require("../../utils/logger");
 const mediaService = require("./services/mediaService");
 
+/**
+ *
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
+ */
 const downloadMedia = async (req, res) => {
     //TODO: Add open-api spec
     try {
@@ -38,7 +45,7 @@ const downloadMedia = async (req, res) => {
             }
         });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error", e });
     }
 };

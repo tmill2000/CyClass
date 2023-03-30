@@ -50,8 +50,8 @@ CREATE TABLE polls (
     lecture_id int NOT NULL,
     timestamp datetime NOT NULL,
     question_text varchar(512),
-    is_open boolean,
     close_date datetime,
+    poll_type enum("MULTIPLE_CHOICE", "MULTIPLE_SELECT") NOT NULL,
     FOREIGN KEY (sender_id) REFERENCES users(user_id),
 	FOREIGN KEY (lecture_id) REFERENCES lectures(lecture_id)
 );
@@ -75,7 +75,6 @@ CREATE TABLE poll_responses (
     FOREIGN KEY (response_id) REFERENCES poll_choices(poll_choice_id)
 );
 
---Also include original filename?
 CREATE TABLE media_metadata (
     media_id varchar(36) PRIMARY KEY,
     file_type varchar(5),
@@ -86,17 +85,43 @@ CREATE TABLE media_metadata (
     timestamp datetime NOT NULL
 );
 
+CREATE TABLE posts (
+    post_id int PRIMARY KEY AUTO_INCREMENT,
+    course_id int NOT NULL,
+    post_type enum('ANNOUNCEMENT', 'QUESTION') NOT NULL,
+    body VARCHAR(1024),
+    media_uuid varchar(36),
+    sender_id int NOT NULL,
+    timestamp datetime NOT NULL,
+    parent_post_id int,
+    FOREIGN KEY (course_id) REFERENCES courses(course_id),
+    FOREIGN KEY (sender_id) REFERENCES users(user_id)
+);
+
+
+CREATE TABLE post_comments (
+    post_comment_id int PRIMARY KEY AUTO_INCREMENT,
+    post_id int NOT NULL,
+    body VARCHAR(1024),
+    timestamp datetime NOT NULL,
+    sender_id int NOT NULL,
+    parent_id int,
+    accepted_answer bool,
+    FOREIGN KEY(post_id) REFERENCES posts(post_id),
+    FOREIGN KEY (sender_id) REFERENCES users(user_id)
+);
+
 SET GLOBAL time_zone = 'UTC';
 
-INSERT INTO courses (course_id, owner_id, course_name) VALUES ('1', '1', 'Lib 160');
-INSERT INTO courses (course_id, owner_id, course_name) VALUES ('2', '2', 'CPRE 491');
+INSERT INTO courses (course_id, owner_id, course_name, join_code) VALUES ('1', '1', 'Lib 160', '123');
+INSERT INTO courses (course_id, owner_id, course_name, join_code) VALUES ('2', '2', 'CPRE 491', '1234');
 
 
 
-INSERT INTO lectures (lecture_id, course_id, title)
-VALUES ('1', (select course_id from courses where course_name='Lib 160'), 'Lib 160 Lecture 1');
-INSERT INTO lectures (lecture_id, course_id, title)
-VALUES ('2', (select course_id from courses where course_name='CPRE 491'), 'CPRE 491 Lecture 1');
+INSERT INTO lectures (lecture_id, course_id, title, timestamp)
+VALUES ('1', (select course_id from courses where course_name='Lib 160'), 'Lib 160 Lecture 1', '2023-03-01');
+INSERT INTO lectures (lecture_id, course_id, title, timestamp)
+VALUES ('2', (select course_id from courses where course_name='CPRE 491'), 'CPRE 491 Lecture 1', '2023-03-01');
 
 
 
@@ -144,6 +169,12 @@ VALUES ('3',
 (select lecture_id from lectures where title='Lib 160 Lecture 1'),
 CURRENT_TIMESTAMP, 'Hello everyone' );
 
+
+
+INSERT INTO polls (poll_id, sender_id, lecture_id, timestamp, question_text)
+VALUES ('1', (select user_id from users where netid='maruf'),
+(select lecture_id from lectures where title='Lib 160 Lecture 1'),
+CURRENT_TIMESTAMP, 'What is 1+1?');
 
 
 INSERT INTO polls (poll_id, sender_id, lecture_id, timestamp, question_text)

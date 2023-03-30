@@ -1,6 +1,6 @@
 .lme-container {
-	height: 50%;
-	max-height: 200px;
+	height: 200px;
+	max-height: 50%;
 	flex-grow: 0;
 }
 
@@ -13,7 +13,8 @@
 
 .lme-textbox {
 	width: calc(100% - 115px);
-	height: calc(100% - 110px);
+	height: 100px;
+	max-height: 50%;
 	margin: 20px 40px 0px 40px;
 	padding: 12px;
 	resize: none;
@@ -22,8 +23,73 @@
 }
 
 .lme-buttonarea {
+	height: 38px;
 	width: calc(100% - 120px);
 	margin: -10px 60px 0px 60px;
 	display: flex;
-	flex-direction: row-reverse;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 8px;
+}
+
+.lme-button {
+	padding: 0.4em 0.8em;
+	border: none;
+	border-radius: 8px;
+	font-size: 1.2em;
+	font-weight: bold;
+	text-align: left;
+	cursor: pointer;
+}
+.lme-button#send-button {
+	background-color: #43c3ff;
+}
+.lme-button#send-button:hover {
+	background-color: #79d5ff;
+}
+.lme-button#send-button:active {
+	background-color: #16b5ff;
+}
+
+.lme-circlebutton {
+	padding: 6px;
+	border: none;
+	border-radius: 50%;
+	cursor: pointer;
+	width: 42px;
+	height: 42px;
+	position: relative;
+}
+.lme-circlebutton > img {
+	width: 100%;
+	height: 100%;
+}
+.lme-circlebutton#attach-button {
+	margin-right: 4px;
+	background-color: #d9d9d9;
+}
+.lme-circlebutton#attach-button:hover {
+	background-color: #e7e7e7;
+}
+.lme-circlebutton#attach-button:active {
+	background-color: #b6b6b6;
+}
+.lme-circlebutton#attach-button.attached {
+	background-color: #c54aff;
+}
+.lme-circlebutton#attach-button.attached:hover {
+	background-color: #ce0000;
+}
+
+.lme-selected-file {
+	margin-top: auto;
+	color: #444;
+	text-overflow: ellipsis;
+}
+
+.lme-file-issue {
+	margin-top: auto;
+	color: #ce0000;
+	font-weight: bold;
 }

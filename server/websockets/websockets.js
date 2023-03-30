@@ -1,4 +1,5 @@
 const { containsPortillos } = require("../utils/removePortillos");
+const { writeLog } = require("../utils/logger");
 const addMessage = require("./addMessage");
 const pollService = require("../api/poll/services/pollService");
 const roleService = require("../api/role/services/roleService");
@@ -7,6 +8,11 @@ const webSockets = new Map(); // userID: webSocket
 const lectures = new Map(); // lectureId: [ userId ]
 const ownerMap = new Map();
 
+/**
+ * @param {WebSocket} webSocket
+ * @param {Request} req
+ * @returns
+ */
 const handleRequest = async (webSocket, req) => {
     const len = req.url.length;
     const url = new URLSearchParams(req.url.substring(2, len));
@@ -38,7 +44,7 @@ const handleRequest = async (webSocket, req) => {
         set.add(userId);
         lectures.set(lectureId, set);
     }
-    console.log("connected user: " + userId + " to lecture: " + lectureId);
+    writeLog("general", "connected user: " + userId + " to lecture: " + lectureId);
 
     webSocket.on("message", async message => {
         const messageObj = JSON.parse(message);
@@ -51,8 +57,20 @@ const handleRequest = async (webSocket, req) => {
             messageObj.payload.message_id = insertId;
             messageObj.payload.timestamp = new Date().toISOString();
         } else if (messageObj.type === "poll") {
-            const { question_text: questionText, poll_choices: pollChoices } = messageObj.payload;
-            const pollInfo = await pollService.addPoll(userId, lectureId, questionText, pollChoices);
+            const {
+                question_text: questionText,
+                poll_choices: pollChoices,
+                poll_type: pollType,
+                close_date: closeDate
+            } = messageObj.payload;
+            const pollInfo = await pollService.addPoll(
+                userId,
+                lectureId,
+                questionText,
+                pollChoices,
+                pollType,
+                closeDate
+            );
             messageObj.payload.pollInfo = pollInfo;
             messageObj.payload.timestamp = new Date().toISOString();
             messageObj.payload.poll_choices = messageObj.payload.poll_choices.map(choice => ({
@@ -84,6 +102,19 @@ const handleRequest = async (webSocket, req) => {
         } else if (messageObj.type === "poll_close") {
             const { poll_id } = messageObj.payload;
             message.payload = { poll_id };
+        } else if (messageObj.type === "media_upload") {
+            const { body, is_anonymous, parent_id, sender_id, message_id, lecture_id, media_id } = messageObj.payload;
+            const parsedPayload = {
+                body,
+                is_anonymous,
+                parent_id,
+                message_id,
+                sender_id,
+                lecture_id,
+                media_id
+            };
+            messageObj.payload = parsedPayload;
+            messageObj.payload.timestamp = new Date().toISOString();
         } else {
             return;
         }
@@ -107,9 +138,9 @@ const handleRequest = async (webSocket, req) => {
         }
         if (lectures.get(lectureId).size === 0) {
             lectures.delete(lectureId);
-            console.log("deleted lecture: " + lectureId);
+            writeLog("general", "deleted lecture socket: " + lectureId);
         }
-        console.log("disconnected user: " + userId);
+        writeLog("general", "disconnected user: " + userId);
     });
 };
 

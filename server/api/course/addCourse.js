@@ -1,11 +1,12 @@
 const courseService = require("./services/courseService");
 const { v4 } = require("uuid");
+const { writeLog } = require("../../utils/logger");
 
 /**
  *
- * @param {*} req
- * @param {*} res
- * @returns
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @returns {Promise<Express.Response>}
  */
 const addCourse = async (req, res) => {
     try {
@@ -18,7 +19,7 @@ const addCourse = async (req, res) => {
 
         return res.status(201).send({ course_id: insertId, join_code: joinCode });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

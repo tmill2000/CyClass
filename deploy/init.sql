@@ -50,7 +50,6 @@ CREATE TABLE polls (
     lecture_id int NOT NULL,
     timestamp datetime NOT NULL,
     question_text varchar(512),
-    is_open boolean,
     close_date datetime,
     FOREIGN KEY (sender_id) REFERENCES users(user_id),
 	FOREIGN KEY (lecture_id) REFERENCES lectures(lecture_id)
@@ -84,6 +83,32 @@ CREATE TABLE media_metadata (
     user_id int NOT NULL,
     received boolean NOT NULL,
     timestamp datetime NOT NULL
+);
+
+CREATE TABLE posts (
+    post_id int PRIMARY KEY AUTO_INCREMENT,
+    course_id int NOT NULL,
+    post_type enum('ANNOUNCEMENT', 'QUESTION') NOT NULL,
+    body VARCHAR(1024),
+    media_uuid varchar(36),
+    sender_id int NOT NULL,
+    timestamp datetime NOT NULL,
+    parent_post_id int,
+    FOREIGN KEY (course_id) REFERENCES courses(course_id),
+    FOREIGN KEY (sender_id) REFERENCES users(user_id)
+);
+
+
+CREATE TABLE post_comments (
+    post_comment_id int PRIMARY KEY AUTO_INCREMENT,
+    post_id int NOT NULL,
+    body VARCHAR(1024),
+    timestamp datetime NOT NULL,
+    sender_id int NOT NULL,
+    parent_id int,
+    accepted_answer bool,
+    FOREIGN KEY(post_id) REFERENCES posts(post_id),
+    FOREIGN KEY (sender_id) REFERENCES users(user_id)
 );
 
 SET GLOBAL time_zone = 'UTC';

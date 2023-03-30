@@ -1,10 +1,18 @@
 const { runQuery } = require("../../../utils/db_connection");
+const { writeLog } = require("../../../utils/logger");
 
 /**
- * @param {*} courseId
- * @param {*} title
- * @param {*} res
- * @returns lecture_id of created lecture
+ * @typedef {Object} Lecture
+ * @property {?number} lecture_id
+ * @property {?number} course_id
+ * @property {?string} title
+ * @property {?string} timestamp
+ */
+
+/**
+ * @param {number} courseId
+ * @param {string} title
+ * @returns {Promise<number>}
  */
 const addLecture = async (courseId, title) => {
     try {
@@ -12,16 +20,14 @@ const addLecture = async (courseId, title) => {
         const resp = await runQuery(query, [courseId, title]);
         return resp.insertId;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
 
 /**
- * Function to get a course
- * @param {*} lectureId
- * @param {*} res
- * @returns course data if successful
+ * @param {number} lectureId
+ * @returns {Promise<Lecture[]>}
  */
 const getLecture = async lectureId => {
     try {
@@ -29,11 +35,15 @@ const getLecture = async lectureId => {
         const resp = await runQuery(query, [lectureId]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
 
+/**
+ * @param {number} courseId
+ * @returns {Promise<Lecture[]>}
+ */
 const getLecturesByCourseId = async courseId => {
     try {
         const query = `
@@ -41,14 +51,14 @@ const getLecturesByCourseId = async courseId => {
             lectures 
         inner join courses on 
             courses.course_id = lectures.course_id 
-        inner join users on 
+        left join users on 
             users.user_id = courses.owner_id 
         where 
             lectures.course_id = ?;`;
         const resp = await runQuery(query, [courseId]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };

@@ -78,6 +78,42 @@
 	margin-right: 0px;
 }
 
+.lfeed .attachment-list {
+	margin-top: 10px;
+	display: flex;
+}
+
+.lfeed .attachment {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px;
+	background-color: #FFF;
+	border: 2px solid gray;
+	border-radius: 6px;
+	filter: drop-shadow(0 2px 2px #3336);
+	cursor: pointer;
+}
+.lfeed .attachment .info-list {
+	height: 24px;
+	display: inline-flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+}
+.lfeed .attachment > img {
+	display: inline;
+	width: 24px;
+	height: 24px;
+}
+.lfeed .attachment .info-list > div {
+	color: #0077ff;
+	font-weight: bold;
+}
+.lfeed .attachment .info-list > div.error {
+	color: #e00000;
+}
+
 /*****************************************************************************/
 /* POLL */
 
