@@ -17,6 +17,9 @@ const { writeLog } = require("../../../utils/logger");
  */
 const addRole = async (courseId, userID, role) => {
     try {
+        const noDupeQuery = "SELECT role_id from roles where course_id = ? AND user_id = ? AND role = ?";
+        const [data] = await runQuery(noDupeQuery, [courseId, userID, role]);
+        if (data) return data.role_id;
         const query = "INSERT INTO roles (course_id, user_id, role) VALUES (?, ?, ?);";
         const resp = await runQuery(query, [courseId, userID, role]);
         return resp.insertId;

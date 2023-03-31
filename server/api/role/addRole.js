@@ -43,7 +43,7 @@ const addRole = async (req, res) => {
  */
 const addRoleByJoinCode = async (req, res) => {
     try {
-        const { join_code: joinCode } = req.params;
+        const { join_code: joinCode } = req.query;
         if (!joinCode) {
             return res.status(400).send("Invalid Parameters");
         }
