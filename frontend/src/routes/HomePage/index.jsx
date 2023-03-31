@@ -5,6 +5,7 @@ import CourseComponent from "../HomePage/CourseComponent";
 import ErrorPage from "../ErrorPage";
 import LocalUser from "../../utilities/model/LocalUser";
 import CourseAPI from '../../utilities/api/CourseAPI';
+import { useState } from "react";
 
 import './style.css';
 const courseAPI = new CourseAPI();
@@ -19,13 +20,12 @@ function HomePage(props) {
 	}
 
 	const colors = ["red", "blue", "green", "brown"]
-	
 	const courses = structuredClone(LocalUser.useValue("courses"));
-	// Dropdown list generation
+	
+    // Dropdown list generation
 	const dropdownList = [];
 	for (let i = 0; i < courses.length; i++) {
-        dropdownList.push([courses[i], colors[i]]);
-		// dropdownList.push(<CourseComponent courseTitle={courses[i]} color={colors[i]} />);
+        dropdownList.push([courses[i].name, colors[i]]);
 	}
 
 
@@ -47,6 +47,7 @@ function HomePage(props) {
 
 	return (
 		<div className="home-container">
+            {dropdownList.map(list => <CourseComponent courseTitle={list[0]} color={list[1]} />)}
 			<Popup 
                 trigger={<button className="add-course-button">+</button>}
                 modal
@@ -70,7 +71,6 @@ function HomePage(props) {
                 </div>
                 )}   
             </Popup>
-			{/* {dropdownList.map(list => <CourseComponent courseTitle={list[0]} color={list[1]} />)} */}
 		</div>
 	);
 
