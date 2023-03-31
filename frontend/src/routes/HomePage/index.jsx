@@ -24,19 +24,21 @@ function HomePage(props) {
 	// Dropdown list generation
 	const dropdownList = [];
 	for (let i = 0; i < courses.length; i++) {
-		dropdownList.push(<CourseComponent courseTitle={courses[i]} color={colors[i]} />);
+        dropdownList.push([courses[i], colors[i]]);
+		// dropdownList.push(<CourseComponent courseTitle={courses[i]} color={colors[i]} />);
 	}
 
 
     const getURL = async () => {
 		const url = document.getElementById("input_url");
         const typed_url = url.value.trim();
+        console.log(typed_url);
         if (typed_url == "") {
             console.log("URL is empty.")
             return;
         }
         else{
-            const res_addCourse = await courseAPI.addCourseByUrl(state.url);
+            const res_addCourse = await courseAPI.addCourseByUrl(typed_url);
             if (res_addCourse.accepted){
                 LocalUser.set("rollID", res_addCourse.rollID);
             }
@@ -68,7 +70,7 @@ function HomePage(props) {
                 </div>
                 )}   
             </Popup>
-			{dropdownList}
+			{/* {dropdownList.map(list => <CourseComponent courseTitle={list[0]} color={list[1]} />)} */}
 		</div>
 	);
 

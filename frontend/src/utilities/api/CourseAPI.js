@@ -99,9 +99,9 @@ class CourseAPI {
 	 * @returns {Promise<number>}
 	 */
 	addCourseByUrl(url) {
-		return axios.post("/api/role/" + url, {}, {
-			params: { join_code: url } 	
-		})
+		console.log("---------------------");
+		console.log(url);
+		return axios.post("/api/role/join?join_code=" + url)
 		.then((res) => {
 
 			return {
