@@ -43,7 +43,7 @@ const getMessage = async messageId => {
         const resp = await runQuery(query, [messageId]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -78,7 +78,9 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
         WHERE
             messages.lecture_id = ?
     `;
-        query += timestamp ? "AND messages.timestamp < ? ORDER BY messages.timestamp DESC LIMIT 50;" : "ORDER BY messages.timestamp DESC LIMIT 50;";
+        query += timestamp
+            ? "AND messages.timestamp > ? ORDER BY messages.timestamp DESC LIMIT 50;"
+            : "ORDER BY messages.timestamp DESC LIMIT 50;";
         const options = timestamp ? [lectureId, lectureId, timestamp] : [lectureId, lectureId];
         const messages = await runQuery(query, options);
         const formattedMessages = messages.map(value => ({
@@ -110,7 +112,9 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
         WHERE 
             polls.lecture_id = ?
     `;
-        query += timestamp ? "AND polls.timestamp < ? LIMIT 50;" : "LIMIT 50;";
+        query += timestamp
+            ? "AND polls.timestamp > ? ORDER BY polls.timestamp DESC LIMIT 50;"
+            : "ORDER BY polls.timestamp DESC LIMIT 50;";
         const polls = await runQuery(query, options);
         const pollMap = new Map();
         polls.forEach(value => {
@@ -133,9 +137,9 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
         }
         const data = formattedPolls.concat(formattedMessages).sort((a, b) => a.timestamp - b.timestamp);
         return data;
-    } catch (err) {
-        console.error(err);
-        throw err;
+    } catch (e) {
+        writeLog("error", e.message);
+        throw e;
     }
 };
 
@@ -163,7 +167,7 @@ const addMessage = async (senderId, body, isAnonymous, lectureId, parentID) => {
         const resp = await runQuery(query, [senderId, lectureId, isAnonymous, body, parentID ?? null]);
         return resp.insertId;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -183,7 +187,7 @@ const addMediaMetadata = async (mediaID, courseID, userID, msgID) => {
         await runQuery(mediaQuery, [mediaID, courseID, userID, msgID, false]);
         return mediaID;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };

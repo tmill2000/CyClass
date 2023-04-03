@@ -1,6 +1,7 @@
 const roleService = require("./services/roleService");
 const courseService = require("../course/services/courseService");
 const { hasCoursePermissions } = require("../../utils/permissions");
+const { writeLog } = require("../../utils/logger");
 
 /**
  * @param {Express.Request} req
@@ -30,7 +31,7 @@ const addRole = async (req, res) => {
         }
         return res.status(201).send({ rollID: insertId });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };
@@ -41,7 +42,7 @@ const addRole = async (req, res) => {
  */
 const addRoleByJoinCode = async (req, res) => {
     try {
-        const { join_code: joinCode } = req.params;
+        const { join_code: joinCode } = req.query;
         if (!joinCode) {
             return res.status(400).send("Invalid Parameters");
         }

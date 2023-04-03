@@ -1,3 +1,4 @@
+const { writeLog } = require("../../utils/logger");
 const pollService = require("./services/pollService");
 
 /**
@@ -44,7 +45,7 @@ const getPollMetrics = async (req, res) => {
             }))
         });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

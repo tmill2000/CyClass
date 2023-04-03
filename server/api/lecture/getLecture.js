@@ -1,6 +1,7 @@
 const lectureService = require("./services/lectureService");
 const { lectures } = require("../../websockets/websockets");
 const { isInCourse } = require("../../utils/permissions");
+const { writeLog } = require("../../utils/logger");
 
 /**
  *
@@ -24,7 +25,7 @@ const getLecture = async (req, res) => {
             title: resp[0].title
         });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };
@@ -64,7 +65,7 @@ const getLecturesByCourseId = async (req, res) => {
         const resp = await lectureService.getLecturesByCourseId(courseId);
         return res.status(200).send(resp);
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

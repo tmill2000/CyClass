@@ -1,4 +1,5 @@
 const { runQuery } = require("../../../utils/db_connection");
+const { writeLog } = require("../../../utils/logger");
 
 /**
  * @typedef {Object} PollResponse
@@ -38,7 +39,7 @@ const addPollResponse = async (choiceId, userID, pollId) => {
         const resp2 = await runQuery(query2, [choiceId, userID, pollId]);
         return resp2.insertId;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -54,7 +55,7 @@ const getPollResponse = async pollResponseId => {
         const resp = await runQuery(query, [pollResponseId]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };

@@ -17,7 +17,9 @@ const logTypes = {
  */
 const writeLog = (logType, content) => {
     const logFileName = logTypes[logType] || logTypes["general"];
-    console.log(logFileName);
+    if (process.env.NODE_ENV === "devl") {
+        console.log(content);
+    }
     let contentToWrite = content;
     if (typeof contentToWrite === "object") {
         contentToWrite = JSON.stringify(contentToWrite, null, "\t");

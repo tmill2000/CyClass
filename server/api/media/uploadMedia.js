@@ -3,6 +3,7 @@ const fs = require("fs");
 const mediaService = require("./services/mediaService");
 
 const { isInCourse } = require("../../utils/permissions");
+const { writeLog } = require("../../utils/logger");
 
 /**
  * @param {Express.Request} req
@@ -54,7 +55,7 @@ const uploadMedia = async (req, res) => {
 
         return res.status(200).send({ msg: "Image successfully saved" });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

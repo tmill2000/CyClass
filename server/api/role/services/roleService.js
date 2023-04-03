@@ -1,4 +1,5 @@
 const { runQuery } = require("../../../utils/db_connection");
+const { writeLog } = require("../../../utils/logger");
 
 /**
  * @typedef {Object} Role
@@ -16,11 +17,14 @@ const { runQuery } = require("../../../utils/db_connection");
  */
 const addRole = async (courseId, userID, role) => {
     try {
+        const noDupeQuery = "SELECT role_id from roles where course_id = ? AND user_id = ? AND role = ?";
+        const [data] = await runQuery(noDupeQuery, [courseId, userID, role]);
+        if (data) return data.role_id;
         const query = "INSERT INTO roles (course_id, user_id, role) VALUES (?, ?, ?);";
         const resp = await runQuery(query, [courseId, userID, role]);
         return resp.insertId;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -35,7 +39,7 @@ const getRole = async roleId => {
         const resp = await runQuery(query, [roleId]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -61,7 +65,7 @@ const getCourseRolesByUser = async userId => {
         }
         return roles;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };

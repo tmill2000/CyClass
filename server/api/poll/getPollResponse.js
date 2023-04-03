@@ -1,3 +1,4 @@
+const { writeLog } = require("../../utils/logger");
 const pollResponseService = require("./services/pollResponseService");
 
 /**
@@ -20,7 +21,7 @@ const getPollResponse = async (req, res) => {
             timestamp: new Date(resp[0].timestamp).toISOString()
         });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

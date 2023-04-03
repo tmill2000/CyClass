@@ -1,4 +1,5 @@
 const { runQuery } = require("../../utils/db_connection");
+const { writeLog } = require("../../utils/logger");
 
 const editableFields = {
     courses: [],
@@ -37,7 +38,7 @@ const genericPatch = async (tableName, newValsObj, whereClauseCol, whereClauseVa
         const resp = await runQuery(query, [...insertValues, whereClauseVal]);
         return resp;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };

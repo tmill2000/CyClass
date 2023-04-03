@@ -1,3 +1,4 @@
+const { writeLog } = require("../../utils/logger");
 const mediaService = require("./services/mediaService");
 
 /**
@@ -44,7 +45,7 @@ const downloadMedia = async (req, res) => {
             }
         });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error", e });
     }
 };

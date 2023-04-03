@@ -16,7 +16,6 @@ module.exports = async (senderId, body, isAnonymous, lectureId, parentId) => {
         const res = await runQuery(query, [senderId, lectureId, isAnonymous, body, parentId ?? null]);
         return res.insertId;
     } catch (e) {
-        writeLog("error", e.message)
-        console.error(e);
+        writeLog("error", e.message);
     }
 };

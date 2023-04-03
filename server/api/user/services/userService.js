@@ -1,4 +1,5 @@
 const { runQuery } = require("../../../utils/db_connection");
+const { writeLog } = require("../../../utils/logger");
 
 /**
  * @typedef {Object} User
@@ -19,7 +20,7 @@ const getUserInfoByUserId = async userId => {
         const rows = await runQuery(query, [userId]);
         return rows;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };
@@ -33,9 +34,9 @@ const loginInfo = async (netId, password) => {
         const query = "SELECT * FROM users WHERE netid = ? AND password = ?";
         const rows = await runQuery(query, [netId, password]);
         return rows;
-    } catch (err) {
-        console.error(err);
-        throw err;
+    } catch (e) {
+        writeLog("error", e.message);
+        throw e;
     }
 };
 
@@ -52,7 +53,7 @@ const addUser = async (netid, password, firstName, lastName) => {
         const response = await runQuery(query, [netid, password, firstName, lastName]);
         return response.insertId;
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         throw e;
     }
 };

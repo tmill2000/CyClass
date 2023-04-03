@@ -2,6 +2,7 @@ const { v4 } = require("uuid");
 
 const messageService = require("./services/messageService");
 const { isInCourse } = require("../../utils/permissions");
+const { writeLog } = require("../../utils/logger");
 
 /**
  *
@@ -36,7 +37,7 @@ const addMessage = async (req, res) => {
 
         return res.status(201).send({ messageId: msgInsertId, mediaId: mediaInsertId });
     } catch (e) {
-        console.error(e);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };

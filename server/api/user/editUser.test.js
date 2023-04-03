@@ -7,11 +7,10 @@ const { res, mockClear } = getMockRes();
 jest.mock("../utils/patchService");
 
 describe("editUser", () => {
-
     beforeEach(() => {
-        mockClear()
-        jest.clearAllMocks()
-    })
+        mockClear();
+        jest.clearAllMocks();
+    });
 
     it("should return 200 for Success", async () => {
         const req = getMockReq({ query: { user_id: 1 } });
