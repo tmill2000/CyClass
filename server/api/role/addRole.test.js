@@ -46,14 +46,14 @@ describe("addRole", () => {
             expect(res.status).toBeCalledWith(400);
         });
         it("should return 404 for course not found", async () => {
-            const req = getMockReq({ params: { join_code: "asiugfkajuhsfkjhsa" } });
+            const req = getMockReq({ query: { join_code: "asiugfkajuhsfkjhsa" } });
             req.session = studentSession;
             jest.spyOn(courseService, "getCourseByJoinCode").mockResolvedValueOnce({ closed: true });
             await addRoleByJoinCode(req, res);
             expect(res.status).toBeCalledWith(404);
         });
         it("should return 201 for success", async () => {
-            const req = getMockReq({ params: { join_code: "asiugfkajuhsfkjhsa" } });
+            const req = getMockReq({ query: { join_code: "asiugfkajuhsfkjhsa" } });
             req.session = studentSession;
             jest.spyOn(courseService, "getCourseByJoinCode").mockResolvedValueOnce({ closed: false, course_id: 2 });
             jest.spyOn(roleService, "addRole").mockResolvedValueOnce({ insertId: 1 });
@@ -61,7 +61,7 @@ describe("addRole", () => {
             expect(res.status).toBeCalledWith(201);
         });
         it("should return 500 for for Server error", async () => {
-            const req = getMockReq({ params: { join_code: "asiugfkajuhsfkjhsa" } });
+            const req = getMockReq({ query: { join_code: "asiugfkajuhsfkjhsa" } });
             req.session = studentSession;
             jest.spyOn(courseService, "getCourseByJoinCode").mockRejectedValueOnce(new Error());
             await addRoleByJoinCode(req, res);
