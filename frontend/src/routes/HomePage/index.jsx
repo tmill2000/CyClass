@@ -13,20 +13,36 @@ import './CourseRegistrationPopup.css';
 
 
 function HomePage(props) {
-
+    const [dropdownList, setCourseList] = useState([])
 	const state = {
 		rollID: '',
 		url: ''
 	}
 
-	const colors = ["red", "blue", "green", "brown"]
-	const courses = structuredClone(LocalUser.useValue("courses"));
-	
+    function createList(){
+        const colors = ["red", "blue", "green", "brown"]
+        const courses = structuredClone(LocalUser.useValue("courses"));
+        for (let i = 0; i < courses.length; i++) {
+            dropdownList.push([courses[i].name, colors[i]]);
+        }
+    }
+    
+
+    function addCourseToList(){
     // Dropdown list generation
-	const dropdownList = [];
-	for (let i = 0; i < courses.length; i++) {
-        dropdownList.push([courses[i].name, colors[i]]);
-	}
+
+        setCourseList([...dropdownList, ""]);
+    } 
+
+    // addCourseToList();
+
+	
+	
+    // // Dropdown list generation
+	// const dropdownList = [];
+	// for (let i = 0; i < courses.length; i++) {
+    //     dropdownList.push([courses[i].name, colors[i]]);
+	// }
 
 
     const getURL = async () => {
@@ -43,6 +59,7 @@ function HomePage(props) {
                 LocalUser.set("rollID", res_addCourse.rollID);
             }
         }
+        addCourseToList();
     }
 
 	return (
