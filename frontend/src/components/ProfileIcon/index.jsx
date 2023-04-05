@@ -11,18 +11,19 @@ const ProfileIcon = (props) => {
 
     return (
         <div className="profile-icon-outline" style={{width: props.width}}>
-            <img className="profile-img" src={profilepic}></img>
+            {props.flipped ? null: <img className="profile-img" src={profilepic}></img>}
             <div className="profile-info">
-                <ul className="list-layout">
+                <ul className="list-layout"> 
                     <li className="list-item">
-                        <span className="profile-name">{props.profile_name}</span>
-                       
+                        {props.flipped ? <span className="profile-name-flipped">{props.profile_name}</span> : <span className="profile-name">{props.profile_name}</span> }
                     </li>
                     <li className="list-item">
-                        <span className="profile-role">{props.profile_role}</span>
+                        {props.flipped ? <span className="profile-role-flipped">{props.profile_role}</span> : <span className="profile-role">{props.profile_role}</span> }
                     </li>
                 </ul>
             </div>
+            
+            {props.flipped ? <img className="profile-img" src={profilepic}></img> : null}
         </div>
     );
 
