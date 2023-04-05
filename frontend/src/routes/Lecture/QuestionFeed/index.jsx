@@ -24,6 +24,6 @@ export default function QuestionFeed(props) {
 			</div>
 			<div className="back" />
 		</div>
-	)
+	);
 
 }
