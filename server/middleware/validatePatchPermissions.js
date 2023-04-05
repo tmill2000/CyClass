@@ -38,7 +38,11 @@ const canEditGivenMessage = async (req, res, next) => {
 };
 
 const canEditGivenPollPrompt = async (req, res, next) => {
-    if (process.env.NODE_ENV === "devl" || req.session.userid === 4) next();
+    writeLog("debug", req.session.userid);
+    if (process.env.NODE_ENV === "devl" || req.session.userid === 4) {
+        next();
+        return;
+    }
 
     const { poll_id: pollId } = req.body;
     const pollQuery = "SELECT sender_id FROM polls WHERE poll_id = ?;";
