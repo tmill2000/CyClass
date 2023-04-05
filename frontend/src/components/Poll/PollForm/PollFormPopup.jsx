@@ -28,8 +28,11 @@ export default function PollFormPopup(props){
     function get_date(){
         var date = new Date();
         const time_elapsed = document.getElementById('numMins');
-        // const mins = date.getMinutes() + time_elapsed;
-        // date.setMinutes(date.getMinutes() + Number(time_elapsed))
+        let updated_mins = date.getMinutes() + time_elapsed;
+        let add_mins = updated_mins % 60;
+        updated_mins - add_mins * 60;
+        // date.setHours(date.getHours() + add_mins);
+        // date.setMinutes(updated_mins);
         console.log(date); // Wed Jan 01 2014 13:28:56 GMT-1000 (Hawaiian Standard Time) 
         
         return date.toISOString();
