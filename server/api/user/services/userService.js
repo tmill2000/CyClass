@@ -29,10 +29,10 @@ const getUserInfoByUserId = async userId => {
  * @param {number} userId
  * @returns {Promise<User[]>}
  */
-const loginInfo = async (netId, password) => {
+const loginInfo = async netId => {
     try {
-        const query = "SELECT * FROM users WHERE netid = ? AND password = ?";
-        const rows = await runQuery(query, [netId, password]);
+        const query = "SELECT * FROM users WHERE netid = ?";
+        const rows = await runQuery(query, [netId]);
         return rows;
     } catch (e) {
         writeLog("error", e.message);
