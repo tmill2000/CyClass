@@ -8,7 +8,7 @@ import React, { createRef, useEffect, useRef } from "react";
 
 import "./styles.css";
 
-export default function PopUp(props) {
+export default function Popup(props) {
 
 	// Effect
 	const popupRef = createRef();
@@ -24,6 +24,7 @@ export default function PopUp(props) {
 			popup.style.display = "flex";
 			const timer = setTimeout(() => {
 				popup.style.backdropFilter = "blur(3px)";
+				popup.style.backgroundColor = "#0004";
 				popup.children[0].style.height = "90%";
 			}, 0);
 			return () => clearTimeout(timer);
@@ -32,6 +33,7 @@ export default function PopUp(props) {
 
 			// Hide with transition
 			popup.style.backdropFilter = "blur(0px)";
+			popup.style.backgroundColor = "#0000";
 			popup.children[0].style.height = "0%";
 			const timer = setTimeout(() => {
 				popup.style.display = "none";
@@ -45,13 +47,13 @@ export default function PopUp(props) {
 	// Component
 	return (
 		<div ref={popupRef} className="popup" style={{display: "none"}}>
-			<div>
+			<div style={{maxWidth: props.maxWidth}}>
 				<div className="header">
 					<span className="title">{props.title}</span>
 					<button className="close button" onClick={props.onClose}>X</button>
 				</div>
 				<div className="header-line" />
-				<div>
+				<div className="content">
 					{props.children}
 				</div>
 			</div>
@@ -60,7 +62,7 @@ export default function PopUp(props) {
 
 }
 
-export function PopUpForm(props) {
+export function PopupForm(props) {
 
 	// Input element generation
 	const inputElements = [];
@@ -70,18 +72,22 @@ export function PopUpForm(props) {
 		const inputRef = createRef();
 		let mainInput = null;
 		let getter = null;
+		let clearer = null;
 		switch (input.type) {
 			case "text":
 				mainInput = <input ref={inputRef} type="text" onChange={(e) => e.target.className = ""}/>;
 				getter = () => inputRef.current.value.trim();
+				clearer = () => inputRef.current.value = "";
 				break;
 			case "paragraph":
 				mainInput = <textarea ref={inputRef} onChange={(e) => e.target.className = ""}/>;
 				getter = () => inputRef.current.value.trim();
+				clearer = () => inputRef.current.value = "";
 				break;
 			case "boolean":
 				mainInput = <input ref={inputRef} type="checkbox" onChange={(e) => e.target.className = ""}/>;
 				getter = () => inputRef.current.checked;
+				clearer = () => inputRef.current.checked = false;
 				break;
 			default:
 				throw new Error(`Unrecognized input type: ${x.type}`);
@@ -99,6 +105,7 @@ export function PopUpForm(props) {
 			),
 			config: input,
 			get: getter,
+			clear: clearer,
 			setInvalid: () => inputRef.current.className = "invalid"
 		});
 
@@ -129,7 +136,12 @@ export function PopUpForm(props) {
 		if (allValid) {
 			canSubmit.current = false;
 			Promise.resolve(props.onSubmit(inputs))
-				.then(() => props.onClose())
+				.then(() => {
+					for (const input of inputElements) {
+						input.clear();
+					}
+					props.onClose();
+				})
 				.finally(() => canSubmit.current = true);
 		}
 
@@ -137,12 +149,12 @@ export function PopUpForm(props) {
 
 	// Component
 	return (
-		<PopUp title={props.title} enabled={props.enabled} onClose={props.onClose}>
+		<Popup title={props.title} enabled={props.enabled} onClose={props.onClose} maxWidth="1000px">
 			<div className="form">
 				{inputElements.map(x => x.element)}
 				<button className="submit button" onClick={submit}>{props.submitText ?? "SUBMIT"}</button>
 			</div>
-		</PopUp>
+		</Popup>
 	);
 
 }

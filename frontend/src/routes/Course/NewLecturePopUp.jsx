@@ -4,10 +4,10 @@
  * UPDATED:	04/05/2023
 */
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { PopUpForm } from "../../components/PopUp";
+import { PopupForm } from "../../components/PopUp";
 
 import "./styles.css";
 
@@ -28,7 +28,7 @@ function NewLecturePopUp(props) {
 
 	// Component
 	return (
-		<PopUpForm
+		<PopupForm
 			title="New Lecture"
 			enabled={props.visible}
 			onClose={props.onClose}

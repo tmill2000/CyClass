@@ -628,6 +628,24 @@ class LiveLectureAPI {
 	}
 
 	/**
+	 * Sends the given question to the course owner (i.e. not in chat). Can optionally be anonymous.
+	 * @param {string} question 
+	 * @param {boolean?} anonymous
+	 */
+	sendQuestion(question, anonymous) {
+
+		// Send question through WebSocket
+		this.websocket.send(JSON.stringify({
+			type: "question",
+			payload: {
+				body: question,
+				is_anonymous: anonymous ?? false
+			}
+		}));
+
+	}
+
+	/**
 	 * Binds the given callback to execute whenever a live connection is opened successfully. Callback is passed a
 	 * {@link LiveLectureOpenEvent}.
 	 * @param {Function} callback 

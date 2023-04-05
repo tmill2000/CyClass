@@ -1,13 +1,19 @@
 
-import React from "react";
-import Button from "../../../components/Button/Button";
-import "./style.css";
-import FilterBox from "../FilterBox";
-import handIcon from "./handIcon.png"
+import React, { useState } from "react";
 
+import Button from "../../../components/Button/Button";
 import PollFormPopup from "../../../components/Poll/PollForm/PollFormPopup";
 
+import FilterBox from "./FilterBox";
+import RaiseHandPopup from "./RaiseHandPopup";
+import "./style.css";
+
+import handIcon from "./handIcon.png"
+
 function SidePanel(props) {
+
+    // State
+    const [raiseHandPopupVisible, setRaiseHandPopupVisible] = useState(false);
 
     return (
         <div className="left-menu-container">
@@ -28,11 +34,12 @@ function SidePanel(props) {
                 <FilterBox></FilterBox>
             </div>
             <div className="buttons-LLLM">
-                <button className="button-LLLM-raise-hand">
-                {/* <img src={handIcon} className="hand-icon-LLLM"></img> */}
-                RAISE HAND</button>
+                <button className="button-LLLM-raise-hand" onClick={() => setRaiseHandPopupVisible(true)}>
+                    <img src={handIcon} className="hand-icon-LLLM" />
+                </button>
                 {props.elevated ? <PollFormPopup profile_name={props.userIDname} profile_role={props.userIDrole} api={props.api}></PollFormPopup> : null}
             </div>
+            <RaiseHandPopup api={props.api} visible={raiseHandPopupVisible} onClose={() => setRaiseHandPopupVisible(false)} />
         </div>
     );
 

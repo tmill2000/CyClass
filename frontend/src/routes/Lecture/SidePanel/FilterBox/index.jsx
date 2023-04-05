@@ -1,5 +1,5 @@
 import React from "react";
-import Checkbox from "../../../components/Checkbox/CheckboxWithLabel";
+import Checkbox from "../../../../components/Checkbox/CheckboxWithLabel";
 import filterPic from './filterIcon.png'
 import "./style.css";
 
