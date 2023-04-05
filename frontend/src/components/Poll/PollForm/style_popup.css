@@ -1,4 +1,4 @@
-.popup {
+.poll-popup {
     font-size: 12px;
     background-color: rgb(247, 243, 243);
     border-color: gray;
@@ -7,7 +7,7 @@
     border-radius: 10px;
   }
 
-  .popup > .header {
+  .poll-popup > .header {
     border-bottom: 1px solid gray;
     font-size: 18px;
     text-align: left;
@@ -15,19 +15,19 @@
     color: black;
   }
 
-  .popup > .content {
+  .poll-popup > .content {
     width: 100%;
     padding: 10px 5px;
     color: black;
   }
 
-  .popup > .actions {
+  .poll-popup > .actions {
     width: 100%;
     padding: 10px 5px;
     margin: auto;
     text-align: center;
   }
-  .popup > .close {
+  .poll-popup > .close {
     cursor: pointer;
     position: absolute;
     display: block;
