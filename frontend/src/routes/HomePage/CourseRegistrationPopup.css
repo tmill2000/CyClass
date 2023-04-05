@@ -1,4 +1,4 @@
-.popup {
+.course-reg-popup {
     font-size: 12px;
     background-color: rgb(247, 243, 243);
     border-color: gray;
@@ -6,7 +6,7 @@
     width: calc(100vw - 480px);
   }
 
-  .popup > .header {
+  .course-reg-popup > .header {
     border-bottom: 1px solid gray;
     font-size: 18px;
     text-align: left;
@@ -14,19 +14,19 @@
     color: black;
   }
 
-  .popup > .content {
+  .course-reg-popup > .content {
     width: 100%;
     padding: 10px 5px;
     color: black;
   }
 
-  .popup > .actions {
+  .course-reg-popup > .actions {
     width: 100%;
     padding: 10px 5px;
     margin: auto;
     text-align: center;
   }
-  .popup > .close {
+  .course-reg-popup > .close {
     cursor: pointer;
     position: absolute;
     display: block;

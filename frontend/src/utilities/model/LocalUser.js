@@ -232,4 +232,26 @@ export default class LocalUser {
 
 	}
 
+	/**
+	 * Adds the given course to the local user's course list while signed in. Intended for whenever a user just newly
+	 * registers.
+	 * @param {{id: number, name: string, role: string}} course 
+	 */
+	addCourse(course) {
+
+		// Validate input
+		if (course.id == null) {
+			throw new Error("Given course object is missing id");
+		} else if (course.name == null) {
+			throw new Error("Given course object is missing name");
+		} else if (course.role == null) {
+			throw new Error("Given course object is missing role");
+		}
+
+		// Add to list and update store (will trigger an update for .useValue)
+		this.courses.push(course);
+		DataStore.set("courses", this.courses);
+
+	}
+
 };
