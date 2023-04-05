@@ -7,7 +7,7 @@ import handIcon from "./handIcon.png"
 
 import PollFormPopup from "../../../components/Poll/PollForm/PollFormPopup";
 
-const LiveLectureLeftMenu = (props) => {
+function SidePanel(props) {
 
     return (
         <div className="left-menu-container">
@@ -19,7 +19,7 @@ const LiveLectureLeftMenu = (props) => {
                     type="button"
                     buttonStyle="btn--newComment--solid"
                     buttonSize="btn--medium"
-                    className="button"
+                    className="button-left-menu"
                 >
                 LEAVE
                 </Button>
@@ -38,4 +38,4 @@ const LiveLectureLeftMenu = (props) => {
 
 }
 
-export default LiveLectureLeftMenu;
+export default SidePanel;

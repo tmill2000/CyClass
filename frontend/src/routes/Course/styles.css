@@ -138,7 +138,7 @@
 	display: inline-block;
 }
 
-.course .button {
+.course .create-panel .button {
 	width: 100%;
 	padding: 0.4em 0.8em;
 	border: none;
@@ -147,6 +147,7 @@
 	font-weight: bold;
 	text-align: left;
 	cursor: pointer;
+	color: #FFF;
 }
 
 .course .button.new-lecture {
@@ -163,14 +164,25 @@
 	top: 0px;
 	left: 0px;
 	backdrop-filter: blur(3px);
+	transition: all cubic-bezier(0.19, 1, 0.22, 1) 0.4s;
+	display: flex;
+	justify-content: center;
+	align-items: end;
 }
 .course .nl-popup > div {
 	position: relative;
 	width: 90%;
+	max-width: 1000px;
 	height: 90%;
-	top: 10%;
-	left: 5%;
+	overflow: hidden;
 	background-color: #FFF;
+	transition: all cubic-bezier(0.19, 1, 0.22, 1) 0.4s;
+}
+
+.course .nl-popup .content {
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
 }
 
 .course .nl-popup .header {
@@ -191,6 +203,9 @@
 	border: none;
 	background: none;
 	cursor: pointer;
+}
+.course .nl-popup .close:hover {
+	color: #800;
 }
 
 .course .nl-popup .header-line {
