@@ -1,8 +1,16 @@
 const { writeLog } = require("../../utils/logger");
 const mediaService = require("./services/mediaService");
 
+const CONTENT_TYPE_HEADER = {
+    png: "image/png",
+    jpg: "image/jpg",
+    jpeg: "image/jpeg",
+    pdf: "application/pdf",
+    mp4: "video/pm4",
+    txt: "text/plain"
+};
+
 /**
- *
  * @param {Express.Request} req
  * @param {Express.Response} res
  * @returns {Promise<Express.Response>}
@@ -31,6 +39,7 @@ const downloadMedia = async (req, res) => {
         var options = {
             root: dir,
             headers: {
+                "Content-Type": CONTENT_TYPE_HEADER[fileType],
                 "x-timestamp": Date.now(),
                 "x-sent": true
             }

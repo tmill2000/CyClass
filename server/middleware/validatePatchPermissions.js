@@ -37,7 +37,25 @@ const canEditGivenMessage = async (req, res, next) => {
     return res.status(403).send({ msg: "Forbidden to update this record" });
 };
 
+const canEditGivenPollPrompt = async (req, res, next) => {
+    if (process.env.NODE_ENV === "devl") next();
+
+    const { poll_id: pollId } = req.body;
+    const pollQuery = "SELECT sender_id FROM polls WHERE poll_id = ?;";
+
+    const rawQueryResp = await runQuery(pollQuery, [pollId]);
+    writeLog("debug", rawQueryResp);
+    const { sender_id: senderId } = rawQueryResp[0];
+
+    if (senderId !== req.session.userid) {
+        return res.status(403).send({ msg: "Forbidden to update this record" });
+    }
+
+    next();
+};
+
 module.exports = {
     canEditGivenUser,
-    canEditGivenMessage
+    canEditGivenMessage,
+    canEditGivenPollPrompt
 };

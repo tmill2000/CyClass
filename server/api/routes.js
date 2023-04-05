@@ -58,6 +58,7 @@ router.delete("/message", validateSession, message.deleteMessage);
 //Patch
 router.patch("/course/close", validateSession, course.closeCourse);
 router.patch("/poll/close", validateSession, poll.closePoll);
+router.patch("/poll", validateSession, validatePatch.canEditGivenPollPrompt, poll.editPollPrompt);
 router.patch("/user", validateSession, validatePatch.canEditGivenUser, user.editUser);
 router.patch("/message", validateSession, validatePatch.canEditGivenMessage, message.editMessage);
 
