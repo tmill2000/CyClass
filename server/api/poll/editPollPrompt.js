@@ -7,6 +7,7 @@ const patch = require("../utils/patchService");
  * @returns {Promise<Express.Response>}
  */
 const editPollPrompt = async (req, res) => {
+    writeLog("debug", "in editPollPrompt");
     try {
         const { poll_id: pollId } = req.body;
 
