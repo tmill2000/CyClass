@@ -96,10 +96,13 @@ const handleRequest = async (webSocket, req) => {
                 if (toUserWebSocket) {
                     toUserWebSocket.send(
                         JSON.stringify({
-                            userId,
-                            body,
-                            is_anonymous,
-                            lecture_id: lectureId
+                            type: "question",
+                            payload: {
+                                userId,
+                                body,
+                                is_anonymous,
+                                lecture_id: lectureId
+                            }
                         })
                     );
                 }

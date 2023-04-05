@@ -59,3 +59,12 @@ div#main {
 .button:active {
 	filter: brightness(90%);
 }
+
+.standard.button {
+	padding: 0.4em 0.8em;
+	border: none;
+	border-radius: 8px;
+	font-size: 1.2em;
+	font-weight: bold;
+	text-align: left;
+}

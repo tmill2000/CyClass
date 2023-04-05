@@ -1,10 +1,12 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/22/2022
- * UPDATED:	03/28/2023
+ * UPDATED:	04/05/2023
  */
 
 import axios from "axios";
+
+import DataStore from "../data/DataStore";
 
 const ATTACHMENT_TYPES = {
 	"image/png": {
@@ -196,6 +198,44 @@ class LiveLectureAPI {
 				});
 				break;
 
+			case "question":
+
+				// Retrieve questions list (frontend manages storage of questions)
+				const storeKey = `questionsLecture${this.lectureID}`;
+				if (this.questions == null) {
+					this.questions = DataStore.get(storeKey) ?? [];
+				}
+				if (this.nextQuestionID == null) {
+					this.nextQuestionID = this.questions.reduce((accum, curr) => Math.max(accum, curr.id), 0) + 1;
+				}
+
+				// Add question to list and record
+				const question = {
+					id: this.nextQuestionID++,
+					question: msg.payload.body,
+					userID: msg.payload.userId,
+					anonymous: msg.payload.is_anonymous,
+					time: new Date().toJSON()
+				};
+				this.questions = [...this.questions, question];
+				DataStore.set(storeKey, this.questions);
+
+				// Make question event
+				lectureEvent = new LiveLectureQuestionEvent(this.lectureID, question.id, {
+					question: question.question,
+					userID: question.userID,
+					isAnonymous: question.anonymous,
+					time: new Date(question.time)
+				});
+				break;
+
+			default:
+
+				// Make error event if message was given
+				if (msg.msg != null) {
+					lectureEvent = new LiveLectureErrorEvent(this.lectureID, msg.msg, new Date());
+				}
+
 			}
 			if (lectureEvent != null) {
 				this.eventTarget.dispatchEvent(lectureEvent);
@@ -235,6 +275,20 @@ class LiveLectureAPI {
 	 * @return Promise
 	 */
 	fetchHistory(beforeTimestamp) {
+
+		// Get questions from local storage and fire events for each
+		if (this.questions == null) {
+			this.questions = DataStore.get(`questionsLecture${this.lectureID}`) ?? [];
+		}
+		for (const question of this.questions) {
+			const event = new LiveLectureQuestionEvent(this.lectureID, question.id, {
+				question: question.question,
+				userID: question.userID,
+				isAnonymous: question.anonymous,
+				time: new Date(question.time)
+			});
+			this.eventTarget.dispatchEvent(event);
+		}
 
 		// Perform get
 		return axios.get("/api/message/messagesByLecture", {
@@ -290,7 +344,7 @@ class LiveLectureAPI {
 			.catch((err) => {
 				console.error("Failed to fetch lecture history:", err);
 				throw err;
-			})
+			});
 
 	}
 
@@ -651,88 +705,89 @@ class LiveLectureAPI {
 	}
 
 	/**
-	 * Binds the given callback to execute whenever a live connection is opened successfully. Callback is passed a
-	 * {@link LiveLectureOpenEvent}.
-	 * @param {Function} callback 
+	 * Deletes the specified question, making it such that it will never show up on future history fetches.
+	 * @param {number} questionID 
 	 */
+	deleteQuestion(questionID) {
+
+		// Lazy-load questions
+		const storeKey = `questionsLecture${this.lectureID}`;
+		if (this.questions == null) {
+			this.questions = DataStore.get(storeKey) ?? [];
+		}
+
+		// Find, remove, and save
+		const index = this.questions.findIndex(e => e.id == questionID);
+		if (index >= 0) {
+			this.questions = [...this.questions];
+			this.questions[index] = this.questions[this.questions.length - 1];
+			this.questions.pop();
+			if (this.questions.length == 0) {
+				DataStore.clear(storeKey);
+			} else {
+				DataStore.set(storeKey, this.questions);
+			}
+		}
+
+		// Fire event
+		this.eventTarget.dispatchEvent(new LiveLectureQuestionDeletedEvent(this.lectureID, questionID));
+
+	}
+
 	onLiveOpen(callback) {
 		this.eventTarget.addEventListener("open", callback);
 	}
-
-	/**
-	 * Unbinds the callback previously bound using `onLiveOpen()`.
-	 * @param {Function} callback 
-	 */
 	removeOnLiveOpen(callback) {
 		this.eventTarget.removeEventListener("open", callback);
 	}
 
-	/**
-	 * Binds the given callback to execute whenever the live connection is closed. Callback is passed a
-	 * {@link LiveLectureCloseEvent}.
-	 * @param {Function} callback 
-	 */
 	onLiveClose(callback) {
 		this.eventTarget.addEventListener("close", callback);
 	}
-
-	/**
-	 * Unbinds the callback previously bound using `onLiveClose()`.
-	 * @param {Function} callback 
-	 */
 	removeOnLiveClose(callback) {
 		this.eventTarget.removeEventListener("close", callback);
 	}
 
-	/**
-	 * Binds the given callback to execute whenever a new message is received from a live connection or from a prior API
-	 * call. Callback is passed a {@link LiveLectureMessageEvent}.
-	 * @param {Function} callback 
-	 */
 	onMessage(callback) {
 		this.eventTarget.addEventListener("message", callback);
 	}
-
-	/**
-	 * Unbinds the callback previously bound using `onMessage()`.
-	 * @param {Function} callback 
-	 */
 	removeOnMessage(callback) {
 		this.eventTarget.removeEventListener("message", callback);
 	}
 
-	/**
-	 * Binds the given callback to execute whenever a new poll is received from a live connection or from a prior API
-	 * call. Callback is passed a {@link LiveLecturePollEvent}.
-	 * @param {Function} callback 
-	 */
 	onPoll(callback) {
 		this.eventTarget.addEventListener("poll", callback);
 	}
-
-	/**
-	 * Unbinds the callback previously bound using `onPoll()`.
-	 * @param {Function} callback 
-	 */
 	removeOnPoll(callback) {
 		this.eventTarget.removeEventListener("poll", callback);
 	}
 
-	/**
-	 * Binds the given callback to execute whenever a poll update is received from a live connection. Callback is passed
-	 * a {@link LiveLecturePollUpdatedEvent}.
-	 * @param {Function} callback 
-	 */
 	onPollUpdated(callback) {
 		this.eventTarget.addEventListener("pollUpdated", callback);
 	}
-
-	/**
-	 * Unbinds the callback previously bound using `onPollUpdated()`.
-	 * @param {Function} callback 
-	 */
 	removeOnPollUpdated(callback) {
 		this.eventTarget.removeEventListener("pollUpdated", callback);
+	}
+
+	onQuestion(callback) {
+		this.eventTarget.addEventListener("question", callback);
+	}
+	removeOnQuestion(callback) {
+		this.eventTarget.removeEventListener("question", callback);
+	}
+
+	onQuestionDeleted(callback) {
+		this.eventTarget.addEventListener("questionDeleted", callback);
+	}
+	removeOnQuestionDeleted(callback) {
+		this.eventTarget.removeEventListener("questionDeleted", callback);
+	}
+
+	onError(callback) {
+		this.eventTarget.addEventListener("error", callback);
+	}
+	removeOnError(callback) {
+		this.eventTarget.removeEventListener("error", callback);
 	}
 
 }
@@ -836,11 +891,69 @@ class LiveLecturePollUpdatedEvent extends Event {
 
 }
 
+/**
+ * Represents a new question to a live lecture's host. Contains the following properties:
+ * - `lectureID` (number)
+ * - `questionID` (number)
+ * - `question` (string)
+ * - `userID` (number?)
+ * - `isAnonymous` (boolean)
+ * - `time` ({@link Date})
+ */
+class LiveLectureQuestionEvent extends Event {
+
+	constructor(lectureID, questionID, data) {
+		super("question");
+		this.questionID = questionID
+		this.lectureID = lectureID;
+		this.question = data.question;
+		this.userID = data.userID;
+		this.isAnonymous = data.isAnonymous;
+		this.time = data.time;
+	}
+
+}
+
+/**
+ * Represents the deletion of a question from the live lecture. Contains the following properties:
+ * - `lectureID` (number)
+ * - `questionID` (number)
+ */
+class LiveLectureQuestionDeletedEvent extends Event {
+
+	constructor(lectureID, questionID) {
+		super("questionDeleted");
+		this.questionID = questionID
+		this.lectureID = lectureID
+	}
+
+}
+
+/**
+ * Represents a streamed error message from the backend. Contains the following properties:
+ * - `lectureID` (number)
+ * - `message` (string)
+ * - `time` ({@link Date})
+ */
+class LiveLectureErrorEvent extends Event {
+
+	constructor(lectureID, msg, time) {
+		super("error");
+		this.lectureID = lectureID;
+		this.message = msg;
+		this.time = time;
+	}
+
+}
+
 export {
 	LiveLectureOpenEvent,
 	LiveLectureCloseEvent,
 	LiveLectureMessageEvent,
 	LiveLecturePollEvent,
-	LiveLecturePollUpdatedEvent
+	LiveLecturePollUpdatedEvent,
+	LiveLectureQuestionEvent,
+	LiveLectureQuestionDeletedEvent,
+	LiveLectureErrorEvent
 };
 export default LiveLectureAPI;

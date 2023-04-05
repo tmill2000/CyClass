@@ -20,7 +20,7 @@ export default function Question(props) {
 	// Component
 	return (
 		<div className="question">
-			<div className="bubble">
+			<div className="bubble selectable">
 				{props.question}
 			</div>
 			<div className="under">
