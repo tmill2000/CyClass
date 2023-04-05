@@ -32,7 +32,7 @@ export default function PollFormPopup(props){
         // date.setMinutes(date.getMinutes() + Number(time_elapsed))
         console.log(date); // Wed Jan 01 2014 13:28:56 GMT-1000 (Hawaiian Standard Time) 
         
-        return JSON.stringify(date);
+        return date.toISOString();
     }
 
     function backgroundColor(letter){
