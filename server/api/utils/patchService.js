@@ -8,7 +8,7 @@ const editableFields = {
     messages: ["message_title", "is_anonymous", "body"],
     poll_choices: [],
     poll_responses: [],
-    polls: [],
+    polls: ["question_text", "close_date"],
     roles: [],
     users: ["netid", "password", "first_name", "last_name"]
 };
