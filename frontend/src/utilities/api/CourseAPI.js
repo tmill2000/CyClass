@@ -93,38 +93,64 @@ class CourseAPI {
 	}
 
 	/**
-	 * Attempts to add the current signed in user to the course
-	 * they provide via url. 
-	 * @param {string} url 
-	 * @returns {Promise<number>}
+	 * Attempts to add the current signed in user to the course they provide via join code. 
+	 * @param {string} joinCode join code 
+	 * @returns {Promise<{accepted: boolean, course?: {id: number, name: string, role: string}}>}
 	 */
-	addCourseByUrl(url) {
-		console.log("---------------------");
-		console.log(url);
-		return axios.post("/api/role/join?join_code=" + url)
-		.then((res) => {
-
-			return {
-				accepted: true,
-				rollID: res.data.rollID
-			};
-
-		})
-		.catch((err) => {
-
-			// Return rejection if cannot connect to DB
-			if (err.response?.status == 401) {
-				return {
-					accepted: false,
-					rollID: null
-				};
+	addCourseByJoinCode(joinCode) {
+		
+		// Perform post
+		return axios.post("/api/role/join", {}, {
+			params: {
+				join_code: joinCode
 			}
+		})
+			.then((res) => {
 
-			// Otherwise, log and propogate
-			console.error("Failed to perform coursa addition:", err);
-			throw err;
+				// Use role ID to get course information (frontend has no concept of a "role ID")
+				return axios.get("/api/role", {
+					params: {
+						role_id: res.data.rollID
+					}
+				})
+					.then((res) => {
+						return axios.get("/api/course", {
+							params: {
+								course_id: res.data.course_id
+							}
+						})
+							.then((courseRes) => {
 
-		});
+								// Return full data
+								return {
+									accepted: true,
+									course: {
+										id: res.data.course_id,
+										name: courseRes.data.course_name,
+										role: res.data.role
+									}
+								};
+
+							});
+					});
+
+			})
+			.catch((err) => {
+
+				// Return rejection if cannot connect to DB
+				if (err.response?.status == 401) {
+					return {
+						accepted: false,
+						course: null
+					};
+				}
+
+				// Otherwise, log and propogate
+				console.error("Failed to perform course addition:", err);
+				throw err;
+
+			});
+
 	}
 
 };
