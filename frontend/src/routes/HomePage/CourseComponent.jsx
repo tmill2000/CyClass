@@ -1,12 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 
 const CourseComponent = (props) => {
 
+    const navigate = useNavigate();
+
     return (
-        <div className="cc-container" style={{'backgroundColor': props.color}}>
-            <div className="cc-title">{props.courseTitle}</div>
-        </div>
+        <button className="cc-container" style={{'backgroundColor': props.color}} onClick={(e) => navigate(`/course/${props.course.id}`)}>
+            <div className="cc-title">{props.course.name}</div>
+        </button>
     );
 
 }

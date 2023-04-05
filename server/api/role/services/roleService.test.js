@@ -34,7 +34,13 @@ describe("roleService", () => {
 
     describe("addRole", () => {
         it("should return response", async () => {
+            jest.spyOn(db, "runQuery").mockResolvedValueOnce([]);
             jest.spyOn(db, "runQuery").mockResolvedValueOnce({ insertId: 1 });
+            const res = await addRole(1, 1, "PROFESSOR");
+            expect(res).toBe(1);
+        });
+        it("should return response", async () => {
+            jest.spyOn(db, "runQuery").mockResolvedValueOnce([{ role_id: 1 }]);
             const res = await addRole(1, 1, "PROFESSOR");
             expect(res).toBe(1);
         });

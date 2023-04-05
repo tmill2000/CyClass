@@ -6,11 +6,11 @@ const patch = require("../utils/patchService");
  * @param {Express.Response} res
  * @returns {Promise<Express.Response>}
  */
-const editMessage = async (req, res) => {
+const editPollResponse = async (req, res) => {
     try {
-        const { message_id: messageId } = req.body;
+        const { poll_response_id: pollResponseId } = req.body;
 
-        await patch.genericPatch("messages", req.body, "message_id", messageId);
+        await patch.genericPatch("poll_responses", req.body, "poll_response_id", pollResponseId);
 
         return res.status(200).send({ msg: "Success" });
     } catch (e) {
@@ -20,5 +20,5 @@ const editMessage = async (req, res) => {
 };
 
 module.exports = {
-    editMessage
+    editPollResponse
 };

@@ -13,81 +13,62 @@ import './CourseRegistrationPopup.css';
 
 
 function HomePage(props) {
-    const [dropdownList, setCourseList] = useState([])
+
 	const state = {
 		rollID: '',
 		url: ''
 	}
 
-    function createList(){
-        const colors = ["red", "blue", "green", "brown"]
-        const courses = structuredClone(LocalUser.useValue("courses"));
-        for (let i = 0; i < courses.length; i++) {
-            dropdownList.push([courses[i].name, colors[i]]);
-        }
-    }
-    
-
-    function addCourseToList(){
-    // Dropdown list generation
-
-        setCourseList([...dropdownList, ""]);
-    } 
-
-    // addCourseToList();
-
+	const colors = ["red", "blue", "green", "brown"]
+	const courses = structuredClone(LocalUser.useValue("courses"));
 	
-	
-    // // Dropdown list generation
-	// const dropdownList = [];
-	// for (let i = 0; i < courses.length; i++) {
-    //     dropdownList.push([courses[i].name, colors[i]]);
-	// }
+	// Dropdown list generation
+	const dropdownList = [];
+	for (let i = 0; i < courses.length; i++) {
+		dropdownList.push([courses[i], colors[i]]);
+	}
 
 
-    const getURL = async () => {
+	const getURL = async () => {
 		const url = document.getElementById("input_url");
-        const typed_url = url.value.trim();
-        console.log(typed_url);
-        if (typed_url == "") {
-            console.log("URL is empty.")
-            return;
-        }
-        else{
-            const res_addCourse = await courseAPI.addCourseByUrl(typed_url);
-            if (res_addCourse.accepted){
-                LocalUser.set("rollID", res_addCourse.rollID);
-            }
-        }
-        addCourseToList();
-    }
+		const typed_url = url.value.trim();
+		console.log(typed_url);
+		if (typed_url == "") {
+			console.log("URL is empty.")
+			return;
+		}
+		else{
+			const res_addCourse = await courseAPI.addCourseByJoinCode(typed_url);
+			if (res_addCourse.accepted){
+				LocalUser.current.addCourse(res_addCourse.course);
+			}
+		}
+	}
 
 	return (
 		<div className="home-container">
-            {dropdownList.map(list => <CourseComponent courseTitle={list[0]} color={list[1]} />)}
+			{dropdownList.map(list => <CourseComponent course={list[0]} color={list[1]} />)}
 			<Popup 
-                trigger={<button className="add-course-button">+</button>}
-                modal
-                nested
-            >
-                {close => (
-                <div className="course-reg-popup">
-                    <button className="close" onClick={close}>&times;</button>
-                    <div className="header"> Add A Course: </div>
-                    <div className="course-reg-input-group">
-                        <div className="course-reg-input-label"></div>
-                        <input id="input_url" className="course-reg-input-field"></input>
-                    </div>
+				trigger={<button className="add-course-button">+</button>}
+				modal
+				nested
+			>
+				<div className="course-reg-popup">
+					<button className="close" onClick={close}>&times;</button>
+					<div className="header"> Add a Course: </div>
+					<div className="course-reg-input-group">
+						<div className="course-reg-input-label"></div>
+						<input id="input_url" className="course-reg-input-field"></input>
+					</div>
 
-                    <div className="actions">
-                    <button className="button"
-                        onClick={() => {
-                            getURL();
-                        }}>Add Course</button>
-                    </div>
-                </div>
-                )}   
-            </Popup>
+					<div className="actions">
+					<button className="button"
+						onClick={() => {
+							getURL();
+						}}>Add Course</button>
+					</div>
+				</div>
+			</Popup>
 		</div>
 	);
 

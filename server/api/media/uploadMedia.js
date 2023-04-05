@@ -29,7 +29,7 @@ const uploadMedia = async (req, res) => {
             return res.status(401).send({ msg: "Not In Course: Unauthorized to add media" });
         }
         const fileType = req.get("Content-Type")?.split("/")[1];
-        if (!["png", "jpg", "jpeg", "pdf"].includes(fileType)) {
+        if (!["png", "jpg", "jpeg", "pdf", "txt", "mp4"].includes(fileType)) {
             return res.status(400).send({ msg: "Missing valid Content-Type header" });
         }
 

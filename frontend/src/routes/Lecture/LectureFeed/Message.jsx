@@ -30,7 +30,7 @@ function Message(props) {
 			</div>
 			{(props.user != null) ?
 			<div className="user-container">
-				<ProfileIcon profile_name={props.me ? "You" : props.user.name} profile_role={props.user.role} flipped={true} />
+				<ProfileIcon profile_name={props.me ? "You" : props.user.name} profile_role={props.user.role} flipped={props.me} />
 			</div>
 			: null}
 		</li>
