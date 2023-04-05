@@ -5,7 +5,6 @@
 	padding: 20px calc((100% - 1400px) / 2.0);
 	background-color: #DDD;
 	white-space: nowrap;
-	position: relative;
 }
 
 /*****************************************************************************/
@@ -138,7 +137,7 @@
 	display: inline-block;
 }
 
-.course .button {
+.course .create-panel .button {
 	width: 100%;
 	padding: 0.4em 0.8em;
 	border: none;
@@ -147,94 +146,9 @@
 	font-weight: bold;
 	text-align: left;
 	cursor: pointer;
+	color: #FFF;
 }
 
 .course .button.new-lecture {
 	background-color: #1976D2;
-}
-
-/*****************************************************************************/
-/* LECTURE POP-UP */
-
-.course .nl-popup {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0px;
-	left: 0px;
-	backdrop-filter: blur(3px);
-}
-.course .nl-popup > div {
-	position: relative;
-	width: 90%;
-	height: 90%;
-	top: 10%;
-	left: 5%;
-	background-color: #FFF;
-}
-
-.course .nl-popup .header {
-	width: calc(100% - 44px);
-	display: flex;
-	padding: 12px 16px 12px 28px;
-	align-items: end;
-}
-
-.course .nl-popup .title {
-	font-size: 2em;
-	margin-right: auto;
-}
-.course .nl-popup .close {
-	font-size: 2.4em;
-	font-weight: bold;
-	color: #444;
-	border: none;
-	background: none;
-	cursor: pointer;
-}
-
-.course .nl-popup .header-line {
-	width: calc(100% - 40px);
-	margin: 0px 20px 28px 20px;
-	height: 1px;
-	background-color: #4444;
-}
-
-.course .nl-popup .input-container {
-	margin: 0px 40px;
-	display: flex;
-}
-
-.course .nl-popup .input-container .label {
-	margin-right: 10px;
-	display: flex;
-	font-weight: bolder;
-}
-.course .nl-popup .input-container .label > span {
-	margin: auto;
-}
-
-.course .nl-popup .input-container > input {
-	padding: 4px 8px;
-	flex-grow: 1;
-	border: 2px solid #D5D5D5;
-	border-radius: 6px;
-}
-
-.course .nl-popup .input-container > input.invalid {
-	border-color: #F00;
-}
-
-.course .nl-popup .submit {
-	display: block;
-	margin: 24px auto 0px auto;
-	padding: 6px 24px;
-	border: none;
-	border-radius: 6px;
-	background: none;
-	background-color: #1976D2;
-	color: #FFF;
-	font-size: 1.4em;
-	font-weight: bold;
-	cursor: pointer;
 }

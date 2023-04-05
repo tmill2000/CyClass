@@ -45,12 +45,6 @@
 .lme-button#send-button {
 	background-color: #43c3ff;
 }
-.lme-button#send-button:hover {
-	background-color: #79d5ff;
-}
-.lme-button#send-button:active {
-	background-color: #16b5ff;
-}
 
 .lme-circlebutton {
 	padding: 6px;
@@ -68,12 +62,6 @@
 .lme-circlebutton#attach-button {
 	margin-right: 4px;
 	background-color: #d9d9d9;
-}
-.lme-circlebutton#attach-button:hover {
-	background-color: #e7e7e7;
-}
-.lme-circlebutton#attach-button:active {
-	background-color: #b6b6b6;
 }
 .lme-circlebutton#attach-button.attached {
 	background-color: #c54aff;
