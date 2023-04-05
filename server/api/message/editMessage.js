@@ -2,7 +2,6 @@ const { writeLog } = require("../../utils/logger");
 const patch = require("../utils/patchService");
 
 /**
- *
  * @param {Express.Request} req
  * @param {Express.Response} res
  * @returns {Promise<Express.Response>}
