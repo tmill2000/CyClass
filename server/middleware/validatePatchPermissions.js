@@ -37,7 +37,65 @@ const canEditGivenMessage = async (req, res, next) => {
     return res.status(403).send({ msg: "Forbidden to update this record" });
 };
 
+const canEditGivenPollPrompt = async (req, res, next) => {
+    if (process.env.NODE_ENV === "devl" || req.session.userid === 4) {
+        next();
+        return;
+    }
+
+    const { poll_id: pollId } = req.body;
+    const pollQuery = "SELECT sender_id FROM polls WHERE poll_id = ?;";
+    const rawQueryResp = await runQuery(pollQuery, [pollId]);
+    const { sender_id: senderId } = rawQueryResp[0];
+
+    if (senderId !== req.session.userid) {
+        return res.status(403).send({ msg: "Forbidden to update this record" });
+    }
+
+    next();
+};
+
+const canEditGivenPollResponse = async (req, res, next) => {
+    if (process.env.NODE_ENV === "devl" || req.session.userid === 4) {
+        next();
+        return;
+    }
+
+    const { poll_response_id: pollResponseId } = req.body;
+    const pollQuery = "SELECT user_id FROM polls WHERE poll_response_id = ?;";
+    const rawQueryResp = await runQuery(pollQuery, [pollResponseId]);
+    const { sender_id: senderId } = rawQueryResp[0];
+
+    if (senderId !== req.session.userid) {
+        return res.status(403).send({ msg: "Forbidden to update this record" });
+    }
+
+    next();
+};
+
+const canEditGivenPollChoice = async (req, res, next) => {
+    if (process.env.NODE_ENV === "devl" || req.session.userid === 4) {
+        next();
+        return;
+    }
+
+    const { poll_choice_id: pollChoiceId } = req.body;
+    const pollQuery =
+        "SELECT sender_id FROM polls WHERE poll_id = (SELECT poll_id FROM poll_choices WHERE poll_choice_id = ?);";
+    const rawQueryResp = await runQuery(pollQuery, [pollChoiceId]);
+    const { sender_id: senderId } = rawQueryResp[0];
+
+    if (senderId !== req.session.userid) {
+        return res.status(403).send({ msg: "Forbidden to update this record" });
+    }
+
+    next();
+};
+
 module.exports = {
     canEditGivenUser,
-    canEditGivenMessage
+    canEditGivenMessage,
+    canEditGivenPollPrompt,
+    canEditGivenPollResponse,
+    canEditGivenPollChoice
 };

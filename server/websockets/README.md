@@ -87,3 +87,39 @@ messageObj = {
             }
         }
 ```
+
+### **Message Update**
+- sends message without saving to db
+```
+messageObj = {
+            type: "message_update"
+            payload: {
+                body: string
+                is_anonymous: boolean
+                parent_id: number | null
+                message_id: number
+                sender_id: number
+                lecture_id: number
+                media_id: string
+                timestamp: string (date)
+            }
+        }
+```
+
+### **Poll Update**
+- sends poll without saving to db
+```
+```
+messageObj = {
+            type: "poll"
+            payload: {
+                question_text: string
+                poll_type: string
+                close_date: string
+                poll_choices: [
+                    choice_text: string
+                ]
+            }
+        }
+```
+```
