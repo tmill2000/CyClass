@@ -452,10 +452,12 @@ class LiveLectureAPI {
 	 * indefinite / manually closed) and has the specified choice options. Assumes a live lecture connection has been
 	 * established.
 	 * @param {string} prompt 
-	 * @param {number?} openTime
+	 * @param {number?} close_time
+	 * @param {number} course_id
+	 * @param {number} lecture_id
 	 * @param {{ text: string, correct: boolean }[]} choices
 	 */
-	createPoll(prompt, openTime, choices) {
+	createPoll(prompt, close_time, choices, course_id, lecture_id) {
 
 		// Verify connection
 		if (this.websocket == null) {
@@ -466,7 +468,10 @@ class LiveLectureAPI {
 		this.websocket.send(JSON.stringify({
 			type: "poll",
 			payload: {
+				course_id: course_id,
+				lecture_id: lecture_id,
 				question_text: prompt,
+				close_date: close_time,
 				poll_choices: choices.map(choice => ({
 					choice_text: choice.text,
 					is_correct_choice: choice.correct

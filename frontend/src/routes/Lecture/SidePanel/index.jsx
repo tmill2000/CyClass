@@ -34,10 +34,10 @@ function SidePanel(props) {
                 <FilterBox></FilterBox>
             </div>
             <div className="buttons-LLLM">
-                <button className="button-LLLM-raise-hand" onClick={() => setRaiseHandPopupVisible(true)}>
-                    <img src={handIcon} className="hand-icon-LLLM" />
-                </button>
-                {props.elevated ? <PollFormPopup profile_name={props.userIDname} profile_role={props.userIDrole} api={props.api}></PollFormPopup> : null}
+                <button className="button-LLLM-raise-hand">
+                {/* <img src={handIcon} className="hand-icon-LLLM"></img> */}
+                RAISE HAND</button>
+                {props.elevated ? <PollFormPopup profile_name={props.userIDname} profile_role={props.userIDrole} api={props.api} courseID={props.courseID} lectureID={props.lectureID}></PollFormPopup> : null}
             </div>
             <RaiseHandPopup api={props.api} visible={raiseHandPopupVisible} onClose={() => setRaiseHandPopupVisible(false)} />
         </div>

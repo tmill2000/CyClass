@@ -19,6 +19,7 @@ function Lecture(props) {
 
 	// Get lecture and course IDs from path params and validate them
 	const pathParams = useParams();
+
 	const lectureID = parseInt(pathParams.lectureID);
 	if (isNaN(lectureID)) {
 		return <ErrorPage code={400} text="Invalid lecture number" />;
@@ -66,9 +67,9 @@ function Lecture(props) {
 	return (
 		<div className="page">
             <LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
-			<div className="lecture-main">
-            	<SideBar userIDname={LocalUser.current.netID} userIDrole={user_role} api={api} elevated={isElevatedUser}/>
-				<div className="feed-container">
+			<div style={{ display: "flex" }}>
+            	<LiveLectureLeftMenu userIDname={LocalUser.current.netID} userIDrole={user_role} api={api} elevated={isElevatedUser} courseID={courseID} lectureID={lectureID}/>
+				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
 					<LectureFeed api={api} elevated={isElevatedUser} messages={lectureState.messages} polls={lectureState.polls} />
 					<NewMessageEntry api={api} />
 				</div>
