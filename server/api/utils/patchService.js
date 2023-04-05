@@ -6,7 +6,7 @@ const editableFields = {
     lectures: [],
     media_metadata: [],
     messages: ["message_title", "is_anonymous", "body"],
-    poll_choices: [],
+    poll_choices: ["choice_text", "is_correct_choice"],
     poll_responses: ["response_id"],
     polls: ["question_text", "close_date"],
     roles: [],

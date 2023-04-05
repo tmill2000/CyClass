@@ -56,7 +56,6 @@ const canEditGivenPollPrompt = async (req, res, next) => {
 };
 
 const canEditGivenPollResponse = async (req, res, next) => {
-    writeLog("debug", req.session.userid);
     if (process.env.NODE_ENV === "devl" || req.session.userid === 4) {
         next();
         return;
@@ -74,9 +73,29 @@ const canEditGivenPollResponse = async (req, res, next) => {
     next();
 };
 
+const canEditGivenPollChoice = async (req, res, next) => {
+    if (process.env.NODE_ENV === "devl" || req.session.userid === 4) {
+        next();
+        return;
+    }
+
+    const { poll_choice_id: pollChoiceId } = req.body;
+    const pollQuery =
+        "SELECT sender_id FROM polls WHERE poll_id = (SELECT poll_id FROM poll_choices WHERE poll_choice_id = ?);";
+    const rawQueryResp = await runQuery(pollQuery, [pollChoiceId]);
+    const { sender_id: senderId } = rawQueryResp[0];
+
+    if (senderId !== req.session.userid) {
+        return res.status(403).send({ msg: "Forbidden to update this record" });
+    }
+
+    next();
+};
+
 module.exports = {
     canEditGivenUser,
     canEditGivenMessage,
     canEditGivenPollPrompt,
-    canEditGivenPollResponse
+    canEditGivenPollResponse,
+    canEditGivenPollChoice
 };
