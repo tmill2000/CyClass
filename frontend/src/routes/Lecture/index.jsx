@@ -65,7 +65,7 @@ function Lecture(props) {
 	const api = lectureState.api
 	return (
 		<div className="page">
-            <LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
+            <LiveLectureTitle userIDname={LocalUser.current.netID} userIDrole={user_role} lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
 			<div style={{ display: "flex" }}>
             	<LiveLectureLeftMenu userIDname={LocalUser.current.netID} userIDrole={user_role} api={api} elevated={isElevatedUser} courseID={courseID} lectureID={lectureID}/>
 				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
