@@ -141,7 +141,7 @@ export default function PollFormPopup(props){
         nested
       >
         {close => (
-          <div className="popup">
+          <div className="poll-popup">
             <button className="close" onClick={close}>&times;</button>
             <div className="header">         
                 <div className='poll-form-header-container'>

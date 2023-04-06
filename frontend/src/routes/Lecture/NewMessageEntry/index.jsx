@@ -63,8 +63,8 @@ function NewMessageEntry(props) {
 				</span>
 				: <span className="lme-file-issue">{fileIssue}</span> }
 				<input id="file-select" type="file" style={{display: "none"}} onChange={fileInputChanged} />
-				<button id="attach-button" className={"lme-circlebutton" + (selectedFile != null ? " attached" : "")} onClick={attachFile}><img src={attachmentImg} /></button>
-				<button id="send-button" className="lme-button" onClick={sendMsg}>SEND</button>
+				<button id="attach-button" className={"button lme-circlebutton" + (selectedFile != null ? " attached" : "")} onClick={attachFile}><img src={attachmentImg} /></button>
+				<button id="send-button" className="button lme-button" onClick={sendMsg}>SEND</button>
 			</div>
 		</div>
 	);

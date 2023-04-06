@@ -1,0 +1,74 @@
+.qfeed {
+	position: absolute;
+	right: 0%;
+	top: 80px;
+	width: 800px;
+	max-height: 80%;
+	padding: 20px;
+}
+
+.qfeed .title {
+	font-size: 1.6em;
+	font-weight: bolder;
+	color: #002f62;
+	z-index: 1;
+}
+
+.qfeed .back {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: calc(120%);
+	height: calc(100%);
+	background-color: #0004;
+	filter: blur(40px);
+}
+
+.qfeed .list {
+	position: relative;
+	width: calc(100% - 40px);
+	overflow-y: auto;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+}
+
+.qfeed .question {
+	width: 100%;
+	margin: 10px 0px;
+}
+
+.qfeed .bubble {
+	padding: 8px 12px;
+	background-color: #FFF;
+	border-radius: 10px;
+}
+
+.qfeed .under {
+	width: 100%;
+}
+
+.qfeed .clear.button {
+	margin-top: 8px;
+	margin-left: 8px;
+	background-color: #0C0;
+	padding: 0.2em 0.5em;
+	font-size: 1.1em;
+}
+
+.qfeed .user-container {
+	margin-top: -20px;
+	padding-top: 20px;
+	padding-left: 10px;
+	display: inline;
+	background-color: #FFF;
+	border-radius: 10px;
+	float: right;
+}
+
+.qfeed .user-container > div {
+	margin-top: -7px;
+	margin-bottom: -7px;
+	padding: 0px 0px;
+}
