@@ -771,6 +771,23 @@ class LiveLectureAPI {
 	};
 
 	/**
+	 * Edits a polls choice
+	 * @param {*} pollChoiceId 
+	 * @param {*} updatedChoice 
+	 */
+	editPollChoice(pollChoiceId, updatedChoice) {
+		axios.patch('/api/poll/editPollChoice', {
+			poll_choice_id: pollChoiceId,
+			choice: updatedChoice
+		})
+		.then((res) => {})
+		.catch((err) => {
+		  console.error("Failed to edit choice",err);
+		  throw err;
+		})
+	};
+
+	/**
 	 * Sends the given question to the course owner (i.e. not in chat). Can optionally be anonymous.
 	 * @param {string} question 
 	 * @param {boolean?} anonymous
