@@ -8,7 +8,7 @@ import ErrorPage from "../ErrorPage";
 import LectureFeed from "./LectureFeed";
 import NewMessageEntry from "./NewMessageEntry";
 import LiveLectureTitle from "./LiveLectureTitle";
-import SideBar from "./SidePanel";
+import SidePanel from "./SidePanel";
 import "./styles.css";
 
 import LectureState from "./LectureState";
