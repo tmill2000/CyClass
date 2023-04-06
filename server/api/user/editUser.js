@@ -1,6 +1,6 @@
 const { writeLog } = require("../../utils/logger");
-const patch = require("../utils/patchService");
 const bcrypt = require("bcrypt");
+const patch = require("../utils/patchService");
 
 /**
  * @param {Express.Request} req
