@@ -8,7 +8,7 @@ import ErrorPage from "../ErrorPage";
 import LectureFeed from "./LectureFeed";
 import NewMessageEntry from "./NewMessageEntry";
 import LiveLectureTitle from "./LiveLectureTitle";
-import SideBar from "./SidePanel";
+import SidePanel from "./SidePanel";
 import "./styles.css";
 
 import LectureState from "./LectureState";
@@ -67,9 +67,9 @@ function Lecture(props) {
 	const api = lectureState.api;
 	return (
 		<div className="page">
-            <LiveLectureTitle lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
+            <LiveLectureTitle userIDname={LocalUser.current.netID} userIDrole={user_role} lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
 			<div className="lecture-main">
-            	<SideBar userIDname={LocalUser.current.netID} userIDrole={user_role} api={api} elevated={isElevatedUser} courseID={courseID} lectureID={lectureID}/>
+            	<SidePanel userIDname={LocalUser.current.netID} userIDrole={user_role} api={api} elevated={isElevatedUser} courseID={courseID} lectureID={lectureID}/>
 				<div className="feed-container">
 					<LectureFeed api={api} elevated={isElevatedUser} messages={lectureState.messages} polls={lectureState.polls} />
 					<NewMessageEntry api={api} />

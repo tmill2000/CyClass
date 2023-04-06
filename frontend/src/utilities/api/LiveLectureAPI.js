@@ -511,7 +511,7 @@ class LiveLectureAPI {
 	 * @param {number} lecture_id
 	 * @param {{ text: string, correct: boolean }[]} choices
 	 */
-	createPoll(prompt, close_time, choices, course_id, lecture_id) {
+	createPoll(prompt, close_time, choices, course_id, lecture_id, poll_type) {
 
 		// Verify connection
 		if (this.websocket == null) {
@@ -522,14 +522,19 @@ class LiveLectureAPI {
 		this.websocket.send(JSON.stringify({
 			type: "poll",
 			payload: {
-				course_id: course_id,
 				lecture_id: lecture_id,
 				question_text: prompt,
-				close_date: close_time,
+				
+				
+				
+				
 				poll_choices: choices.map(choice => ({
 					choice_text: choice.text,
 					is_correct_choice: choice.correct
-				}))
+				})),
+				course_id: course_id,
+				close_date: close_time,
+				poll_type: poll_type
 			}
 		}));
 	}
