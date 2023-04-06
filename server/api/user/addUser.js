@@ -14,7 +14,6 @@ const addUser = async (req, res) => {
             return res.status(400).send({ msg: "Invalid Body" });
         }
         const hash = bcrypt.hashSync(password, 10);
-        console.log(hash)
         const insertId = await userService.addUser(netid, hash, firstName, lastName);
         return res.status(201).send({ user_id: insertId });
     } catch (e) {
