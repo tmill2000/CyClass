@@ -48,8 +48,8 @@ const login = async (req, res) => {
         if (!rows) {
             return res.status(401).send({ msg: "Incorrect Username or Password" });
         }
-        const hash = bcrypt.hashSync(password, 10);
-        console.log(hash);
+        // const hash = bcrypt.hashSync(password, 10);
+        // console.log(hash);
         const match = await bcrypt.compare(password, rows[0].password);
         if (netId == rows[0]?.netid && match) {
             req.session.userid = rows[0].user_id;
@@ -62,6 +62,7 @@ const login = async (req, res) => {
             res.status(401).send({ msg: "Incorrect Username or Password" });
         }
     } catch (e) {
+        console.log(e)
         writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
