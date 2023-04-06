@@ -462,6 +462,38 @@ class LiveLectureAPI {
 		}
 
 	}
+	/**
+	 * 
+	 * @param {*} messageId 
+	 * @param {*} updatedContent 
+	 * @returns 
+	 */
+	editMessage(messageId, updatedContent) {
+		//Perform patch
+		return axios.patch("/api/editMessage", {
+			params: {
+				message_id: messageId,
+				content: updatedContent,
+		  	}
+		})
+		.then((res) => {
+			// Send edited message through WebSocket (backend will record)
+			this.websocket.send(JSON.stringify({
+				type: "message",
+				payload: {
+					sender_id: this.userID,
+					body: body,
+					is_anonymous: anonymous,
+					course_id: this.courseID,
+					lecture_id: this.lectureID,
+					parent_id: null
+				}
+			}));
+		})
+		.catch((err) => {
+		  console.error("Failed to edit message", err);
+		})
+	};
 
 	/**
 	 * Sends a request to retrieve the file attached to a message. Returns a Promise that will resolve to the loaded
