@@ -8,9 +8,11 @@ import ErrorPage from "../ErrorPage";
 import LectureFeed from "./LectureFeed";
 import NewMessageEntry from "./NewMessageEntry";
 import LiveLectureTitle from "./LiveLectureTitle";
-import LiveLectureLeftMenu from "./LiveLectureLeftMenu";
+import SideBar from "./SidePanel";
+import "./styles.css";
 
 import LectureState from "./LectureState";
+import QuestionFeed from "./QuestionFeed";
 
 let lectureState = null;
 
@@ -62,7 +64,7 @@ function Lecture(props) {
 	}, [ lectureID ]);
 
 	// Return component
-	const api = lectureState.api
+	const api = lectureState.api;
 	return (
 		<div className="page">
             <LiveLectureTitle userIDname={LocalUser.current.netID} userIDrole={user_role} lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
@@ -71,6 +73,7 @@ function Lecture(props) {
 				<div style={{ display: "flex", flexDirection: "column", width: "87%", height: "calc(100vh - 140px)" }}>
 					<LectureFeed api={api} elevated={isElevatedUser} messages={lectureState.messages} polls={lectureState.polls} />
 					<NewMessageEntry api={api} />
+					<QuestionFeed api={api} questions={lectureState.questions} />
 				</div>
 			</div>
 		</div>

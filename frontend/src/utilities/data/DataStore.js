@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { configureStore, createReducer, createAction } from "@reduxjs/toolkit";
+import { configureStore, createReducer, createAction, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { Provider, useSelector } from "react-redux";
 
 const LOCAL_STORAGE_KEY = "dataStore";

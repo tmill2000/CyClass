@@ -19,7 +19,7 @@ CREATE TABLE users (
     netid varchar(24) NOT NULL,
     first_name varchar(255),
     last_name varchar(255),
-    password varchar(30) NOT NULL
+    password varchar(255) NOT NULL
 );
 
 CREATE TABLE roles (

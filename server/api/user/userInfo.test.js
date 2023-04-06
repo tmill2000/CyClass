@@ -3,6 +3,7 @@ const userService = require("./services/userService");
 const roleService = require("../role/services/roleService");
 const { getMockReq, getMockRes } = require("@jest-mock/express");
 const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 const { res, mockClear } = getMockRes();
 
 describe("userInfo", () => {
@@ -70,6 +71,7 @@ describe("userInfo", () => {
                 }
             ]);
             jest.spyOn(crypto, "randomBytes").mockReturnValueOnce("session");
+            jest.spyOn(bcrypt, "compare").mockResolvedValueOnce(true);
             req.session = {};
             await login(req, res);
             expect(res.status).toBeCalledWith(200);

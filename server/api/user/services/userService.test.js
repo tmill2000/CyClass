@@ -22,6 +22,7 @@ describe("roleService", () => {
 
     describe("addUser", () => {
         it("should return response", async () => {
+            jest.spyOn(db, "runQuery").mockResolvedValueOnce([]);
             jest.spyOn(db, "runQuery").mockResolvedValueOnce({ insertId: 1 });
             const res = await addUser("netid", "pw", "Phil", "Swift");
             expect(res).toBe(1);

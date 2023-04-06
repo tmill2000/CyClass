@@ -3,12 +3,11 @@
     width: 13%;
     height: 100%;
     background-color: rgb(176, 176, 176);
-    position: relative;
     padding-right: 0;
     margin-right: 0;
 }
 
-.button {
+.button-left-menu {
     background-color: rgb(60, 16, 16);
     color: white;
     padding-top: 20px;
@@ -48,7 +47,7 @@
 .button-LLLM-raise-hand {
     border-radius: 50%;
     background-color: rgb(0, 140, 255);
-    padding:15px;
+    padding: 10px;
     color: white;
     border-color: rgb(0, 140, 255);
     
@@ -68,5 +67,5 @@
 }
 
 .hand-icon-LLLM {
-    width: 20px;
+    width: 50px;
 }
