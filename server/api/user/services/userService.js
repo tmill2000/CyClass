@@ -49,6 +49,9 @@ const loginInfo = async netId => {
  */
 const addUser = async (netid, password, firstName, lastName) => {
     try {
+        const noDupe = "SELECT user_id FROM users WHERE netid = ?";
+        const [noDupeRes] = await runQuery(noDupe, [netid]);
+        if (noDupeRes) return -1;
         const query = "INSERT INTO users (netid, password, first_name, last_name) VALUES (?, ?, ?, ?);";
         const response = await runQuery(query, [netid, password, firstName, lastName]);
         return response.insertId;
