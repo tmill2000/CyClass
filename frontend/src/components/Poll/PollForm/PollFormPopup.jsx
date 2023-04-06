@@ -20,19 +20,26 @@ export default function PollFormPopup(props){
 
     const onSelect = () => {
 		if (props.api != null && props.courseID != null && props.lectureID != null)  {
-
-			props.api.createPoll(poll_question_input.current.value.trim(), get_date(), getInputs(), props.courseID, props.lectureID);
+			props.api.createPoll(poll_question_input.current.value.trim(), get_date(), getInputs(), props.courseID, props.lectureID, 'MULTIPLE_CHOICE');
 		}
 	};
 
     function get_date(){
         var date = new Date();
         const time_elapsed = document.getElementById('numMins');
-        // const mins = date.getMinutes() + time_elapsed;
-        // date.setMinutes(date.getMinutes() + Number(time_elapsed))
+        let updated_mins = date.getMinutes() + time_elapsed;
+        let add_mins = updated_mins % 60;
+        console.log(add_mins);
+        updated_mins = updated_mins - add_mins * 60;
+        console.log(updated_mins);
+        updated_hours = date.getHours() + add_mins;
+        console.log(updated_hours);
+        date.setHours(updated_hours);
+        date.setMinutes(updated_mins);
         console.log(date); // Wed Jan 01 2014 13:28:56 GMT-1000 (Hawaiian Standard Time) 
         
-        return JSON.stringify(date);
+        // return date.toISOString();
+        return null;
     }
 
     function backgroundColor(letter){
