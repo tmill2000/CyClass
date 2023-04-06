@@ -463,14 +463,13 @@ class LiveLectureAPI {
 
 	}
 	/**
-	 * 
+	 * Edits a message when selected, and sends the updatedMessage through web socket.
 	 * @param {*} messageId 
 	 * @param {*} updatedContent 
-	 * @returns 
 	 */
 	editMessage(messageId, updatedContent) {
 		//Perform patch
-		return axios.patch("/api/editMessage", {
+		return axios.patch("/api/message/editMessage", {
 			params: {
 				message_id: messageId,
 				content: updatedContent,
@@ -492,6 +491,35 @@ class LiveLectureAPI {
 		})
 		.catch((err) => {
 		  console.error("Failed to edit message", err);
+		})
+	};
+
+	/**
+	 * Deletes a message when selected and sends through web socket. 
+	 * @param {*} messageId 
+	 * @param {*} courseId 
+	 */
+	deleteMessage (messageId, courseId) {
+		// Perform deletion
+		return axios.delete("/api/message/deleteMessage", {
+			params: { 
+				message_id: messageId, 
+				course_id: courseId 
+			},
+		})
+		.then((res) => {
+			// Also send through websocket
+			if (this.websocket != null) {
+				this.websocket.send(JSON.stringify({
+					type: "delete_message",
+					payload: {
+						course_id: courseId
+					}
+				}));
+			}
+		})
+		 .catch((err) => {
+		  console.error("Failed to delete message", err);
 		})
 	};
 
