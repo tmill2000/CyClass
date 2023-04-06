@@ -60,7 +60,6 @@ const login = async (req, res) => {
             res.status(401).send({ msg: "Incorrect Username or Password" });
         }
     } catch (e) {
-        console.log(e);
         writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
