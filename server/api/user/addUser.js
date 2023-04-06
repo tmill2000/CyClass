@@ -15,9 +15,12 @@ const addUser = async (req, res) => {
         }
         const hash = bcrypt.hashSync(password, 10);
         const insertId = await userService.addUser(netid, hash, firstName, lastName);
+        if (insertId < 0) {
+            return res.status(409).send({ msg: `NetId ${netid} is taken.` });
+        }
         return res.status(201).send({ user_id: insertId });
     } catch (e) {
-        writeLog("error", "addUser" + e.message);
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };
