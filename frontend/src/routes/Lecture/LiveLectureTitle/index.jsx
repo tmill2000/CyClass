@@ -3,9 +3,6 @@ import ProfileIcon from '../../../components/ProfileIcon'
 import Button from "../../../components/Button/Button";
 import "./style.css";
 
-// Example use:
-//<ProfileIcon profile_name="Jaden Ciesielski" profile_role="Student" width="500px"></ProfileIcon>
-
 const LiveLectureTitle = (props) => {
 
     return (
@@ -15,7 +12,7 @@ const LiveLectureTitle = (props) => {
                     <span className="host-by">HOSTED BY:</span>
                 </li>
                 <li className="list-item">
-                    <ProfileIcon profile_name="Maruf" profile_role="Professor" width="300px"></ProfileIcon>
+                    <ProfileIcon profile_name={props.userIDname} profile_role={props.userIDrole} width="300px"></ProfileIcon>
                 </li>
             </ul>
             <div className="title-section">

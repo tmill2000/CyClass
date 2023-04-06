@@ -6,7 +6,6 @@ import './style_popup.css';
 import IconPoll from "../IconPoll";
 import ProfileIcon from "../../ProfileIcon";
 
-
 export default function PollFormPopup(props){
     const poll_question_input = createRef();
     const poll_answer_A = createRef();
@@ -20,10 +19,28 @@ export default function PollFormPopup(props){
     let pollD = false;
 
     const onSelect = () => {
-		if (props.api != null ) {
-			props.api.createPoll(poll_question_input.current.value.trim(), null, getInputs());
+		if (props.api != null && props.courseID != null && props.lectureID != null)  {
+			props.api.createPoll(poll_question_input.current.value.trim(), get_date(), getInputs(), props.courseID, props.lectureID, 'MULTIPLE_CHOICE');
 		}
 	};
+
+    function get_date(){
+        var date = new Date();
+        const time_elapsed = document.getElementById('numMins');
+        let updated_mins = date.getMinutes() + time_elapsed;
+        let add_mins = updated_mins % 60;
+        console.log(add_mins);
+        updated_mins = updated_mins - add_mins * 60;
+        console.log(updated_mins);
+        updated_hours = date.getHours() + add_mins;
+        console.log(updated_hours);
+        date.setHours(updated_hours);
+        date.setMinutes(updated_mins);
+        console.log(date); // Wed Jan 01 2014 13:28:56 GMT-1000 (Hawaiian Standard Time) 
+        
+        // return date.toISOString();
+        return null;
+    }
 
     function backgroundColor(letter){
         const btnA = document.getElementById('buttonA');
@@ -131,7 +148,7 @@ export default function PollFormPopup(props){
         nested
       >
         {close => (
-          <div className="popup">
+          <div className="poll-popup">
             <button className="close" onClick={close}>&times;</button>
             <div className="header">         
                 <div className='poll-form-header-container'>
@@ -166,7 +183,7 @@ export default function PollFormPopup(props){
                 </div>
                 <div className="poll-form-time-available-group">
                     <div className="poll-form-time-available-label">Number of minutes poll is available: </div>
-                    <input ref={poll_duration} className="poll-form-time-available-input" type="number" required/>
+                    <input ref={poll_duration} className="poll-form-time-available-input" type="number" required id="numMins"/>
                 </div>
             </div>
             </div>

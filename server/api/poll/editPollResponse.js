@@ -1,5 +1,4 @@
 const { writeLog } = require("../../utils/logger");
-const bcrypt = require("bcrypt");
 const patch = require("../utils/patchService");
 
 /**
@@ -7,14 +6,11 @@ const patch = require("../utils/patchService");
  * @param {Express.Response} res
  * @returns {Promise<Express.Response>}
  */
-const editUser = async (req, res) => {
+const editPollResponse = async (req, res) => {
     try {
-        const { user_id: userId, password } = req.body;
-        if (password) {
-            const hash = bcrypt.hashSync(password, 10);
-            req.body.password = hash;
-        }
-        await patch.genericPatch("users", req.body, "user_id", userId);
+        const { poll_response_id: pollResponseId } = req.body;
+
+        await patch.genericPatch("poll_responses", req.body, "poll_response_id", pollResponseId);
 
         return res.status(200).send({ msg: "Success" });
     } catch (e) {
@@ -24,5 +20,5 @@ const editUser = async (req, res) => {
 };
 
 module.exports = {
-    editUser
+    editPollResponse
 };

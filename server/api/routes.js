@@ -43,7 +43,10 @@ router.post("/poll-response", validateSession, poll.addPollResponse);
 router.post(
     "/upload-media",
     validateSession,
-    bodyParser.raw({ type: ["image/jpeg", "image/png", "application/pdf"], limit: "5mb" }),
+    bodyParser.raw({
+        type: ["image/jpeg", "image/png", "application/pdf", "application/mp4", "text/plain"],
+        limit: "5mb"
+    }),
     media.uploadMedia
 ); //TODO: Very vulnerable to malicious files
 router.post("/poll", validateSession, poll.addPoll);
@@ -55,6 +58,9 @@ router.delete("/message", validateSession, message.deleteMessage);
 //Patch
 router.patch("/course/close", validateSession, course.closeCourse);
 router.patch("/poll/close", validateSession, poll.closePoll);
+router.patch("/poll", validateSession, validatePatch.canEditGivenPollPrompt, poll.editPollPrompt);
+router.patch("/poll-response", validateSession, validatePatch.canEditGivenPollResponse, poll.editPollResponse);
+router.patch("/poll-choice", validateSession, validatePatch.canEditGivenPollChoice, poll.editPollChoice);
 router.patch("/user", validateSession, validatePatch.canEditGivenUser, user.editUser);
 router.patch("/message", validateSession, validatePatch.canEditGivenMessage, message.editMessage);
 

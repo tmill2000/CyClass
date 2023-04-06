@@ -56,6 +56,9 @@ const handleRequest = async (webSocket, req) => {
             const insertId = await addMessage(userId, body, isAnonymous, lectureId, parentId);
             messageObj.payload.message_id = insertId;
             messageObj.payload.timestamp = new Date().toISOString();
+        } else if (messageObj.type === "message_update") {
+            // TODO ensure payload shape
+            messageObj.payload.updated = true;
         } else if (messageObj.type === "poll") {
             const {
                 question_text: questionText,
@@ -76,6 +79,9 @@ const handleRequest = async (webSocket, req) => {
             messageObj.payload.poll_choices = messageObj.payload.poll_choices.map(choice => ({
                 choice_text: choice.choice_text
             }));
+        } else if (messageObj.type === "poll_update") {
+            //TODO ensure payload shape
+            messageObj.payload.updated = true;
         } else if (messageObj.type === "question") {
             const { body, is_anonymous } = messageObj.payload;
 
@@ -90,10 +96,13 @@ const handleRequest = async (webSocket, req) => {
                 if (toUserWebSocket) {
                     toUserWebSocket.send(
                         JSON.stringify({
-                            userId,
-                            body,
-                            is_anonymous,
-                            lecture_id: lectureId
+                            type: "question",
+                            payload: {
+                                userId,
+                                body,
+                                is_anonymous,
+                                lecture_id: lectureId
+                            }
                         })
                     );
                 }

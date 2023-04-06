@@ -1,5 +1,6 @@
 const { writeLog } = require("../../utils/logger");
 const userService = require("./services/userService");
+const bcrypt = require("bcrypt");
 
 /**
  * @param {Express.Request} req
@@ -12,7 +13,11 @@ const addUser = async (req, res) => {
         if (!netid || !password) {
             return res.status(400).send({ msg: "Invalid Body" });
         }
-        const insertId = await userService.addUser(netid, password, firstName, lastName);
+        const hash = bcrypt.hashSync(password, 10);
+        const insertId = await userService.addUser(netid, hash, firstName, lastName);
+        if (insertId < 0) {
+            return res.status(409).send({ msg: `NetId ${netid} is taken.` });
+        }
         return res.status(201).send({ user_id: insertId });
     } catch (e) {
         writeLog("error", e.message);

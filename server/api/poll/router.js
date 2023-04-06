@@ -4,6 +4,9 @@ const addPoll = require("./addPoll");
 const getPollMetrics = require("./getPollMetrics");
 const closePoll = require("./closePoll");
 const getPollById = require("./getPolls");
+const editPollPrompt = require("./editPollPrompt");
+const editPollResponse = require("./editPollResponse");
+const editPollChoice = require("./editPollChoice");
 
 module.exports = {
     ...addPollResponse,
@@ -11,5 +14,8 @@ module.exports = {
     ...addPoll,
     ...getPollMetrics,
     ...closePoll,
-    ...getPollById
+    ...getPollById,
+    ...editPollPrompt,
+    ...editPollResponse,
+    ...editPollChoice
 };

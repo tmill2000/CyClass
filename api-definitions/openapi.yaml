@@ -54,6 +54,8 @@ paths:
           description: Invalid Session
         '404':
           description: Invalid Body
+        '409':
+          description: NetId {netid} is taken
         '500':
           description: Internal Server Error
     get:
@@ -238,6 +240,8 @@ paths:
                     type: boolean
         '400':
           description: Invalid Parameters
+        '401':
+          description: Unauthorized
         '403':
           description: Invalid Session
         '500':

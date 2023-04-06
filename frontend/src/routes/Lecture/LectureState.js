@@ -39,6 +39,7 @@ export default class LectureState {
 
 	messages = []
 	polls = []
+	questions = []
 	version = 0
 
 	constructor(userID, courseID, lectureID) {
@@ -91,6 +92,36 @@ export default class LectureState {
 
 				// Update object
 				this.polls[index].closed = event.closed;
+
+				// Update version
+				this.setStateVersion(++this.version);
+
+			}
+
+		});
+		this.api.onQuestion(async (event) => {
+
+			// Add to questions
+			this.questions.push({
+				id: event.questionID,
+				question: event.question,
+				user: await toUserInfo(event.userID, event.isAnonymous),
+				time: event.time
+			});
+
+			// Update version
+			this.setStateVersion(++this.version);
+
+		});
+		this.api.onQuestionDeleted(async (event) => {
+
+			// Find in list, if exists
+			const index = this.questions.findIndex(e => e.id == event.questionID);
+			if (index >= 0) {
+
+				// Remove
+				this.questions[index] = this.questions[this.questions.length - 1];
+				this.questions.pop();
 
 				// Update version
 				this.setStateVersion(++this.version);

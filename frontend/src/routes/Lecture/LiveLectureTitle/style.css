@@ -6,7 +6,6 @@
     background-color: white;
 	width: 100%;
 	display: flex;
-	position: relative;
 }
 
 .list-layout{
@@ -46,7 +45,6 @@
 .title-section {
     text-align: center;
     align-items: center;
-    padding-left: 25%;
 }
 
 .host-by {

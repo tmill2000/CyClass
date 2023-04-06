@@ -2,6 +2,7 @@ const roleService = require("../role/services/roleService");
 const userService = require("./services/userService");
 const { writeLog } = require("../../utils/logger");
 const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 
 /**
  * @param {Express.Request} req
@@ -43,11 +44,12 @@ const login = async (req, res) => {
         if (!netId || !password) {
             return res.status(400).send({ msg: "Invalid Body" });
         }
-        const rows = await userService.loginInfo(netId, password);
+        const rows = await userService.loginInfo(netId);
         if (!rows) {
             return res.status(401).send({ msg: "Incorrect Username or Password" });
         }
-        if (netId == rows[0]?.netid && password == rows[0]?.password) {
+        const match = await bcrypt.compare(password, rows[0].password);
+        if (netId == rows[0]?.netid && match) {
             req.session.userid = rows[0].user_id;
             req.session.netId = netId;
             req.session.sessionId = crypto.randomBytes(16).toString("base64");

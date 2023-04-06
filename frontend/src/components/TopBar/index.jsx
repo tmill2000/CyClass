@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import LocalUser from "../../utilities/model/LocalUser";
 
@@ -62,7 +62,7 @@ function TopBar(props) {
 		<div ref={topBarRef} className="topbar">
 			<CourseDropdown courses={courses} expanded={currDropdown == "course"} onClick={(e) => setCurrDropdown(currDropdown == "course" ? null : "course")} />
 			<div className="topbar-logo-container">
-				<img className="topbar-logo" src={logoImg} />
+				<Link to="/home"><img className="topbar-logo" src={logoImg} /></Link>
 			</div>
 			<UserDropdown name={netID} email="" expanded={currDropdown == "user"} onClick={(e) => setCurrDropdown(currDropdown == "user" ? null : "user")} />
 		</div>

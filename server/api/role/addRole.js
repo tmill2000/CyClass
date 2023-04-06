@@ -2,6 +2,7 @@ const roleService = require("./services/roleService");
 const courseService = require("../course/services/courseService");
 const { hasCoursePermissions } = require("../../utils/permissions");
 const { writeLog } = require("../../utils/logger");
+const { join } = require("path");
 
 /**
  * @param {Express.Request} req
@@ -47,12 +48,13 @@ const addRoleByJoinCode = async (req, res) => {
             return res.status(400).send("Invalid Parameters");
         }
         const course = await courseService.getCourseByJoinCode(joinCode);
-        if (course?.closed) {
+        if (!course || course?.closed) {
             return res.status(404).send({ msg: "Course Missing or Closed" });
         }
         const insertId = await roleService.addRole(course.course_id, req.session.userid, "STUDENT");
         return res.status(201).send({ rollID: insertId });
     } catch (e) {
+        writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
     }
 };
