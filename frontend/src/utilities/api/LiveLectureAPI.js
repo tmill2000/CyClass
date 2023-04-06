@@ -491,6 +491,7 @@ class LiveLectureAPI {
 		})
 		.catch((err) => {
 		  console.error("Failed to edit message", err);
+		  throw err;
 		})
 	};
 
@@ -520,6 +521,7 @@ class LiveLectureAPI {
 		})
 		 .catch((err) => {
 		  console.error("Failed to delete message", err);
+		  throw err;
 		})
 	};
 
@@ -750,6 +752,23 @@ class LiveLectureAPI {
 			})
 
 	}
+
+	/**
+	 * Edits a polls prompt
+	 * @param {*} pollId 
+	 * @param {*} updatedPrompt 
+	 */
+	editPollPrompt(pollId, updatedPrompt) {
+		axios.patch("/api/poll/editPollPrompt", {
+			poll_id: pollId,
+			prompt: updatedPrompt
+		})
+		.then((res) => {})
+		.catch((err) => {
+		  console.error("Failed to edit prompt", err);
+		  throw err;
+		})
+	};
 
 	/**
 	 * Sends the given question to the course owner (i.e. not in chat). Can optionally be anonymous.
