@@ -22,7 +22,10 @@ const canEditGivenUser = async (req, res, next) => {
 };
 
 const canEditGivenMessage = async (req, res, next) => {
-    if (process.env.NODE_ENV === "devl") next();
+    if (process.env.NODE_ENV === "devl") {
+        next();
+        return;
+    }
 
     const { message_id: messageId } = req.body;
 
@@ -32,7 +35,10 @@ const canEditGivenMessage = async (req, res, next) => {
     writeLog("debug", rawQueryResp);
     const { course_id: courseId } = rawQueryResp[0];
 
-    if (isInCourse(courseId, req.session)) next();
+    if (isInCourse(courseId, req.session)) {
+        next();
+        return;
+    }
 
     return res.status(403).send({ msg: "Forbidden to update this record" });
 };
