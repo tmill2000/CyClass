@@ -67,6 +67,39 @@ export default class LectureState {
 			this.setStateVersion(++this.version);
 
 		});
+		this.api.onMessageUpdated(async (event) => {
+
+			// Look for message in array
+			const index = this.messages.findIndex(x => x.id == event.messageID);
+			if (index >= 0) {
+
+				// Update object
+				if (event.body != null) {
+					this.messages[index].text = event.body;
+				}
+
+				// Update version
+				this.setStateVersion(++this.version);
+
+			}
+
+		});
+		this.api.onMessageDeleted(async (event) => {
+
+			// Look for message in array
+			const index = this.messages.findIndex(x => x.id == event.messageID);
+			if (index >= 0) {
+
+				// Remove
+				this.messages[index] = this.messages[this.messages.length - 1];
+				this.messages.pop();
+
+				// Update version
+				this.setStateVersion(++this.version);
+
+			}
+
+		});
 		this.api.onPoll(async (event) => {
 
 			// Add to polls array
@@ -91,7 +124,22 @@ export default class LectureState {
 			if (index >= 0) {
 
 				// Update object
-				this.polls[index].closed = event.closed;
+				if (event.closed != null) {
+					this.polls[index].closed = event.closed;
+				}
+				if (event.prompt != null) {
+					this.polls[index].prompt = event.prompt;
+				}
+				if (event.choices != null) {
+					for (const choice of event.choices) {
+						const choiceIndex = this.polls[index].choices.findIndex(x => x.id == choice.id);
+						if (choiceIndex >= 0) {
+							this.polls[index].choices[choiceIndex].text = choice.text;
+						} else {
+							console.error(`Failed to update poll: missing choice with ID ${choice.id}`);
+						}
+					}
+				}
 
 				// Update version
 				this.setStateVersion(++this.version);

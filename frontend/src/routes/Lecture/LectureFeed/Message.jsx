@@ -9,7 +9,6 @@
  import Attachment from "./Attachment";
  import ProfileIcon from "../../../components/ProfileIcon";
  import LocalUser from '../../../utilities/model/LocalUser';
- import LiveLectureAPI from '../../../utilities/api/LiveLectureAPI';
  import "./styles.css";
  
  function Message(props) {
@@ -17,48 +16,15 @@
    const [isHovering, setIsHovering] = useState(false);
    const [showActions, setShowActions] = useState(false);
  
-   const isEditable = user && LocalUser.id === user.id;
+   const isEditable = props.user.id == LocalUser.current?.userID;
  
-   const handleEdit = (updatedContent) => {
-	 LiveLectureAPI.editMessage(props.messageId, props.updatedContent)
-	   .then((res) => {
-		this.websocket.send(JSON.stringify({
-			type: "message",
-			payload: {
-				sender_id: this.userID,
-				body: body,
-				is_anonymous: anonymous,
-				course_id: this.courseID,
-				lecture_id: this.lectureID,
-				parent_id: null
-			}
-		}));
-	   })
-	   .catch((err) => {
-		 console.error("Failed to edit message", err);
-		 throw err;
-	   });
-   };
- 
-   const handleDelete = () => {
-	 LiveLectureAPI.deleteMessage(props.messageId, props.courseId)
-	   .then((res) => {
-		if (this.websocket != null) {
-			this.websocket.send(JSON.stringify({
-				type: "delete_message",
-				payload: {
-					course_id: courseId
-				}
-			}));
-		}
-		// Refresh message list after deletion
-		 props.refreshMessages();
-	   })
-	   .catch((err) => {
-		 console.error("Failed to delete message", err);
-		 throw err;
-	   });
-   };
+	const handleEdit = (updatedContent) => {
+		props.api.editMessage(props.id, updatedContent);
+	};
+	
+	const handleDelete = () => {
+		props.api.deleteMessage(props.id);
+	};
  
    // Component
    return (
@@ -71,9 +37,9 @@
 		 <TimeLabel time={props.time} />
 		 <div className="post-bubble">
 		   {isEditable ? (
-			 <EditableMessage message={message} handleEdit={handleEdit} />
+			 <EditableMessage message={props.text} handleEdit={handleEdit} />
 		   ) : (
-			 <span className="selectable">{message}</span>
+			 <span className="selectable">{props.text}</span>
 		   )}
 		   {props.attachments != null && props.attachments.length > 0 ? (
 			 <div className="attachment-list">
@@ -89,15 +55,15 @@
 		   ) : null}
 		 </div>
 	   </div>
-	   {user != null ? (
+	   {props.user != null ? (
 		 <div
 		   className="user-container"
 		   onMouseEnter={() => setShowActions(true)}
 		   onMouseLeave={() => setShowActions(false)}
 		 >
 		   <ProfileIcon
-			 profile_name={props.me ? "You" : user.name}
-			 profile_role={user.role}
+			 profile_name={props.me ? "You" : props.user.name}
+			 profile_role={props.user.role}
 			 flipped={props.me}
 		   />
 		   {isEditable && isHovering && showActions ? (

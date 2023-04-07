@@ -4,7 +4,6 @@ import ProfileIcon from "../../../components/ProfileIcon";
 import TimeLabel from "./TimeLabel";
 import PollOption from "./PollOption";
 import "./styles.css";
-import LiveLectureAPI from "../../../utilities/api/LiveLectureAPI";
 
 let allowResponse = true;
 const selectedCache = {};
@@ -30,12 +29,12 @@ function Poll(props) {
     [props.api, props.id, selected]
   );
 
-  const canEditPoll = props.user.id === props.creator.id;
+  const canEditPoll = props.elevated;
 
   const editPollPrompt = () => {
     const updatedPrompt = prompt("Enter updated poll prompt:");
     if (updatedPrompt != null) {
-      LiveLectureAPI.editPollPrompt(props.id, updatedPrompt).then(() => {
+      props.api.editPollPrompt(props.id, updatedPrompt).then(() => {
         setPollPrompt(updatedPrompt);
       });
     }
@@ -44,7 +43,7 @@ function Poll(props) {
   const editPollChoice = (choiceId) => {
     const updatedChoice = prompt("Enter updated poll choice:");
     if (updatedChoice != null) {
-      LiveLectureAPI.editPollChoice(choiceId, updatedChoice).then(() => {
+      props.api.editPollChoiceText(choiceId, updatedChoice).then(() => {
         const newChoices = pollChoices.map((choice) => {
           if (choice.id === choiceId) {
             return { ...choice, text: updatedChoice };
@@ -53,15 +52,6 @@ function Poll(props) {
           }
         });
         setPollChoices(newChoices);
-      });
-    }
-  };
-
-  const editPollResponse = (responseId) => {
-    const updatedResponse = prompt("Enter updated poll response:");
-    if (updatedResponse != null) {
-      LiveLectureAPI.editPollResponse(responseId, updatedResponse).then(() => {
-        setSelected(responseId);
       });
     }
   };
