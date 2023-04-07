@@ -45,6 +45,7 @@ class CourseAPI {
 							return {
 								id: lecture.lecture_id,
 								title: lecture.title,
+								time: new Date(lecture.timestamp),
 								live: result.data.live
 							};
 						})
@@ -53,6 +54,7 @@ class CourseAPI {
 							return {
 								id: lecture.lecture_id,
 								title: lecture.title,
+								time: new Date(lecture.timestamp),
 								live: false
 							};
 						})
