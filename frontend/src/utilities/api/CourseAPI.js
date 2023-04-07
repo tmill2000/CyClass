@@ -100,11 +100,12 @@ class CourseAPI {
 	addCourseByJoinCode(joinCode) {
 		
 		// Perform post
-		return axios.post("/api/role/join", {}, {
-			params: {
-				join_code: joinCode
-			}
-		})
+		// return axios.post("/api/role/join", {}, {
+		// 	params: {
+		// 		join_code: joinCode
+		// 	}
+		// })
+		return axios.post("/api/role/join?join_code=" + joinCode)
 			.then((res) => {
 
 				// Use role ID to get course information (frontend has no concept of a "role ID")
