@@ -27,12 +27,14 @@ export default function PollFormPopup(props){
     function get_date(){
         var date = new Date();
         const time_elapsed = document.getElementById('numMins');
+        time_elapsed = time_elapsed.current.trim();
+        console.log(time_elapsed);
         let updated_mins = date.getMinutes() + time_elapsed;
         let add_mins = updated_mins % 60;
-        console.log(add_mins);
+        console.log(updated_mins);
         updated_mins = updated_mins - add_mins * 60;
         console.log(updated_mins);
-        updated_hours = date.getHours() + add_mins;
+        let updated_hours = date.getHours() + add_mins;
         console.log(updated_hours);
         date.setHours(updated_hours);
         date.setMinutes(updated_mins);
