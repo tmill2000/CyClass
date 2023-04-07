@@ -4,7 +4,7 @@ import ProfileIcon from "../../../components/ProfileIcon";
 import TimeLabel from "./TimeLabel";
 import PollOption from "./PollOption";
 import "./styles.css";
-import LiveLectureAPI from "../../../api/LiveLectureAPI";
+import LiveLectureAPI from "../../../utilities/api/LiveLectureAPI";
 
 let allowResponse = true;
 const selectedCache = {};

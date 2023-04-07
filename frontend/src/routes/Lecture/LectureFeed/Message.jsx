@@ -8,12 +8,12 @@
  import TimeLabel from "./TimeLabel";
  import Attachment from "./Attachment";
  import ProfileIcon from "../../../components/ProfileIcon";
- import LocalUser from '../../utilities/model/LocalUser';
- import LiveLectureAPI from '../../utilities/api/LiveLectureAPI';
+ import LocalUser from '../../../utilities/model/LocalUser';
+ import LiveLectureAPI from '../../../utilities/api/LiveLectureAPI';
  import "./styles.css";
  
  function Message(props) {
-	
+
    const [isHovering, setIsHovering] = useState(false);
    const [showActions, setShowActions] = useState(false);
  
