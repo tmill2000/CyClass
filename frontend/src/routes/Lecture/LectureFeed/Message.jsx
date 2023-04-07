@@ -55,7 +55,7 @@
 		   ) : null}
 		 </div>
 	   </div>
-	   {props.user != null ? (
+	   {props.showUser ? (
 		 <div
 		   className="user-container"
 		   onMouseEnter={() => setShowActions(true)}
