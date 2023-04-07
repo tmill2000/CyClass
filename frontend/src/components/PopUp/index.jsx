@@ -70,6 +70,7 @@ export function PopupForm(props) {
 
 		// Make actual input element based on type
 		const inputRef = createRef();
+		const inputRef2 = createRef();
 		let mainInput = null;
 		let getter = null;
 		let clearer = null;
@@ -156,5 +157,16 @@ export function PopupForm(props) {
 			</div>
 		</Popup>
 	);
+
+
+	function answer(){
+
+		return (
+			<div>
+				<button className="poll-form-individual-answer-label" id="buttonA" onClick={backgroundColorA}> A </button>
+				<input ref={poll_answer_A} className="poll-form-individual-answer-entry" id="entryA"/>
+			</div>
+		);
+	}
 
 }
