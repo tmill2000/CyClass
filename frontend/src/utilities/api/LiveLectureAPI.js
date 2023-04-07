@@ -196,7 +196,7 @@ class LiveLectureAPI {
 
 				// Make poll event
 				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, {
-					propmt: msg.payload.question_text,
+					prompt: msg.payload.question_text,
 					closed: false,
 					time: new Date(msg.payload.timestamp),
 					choices: choices
@@ -352,7 +352,7 @@ class LiveLectureAPI {
 
 						// Dispatch poll
 						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, {
-							propmt: msg.question,
+							prompt: msg.question,
 							closed: msg.closed,
 							time: new Date(msg.timestamp),
 							choices: choices
@@ -788,9 +788,9 @@ class LiveLectureAPI {
 	editPollPrompt(pollId, updatedPrompt) {
 
 		// Perform patch
-		axios.patch("/api/poll", {
+		return axios.patch("/api/poll", {
 			poll_id: pollId,
-			prompt: updatedPrompt
+			question_text: updatedPrompt
 		})
 			.then((res) => {
 				
@@ -818,12 +818,12 @@ class LiveLectureAPI {
 	 * @param {*} pollChoiceId 
 	 * @param {*} updatedChoice 
 	 */
-	editPollChoiceText(pollChoiceId, updatedChoice) {
+	editPollChoiceText(pollID, pollChoiceId, updatedChoice) {
 
 		// Perform patch
-		axios.patch('/api/poll-choice', {
+		return axios.patch('/api/poll-choice', {
 			poll_choice_id: pollChoiceId,
-			choice: updatedChoice
+			choice_text: updatedChoice
 		})
 			.then((res) => {
 				
@@ -832,7 +832,7 @@ class LiveLectureAPI {
 					this.websocket.send(JSON.stringify({
 						type: "poll_update",
 						payload: {
-							poll_id: pollId,
+							poll_id: pollID,
 							choices: [{
 								id: pollChoiceId,
 								text: updatedChoice

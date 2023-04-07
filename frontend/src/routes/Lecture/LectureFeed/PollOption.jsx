@@ -9,11 +9,13 @@
  * - correct?: boolean
  */
 
- import React from "react";
+ import React, { useState } from "react";
 
  import "./styles.css";
  
  function PollOption(props) {
+	
+	const [hovering, setHovering] = useState(false); // New state hook for hover tracking
  
 	 // Decide on "correct" style class/label
 	 let correctClass = "", correctLabel;
@@ -23,13 +25,27 @@
 	 } else {
 		 correctLabel = props.selected ? "Selected" : "";
 	 }
+
+	 const editPollChoice = () => {
+	   const updatedChoice = prompt("Enter updated poll choice:");
+	   if (updatedChoice != null) {
+		 props.api.editPollChoiceText(props.pollID, props.id, updatedChoice)
+	   }
+	 };
  
 	 // Component
 	 return (
-		 <button className={`option ${props.selected ? "selected" : ""} ${correctClass}`} onClick={props.onSelect} disabled={props.onSelect == null}>
+		 <button className={`option ${props.selected ? "selected" : ""} ${correctClass}`} onClick={props.onSelect} disabled={props.onSelect == null}
+		 onMouseEnter={() => setHovering(true)}
+		 onMouseLeave={() => setHovering(false)}>
 			 <div className="select-box" />
 			 <span className="option-text">{props.children}</span>
 			 <span className="option-text label">{correctLabel}</span>
+			 {props.canEdit && (
+				<button className="edit-button" onClick={editPollChoice}>
+				Edit Choice
+				</button>
+				)}
 		 </button>
 	 );
  

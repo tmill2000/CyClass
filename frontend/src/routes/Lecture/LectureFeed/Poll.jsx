@@ -34,25 +34,7 @@ function Poll(props) {
   const editPollPrompt = () => {
     const updatedPrompt = prompt("Enter updated poll prompt:");
     if (updatedPrompt != null) {
-      props.api.editPollPrompt(props.id, updatedPrompt).then(() => {
-        setPollPrompt(updatedPrompt);
-      });
-    }
-  };
-
-  const editPollChoice = (choiceId) => {
-    const updatedChoice = prompt("Enter updated poll choice:");
-    if (updatedChoice != null) {
-      props.api.editPollChoiceText(choiceId, updatedChoice).then(() => {
-        const newChoices = pollChoices.map((choice) => {
-          if (choice.id === choiceId) {
-            return { ...choice, text: updatedChoice };
-          } else {
-            return choice;
-          }
-        });
-        setPollChoices(newChoices);
-      });
+        props.api.editPollPrompt(props.id, updatedPrompt)
     }
   };
 
@@ -74,43 +56,96 @@ function Poll(props) {
 
   const choices = pollChoices.sort((x, y) => x.id - y.id);
 
-  const resultsURL = results ? `poll=${props.id}` : "";
+  const resultsURL = `results?poll=${props.id}`;
 
   const showEditButtons = hovering && props.elevated && canEditPoll && !props.closed;
 
   return (
+    <li className={`poll ${props.me ? "me" : ""}`}
+    onMouseEnter={() => setHovering(true)}
+    onMouseLeave={() => setHovering(false)}>
+        <div>
+            <TimeLabel time={props.time}/>
+            <div className="post-bubble">
+                <div className="poll-header">
+                    <div className="title-container">
+                        <div className="container">
+                            <span className="title">POLL{props.closed ? " (closed)" : ""}</span>
+                        </div>
+                        <div className="line" />
+                    </div>
+                    {!props.closed && props.elevated ? <button className="button close" onClick={onClose}>CLOSE</button> : null}
+                    {props.elevated ? <Link className="button results" to={resultsURL}>VIEW PARTICIPATION</Link> : null}
+                </div>
+                <div className="content">
+                    <p>{props.prompt}</p>
+                    <div>
+                        {choices.map(x => <PollOption key={x.id.toString()}
+                            id={x.id}
+                            pollID={props.id}
+                            api={props.api}
+                            canEdit={canEditPoll}
+                            onSelect={!props.closed ? () => onSelect(x.id) : null}
+                            selected={x.id == selected}
+                            correct={props.closed ? x.correct == true : null}>
+                            {x.text}
+                        </PollOption>)}
+                    </div>
+                </div>
+                <div className="poll-footer">
+                    {hovering && (
+                    <div className="poll-buttons">
+                        {canEditPoll && (
+                        <button className="edit-button" onClick={editPollPrompt}>
+                        Edit Prompt
+                        </button>
+                        )}
+                    </div>
+                    )}
+                </div>
+            </div>
+        </div>
+        {(props.user != null) ?
+        <div className="user-container">
+            <ProfileIcon profile_name={props.me ? "You" : props.user.name} profile_role={props.user.role} flipped={true} />
+        </div>
+        : null}
+    </li>
+);
+
+return (
     <li
 className={`poll ${props.me ? "me" : ""}`}
 onMouseEnter={() => setHovering(true)}
 onMouseLeave={() => setHovering(false)}
 >
 <div>
-   <TimeLabel time={props.time} />
-   <div className="post-bubble">
-      <div className="poll-header">
-         <h3>{pollPrompt}</h3>
-         {props.creator && (
-         <div className="poll-author">
+<TimeLabel time={props.time} />
+<div className="post-bubble">
+    <div className="poll-header">
+        <h3>{pollPrompt}</h3>
+        {props.creator && (
+        <div className="poll-author">
             <ProfileIcon user={props.creator} />
             <span>{props.creator.username}</span>
-         </div>
-         )}
-      </div>
-      <div className="poll-choices">
-         {choices.map((choice) => (
-         <PollOption
-         key={choice.id}
-         choice={choice}
-         selected={selected === choice.id}
-         onSelect={onSelect}
-         canEdit={showEditButtons}
-         onEdit={() => editPollChoice(choice.id)}
-         />
-         ))}
-      </div>
-      <div className="poll-footer">
-         {props.me && (
-         <div className="poll-buttons">
+        </div>
+        )}
+    </div>
+    <div className="poll-choices">
+        {choices.map((choice) => (
+        <PollOption
+        key={choice.id}
+        choice={choice}
+        selected={selected === choice.id}
+        onSelect={onSelect}
+        canEdit={showEditButtons}
+        onEdit={() => editPollChoice(choice.id)}
+        />
+        ))}
+    </div>
+    <div className="poll-footer">
+        {props.me && (
+        <div className="poll-buttons">
             {canEditPoll && (
             <button className="edit-button" onClick={editPollPrompt}>
             Edit Prompt
@@ -121,14 +156,14 @@ onMouseLeave={() => setHovering(false)}
             Close Poll
             </button>
             )}
-         </div>
-         )}
-         <div className="poll-result-link">
+        </div>
+        )}
+        <div className="poll-result-link">
             <Link className="button results" to={resultsURL}>
             VIEW PARTICIPATION</Link>
-         </div>
-      </div>
-   </div>
+        </div>
+    </div>
+</div>
 </div>
 </li>
 );
