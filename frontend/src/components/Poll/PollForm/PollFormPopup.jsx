@@ -13,6 +13,7 @@ export default function PollFormPopup(props){
     const poll_answer_C = createRef();
     const poll_answer_D = createRef();
     const poll_duration = createRef();
+    const poll_multiple_answers = createRef()
     let pollA = false;
     let pollB = false;
     let pollC = false;
@@ -53,61 +54,92 @@ export default function PollFormPopup(props){
         const entryC = document.getElementById('entryC');
         const btnD = document.getElementById('buttonD');
         const entryD = document.getElementById('entryD');
+        const multipleAnswers = document.getElementById('poll_multiple_answers');
+        console.log("----------------------")
+        console.log(multipleAnswers)
         if (letter === 'A'){
-            btnA.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
-            entryA.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
-            pollA = true;
-            pollB = false;
-            pollC = false;
-            pollD = false;
-            btnB.style.backgroundColor = 'white';
-            entryB.style.backgroundColor = 'white';
-            btnC.style.backgroundColor = 'white';
-            entryC.style.backgroundColor = 'white';
-            btnD.style.backgroundColor = 'white';
-            entryD.style.backgroundColor = 'white';
+            if (btnA.style.backgroundColor == 'white' || btnA.style.backgroundColor == ''){
+                btnA.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
+                entryA.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
+                pollA = true;
+                if (!multipleAnswers.value){
+                    pollB = false;
+                    pollC = false;
+                    pollD = false;
+                    btnB.style.backgroundColor = 'white';
+                    entryB.style.backgroundColor = 'white';
+                    btnC.style.backgroundColor = 'white';
+                    entryC.style.backgroundColor = 'white';
+                    btnD.style.backgroundColor = 'white';
+                    entryD.style.backgroundColor = 'white';
+                }
+            }
+            else{
+                btnA.style.backgroundColor = 'white';
+                entryA.style.backgroundColor = 'white';
+                pollA = false;
+            }
+
+
         }
         else if (letter === 'B'){
-            btnB.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
-            entryB.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
-            pollB = true;
-            pollA = false;
-            pollC = false;
-            pollD = false;
-            btnA.style.backgroundColor = 'white';
-            entryA.style.backgroundColor = 'white';
-            btnC.style.backgroundColor = 'white';
-            entryC.style.backgroundColor = 'white';
-            btnD.style.backgroundColor = 'white';
-            entryD.style.backgroundColor = 'white';
+            if (btnB.style.backgroundColor == 'white' || btnB.style.backgroundColor == ''){
+                btnB.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
+                entryB.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
+                pollB = true;
+                if (!multipleAnswers.value){
+                    pollA = false;
+                    pollC = false;
+                    pollD = false;
+                    btnA.style.backgroundColor = 'white';
+                    entryA.style.backgroundColor = 'white';
+                    btnC.style.backgroundColor = 'white';
+                    entryC.style.backgroundColor = 'white';
+                    btnD.style.backgroundColor = 'white';
+                    entryD.style.backgroundColor = 'white';
+                }
+            }
+            else{
+                btnB.style.backgroundColor = 'white';
+                entryB.style.backgroundColor = 'white';
+                pollB = false;
+            }
+
         }
         else if (letter === 'C'){
+            if (btnB.style.backgroundColor == 'white' || btnB.style.backgroundColor == ''){
+                
+            }
             btnC.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
             entryC.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
             pollC = true;
-            pollB = false;
-            pollA = false;
-            pollD = false;
-            btnB.style.backgroundColor = 'white';
-            entryB.style.backgroundColor = 'white';
-            btnA.style.backgroundColor = 'white';
-            entryA.style.backgroundColor = 'white';
-            btnD.style.backgroundColor = 'white';
-            entryD.style.backgroundColor = 'white';
+            if (!multipleAnswers.value){
+                pollB = false;
+                pollA = false;
+                pollD = false;
+                btnB.style.backgroundColor = 'white';
+                entryB.style.backgroundColor = 'white';
+                btnA.style.backgroundColor = 'white';
+                entryA.style.backgroundColor = 'white';
+                btnD.style.backgroundColor = 'white';
+                entryD.style.backgroundColor = 'white';
+            }
         }
         else if (letter == 'D') {
             btnD.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
             entryD.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
             pollD = true;
-            pollB = false;
-            pollC = false;
-            pollA = false;
-            btnB.style.backgroundColor = 'white';
-            entryB.style.backgroundColor = 'white';
-            btnC.style.backgroundColor = 'white';
-            entryC.style.backgroundColor = 'white';
-            btnA.style.backgroundColor = 'white';
-            entryA.style.backgroundColor = 'white';
+            if (!multipleAnswers.value){
+                pollB = false;
+                pollC = false;
+                pollA = false;
+                btnB.style.backgroundColor = 'white';
+                entryB.style.backgroundColor = 'white';
+                btnC.style.backgroundColor = 'white';
+                entryC.style.backgroundColor = 'white';
+                btnA.style.backgroundColor = 'white';
+                entryA.style.backgroundColor = 'white';
+            }
         }
     }
 
@@ -168,6 +200,10 @@ export default function PollFormPopup(props){
             <div className="content">
               {' '}
               <div>
+                <div className="poll-form-type-group">
+                    <input type="radio" value="Multiple Correct Answers" id="poll_multiple_answers" ref={poll_multiple_answers}></input>
+                    <div>Multiple Correct Answers</div>
+                </div>
                 <div className="poll-form-answer-entry-group">
                     <div className="poll-form-answer-label">Enter in your answer choices: </div>
                     <div className="poll-form-answer-group">

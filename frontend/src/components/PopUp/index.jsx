@@ -90,6 +90,14 @@ export function PopupForm(props) {
 				getter = () => inputRef.current.checked;
 				clearer = () => inputRef.current.checked = false;
 				break;
+			case "answerBlock":
+				mainInput = <div>
+								<button id={input.name} ref={inputRef2} onClick={(e) => e.target.className = ""}>{input.letter}</button>
+								<input ref={inputRef} className="poll-form-individual-answer-entry" id={input.name2}/>
+							</div>
+				getter = () => [{text: inputRef.current.value.trim(), correct: inputRef2.current.value}];
+				clearer = () => inputRef.current.value = "";
+				break;
 			default:
 				throw new Error(`Unrecognized input type: ${x.type}`);
 		}
@@ -159,14 +167,14 @@ export function PopupForm(props) {
 	);
 
 
-	function answer(){
+	// function answer(){
 
-		return (
-			<div>
-				<button className="poll-form-individual-answer-label" id="buttonA" onClick={backgroundColorA}> A </button>
-				<input ref={poll_answer_A} className="poll-form-individual-answer-entry" id="entryA"/>
-			</div>
-		);
-	}
+	// 	return (
+	// 		<div>
+				// <button className="poll-form-individual-answer-label" id="buttonA" onClick={backgroundColorA}> A </button>
+				// <input ref={poll_answer_A} className="poll-form-individual-answer-entry" id="entryA"/>
+	// 		</div>
+	// 	);
+	// }
 
 }

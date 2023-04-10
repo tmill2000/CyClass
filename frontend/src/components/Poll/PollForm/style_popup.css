@@ -5,6 +5,10 @@
     border-style: solid;
     width: calc(100vw - 480px);
     border-radius: 10px;
+    z-index: 10;
+    backdrop-filter: blur(3px);
+    background-color: #0002;
+    transition: all cubic-bezier(0.19, 1, 0.22, 1) 0.4s;
   }
 
   .poll-popup > .header {
