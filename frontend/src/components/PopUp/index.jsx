@@ -92,7 +92,7 @@ export function PopupForm(props) {
 				break;
 			case "answerBlock":
 				mainInput = <div>
-								<button id={input.name} ref={inputRef2} onClick={(e) => e.target.className = ""}>{input.letter}</button>
+								<button id={input.name} ref={inputRef2} onClick={input.change_method}>{input.change}</button>
 								<input ref={inputRef} className="poll-form-individual-answer-entry" id={input.name2}/>
 							</div>
 				getter = () => [{text: inputRef.current.value.trim(), correct: inputRef2.current.value}];

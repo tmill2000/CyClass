@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { PopupForm } from "../PopUp";
@@ -32,6 +32,63 @@ function PollTypePopUp(props){
         }
 		return message;
 	}
+	// const correctA = false;
+	// const correctB = false;
+	// const correctC = false;
+	// const correctD = false;
+	const [correctA, setCorrectA] = useState(false);
+	const [correctB, setCorrectB] = useState(false);
+	const [correctC, setCorrectC] = useState(false);
+	const [correctD, setCorrectD] = useState(false);
+
+	// const correct_list = [correctA, correctB, correctC, correctD]
+	const correct_list = [
+		[correctA, setCorrectA], 
+		[correctB, setCorrectB], 
+		[correctC, setCorrectC], 
+		[correctD, setCorrectD]];
+
+	const multiple_choice = true;
+
+	const element_names = [
+		["A_answer_button", "A_answer_input"],
+		["B_answer_button", "B_answer_input"],
+		["C_answer_button", "C_answer_input"],
+		["D_answer_button", "D_answer_input"]]
+
+	function change_method(button_element, input_element, bool_letter, setBool){
+		if (multiple_choice){
+			change_multiple_choice(button_element, input_element, bool_letter, setBool)
+		}
+
+	}
+
+	function change_multiple_choice(button_element, input_element, bool_letter, setBool){
+		// bool_letter = setBool(!bool_letter); //switch to right "correctness"
+
+		return;
+		// if (bool_letter){ // answer is now true/correct
+		// 	for (let i = 0; i < 4; i++){
+		// 		correct_list[i] = !correct_list[i];
+		// 		let button_curr = document.getElementById(element_names[i][0]);
+		// 		let input_curr = document.getElementById(element_names[i][1]);
+		// 		button_curr.style.backgroundColor = 'white';
+		// 		input_curr.style.backgroundColor = 'white';
+		// 	}
+		// 	let button_curr = document.getElementById(button_element);
+		// 	let input_curr = document.getElementById(input_element);
+		// 	button_curr.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
+		// 	input_curr.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
+		// }
+		// else { // answer is now false 
+		// 	let button_curr = document.getElementById(button_element);
+		// 	let input_curr = document.getElementById(input_element);
+		// 	button_curr.style.backgroundColor = 'white';
+		// 	input_curr.style.backgroundColor = 'white';
+		// }
+	}
+	
+
 
     return (
 		<PopupForm
@@ -54,36 +111,37 @@ function PollTypePopUp(props){
 					validator: (input) => input != ""
 				},
 				{
-					label: "Answer1",
+					label: "Answer A",
 					name: "A_answer_button",
 					name2: "A_answer_input",
-					letter: "A",
-					type: "answerBlock"
-					// validator: (input) => input
+					type: "answerBlock",
+					change: correctA ? "Correct" : "Incorrect",
+					change_method: change_method("A_answer_button", "A_answer_input", correctA, setCorrectA)
 				},
 				{
-					label: "Answer2",
+					label: "Answer B",
 					name: "B_answer_button",
 					name2: "B_answer_input",
-					letter: "B",
-					type: "answerBlock"
-					// validator: (input) => input
+					type: "answerBlock",
+					change: correctB ? "Correct" : "Incorrect",
+					change_method: change_method("B_answer_button", "B_answer_input", correctB, setCorrectB)
 				},
 				{
-					label: "Answer3",
+					label: "Answer C",
 					name: "C_answer_button",
 					name2: "C_answer_input",
-					letter: "C",
-					type: "answerBlock"
-					// validator: (input) => input
+					type: "answerBlock",
+					change: correctC ? "Correct" : "Incorrect",
+					change_method: change_method("C_answer_button", "C_answer_input", correctC, setCorrectC)
 				},
 				{
-					label: "Answer4",
+					label: "Answer D",
 					name: "D_answer_button",
 					name2: "D_answer_input",
-					letter: "D",
-					type: "answerBlock"
-					// validator: (input) => input
+					type: "answerBlock",
+					validator: (input) => input != "",
+					change: correctD ? "Correct" : "Incorrect",
+					change_method: change_method("D_answer_button", "D_answer_input", correctD, setCorrectD)
 				}
 			]} />
 	);

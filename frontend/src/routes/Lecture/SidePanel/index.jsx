@@ -40,8 +40,6 @@ function SidePanel(props) {
 					<img src={handIcon} className="hand-icon-LLLM" />
 				</button>
 				{props.elevated ? <button className="button-poll-popup" onClick={() => setPollPopup(!pollPopup)}>Post Poll</button> : null }
-				
-				{/* {props.elevated ? <PollFormPopup profile_name={props.userIDname} profile_role={props.userIDrole} api={props.api} courseID={props.courseID} lectureID={props.lectureID}></PollFormPopup> : null} */}
 			</div>
 			{props.elevated ? <PollTypePopUp visible={pollPopup} api={props.api} courseID={props.courseID} lectureID={props.lectureID} onClose={() => setPollPopup(false)}></PollTypePopUp> : null}
 			<RaiseHandPopup api={props.api} visible={raiseHandPopupVisible} onClose={() => setRaiseHandPopupVisible(false)} />
