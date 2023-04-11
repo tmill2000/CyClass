@@ -9,33 +9,53 @@ function PollTypePopUp(props){
 
 
     const create = (inputs) => {
-		let poll_question = inputs.title.current.value.trim();
+		console.log("CCCCCCCCCCCCCCCCCCC");
+		console.log(props);
+		console.log(inputs);
+		let poll_question = inputs.title;
 		console.log("CCCCCCCCCCCCCCCCCCC");
 		console.log(poll_question);
-		let close_date = get_date();
-		let options = get_options(inputs.A_answer_input, inputs.B_answer_input, inputs.C_answer_input, inputs.D_answer_input);
+		let close_date = get_date(inputs);
+
+		let options = get_options(inputs.A_answer_button, inputs.B_answer_button, inputs.C_answer_button, inputs.D_answer_button);
 		//create new multiple choice or select all that apply form
 		return props.api.createPoll(poll_question, close_date, options, props.courseID, props.lectureID, 'MULTIPLE_CHOICE')
 			.catch((err) => props.onClose());
 	};
 
+	function get_date(inputs){
+        var date = new Date();
+        const time_elapsed = inputs.numMins;
+        console.log(time_elapsed);
+        let updated_mins = date.getMinutes() + time_elapsed;
+        let add_mins = updated_mins % 60;
+        console.log(updated_mins);
+        updated_mins = updated_mins - add_mins * 60;
+        console.log(updated_mins);
+        let updated_hours = date.getHours() + add_mins;
+        console.log(updated_hours);
+        date.setHours(updated_hours);
+        date.setMinutes(updated_mins);
+        console.log(date); // Wed Jan 01 2014 13:28:56 GMT-1000 (Hawaiian Standard Time) 
+        
+        // return date.toISOString();
+        return null;
+    }
+
 	const get_options = (A, B, C, D) => {
-		some = [A, B, C, D]
-		let message = [];
+		const some = [A, B, C, D];
+		const message = [];
 		for (let i =0; i < 4; i++){
-            // if (some[i].current.value.trim() != ''){
-            //     message.push({
-            //         text: some[i].current.value.trim(),
-            //         correct: correct[i]
-            //     });
-            // }
+			let something = some[i][0];
+			message.push({
+				text: something.text,
+				correct: something.correct
+			});
         }
+		console.log(message);
 		return message;
 	}
-	// const correctA = false;
-	// const correctB = false;
-	// const correctC = false;
-	// const correctD = false;
+
 	const [correctA, setCorrectA] = useState(false);
 	const [correctB, setCorrectB] = useState(false);
 	const [correctC, setCorrectC] = useState(false);
@@ -64,28 +84,28 @@ function PollTypePopUp(props){
 	}
 
 	function change_multiple_choice(button_element, input_element, bool_letter, setBool){
-		// bool_letter = setBool(!bool_letter); //switch to right "correctness"
+		bool_letter = setBool(!bool_letter); //switch to right "correctness"
 
-		return;
-		// if (bool_letter){ // answer is now true/correct
-		// 	for (let i = 0; i < 4; i++){
-		// 		correct_list[i] = !correct_list[i];
-		// 		let button_curr = document.getElementById(element_names[i][0]);
-		// 		let input_curr = document.getElementById(element_names[i][1]);
-		// 		button_curr.style.backgroundColor = 'white';
-		// 		input_curr.style.backgroundColor = 'white';
-		// 	}
-		// 	let button_curr = document.getElementById(button_element);
-		// 	let input_curr = document.getElementById(input_element);
-		// 	button_curr.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
-		// 	input_curr.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
-		// }
-		// else { // answer is now false 
-		// 	let button_curr = document.getElementById(button_element);
-		// 	let input_curr = document.getElementById(input_element);
-		// 	button_curr.style.backgroundColor = 'white';
-		// 	input_curr.style.backgroundColor = 'white';
-		// }
+		// return;
+		if (bool_letter){ // answer is now true/correct
+			for (let i = 0; i < 4; i++){
+				correct_list[i] = !correct_list[i];
+				let button_curr = document.getElementById(element_names[i][0]);
+				let input_curr = document.getElementById(element_names[i][1]);
+				button_curr.style.backgroundColor = 'white';
+				input_curr.style.backgroundColor = 'white';
+			}
+			let button_curr = document.getElementById(button_element);
+			let input_curr = document.getElementById(input_element);
+			button_curr.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
+			input_curr.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
+		}
+		else { // answer is now false 
+			let button_curr = document.getElementById(button_element);
+			let input_curr = document.getElementById(input_element);
+			button_curr.style.backgroundColor = 'white';
+			input_curr.style.backgroundColor = 'white';
+		}
 	}
 	
 
@@ -107,8 +127,7 @@ function PollTypePopUp(props){
 				{
 					label: "Multiple Answers?",  //assume only 1 correct answer for now
 					name: "num_correct_answers",
-					type: "boolean",
-					validator: (input) => input != ""
+					type: "boolean"
 				},
 				{
 					label: "Answer A",
@@ -116,7 +135,7 @@ function PollTypePopUp(props){
 					name2: "A_answer_input",
 					type: "answerBlock",
 					change: correctA ? "Correct" : "Incorrect",
-					change_method: change_method("A_answer_button", "A_answer_input", correctA, setCorrectA)
+					change_method: () => change_method("A_answer_button", "A_answer_input", correctA, setCorrectA)
 				},
 				{
 					label: "Answer B",
@@ -124,7 +143,7 @@ function PollTypePopUp(props){
 					name2: "B_answer_input",
 					type: "answerBlock",
 					change: correctB ? "Correct" : "Incorrect",
-					change_method: change_method("B_answer_button", "B_answer_input", correctB, setCorrectB)
+					change_method: () => change_method("B_answer_button", "B_answer_input", correctB, setCorrectB)
 				},
 				{
 					label: "Answer C",
@@ -132,16 +151,20 @@ function PollTypePopUp(props){
 					name2: "C_answer_input",
 					type: "answerBlock",
 					change: correctC ? "Correct" : "Incorrect",
-					change_method: change_method("C_answer_button", "C_answer_input", correctC, setCorrectC)
+					change_method: () => change_method("C_answer_button", "C_answer_input", correctC, setCorrectC)
 				},
 				{
 					label: "Answer D",
 					name: "D_answer_button",
 					name2: "D_answer_input",
 					type: "answerBlock",
-					validator: (input) => input != "",
 					change: correctD ? "Correct" : "Incorrect",
-					change_method: change_method("D_answer_button", "D_answer_input", correctD, setCorrectD)
+					change_method: () => change_method("D_answer_button", "D_answer_input", correctD, setCorrectD)
+				},
+				{
+					label: "Number of minutes to keep the poll open: ",
+					name: "numMins",
+					type: "spinner"
 				}
 			]} />
 	);

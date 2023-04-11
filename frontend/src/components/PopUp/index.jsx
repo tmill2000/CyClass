@@ -95,7 +95,12 @@ export function PopupForm(props) {
 								<button id={input.name} ref={inputRef2} onClick={input.change_method}>{input.change}</button>
 								<input ref={inputRef} className="poll-form-individual-answer-entry" id={input.name2}/>
 							</div>
-				getter = () => [{text: inputRef.current.value.trim(), correct: inputRef2.current.value}];
+				getter = () => [{text: inputRef.current.value.trim(), correct: input.change == "Correct" ? true: false}];
+				clearer = () => inputRef.current.value = "";
+				break;
+			case "spinner":
+				mainInput = <input ref={inputRef} type="number" id={input.name}/>
+				getter = () => inputRef.current.value.trim();
 				clearer = () => inputRef.current.value = "";
 				break;
 			default:
@@ -140,7 +145,6 @@ export function PopupForm(props) {
 				allValid = false;
 			}
 		}
-
 		// If all valid, submit
 		if (allValid) {
 			canSubmit.current = false;
@@ -150,6 +154,9 @@ export function PopupForm(props) {
 						input.clear();
 					}
 					props.onClose();
+				})
+				.catch((err) => {
+					console.log(err);
 				})
 				.finally(() => canSubmit.current = true);
 		}
@@ -165,16 +172,5 @@ export function PopupForm(props) {
 			</div>
 		</Popup>
 	);
-
-
-	// function answer(){
-
-	// 	return (
-	// 		<div>
-				// <button className="poll-form-individual-answer-label" id="buttonA" onClick={backgroundColorA}> A </button>
-				// <input ref={poll_answer_A} className="poll-form-individual-answer-entry" id="entryA"/>
-	// 		</div>
-	// 	);
-	// }
 
 }
