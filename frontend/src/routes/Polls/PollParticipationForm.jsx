@@ -16,6 +16,12 @@
 
  //  /course/1/lecture/1/results?poll=5
 
+ const headers = [
+   { label: "Name", key: "name" },
+   { label: "Role", key: "role" },
+   { label: "Correct", key: "correct" }
+ ];
+
  const userAPI = new UserAPI();
 
  function ParticipationForm (props) {
@@ -50,6 +56,10 @@
 
     // Pull participation info
     useEffect(() => {
+
+      const handleClick = () => {
+         console.log('hello world')
+      };
 
       const lectureAPI = new LiveLectureAPI(userID, courseID, lectureID);
       lectureAPI.getPollParticipation(pollID)
@@ -124,6 +134,11 @@
         </div>
         <div style={{paddingLeft: '160px'}}>
            {results != null ? results.responses.map((response, index) => <ParticipantPill name={response.user.name} role={response.user.role} correct={response.correct} altStyle={index % 2 == 1}></ParticipantPill>) : null}
+        </div>
+        <div style={{paddingTop: '100px'}}>
+           <div style={{borderTop: '10px solid gray'}}></div>
+           <input type="button" value="Export to CSV"></input>
+           <button onClick={handleClick}>Click Me</button>
         </div>
      </div>
 	);
