@@ -69,3 +69,15 @@
 .hand-icon-LLLM {
     width: 50px;
 }
+
+.button-poll-popup{
+    width: 100%;
+	padding: 0.4em 0.8em;
+	border: none;
+	border-radius: 4px;
+	font-size: 1.2em;
+	font-weight: bold;
+	cursor: pointer;
+	color: #FFF;
+    background-color: #1976D2;
+}
