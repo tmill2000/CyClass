@@ -27,8 +27,7 @@ export default function PollFormPopup(props){
 
     function get_date(){
         var date = new Date();
-        const time_elapsed = document.getElementById('numMins');
-        time_elapsed = time_elapsed.current.trim();
+        const time_elapsed = poll_duration.current.value.trim();
         console.log(time_elapsed);
         let updated_mins = date.getMinutes() + time_elapsed;
         let add_mins = updated_mins % 60;
@@ -228,8 +227,8 @@ export default function PollFormPopup(props){
             <div className="actions">
               <button className="button-LLLM-new-post"
                 onClick={() => {
-                  close();
                   onSelect();
+                  close();
                 }}>Submit Poll</button>
             </div>
           </div>

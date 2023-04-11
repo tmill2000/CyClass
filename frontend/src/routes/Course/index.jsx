@@ -64,7 +64,7 @@ function Course(props) {
 	const posts = [];
 	if (lectures != null) {
 		for (const lecture of lectures) {
-			posts.push(<LecturePost key={lecture.id} id={lecture.id} title={lecture.title} user={{}} time={new Date()} live={lecture.live} />);
+			posts.push(<LecturePost key={lecture.id} id={lecture.id} title={lecture.title} user={{}} time={lecture.time} live={lecture.live} />);
 		}
 	}
 
