@@ -54,6 +54,11 @@
     border-style:solid;
     background-color: white;
 } */
+.poll-form-type-group{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
 
 .poll-form-question-input-label{
     font-size: 25px;

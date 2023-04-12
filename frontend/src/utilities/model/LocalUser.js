@@ -156,8 +156,7 @@ export default class LocalUser {
 		// Hook and return proper value
 		switch (value) {
 			case "courses":
-				useDataStoreValue("courses");
-				return LocalUser.current?.getCourses() || [];
+				return useDataStoreValue("courses") || [];
 			case "netID":
 			case "userID":
 			case "sessionID":
@@ -249,7 +248,7 @@ export default class LocalUser {
 		}
 
 		// Add to list and update store (will trigger an update for .useValue)
-		this.courses.push(course);
+		this.courses = [...this.courses, course];
 		DataStore.set("courses", this.courses);
 
 	}

@@ -601,7 +601,9 @@ class LiveLectureAPI {
 	 * @param {{ text: string, correct: boolean }[]} choices
 	 */
 	createPoll(prompt, close_time, choices, course_id, lecture_id, poll_type) {
-
+		console.log("made it here");
+		console.log(prompt);
+		
 		// Verify connection
 		if (this.websocket == null) {
 			throw new Error("No WebSocket connection was established");
