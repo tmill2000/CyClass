@@ -18,7 +18,7 @@ function PollTypePopUp(props){
 		if (!multipleAnswers){
 			pollType = 'MULTIPLE_CHOICE';
 		}
-		props.visible(false);
+		props.onClose();
 		//create new multiple choice or select all that apply form
 		return props.api.createPoll(poll_question, close_date, options, props.courseID, props.lectureID, pollType)
 			.catch((err) => props.onClose());
@@ -100,17 +100,6 @@ function PollTypePopUp(props){
 		}
 		else{
 			change_multiple_choice(button_element, input_element, bool_letter, setBool);
-		}
-	}
-
-	function clear_answers(){
-		for (let i = 0; i < 4; i++){
-			let setBoolean = correct_list[i][1];
-			setBoolean(false);
-			let button_curr = document.getElementById(element_names[i][0]);
-			let input_curr = document.getElementById(element_names[i][1]);
-			button_curr.style.backgroundColor = 'white';
-			input_curr.style.backgroundColor = 'white';
 		}
 	}
 

@@ -6,6 +6,7 @@ import ErrorPage from "../ErrorPage";
 import LocalUser from "../../utilities/model/LocalUser";
 import CourseAPI from '../../utilities/api/CourseAPI';
 import { useState } from "react";
+import AddCoursePopUp from "./AddCoursePopUp";
 
 import './style.css';
 const courseAPI = new CourseAPI();
@@ -19,15 +20,22 @@ function HomePage(props) {
 		url: ''
 	}
 
+	const [addCoursePopup, setAddCoursePopup] = useState(false);
+
+	const [courseList, setCourseList] = useState(structuredClone(LocalUser.useValue("courses")));
+
 	const colors = ["red", "blue", "green", "brown"]
-	const courses = structuredClone(LocalUser.useValue("courses"));
+	// const courses = structuredClone(LocalUser.useValue("courses"));
 	
-	// Dropdown list generation
 	const dropdownList = [];
-	for (let i = 0; i < courses.length; i++) {
-		dropdownList.push([courses[i], colors[i]]);
+	function createDropDownList(){
+		// Dropdown list generation
+		for (let i = 0; i < courseList.length; i++) {
+			dropdownList.push([courseList[i], colors[i]]);
+		}
 	}
 
+	createDropDownList();
 
 	const getURL = async () => {
 		const url = document.getElementById("input_url");
@@ -39,16 +47,26 @@ function HomePage(props) {
 		}
 		else{
 			const res_addCourse = await courseAPI.addCourseByJoinCode(typed_url);
+			console.log(")))))))))))))))");
+			console.log(res_addCourse);
 			if (res_addCourse.accepted){
 				LocalUser.current.addCourse(res_addCourse.course);
 			}
 		}
 	}
 
+	function closePopUp(){
+		setAddCoursePopup(false);
+		setCourseList(structuredClone(LocalUser.useValue("courses")));
+		createDropDownList();
+	}
+
 	return (
 		<div className="home-container">
 			{dropdownList.map(list => <CourseComponent course={list[0]} color={list[1]} />)}
-			<Popup 
+			<button className="add-course-button" onClick={() => setAddCoursePopup(true)}>+</button>
+			<AddCoursePopUp visible={addCoursePopup} api={courseAPI}  onClose={() => closePopUp()}></AddCoursePopUp>
+			{/* <Popup 
 				trigger={<button className="add-course-button">+</button>}
 				modal
 				nested
@@ -68,7 +86,7 @@ function HomePage(props) {
 						}}>Add Course</button>
 					</div>
 				</div>
-			</Popup>
+			</Popup> */}
 		</div>
 	);
 

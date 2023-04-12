@@ -59,11 +59,10 @@
 }
 
 .buttons-LLLM {
-    padding-top: 40%;
+    padding-top: 7px;
     margin-top: auto;
     margin-bottom: 0;
-    /* padding-right: 70%; */
-    padding-left: 10%;
+    /* justify-content: center; */
 }
 
 .hand-icon-LLLM {
@@ -75,7 +74,10 @@
     /* font-size: 22px; */
 	border-radius: 6px;
     background-color: rgb(0, 140, 255);
-    padding: 10px;
-    color: white;
+    color: black;
     border-color: rgb(0, 140, 255);
+    margin-top: 5px;
+    height: 40px;
+    font-style: bold;
+    font-size: 15px;
 }

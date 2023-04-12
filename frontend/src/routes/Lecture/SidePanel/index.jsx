@@ -41,7 +41,7 @@ function SidePanel(props) {
 				</button>
 				{props.elevated ? <button className="button-poll-popup" onClick={() => setPollPopup(!pollPopup)}>POST POLL</button> : null }
 			</div>
-			{props.elevated ? <PollTypePopUp visible={setPollPopup} api={props.api} courseID={props.courseID} lectureID={props.lectureID} onClose={() => setPollPopup(false)}></PollTypePopUp> : null}
+			{props.elevated ? <PollTypePopUp visible={pollPopup} api={props.api} courseID={props.courseID} lectureID={props.lectureID} onClose={() => setPollPopup(false)}></PollTypePopUp> : null}
 			<RaiseHandPopup api={props.api} visible={raiseHandPopupVisible} onClose={() => setRaiseHandPopupVisible(false)} />
 		</div>
 	);
