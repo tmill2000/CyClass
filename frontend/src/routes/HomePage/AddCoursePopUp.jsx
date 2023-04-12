@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LocalUser from "../../utilities/model/LocalUser";
 
 import { PopupForm } from "../../components/PopUp";
 
@@ -10,6 +9,7 @@ function AddCoursePopUp(props){
     const create = (inputs) => {
         let joinCode = inputs.joinCode;
         addCourse(joinCode);
+        props.onClose();
     }
 
     async function addCourse(joinCode){
@@ -19,8 +19,10 @@ function AddCoursePopUp(props){
         console.log(")))))))))))))))");
         console.log(res_addCourse);
         if (res_addCourse.accepted){
-            LocalUser.current.addCourse(res_addCourse.course);
-        } else{
+            let x = 1;
+            // LocalUser.current.addCourse(res_addCourse.course);
+        }
+        else{
             console.log("incorrect join code");
         }
     }
