@@ -62,22 +62,20 @@
     padding-top: 40%;
     margin-top: auto;
     margin-bottom: 0;
-    padding-right: 70%;
-    padding-left: 5%;
+    /* padding-right: 70%; */
+    padding-left: 10%;
 }
 
 .hand-icon-LLLM {
     width: 50px;
+    padding-right: 70%;
 }
 
 .button-poll-popup{
-    width: 100%;
-	padding: 0.4em 0.8em;
-	border: none;
-	border-radius: 4px;
-	font-size: 1.2em;
-	font-weight: bold;
-	cursor: pointer;
-	color: #FFF;
-    background-color: #1976D2;
+    /* font-size: 22px; */
+	border-radius: 6px;
+    background-color: rgb(0, 140, 255);
+    padding: 10px;
+    color: white;
+    border-color: rgb(0, 140, 255);
 }

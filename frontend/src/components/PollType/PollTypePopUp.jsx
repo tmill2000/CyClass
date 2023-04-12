@@ -9,17 +9,18 @@ function PollTypePopUp(props){
 
 
     const create = (inputs) => {
-		console.log("CCCCCCCCCCCCCCCCCCC");
-		console.log(props);
-		console.log(inputs);
 		let poll_question = inputs.title;
-		console.log("CCCCCCCCCCCCCCCCCCC");
-		console.log(poll_question);
 		let close_date = get_date(inputs);
 
 		let options = get_options(inputs.A_answer_button, inputs.B_answer_button, inputs.C_answer_button, inputs.D_answer_button);
+		
+		let pollType = 'MULTIPLE_SELECT';
+		if (!multipleAnswers){
+			pollType = 'MULTIPLE_CHOICE';
+		}
+		props.visible(false);
 		//create new multiple choice or select all that apply form
-		return props.api.createPoll(poll_question, close_date, options, props.courseID, props.lectureID, 'MULTIPLE_CHOICE')
+		return props.api.createPoll(poll_question, close_date, options, props.courseID, props.lectureID, pollType)
 			.catch((err) => props.onClose());
 	};
 
@@ -68,7 +69,7 @@ function PollTypePopUp(props){
 		[correctC, setCorrectC], 
 		[correctD, setCorrectD]];
 
-	const multiple_choice = true;
+	const [multipleAnswers, setMultipleAnswers] = useState(false);
 
 	const element_names = [
 		["A_answer_button", "A_answer_input"],
@@ -76,20 +77,51 @@ function PollTypePopUp(props){
 		["C_answer_button", "C_answer_input"],
 		["D_answer_button", "D_answer_input"]]
 
-	function change_method(button_element, input_element, bool_letter, setBool){
-		if (multiple_choice){
-			change_multiple_choice(button_element, input_element, bool_letter, setBool)
-		}
 
+	function change_num_answers(){
+		let ma = !multipleAnswers
+		setMultipleAnswers(ma);
+
+		if (!ma){
+			for (let i = 0; i < 4; i++){
+				let setBoolean = correct_list[i][1];
+				setBoolean(false);
+				let button_curr = document.getElementById(element_names[i][0]);
+				let input_curr = document.getElementById(element_names[i][1]);
+				button_curr.style.backgroundColor = 'white';
+				input_curr.style.backgroundColor = 'white';
+			}
+		}
 	}
 
-	function change_multiple_choice(button_element, input_element, bool_letter, setBool){
-		bool_letter = setBool(!bool_letter); //switch to right "correctness"
+	function change_method(button_element, input_element, bool_letter, setBool){
+		if (multipleAnswers){
+			change_multiple_select(button_element, input_element, bool_letter, setBool);
+		}
+		else{
+			change_multiple_choice(button_element, input_element, bool_letter, setBool);
+		}
+	}
 
-		// return;
+	function clear_answers(){
+		for (let i = 0; i < 4; i++){
+			let setBoolean = correct_list[i][1];
+			setBoolean(false);
+			let button_curr = document.getElementById(element_names[i][0]);
+			let input_curr = document.getElementById(element_names[i][1]);
+			button_curr.style.backgroundColor = 'white';
+			input_curr.style.backgroundColor = 'white';
+		}
+	}
+
+
+	function change_multiple_choice(button_element, input_element, bool_letter, setBool){
+		bool_letter = !bool_letter;//switch to right "correctness"
+		
 		if (bool_letter){ // answer is now true/correct
 			for (let i = 0; i < 4; i++){
-				correct_list[i] = !correct_list[i];
+				let setBoolean = correct_list[i][1];
+				setBoolean(false);
 				let button_curr = document.getElementById(element_names[i][0]);
 				let input_curr = document.getElementById(element_names[i][1]);
 				button_curr.style.backgroundColor = 'white';
@@ -106,8 +138,26 @@ function PollTypePopUp(props){
 			button_curr.style.backgroundColor = 'white';
 			input_curr.style.backgroundColor = 'white';
 		}
+		setBool(bool_letter);
 	}
 	
+	function change_multiple_select(button_element, input_element, bool_letter, setBool){
+		bool_letter = !bool_letter;//switch to right "correctness"
+		setBool(bool_letter);
+		if (bool_letter){ // answer is now true/correct
+			let button_curr = document.getElementById(button_element);
+			let input_curr = document.getElementById(input_element);
+			button_curr.style.backgroundColor = 'rgba(32, 197, 32, 0.826)';
+			input_curr.style.backgroundColor = 'rgba(117, 241, 117, 0.712)';
+		}
+		else { // answer is now false 
+			let button_curr = document.getElementById(button_element);
+			let input_curr = document.getElementById(input_element);
+			button_curr.style.backgroundColor = 'white';
+			input_curr.style.backgroundColor = 'white';
+		}
+		setBool(bool_letter);
+	}
 
 
     return (
@@ -127,7 +177,8 @@ function PollTypePopUp(props){
 				{
 					label: "Multiple Answers?",  //assume only 1 correct answer for now
 					name: "num_correct_answers",
-					type: "boolean"
+					type: "booleanOnClick",
+					change_method: () => change_num_answers()
 				},
 				{
 					label: "Answer A",

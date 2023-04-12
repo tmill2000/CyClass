@@ -90,6 +90,11 @@ export function PopupForm(props) {
 				getter = () => inputRef.current.checked;
 				clearer = () => inputRef.current.checked = false;
 				break;
+			case "booleanOnClick":
+				mainInput = <input ref={inputRef} type="checkbox" onChange={input.change_method}/>;
+				getter = () => inputRef.current.checked;
+				clearer = () => inputRef.current.checked = false;
+				break;
 			case "answerBlock":
 				mainInput = <div>
 								<button id={input.name} ref={inputRef2} onClick={input.change_method}>{input.change}</button>
