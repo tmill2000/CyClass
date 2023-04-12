@@ -5,6 +5,7 @@
  */
 
  import React, { useState } from "react";
+ import Button from "../../../components/Button/Button"
  import TimeLabel from "./TimeLabel";
  import Attachment from "./Attachment";
  import ProfileIcon from "../../../components/ProfileIcon";
@@ -66,10 +67,9 @@
 			 profile_role={props.user.role}
 			 flipped={props.me}
 		   />
-		   {isEditable && isHovering && showActions ? (
+		   	{isEditable && isHovering && showActions ? (
 			 <div className="message-actions">
-			   <button onClick={handleDelete}>Delete</button>
-			   <button onClick={() => setIsEditing(true)}>Edit</button>
+			   <Button onClick={handleDelete}>Delete</Button>
 			 </div>
 		   ) : null}
 		 </div>
@@ -95,8 +95,10 @@
 			 value={newContent}
 			 onChange={(e) => setNewContent(e.target.value)}
 		   />
-		   <button onClick={handleEdit}>Save</button>
-		   <button onClick={() => setIsEditing(false)}>Cancel</button>
+		   <div>
+		   <Button onClick={handleEdit}>Save</Button>
+		   <Button onClick={() => setIsEditing(false)}>Cancel</Button>
+		   </div>
 		 </div>
 	   ) : (
 		 <span className="editable" onClick={() => setIsEditing(true)}>
