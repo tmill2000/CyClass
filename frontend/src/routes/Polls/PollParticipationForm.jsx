@@ -23,12 +23,6 @@
    { label: "Email", key: "email" }
  ];
 
- let data = [
-   { firstname: "test", lastname: "test", email: "test@iastate.edu" },
-   { firstname: "test1", lastname: "test1", email: "test1@iastate.edu" },
-   { firstname: "test2", lastname: "test2", email: "test2@iastate.edu" }
- ];
-
 
  const userAPI = new UserAPI();
 
@@ -148,8 +142,8 @@
         <div style={{paddingLeft: '160px'}}>
            {results != null ? results.responses.map((response, index) => <ParticipantPill name={response.user.name} role={response.user.role} correct={response.correct} altStyle={index % 2 == 1}></ParticipantPill>) : null}
         </div>
-        <div style={{textAlign: 'center'}}>
-            {responsesMap != null ? <CSVLink data={responsesMap} filename="Poll_Results.csv" >Poll Results</CSVLink> : null}
+        <div style={{textAlign: 'center', paddingTop: '75px'}}>
+            {responsesMap != null ? <CSVLink data={responsesMap} filename="Poll_Results.csv" ><button className='button-csv-download'>Poll Results</button></CSVLink> : null}
         </div>
      </div>
 	);
