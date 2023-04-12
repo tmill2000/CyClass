@@ -13,14 +13,22 @@
  import LocalUser from '../../utilities/model/LocalUser';
  import LiveLectureAPI from '../../utilities/api/LiveLectureAPI';
  import UserAPI from '../../utilities/api/UserAPI';
+ import { CSVLink } from "react-csv";
 
  //  /course/1/lecture/1/results?poll=5
 
  const headers = [
-   { label: "Name", key: "name" },
-   { label: "Role", key: "role" },
-   { label: "Correct", key: "correct" }
+   { label: "First Name", key: "firstname" },
+   { label: "Last Name", key: "lastname" },
+   { label: "Email", key: "email" }
  ];
+
+ let data = [
+   { firstname: "test", lastname: "test", email: "test@iastate.edu" },
+   { firstname: "test1", lastname: "test1", email: "test1@iastate.edu" },
+   { firstname: "test2", lastname: "test2", email: "test2@iastate.edu" }
+ ];
+
 
  const userAPI = new UserAPI();
 
@@ -57,10 +65,6 @@
     // Pull participation info
     useEffect(() => {
 
-      const handleClick = () => {
-         console.log('hello world')
-      };
-
       const lectureAPI = new LiveLectureAPI(userID, courseID, lectureID);
       lectureAPI.getPollParticipation(pollID)
          .then((result) => {
@@ -94,19 +98,28 @@
                   });
 
             }))
-               .then(() => {
+            .then(() => {
 
-                  // Update data
-                  setResults({
-                     responses: responses,
-                     totalParticipants: result.totalResponses
-                  });
-
-               })
+               // Update data
+               setResults({
+                  responses: responses,
+                  totalParticipants: result.totalResponses
+               });
+            })
 
          })
 
     }, []);
+
+   let responsesMap = null
+
+    if(results != null){
+      responsesMap = results.responses.map((response) => ({
+         name: response.user.name,
+         role: response.user.role,
+         correct: response.correct
+      }))
+    }
 
 	// Component
 	return (
@@ -135,10 +148,8 @@
         <div style={{paddingLeft: '160px'}}>
            {results != null ? results.responses.map((response, index) => <ParticipantPill name={response.user.name} role={response.user.role} correct={response.correct} altStyle={index % 2 == 1}></ParticipantPill>) : null}
         </div>
-        <div style={{paddingTop: '100px'}}>
-           <div style={{borderTop: '10px solid gray'}}></div>
-           <input type="button" value="Export to CSV"></input>
-           <button onClick={handleClick}>Click Me</button>
+        <div style={{textAlign: 'center'}}>
+            {responsesMap != null ? <CSVLink data={responsesMap} filename="Poll_Results.csv" >Poll Results</CSVLink> : null}
         </div>
      </div>
 	);
