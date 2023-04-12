@@ -22,7 +22,7 @@ function HomePage(props) {
 
 	const [addCoursePopup, setAddCoursePopup] = useState(false);
 
-	const [courseList, setCourseList] = useState(structuredClone(LocalUser.useValue("courses")));
+	const courseList = structuredClone(LocalUser.useValue("courses"));
 
 	const colors = ["red", "blue", "green", "brown"]
 	// const courses = structuredClone(LocalUser.useValue("courses"));
@@ -37,28 +37,26 @@ function HomePage(props) {
 
 	createDropDownList();
 
-	const getURL = async () => {
-		const url = document.getElementById("input_url");
-		const typed_url = url.value.trim();
-		console.log(typed_url);
-		if (typed_url == "") {
-			console.log("URL is empty.")
-			return;
-		}
-		else{
-			const res_addCourse = await courseAPI.addCourseByJoinCode(typed_url);
-			console.log(")))))))))))))))");
-			console.log(res_addCourse);
-			if (res_addCourse.accepted){
-				LocalUser.current.addCourse(res_addCourse.course);
-			}
-		}
-	}
+	// const getURL = async () => {
+	// 	const url = document.getElementById("input_url");
+	// 	const typed_url = url.value.trim();
+	// 	console.log(typed_url);
+	// 	if (typed_url == "") {
+	// 		console.log("URL is empty.")
+	// 		return;
+	// 	}
+	// 	else{
+	// 		const res_addCourse = await courseAPI.addCourseByJoinCode(typed_url);
+	// 		console.log(")))))))))))))))");
+	// 		console.log(res_addCourse);
+	// 		if (res_addCourse.accepted){
+	// 			LocalUser.current.addCourse(res_addCourse.course);
+	// 		}
+	// 	}
+	// }
 
 	function closePopUp(){
 		setAddCoursePopup(false);
-		setCourseList(structuredClone(LocalUser.useValue("courses")));
-		createDropDownList();
 	}
 
 	return (

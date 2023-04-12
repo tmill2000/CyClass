@@ -155,10 +155,12 @@ export function PopupForm(props) {
 			canSubmit.current = false;
 			Promise.resolve(props.onSubmit(inputs))
 				.then(() => {
-					for (const input of inputElements) {
-						input.clear();
+					if (props.enabled) {
+						for (const input of inputElements) {
+							input.clear();
+						}
+						props.onClose();
 					}
-					props.onClose();
 				})
 				.catch((err) => {
 					console.log(err);
