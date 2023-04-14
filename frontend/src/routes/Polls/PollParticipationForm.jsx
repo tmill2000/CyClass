@@ -18,9 +18,11 @@
  //  /course/1/lecture/1/results?poll=5
 
  const headers = [
-   { label: "First Name", key: "firstname" },
-   { label: "Last Name", key: "lastname" },
-   { label: "Email", key: "email" }
+   { label: "First Name", key: "first_name" },
+   { label: "Last Name", key: "last_name" },
+   { label: "Email", key: "email" },
+   { label: "Role", key: "role" },
+   { label: "Correct", key: "correct" }
  ];
 
 
@@ -72,7 +74,9 @@
                      responses.push({
                         user: {
                            id: response.userID,
-                           name: userData.name,
+                           first_name: userData.first_name,
+                           last_name: userData.last_name,
+                           email: userData.email,
                            role: userData.role
                         },
                         option: response.choiceID,
@@ -83,7 +87,9 @@
                      responses.push({
                         user: {
                            id: response.userID,
-                           name: "ERROR",
+                           first_name: "ERROR",
+                           last_name: "ERROR",
+                           email: "ERROR",
                            role: "Unknown"
                         },
                         option: response.choiceID,
@@ -99,6 +105,7 @@
                   responses: responses,
                   totalParticipants: result.totalResponses
                });
+               console.log(responses)
             })
 
          })
@@ -109,7 +116,9 @@
 
     if(results != null){
       responsesMap = results.responses.map((response) => ({
-         name: response.user.name,
+         first_name: response.user.first_name,
+         last_name: response.user.last_name,
+         email: response.user.email,
          role: response.user.role,
          correct: response.correct
       }))
@@ -143,7 +152,7 @@
            {results != null ? results.responses.map((response, index) => <ParticipantPill name={response.user.name} role={response.user.role} correct={response.correct} altStyle={index % 2 == 1}></ParticipantPill>) : null}
         </div>
         <div style={{textAlign: 'center', paddingTop: '75px'}}>
-            {responsesMap != null ? <CSVLink data={responsesMap} filename="Poll_Results.csv" ><button className='button-csv-download'>Poll Results</button></CSVLink> : null}
+            {responsesMap != null ? <CSVLink data={responsesMap} headers={headers} filename="Poll_Results.csv" ><button className='button-csv-download'>Poll Results</button></CSVLink> : null}
         </div>
      </div>
 	);
