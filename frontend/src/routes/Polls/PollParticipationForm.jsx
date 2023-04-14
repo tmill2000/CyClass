@@ -105,7 +105,6 @@
                   responses: responses,
                   totalParticipants: result.totalResponses
                });
-               console.log(responses)
             })
 
          })
