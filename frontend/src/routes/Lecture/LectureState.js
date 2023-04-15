@@ -1,11 +1,13 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	02/21/2023
- * UPDATED:	02/21/2023
+ * UPDATED:	04/15/2023
  */
 
 import LiveLectureAPI from "../../utilities/api/LiveLectureAPI";
 import UserAPI from "../../utilities/api/UserAPI";
+
+import { showErrorToast } from "../../components/Toast";
 
 const TRY_RECONNECT_DELAY = 3; // (sec)
 
@@ -175,6 +177,12 @@ export default class LectureState {
 				this.setStateVersion(++this.version);
 
 			}
+
+		});
+		this.api.onError((event) => {
+
+			// Show as toast
+			showErrorToast(event.message);
 
 		});
 
