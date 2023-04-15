@@ -6,6 +6,8 @@
 
 import React, { createRef, useEffect, useRef } from "react";
 
+import { showErrorToast } from "../Toast";
+
 import "./styles.css";
 
 export default function Popup(props) {
@@ -163,6 +165,7 @@ export function PopupForm(props) {
 					}
 				})
 				.catch((err) => {
+					showErrorToast(`Form failed: ${err.message}`);
 					console.log(err);
 				})
 				.finally(() => canSubmit.current = true);
