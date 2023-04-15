@@ -9,21 +9,15 @@ function AddCoursePopUp(props){
 
     const create = (inputs) => {
         let joinCode = inputs.joinCode;
-        addCourse(joinCode);
-        props.onClose();
+        return addCourse(joinCode);
     }
 
     async function addCourse(joinCode){
-        console.log(")))))))))))))))");
-        console.log(props);
         const res_addCourse = await props.api.addCourseByJoinCode(joinCode);
-        console.log(")))))))))))))))");
-        console.log(res_addCourse);
         if (res_addCourse.accepted){
             LocalUser.current.addCourse(res_addCourse.course);
-        }
-        else{
-            console.log("incorrect join code");
+        } else{
+            throw new Error("Invalid join code");
         }
     }
 

@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
+import { Navigate, useNavigate } from "react-router-dom";
+
+import LocalUser from '../../utilities/model/LocalUser';
+
+import { showErrorToast } from "../../components/Toast";
+
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
 import logoImg from "./ISULogo.png";
-
-import DataStore from '../../utilities/data/DataStore';
-import UserAPI from '../../utilities/api/UserAPI';
-
-import { Navigate, useNavigate } from "react-router-dom";
-
-
-import LocalUser from '../../utilities/model/LocalUser';
 
 const DEFAULT_INPUT_STATE = {
     netid: '',
@@ -55,11 +53,14 @@ function LoginForm(props) {
             if (res) {
                 navigate("/home");
             } else { // (invalid credentials)
+                console.log("hi");
+                showErrorToast("Invalid credentials");
                 resetForm();
             }
             console.log(res);
         }
         catch(e) {
+            showErrorToast("Invalid credentials");
             resetForm();
         }
     }

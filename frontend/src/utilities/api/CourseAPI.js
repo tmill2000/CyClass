@@ -102,12 +102,11 @@ class CourseAPI {
 	addCourseByJoinCode(joinCode) {
 		
 		// Perform post
-		// return axios.post("/api/role/join", {}, {
-		// 	params: {
-		// 		join_code: joinCode
-		// 	}
-		// })
-		return axios.post("/api/role/join?join_code=" + joinCode)
+		return axios.post("/api/role/join", {}, {
+			params: {
+				join_code: joinCode
+			}
+		})
 			.then((res) => {
 
 				// Use role ID to get course information (frontend has no concept of a "role ID")
@@ -141,7 +140,7 @@ class CourseAPI {
 			.catch((err) => {
 
 				// Return rejection if cannot connect to DB
-				if (err.response?.status == 401) {
+				if (err.response?.status == 401 || err.response?.status == 404) {
 					return {
 						accepted: false,
 						course: null

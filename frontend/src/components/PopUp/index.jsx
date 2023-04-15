@@ -126,7 +126,7 @@ export function PopupForm(props) {
 			),
 			config: input,
 			get: getter,
-			clear: clearer,
+			clear: () => inputRef.current.value = "",
 			setInvalid: () => inputRef.current.className = "invalid"
 		});
 
@@ -158,8 +158,12 @@ export function PopupForm(props) {
 			Promise.resolve(props.onSubmit(inputs))
 				.then(() => {
 					if (props.enabled) {
-						for (const input of inputElements) {
-							input.clear();
+						try {
+							for (const input of inputElements) {
+								input.clear();
+							}
+						} catch (err) {
+							console.log("Failed to clear input elements", err);
 						}
 						props.onClose();
 					}

@@ -246,6 +246,11 @@ export default class LocalUser {
 		} else if (course.role == null) {
 			throw new Error("Given course object is missing role");
 		}
+		for (const c of this.courses) {
+			if (c.id == course.id) {
+				throw new Error("Already in the given course");
+			}
+		}
 
 		// Add to list and update store (will trigger an update for .useValue)
 		this.courses = [...this.courses, course];
