@@ -1,61 +1,67 @@
 .live-lecture-outline {
-	display: inline-flex;
-    border: 1px;
-    border-color: black;
+    position: relative;
     height: 80px;
     background-color: white;
-	width: 100%;
 	display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    filter: drop-shadow(0px 4px 4px #0004);
+    z-index: 1;
 }
 
-.list-layout{
-    margin: 0px;
-    list-style-type: none;
-    padding: 0;
-    padding-top: 10px;
-    margin-top: 10px;
+.live-lecture-outline > button {
+    color: #FFF;
+	background-color: #D00;
 }
 
-.list-layout1{
+.title-section {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto auto;
+    text-align: center;
+    width: fit-content;
+    height: fit-content;
+}
+
+.title-section .title {
+    font-size: x-large;
+    font-weight: bolder;
+}
+
+.title-section .time {
+    font-size: small;
+    color: gray;
+}
+
+.host-section {
     margin: 0px;
-    list-style-type: none;
     padding: 0;
     line-height: 2px;
     padding-left: 5px;
 }
 
-.list-item {
-    margin: 0;
-    padding: 0;
-}
-.list-item1 {
-    margin: 0;
-    padding-top: 15px;
-}
-.list-item-title {
-    font-size: x-large;
-    font-weight: bolder;
-}
-
-.list-item-starttime {
-    font-size: small;
-    color: gray;
-}
-
-.title-section {
-    text-align: center;
-    align-items: center;
-}
-
-.host-by {
+.host-section .host-by {
+    position: relative;
+    z-index: 1;
     margin-top: 5px;
     font-size: small;
     padding-left: 8px;
     color: gray;
     font-weight: bold;
+    text-align: right;
 }
 
-.button-section{
+.host-section .host-container {
+    text-align: right;
+    margin-top: -4px;
+    margin-bottom: -10px;
+}
+
+.button-section {
     position: absolute;
     right: 0px;
     padding: 10px;

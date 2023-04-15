@@ -1,10 +1,12 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	03/06/2023
- * UPDATED:	03/06/2023
+ * UPDATED:	04/15/2023
  */
 
 import axios from "axios";
+
+import UserAPI from "./UserAPI";
 
 /**
  * Interface for the API related to courses.
@@ -63,6 +65,50 @@ class CourseAPI {
 			})
 			.catch((err) => {
 				console.error("Failed to fetch lectures for course:", err);
+				throw err;
+			});
+
+	}
+	/**
+	 * Retrieves info about the specified lecture.
+	 * @param {number} lectureID 
+	 * @returns {Promise<{name: string, time: Date, host: {id: number, name: string, role: string}}>}
+	 */
+	getLectureInfo(lectureID) {
+
+		// Perform series of gets
+		return axios.get("/api/lecture", {
+			params: {
+				lecture_id: lectureID,
+				course_id: this.id
+			}
+		})
+			.then((res1) => {
+				return axios.get("/api/course", {
+					params: {
+						course_id: this.id
+					}
+				})
+					.then((res2) => {
+						return new UserAPI().getUserData(res2.data.owner_id)
+							.then((res3) => {
+								
+								// Assemble and return final result
+								return {
+									name: res1.data.title,
+									time: new Date(), // TODO
+									host: {
+										id: res2.data.owner_id,
+										name: res3.name,
+										role: res3.role
+									}
+								};
+		
+							})
+					})
+			})
+			.catch((err) => {
+				console.error("Failed to get lecture info:", err);
 				throw err;
 			});
 

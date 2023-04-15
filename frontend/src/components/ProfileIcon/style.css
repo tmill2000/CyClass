@@ -7,12 +7,13 @@
 
 .profile-img {
     width:55px;
-    margin: auto;
+    margin: auto 0;
+    /* margin: auto; */
 }
 
 .profile-info {
     font-style: normal;
-    flex: 3px;
+    /* flex: 3px; */
 }
 
 .profile-name{

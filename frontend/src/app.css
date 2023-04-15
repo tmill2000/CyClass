@@ -61,6 +61,7 @@ div#main {
 }
 
 .standard.button {
+	height: fit-content;
 	padding: 0.4em 0.8em;
 	border: none;
 	border-radius: 8px;
