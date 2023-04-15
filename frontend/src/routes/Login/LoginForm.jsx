@@ -52,7 +52,9 @@ function LoginForm(props) {
 
         try {
             const res = await LocalUser.login(inputState.netid, inputState.password);
-            if (!res) { // (invalid credentials)
+            if (res) {
+                navigate("/home");
+            } else { // (invalid credentials)
                 resetForm();
             }
             console.log(res);

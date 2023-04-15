@@ -15,9 +15,9 @@ import './CourseRegistrationPopup.css';
 
 function HomePage(props) {
 
-	const state = {
-		rollID: '',
-		url: ''
+	// If no one is logged in, go to login
+	if (LocalUser.current == null) {
+		return <Navigate to="/login" />;
 	}
 
 	const [addCoursePopup, setAddCoursePopup] = useState(false);
