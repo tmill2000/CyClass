@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	10/24/2022
- * UPDATED:	03/06/2023
+ * UPDATED:	04/15/2023
  */
 
 import React from "react";
@@ -24,6 +24,7 @@ import SignUp from "./routes/SignUp";
 import HomePage from "./routes/HomePage";
 
 import TopBar from "./components/TopBar";
+import ToastContainer from "./components/Toast";
 import ParticipationForm from "./routes/Polls/PollParticipationForm";
 
 // Set up axios to insert session ID into all requests
@@ -42,10 +43,12 @@ const router = createBrowserRouter([
 		element: <div id="main">
 			<TopBar />
 			<Outlet />
+			<ToastContainer />
 		</div>,
 		errorElement: <div id="main">
 			<TopBar />
 			<ErrorPage />
+			<ToastContainer />
 		</div>,
 		children: [
 			{

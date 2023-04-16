@@ -9,6 +9,19 @@ function pmod(x, y) {
 }
 
 /**
+ * Returns a time string that's absolute and in a standard format.
+ * @return {string}
+ */
+Date.prototype.toAbsoluteString = function() {
+
+	// Return absolute text
+	const timeStr = `${pmod(this.getHours() - 1, 12) + 1}:${this.getMinutes().toString().padStart(2, "0")}${(this.getHours() < 12) ? "am" : "pm"}`;
+	const dateStr = `${this.getMonth() + 1}/${this.getDate()}/${this.getFullYear().toString().slice(2)}`;
+	return timeStr + " • " + dateStr;
+
+}
+
+/**
  * Returns a time string that's relative to Date.now() in a standard format.
  * @return {string}
  */
@@ -25,13 +38,7 @@ Date.prototype.toRelativeString = function() {
 	} else if (elapsed < 86400) {
 		return Math.floor(elapsed / 3600) + "h ago";
 	} else {
-		const timeStr = `${pmod(this.getHours() - 1, 12) + 1}:${this.getMinutes().toString().padStart(2, "0")}${(this.getHours() < 12) ? "am" : "pm"}`;
-		if (elapsed < 86400 * 2) {
-			return timeStr + " • yesterday";
-		} else {
-			const dateStr = `${this.getMonth() + 1}/${this.getDate()}/${this.getFullYear().toString().slice(2)}`;
-			return timeStr + " • " + dateStr;
-		}
+		return this.toAbsoluteString();
 	}
 
 }

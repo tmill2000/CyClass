@@ -156,8 +156,7 @@ export default class LocalUser {
 		// Hook and return proper value
 		switch (value) {
 			case "courses":
-				useDataStoreValue("courses");
-				return LocalUser.current?.getCourses() || [];
+				return useDataStoreValue("courses") || [];
 			case "netID":
 			case "userID":
 			case "sessionID":
@@ -247,9 +246,14 @@ export default class LocalUser {
 		} else if (course.role == null) {
 			throw new Error("Given course object is missing role");
 		}
+		for (const c of this.courses) {
+			if (c.id == course.id) {
+				throw new Error("Already in the given course");
+			}
+		}
 
 		// Add to list and update store (will trigger an update for .useValue)
-		this.courses.push(course);
+		this.courses = [...this.courses, course];
 		DataStore.set("courses", this.courses);
 
 	}

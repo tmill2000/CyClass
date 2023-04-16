@@ -6,6 +6,8 @@
 
 import React, { createRef, useEffect, useRef } from "react";
 
+import { showErrorToast } from "../Toast";
+
 import "./styles.css";
 
 export default function Popup(props) {
@@ -70,6 +72,7 @@ export function PopupForm(props) {
 
 		// Make actual input element based on type
 		const inputRef = createRef();
+		const inputRef2 = createRef();
 		let mainInput = null;
 		let getter = null;
 		let clearer = null;
@@ -89,6 +92,24 @@ export function PopupForm(props) {
 				getter = () => inputRef.current.checked;
 				clearer = () => inputRef.current.checked = false;
 				break;
+			case "booleanOnClick":
+				mainInput = <input ref={inputRef} type="checkbox" onChange={input.change_method}/>;
+				getter = () => inputRef.current.checked;
+				clearer = () => inputRef.current.checked = false;
+				break;
+			case "answerBlock":
+				mainInput = <div>
+								<button id={input.name} ref={inputRef2} onClick={input.change_method}>{input.change}</button>
+								<input ref={inputRef} className="poll-form-individual-answer-entry" id={input.name2}/>
+							</div>
+				getter = () => [{text: inputRef.current.value.trim(), correct: input.change == "Correct" ? true: false}];
+				clearer = () => inputRef.current.value = "";
+				break;
+			case "spinner":
+				mainInput = <input ref={inputRef} type="number" id={input.name}/>
+				getter = () => inputRef.current.value.trim();
+				clearer = () => inputRef.current.value = "";
+				break;
 			default:
 				throw new Error(`Unrecognized input type: ${x.type}`);
 		}
@@ -105,7 +126,7 @@ export function PopupForm(props) {
 			),
 			config: input,
 			get: getter,
-			clear: clearer,
+			clear: () => inputRef.current.value = "",
 			setInvalid: () => inputRef.current.className = "invalid"
 		});
 
@@ -131,16 +152,25 @@ export function PopupForm(props) {
 				allValid = false;
 			}
 		}
-
 		// If all valid, submit
 		if (allValid) {
 			canSubmit.current = false;
 			Promise.resolve(props.onSubmit(inputs))
 				.then(() => {
-					for (const input of inputElements) {
-						input.clear();
+					if (props.enabled) {
+						try {
+							for (const input of inputElements) {
+								input.clear();
+							}
+						} catch (err) {
+							console.log("Failed to clear input elements", err);
+						}
+						props.onClose();
 					}
-					props.onClose();
+				})
+				.catch((err) => {
+					showErrorToast(`Form failed: ${err.message}`);
+					console.log(err);
 				})
 				.finally(() => canSubmit.current = true);
 		}

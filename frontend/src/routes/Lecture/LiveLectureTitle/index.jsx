@@ -1,41 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import ProfileIcon from '../../../components/ProfileIcon'
-import Button from "../../../components/Button/Button";
+import CourseAPI from "../../../utilities/api/CourseAPI";
+
 import "./style.css";
 
 const LiveLectureTitle = (props) => {
 
+    // Hooks
+    const [lectureInfo, setLectureInfo] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+
+        // Load lecture info
+        new CourseAPI(props.courseID).getLectureInfo(props.lectureID)
+            .then((info) => {
+                setLectureInfo(info);
+            })
+            .catch(() => {
+                setLectureInfo({
+                    name: "Lecture",
+                    time: new Date()
+                });
+            });
+
+    }, []);
+
+    console.log(lectureInfo?.host);
+
     return (
         <div className="live-lecture-outline">
-            <ul className="list-layout1">
-                <li className="list-item1">
-                    <span className="host-by">HOSTED BY:</span>
-                </li>
-                <li className="list-item">
-                    <ProfileIcon profile_name={props.userIDname} profile_role={props.userIDrole} width="300px"></ProfileIcon>
-                </li>
-            </ul>
+            <button className="standard button" onClick={() => navigate(`/course/${props.courseID}`)}>LEAVE</button>
             <div className="title-section">
-                <ul className="list-layout">
-                    <li className="list-item-title">
-                        <span>{props.lecture_title}</span>
-                    </li>
-                    <li className="list-item-starttime">
-                        <span className="lecture-time">Started {props.lecture_starttime} minutes ago</span>
-                    </li>
-                </ul>
+                <div className="title">{lectureInfo?.name ?? "Loading..."}</div>
+                <div className="time">{lectureInfo != null ? (lectureInfo?.time?.toAbsoluteString() ?? new Date().toAbsoluteString()) : ""}</div>
             </div>
-            <div className="button-section">
-                <Button
-                    onClick={() => {
-                        console.log("This can be any function!");
-                    }}
-                    type="button"
-                    buttonStyle="btn--cancel--solid"
-                    buttonSize="btn--medium"
-                >
-                CLOSE LECTURE
-                </Button>
+            <div className="host-section">
+                <div className="host-by">HOSTED BY</div>
+                <div className="host-container">
+                    {lectureInfo?.host != null ? <ProfileIcon profile_name={lectureInfo.host.name} profile_role={lectureInfo.host.role} flipped={true} /> : null }
+                </div>
             </div>
         </div>
     );

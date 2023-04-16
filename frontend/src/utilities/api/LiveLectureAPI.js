@@ -149,7 +149,7 @@ class LiveLectureAPI {
 			case "media_upload":
 
 				// Make message event
-				lectureEvent = new LiveLectureMessageEvent(this.lectureID, null, {
+				lectureEvent = new LiveLectureMessageEvent(this.lectureID, msg.payload.message_id, {
 					body: msg.payload.body,
 					userID: msg.payload.sender_id,
 					isAnonymous: msg.payload.is_anonymous,
@@ -159,6 +159,19 @@ class LiveLectureAPI {
 						type: null
 					}] : null
 				});
+				break;
+
+			case "message_update":
+
+				// Make update/deleted event
+				if (msg.payload.deleted) {
+					lectureEvent = new LiveLectureMessageDeletedEvent(this.lectureID, msg.payload.message_id);
+				} else {
+					lectureEvent = new LiveLectureMessageUpdatedEvent(this.lectureID, msg.payload.message_id, {
+						body: msg.payload.body,
+						time: new Date()
+					});
+				}
 				break;
 
 			case "poll":
@@ -183,10 +196,20 @@ class LiveLectureAPI {
 
 				// Make poll event
 				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, {
-					propmt: msg.payload.question_text,
+					prompt: msg.payload.question_text,
 					closed: false,
 					time: new Date(msg.payload.timestamp),
 					choices: choices
+				});
+				break;
+
+			case "poll_update":
+
+				// Make update event
+				lectureEvent = new LiveLecturePollUpdatedEvent(this.lectureID, msg.payload.poll_id, {
+					prompt: msg.payload.prompt,
+					choices: msg.payload.choices,
+					time: new Date()
 				});
 				break;
 
@@ -329,7 +352,7 @@ class LiveLectureAPI {
 
 						// Dispatch poll
 						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, {
-							propmt: msg.question,
+							prompt: msg.question,
 							closed: msg.closed,
 							time: new Date(msg.timestamp),
 							choices: choices
@@ -462,6 +485,72 @@ class LiveLectureAPI {
 		}
 
 	}
+	/**
+	 * Edits a message when selected, and sends the updatedMessage through web socket.
+	 * @param {*} messageId 
+	 * @param {*} updatedContent 
+	 */
+	editMessage(messageId, updatedContent) {
+
+		// Perform patch
+		return axios.patch("/api/message", {
+			message_id: messageId,
+			body: updatedContent,
+		})
+			.then((res) => {
+
+				// Send edited message through WebSocket
+				if (this.websocket != null) {
+					this.websocket.send(JSON.stringify({
+						type: "message_update",
+						payload: {
+							message_id: messageId,
+							body: updatedContent
+						}
+					}));
+				}
+
+			})
+			.catch((err) => {
+				console.error("Failed to edit message", err);
+				throw err;
+			});
+
+	};
+
+	/**
+	 * Deletes a message when selected and sends through web socket. 
+	 * @param {*} messageId
+	 */
+	deleteMessage (messageId) {
+
+		// Perform deletion
+		return axios.delete("/api/message", {
+			params: { 
+				message_id: messageId, 
+				course_id: this.courseID 
+			},
+		})
+			.then((res) => {
+
+				// Also send through websocket
+				if (this.websocket != null) {
+					this.websocket.send(JSON.stringify({
+						type: "message_update",
+						payload: {
+							message_id: messageId,
+							deleted: true
+						}
+					}));
+				}
+
+			})
+			.catch((err) => {
+				console.error("Failed to delete message", err);
+				throw err;
+			});
+
+	};
 
 	/**
 	 * Sends a request to retrieve the file attached to a message. Returns a Promise that will resolve to the loaded
@@ -512,7 +601,9 @@ class LiveLectureAPI {
 	 * @param {{ text: string, correct: boolean }[]} choices
 	 */
 	createPoll(prompt, close_time, choices, course_id, lecture_id, poll_type) {
-
+		console.log("made it here");
+		console.log(prompt);
+		
 		// Verify connection
 		if (this.websocket == null) {
 			throw new Error("No WebSocket connection was established");
@@ -692,6 +783,75 @@ class LiveLectureAPI {
 	}
 
 	/**
+	 * Edits a polls prompt
+	 * @param {*} pollId 
+	 * @param {*} updatedPrompt 
+	 */
+	editPollPrompt(pollId, updatedPrompt) {
+
+		// Perform patch
+		return axios.patch("/api/poll", {
+			poll_id: pollId,
+			question_text: updatedPrompt
+		})
+			.then((res) => {
+				
+				// Update through websocket if connection is still live
+				if (this.websocket != null) {
+					this.websocket.send(JSON.stringify({
+						type: "poll_update",
+						payload: {
+							poll_id: pollId,
+							prompt: updatedPrompt
+						}
+					}));
+				}
+
+			})
+			.catch((err) => {
+				console.error("Failed to edit prompt", err);
+				throw err;
+			});
+
+	};
+
+	/**
+	 * Edits a polls choice text
+	 * @param {*} pollChoiceId 
+	 * @param {*} updatedChoice 
+	 */
+	editPollChoiceText(pollID, pollChoiceId, updatedChoice) {
+
+		// Perform patch
+		return axios.patch('/api/poll-choice', {
+			poll_choice_id: pollChoiceId,
+			choice_text: updatedChoice
+		})
+			.then((res) => {
+				
+				// Update through websocket if connection is still live
+				if (this.websocket != null) {
+					this.websocket.send(JSON.stringify({
+						type: "poll_update",
+						payload: {
+							poll_id: pollID,
+							choices: [{
+								id: pollChoiceId,
+								text: updatedChoice
+							}]
+						}
+					}));
+				}
+
+			})
+			.catch((err) => {
+				console.error("Failed to edit choice",err);
+				throw err;
+			});
+
+	};
+	
+	/**
 	 * Sends the given question to the course owner (i.e. not in chat). Can optionally be anonymous.
 	 * @param {string} question 
 	 * @param {boolean?} anonymous
@@ -758,6 +918,20 @@ class LiveLectureAPI {
 	}
 	removeOnMessage(callback) {
 		this.eventTarget.removeEventListener("message", callback);
+	}
+
+	onMessageUpdated(callback) {
+		this.eventTarget.addEventListener("messageUpdated", callback);
+	}
+	removeOnMessageUpdated(callback) {
+		this.eventTarget.removeEventListener("messageUpdated", callback);
+	}
+
+	onMessageDeleted(callback) {
+		this.eventTarget.addEventListener("messageDeleted", callback);
+	}
+	removeOnMessageDeleted(callback) {
+		this.eventTarget.removeEventListener("messageDeleted", callback);
 	}
 
 	onPoll(callback) {
@@ -855,6 +1029,40 @@ class LiveLectureMessageEvent extends Event {
 }
 
 /**
+ * Represents a message update in a live lecture. Contains the following properties:
+ * - `lectureID` (number)
+ * - `messageID` (number)
+ * - `body` (string)
+ * - `time` ({@link Date})
+ */
+class LiveLectureMessageUpdatedEvent extends Event {
+
+	constructor(lectureID, messageID, data) {
+		super("messageUpdated");
+		this.lectureID = lectureID;
+		this.messageID = messageID;
+		this.body = data.body;
+		this.time = data.time;
+	}
+
+}
+
+/**
+ * Represents a new message being deleted during a live lecture. Contains the following properties:
+ * - `lectureID` (number)
+ * - `messageID` (number)
+ */
+class LiveLectureMessageDeletedEvent extends Event {
+
+	constructor(lectureID, messageID) {
+		super("messageDeleted");
+		this.lectureID = lectureID;
+		this.messageID = messageID;
+	}
+
+}
+
+/**
  * Represents a new poll to a live lecture. Contains the following properties:
  * - `lectureID` (number)
  * - `pollID` (number)
@@ -883,7 +1091,9 @@ class LiveLecturePollEvent extends Event {
  * Represents a poll having some sort of status update in a live lecture. Contains the following properties:
  * - `lectureID` (number)
  * - `pollID` (number)
- * - `closed` (boolean)
+ * - `prompt` (string?)
+ * - `choices` (`{ id: number, text: string }[]`?)
+ * - `closed` (boolean?)
  */
 class LiveLecturePollUpdatedEvent extends Event {
 
@@ -891,6 +1101,8 @@ class LiveLecturePollUpdatedEvent extends Event {
 		super("pollUpdated");
 		this.lectureID = lectureID;
 		this.pollID = pollID;
+		this.prompt = data.prompt;
+		this.choices = data.choices;
 		this.closed = data.closed;
 	}
 
@@ -955,6 +1167,8 @@ export {
 	LiveLectureOpenEvent,
 	LiveLectureCloseEvent,
 	LiveLectureMessageEvent,
+	LiveLectureMessageUpdatedEvent,
+	LiveLectureMessageDeletedEvent,
 	LiveLecturePollEvent,
 	LiveLecturePollUpdatedEvent,
 	LiveLectureQuestionEvent,

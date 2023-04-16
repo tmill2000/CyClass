@@ -49,7 +49,7 @@ function Lecture(props) {
 	}
 
 	// Create hooks
-	const [stateVersion, setStateVersion] = useState(lectureState.version);
+	const [_, setStateVersion] = useState(lectureState.version);
 	const navigate = useNavigate();
 
 	// Add effect for setting up API connection
@@ -66,8 +66,8 @@ function Lecture(props) {
 	// Return component
 	const api = lectureState.api;
 	return (
-		<div className="page">
-            <LiveLectureTitle userIDname={LocalUser.current.netID} userIDrole={user_role} lecture_title="Example Title 14" lecture_starttime="14"></LiveLectureTitle>
+		<div className="lecture page">
+            <LiveLectureTitle lectureID={lectureID} courseID={courseID} />
 			<div className="lecture-main">
             	<SidePanel userIDname={LocalUser.current.netID} userIDrole={user_role} api={api} elevated={isElevatedUser} courseID={courseID} lectureID={lectureID}/>
 				<div className="feed-container">
