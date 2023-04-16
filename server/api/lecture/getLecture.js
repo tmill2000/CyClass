@@ -22,7 +22,8 @@ const getLecture = async (req, res) => {
         return res.status(200).send({
             lecture_id: resp[0].lecture_id,
             course_id: resp[0].course_id,
-            title: resp[0].title
+            title: resp[0].title,
+            timestamp: resp[0].timestamp
         });
     } catch (e) {
         writeLog("error", e.message);
