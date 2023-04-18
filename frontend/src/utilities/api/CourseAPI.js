@@ -96,7 +96,7 @@ class CourseAPI {
 								// Assemble and return final result
 								return {
 									name: res1.data.title,
-									time: new Date(), // TODO
+									time: new Date(res1.data.timestamp),
 									host: {
 										id: res2.data.owner_id,
 										name: res3.name,

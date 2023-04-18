@@ -22,10 +22,19 @@ function LecturePost(props) {
 		tags.push(<span key="4" className="live">LIVE</span>);
 	}
 
+	// Make time string
+	let startTimeString = "";
+	const elapsedTime = (Date.now() - props.time.getTime()) / 1000;
+	if (elapsedTime < 120) {
+		startTimeString = " • started now";
+	} else if (Date.now() - props.time.getTime() < 7200) {
+		startTimeString = " • started recently";
+	}
+
 	// Component
 	return (
 		<Post className={`lecture ${props.live ? "live" : ""}`} link={`lecture/${props.id}`} title={props.title} user={props.user} tagElements={tags} time={props.time}>
-			<span><strong>Click here to join</strong> • started {props.time.toRelativeString()}</span>
+			{startTimeString != "" ? <span><strong>Click here to join</strong>{startTimeString}</span> : <span>Click here to view</span>}
 		</Post>
 	)
 
