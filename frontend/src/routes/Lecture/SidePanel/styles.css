@@ -1,0 +1,40 @@
+.lecture-main .sidebar {
+    min-width: fit-content;
+	width: 10%;
+    height: 100%;
+    background-color: rgb(230, 230, 230);
+}
+
+.sidebar-container {
+    position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.sidebar-container .button-container {
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: end;
+	gap: 10px;
+}
+
+.sidebar-container .img-button {
+	position: relative;
+	width: 70px;
+	height: 70px;
+    padding: 10px;
+	border: none;
+    border-radius: 50%;
+    background-color: rgb(0, 162, 255);
+}
+.sidebar-container .img-button > img {
+    width: 100%;
+}
+
+.sidebar-container .poll-button {
+    background-color: rgb(0, 206, 61);
+}

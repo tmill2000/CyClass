@@ -36,7 +36,7 @@ function LectureFeed(props) {
 	for (const poll of (props.polls || {})) {
 		feedList.push({
 			type: "poll",
-			element: <Poll key={`poll_${poll.id}`} id={poll.id} time={poll.time} prompt={poll.prompt} choices={poll.choices} closed={poll.closed} api={props.api} elevated={props.elevated}/>,
+			element: <Poll key={`poll_${poll.id}`} id={poll.id} time={poll.time} prompt={poll.prompt} choices={poll.choices} closeDate={poll.closeDate} api={props.api} elevated={props.elevated}/>,
 			time: poll.time.getTime()
 		});
 	}
@@ -62,7 +62,7 @@ function LectureFeed(props) {
 					showUser = false;
 				}
 			}
-			listEntry.element = <Message key={`msg_${msg.id}`} id={msg.id} api={props.api} showUser={showUser} user={msg.user} me={msg.me} time={showTime ? msg.time : null} text={msg.text} attachments={msg.attachments} />;
+			listEntry.element = <Message key={`msg_${msg.id}`} id={msg.id} api={props.api} elevated={props.elevated} showUser={showUser} user={msg.user} me={msg.me} time={showTime ? msg.time : null} text={msg.text} attachments={msg.attachments} />;
 		}
 	}
 

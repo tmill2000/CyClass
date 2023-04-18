@@ -52,6 +52,7 @@ const addPoll = async (senderId, lectureId, questionText, pollChoices, pollType,
                         ?,
                         ?
                     );`;
+        closeDate = closeDate != null ? new Date(closeDate).toISOString().slice(0, 19).replace('T', ' ') : null;
         const resp = await runQuery(query, [senderId, lectureId, questionText, closeDate, pollType]);
         const choiceIds = [];
         for (const pollChoice of pollChoices) {
@@ -96,7 +97,7 @@ const getPollMetrics = async pollId => {
  */
 const closePoll = async pollId => {
     const query = "UPDATE polls SET close_date = NOW() WHERE poll_id = ?;";
-    await runQuery(query, [false, pollId]);
+    await runQuery(query, [pollId]);
 };
 
 /**

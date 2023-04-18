@@ -1,10 +1,12 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	03/06/2023
- * UPDATED:	03/06/2023
+ * UPDATED:	04/15/2023
  */
 
 import axios from "axios";
+
+import UserAPI from "./UserAPI";
 
 /**
  * Interface for the API related to courses.
@@ -67,6 +69,50 @@ class CourseAPI {
 			});
 
 	}
+	/**
+	 * Retrieves info about the specified lecture.
+	 * @param {number} lectureID 
+	 * @returns {Promise<{name: string, time: Date, host: {id: number, name: string, role: string}}>}
+	 */
+	getLectureInfo(lectureID) {
+
+		// Perform series of gets
+		return axios.get("/api/lecture", {
+			params: {
+				lecture_id: lectureID,
+				course_id: this.id
+			}
+		})
+			.then((res1) => {
+				return axios.get("/api/course", {
+					params: {
+						course_id: this.id
+					}
+				})
+					.then((res2) => {
+						return new UserAPI().getUserData(res2.data.owner_id)
+							.then((res3) => {
+								
+								// Assemble and return final result
+								return {
+									name: res1.data.title,
+									time: new Date(res1.data.timestamp),
+									host: {
+										id: res2.data.owner_id,
+										name: res3.name,
+										role: res3.role
+									}
+								};
+		
+							})
+					})
+			})
+			.catch((err) => {
+				console.error("Failed to get lecture info:", err);
+				throw err;
+			});
+
+	}
 
 	/**
 	 * Attempts to create a new lecture, returning a Promise that resolves to the new lecture's ID if successful
@@ -102,12 +148,11 @@ class CourseAPI {
 	addCourseByJoinCode(joinCode) {
 		
 		// Perform post
-		// return axios.post("/api/role/join", {}, {
-		// 	params: {
-		// 		join_code: joinCode
-		// 	}
-		// })
-		return axios.post("/api/role/join?join_code=" + joinCode)
+		return axios.post("/api/role/join", {}, {
+			params: {
+				join_code: joinCode
+			}
+		})
 			.then((res) => {
 
 				// Use role ID to get course information (frontend has no concept of a "role ID")
@@ -141,7 +186,7 @@ class CourseAPI {
 			.catch((err) => {
 
 				// Return rejection if cannot connect to DB
-				if (err.response?.status == 401) {
+				if (err.response?.status == 401 || err.response?.status == 404) {
 					return {
 						accepted: false,
 						course: null

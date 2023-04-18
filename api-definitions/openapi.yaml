@@ -356,6 +356,8 @@ paths:
                   title:
                     type: string
                     example: Lecture 15
+                  timestamp:
+                    type: string
         '400':
           description: Invalid Parameters
         '401':

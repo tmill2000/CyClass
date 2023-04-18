@@ -36,7 +36,7 @@ function CourseDropdown(props) {
 		dropdownList.push(<CourseOption key={i} course={props.courses[i]} />);
 		dropdownListHeight += COURSE_HEIGHT;
 		if (i < props.courses.length - 1) {
-			dropdownList.push(<div key={-i} className="topbar-dropdown-separator" />);
+			dropdownList.push(<div key={-i - 1} className="topbar-dropdown-separator" />);
 			dropdownListHeight += COURSE_SEPARATOR_HEIGHT;
 		}
 	}

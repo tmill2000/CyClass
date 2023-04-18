@@ -1,11 +1,13 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	02/21/2023
- * UPDATED:	02/21/2023
+ * UPDATED:	04/15/2023
  */
 
 import LiveLectureAPI from "../../utilities/api/LiveLectureAPI";
 import UserAPI from "../../utilities/api/UserAPI";
+
+import { showErrorToast } from "../../components/Toast";
 
 const TRY_RECONNECT_DELAY = 3; // (sec)
 
@@ -109,7 +111,7 @@ export default class LectureState {
 				me: event.userID == this.userID,
 				prompt: event.prompt,
 				choices: event.choices,
-				closed: event.closed,
+				closeDate: event.closeDate,
 				time: event.time
 			});
 
@@ -124,8 +126,8 @@ export default class LectureState {
 			if (index >= 0) {
 
 				// Update object
-				if (event.closed != null) {
-					this.polls[index].closed = event.closed;
+				if (event.closeDate != null) {
+					this.polls[index].closeDate = event.closeDate;
 				}
 				if (event.prompt != null) {
 					this.polls[index].prompt = event.prompt;
@@ -175,6 +177,12 @@ export default class LectureState {
 				this.setStateVersion(++this.version);
 
 			}
+
+		});
+		this.api.onError((event) => {
+
+			// Show as toast
+			showErrorToast(event.message);
 
 		});
 

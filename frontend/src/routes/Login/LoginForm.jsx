@@ -1,114 +1,107 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Navigate, useNavigate } from "react-router-dom";
+
+import LocalUser from '../../utilities/model/LocalUser';
+
+import { showErrorToast } from "../../components/Toast";
+
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
 import logoImg from "./ISULogo.png";
 
-import DataStore from '../../utilities/data/DataStore';
-import UserAPI from '../../utilities/api/UserAPI';
+const DEFAULT_INPUT_STATE = {
+    netid: '',
+    password: '',
+    buttonDisabled: false
+};
 
-import { Navigate } from "react-router-dom";
+function LoginForm(props) {
 
+    // Hooks
+    const [inputState, setInputState] = useState(DEFAULT_INPUT_STATE);
+    const navigate = useNavigate();
 
-import LocalUser from '../../utilities/model/LocalUser';
-
-
-class LoginForm extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            netid: '',
-            password: '',
-            buttonDisabled: false
-        }
-    }
-
-    setInputValue(property, val) {
+    // Helper functions
+    const setInputValue = (property, val) => {
         val = val.trim();
         if (val.length > 30) {
             return;
         }
-        this.setState({
+        setInputState({
+            ...inputState,
             [property]: val
         })
+    };
+    const resetForm = () => {
+        setInputState(DEFAULT_INPUT_STATE);
     }
-
-    resetForm() {
-        this.setState({
-            netid: '',
-            password: '',
-            buttonDisabled: false
-        })
-    }
-
-    async doSignUpNaviation() {
-		window.location.pathname = "/signup";
-	}
-
-    async doLogin() {
-        if(!this.state.netid){
+    const doLogin = async () => {
+        if(!inputState.netid){
             return;
         }
-        if(!this.state.password){
+        if(!inputState.password){
             return;
         }
 
-        this.setState({
+        setInputState({
+            ...inputState,
             buttonDisabled: true
-        })
+        });
 
         try {
-
-            const res = await LocalUser.login(this.state.netid, this.state.password);
-            if (!res) { // (invalid credentials)
-                this.resetForm();
+            const res = await LocalUser.login(inputState.netid, inputState.password);
+            if (res) {
+                navigate("/home");
+            } else { // (invalid credentials)
+                console.log("hi");
+                showErrorToast("Invalid credentials");
+                resetForm();
             }
             console.log(res);
         }
-
         catch(e) {
-            this.resetForm();
+            showErrorToast("Invalid credentials");
+            resetForm();
         }
     }
     
-    render() {
-        return (
-            <div className="loginForm">
-                <div className="login-logo-container">
-				    <img className="login-logo" src={logoImg} />
-			    </div>
-                <div className="username-container">
-                    <InputField
-                       type="text"
-                       placeholder="Username"
-                       value={this.state.netid ? this.state.netid : ''}
-                       onChange={ (val) => this.setInputValue('netid', val) }
-                    />
-                </div>
-                <div className="password-container">
-                    <InputField
-                    type="password"
-                    placeholder="Password"
-                    value={this.state.password ? this.state.password : ''}
-                    onChange={ (val) => this.setInputValue('password', val) }
-                    />
-                </div>
-                <div className="forgotpassword-container">
-                    <a className="forgotPassword" href="">Forgot password?</a>
-                </div>
-                    <SubmitButton
-                    text="Sign in"
-                    disabled={this.state.buttonDisabled}
-                    onClick={ () => this.doLogin() }
-                    />
-                    <SubmitButton
-                    text="Sign Up"
-                    disabled={false}
-                    onClick={ () => this.doSignUpNaviation() }
-                    />
+    return (
+        <div className="loginForm">
+            <div className="login-logo-container">
+                <img className="login-logo" src={logoImg} />
             </div>
-        );
-    }
+            <div className="username-container">
+                <InputField
+                    type="text"
+                    placeholder="Username"
+                    value={inputState.netid ? inputState.netid : ''}
+                    onChange={ (val) => setInputValue('netid', val) }
+                />
+            </div>
+            <div className="password-container">
+                <InputField
+                type="password"
+                placeholder="Password"
+                value={inputState.password ? inputState.password : ''}
+                onChange={ (val) => setInputValue('password', val) }
+                />
+            </div>
+            {/* <div className="forgotpassword-container">
+                <a className="forgotPassword" href="">Forgot password?</a>
+            </div> */}
+                <SubmitButton
+                text="Sign in"
+                disabled={inputState.buttonDisabled}
+                onClick={doLogin}
+                />
+                <SubmitButton
+                text="Sign Up"
+                disabled={false}
+                onClick={ () => navigate("/signup") }
+                />
+        </div>
+    );
+
 }
 
 export default LoginForm;

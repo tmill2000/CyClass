@@ -69,7 +69,7 @@ function Course(props) {
 	}
 
 	// Sort posts by time
-	posts.sort((x, y) => x.props.time > y.props.time);
+	posts.sort((x, y) => y.props.time - x.props.time);
 
 	// Component
 	return (
