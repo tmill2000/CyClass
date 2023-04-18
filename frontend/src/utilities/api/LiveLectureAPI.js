@@ -199,7 +199,8 @@ class LiveLectureAPI {
 					prompt: msg.payload.question_text,
 					closeDate: new Date(msg.payload.close_date),
 					time: new Date(msg.payload.timestamp),
-					choices: choices
+					choices: choices,
+					hasMultipleAnswers: msg.payload.poll_type == "MULTIPLE_SELECT"
 				});
 				break;
 
@@ -356,7 +357,8 @@ class LiveLectureAPI {
 							prompt: msg.question,
 							closeDate: new Date(msg.close_date),
 							time: new Date(msg.timestamp),
-							choices: choices
+							choices: choices,
+							hasMultipleAnswers: msg.poll_type == "MULTIPLE_SELECT"
 						});
 						this.eventTarget.dispatchEvent(event);
 
@@ -586,6 +588,42 @@ class LiveLectureAPI {
 			})
 			.catch((err) => {
 				console.error("Failed to download attachment:", err);
+				throw err;
+			});
+
+	}
+
+	/**
+	 * Refreshs info about the poll with the given ID.
+	 * @param {number} pollID 
+	 */
+	refreshPoll(pollID) {
+
+		// Send GET
+		return axios.get("/api/poll", {
+			params: {
+				poll_id: pollID,
+				course_id: this.courseID
+			}
+		})
+			.then((res) => {
+
+				// Send out event
+				this.eventTarget.dispatchEvent(new LiveLecturePollUpdatedEvent(this.lectureID, pollID, {
+					prompt: res.data.question_text,
+					closeDate: res.data.close_date,
+					time: new Date(res.data.timestamp),
+					choices: res.data.poll_choices.map((choice) => ({
+						id: choice.poll_choice_id,
+						text: choice.choice_text,
+						correct: choice.is_correct_choice
+					})),
+					hasMultipleAnswers: res.data.poll_type == "MULTIPLE_SELECT"
+				}));
+
+			})
+			.catch((err) => {
+				console.error("Failed to get poll:", err);
 				throw err;
 			});
 
@@ -1078,6 +1116,7 @@ class LiveLecturePollEvent extends Event {
 		this.userID = data.userID;
 		this.closeDate = data.closeDate;
 		this.time = data.time;
+		this.hasMultipleAnswers = data.hasMultipleAnswers;
 		this.choices = data.choices;
 	}
 

@@ -27,7 +27,7 @@ function Poll(props) {
 	const [timeLeft, setTimeLeft] = useState(props.closeDate != null ? getSecondsLeft(props.closeDate) : 1);
 	const [selected, setSelected] = useState(selectedCache[props.id] || null);
 	selectedCache[props.id] = selected;
-	const isClosed = timeLeft <= 0
+	const isClosed = timeLeft <= 0;
 
 	// Effect for pulling current selection / auto-updating
 	useEffect(() => {
@@ -44,6 +44,9 @@ function Poll(props) {
 			const timer = setInterval(() => {
 				const newTimeLeft = getSecondsLeft(props.closeDate);
 				if (newTimeLeft != timeLeft) {
+					if (newTimeLeft <= 0) {
+						props.api.refreshPoll(props.id);
+					}
 					clearInterval(timer);
 					setTimeLeft(newTimeLeft);
 				}

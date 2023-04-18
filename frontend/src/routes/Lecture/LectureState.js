@@ -112,7 +112,8 @@ export default class LectureState {
 				prompt: event.prompt,
 				choices: event.choices,
 				closeDate: event.closeDate,
-				time: event.time
+				time: event.time,
+				hasMultipleAnswers: event.hasMultipleAnswers
 			});
 
 			// Update version
