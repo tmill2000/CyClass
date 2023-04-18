@@ -30,9 +30,7 @@ function Message(props) {
 	// Component
 	return (
 		<li
-			className={`msg ${props.me ? "me" : ""}`}
-			onMouseEnter={() => setIsHovering(true)}
-			onMouseLeave={() => setIsHovering(false)}>
+			className={`msg ${props.me ? "me" : ""}`}>
 			<div className="post-container">
 				<TimeLabel time={props.time} />
 				<div className="post-bubble">
@@ -85,8 +83,8 @@ function EditableMessage(props) {
 				<div>
 					<textarea value={newContent} onChange={(e) => setNewContent(e.target.value)} />
 					<div>
-						<button className="standard button" onClick={handleEdit}>Save</button>
-						<button className="standard button" onClick={() => setIsEditing(false)}>Cancel</button>
+						<button className="standard button save" onClick={handleEdit}>Save</button>
+						<button className="standard button cancel" onClick={() => setIsEditing(false)}>Cancel</button>
 					</div>
 				</div>
 			) : (
