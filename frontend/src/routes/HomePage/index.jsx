@@ -1,5 +1,4 @@
 import React from "react";
-import Popup from 'reactjs-popup';
 import { Navigate } from "react-router-dom";
 import CourseComponent from "../HomePage/CourseComponent";
 import ErrorPage from "../ErrorPage";

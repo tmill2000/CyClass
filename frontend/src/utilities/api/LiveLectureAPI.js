@@ -611,7 +611,7 @@ class LiveLectureAPI {
 				// Send out event
 				this.eventTarget.dispatchEvent(new LiveLecturePollUpdatedEvent(this.lectureID, pollID, {
 					prompt: res.data.question_text,
-					closeDate: res.data.close_date,
+					closeDate: new Date(res.data.close_date),
 					time: new Date(res.data.timestamp),
 					choices: res.data.poll_choices.map((choice) => ({
 						id: choice.poll_choice_id,

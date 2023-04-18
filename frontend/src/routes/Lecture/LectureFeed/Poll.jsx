@@ -31,13 +31,13 @@ function Poll(props) {
 
 	// Effect for pulling current selection / auto-updating
 	useEffect(() => {
-			if (props.api != null && props.id != null && selected == null) {
-				props.api.getPollResponse(props.id).then((choice) => {
-					if (choice.choiceID != null) {
-						setSelected(choice.choiceID);
-					}
-				});
-			}
+		if (props.api != null && props.id != null && selected == null) {
+			props.api.getPollResponse(props.id).then((choice) => {
+				if (choice.choiceID != null) {
+					setSelected(choice.choiceID);
+				}
+			});
+		}
 	}, [props.api, props.id, selected]);
 	useEffect(() => {
 		if (timeLeft > 0 && props.closeDate != null) {

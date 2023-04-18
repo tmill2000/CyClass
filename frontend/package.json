@@ -17,8 +17,7 @@
 		"react-csv": "^2.2.2",
 		"react-dom": "^18.2.0",
 		"react-redux": "^8.0.5",
-		"react-router-dom": "^6.4.2",
-		"reactjs-popup": "^2.0.5"
+		"react-router-dom": "^6.4.2"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.19.3",
