@@ -18,14 +18,13 @@ function PollTypePopUp(props){
 		if (!multipleAnswers){
 			pollType = 'MULTIPLE_CHOICE';
 		}
-		console.log(close_date);
 		return props.api.createPoll(poll_question, close_date, options, props.courseID, props.lectureID, pollType);
 	};
 
 	function get_date(inputs){
 		if (inputs.numMins > 0) {
-			let date = new Date();
-			date.setMinutes(date.getMinutes() + inputs.numMins);
+			let date = new Date(new Date().getTime() + inputs.numMins * 60 * 1000);
+			console.log(date);
 			return date;
 		} else {
 			return null;
