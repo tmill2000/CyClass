@@ -1,3 +1,9 @@
+/**
+ * AUTHOR:	Adam Walters
+ * CREATED:	02/05/2023
+ * UPDATED:	04/18/2023
+ */
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -8,15 +14,23 @@ import PollOption from "./PollOption";
 import EditDelete from "./EditDelete";
 import "./styles.css";
 
+function getSecondsLeft(closeTime) {
+	return Math.floor((closeTime.getTime() - Date.now()) / 1000);
+}
+
 let allowResponse = true;
 const selectedCache = {};
 
 function Poll(props) {
+
+	// State
+	const [timeLeft, setTimeLeft] = useState(props.closeDate != null ? getSecondsLeft(props.closeDate) : 1);
 	const [selected, setSelected] = useState(selectedCache[props.id] || null);
 	selectedCache[props.id] = selected;
+	const isClosed = timeLeft <= 0
 
-	useEffect(
-		() => {
+	// Effect for pulling current selection / auto-updating
+	useEffect(() => {
 			if (props.api != null && props.id != null && selected == null) {
 				props.api.getPollResponse(props.id).then((choice) => {
 					if (choice.choiceID != null) {
@@ -24,19 +38,23 @@ function Poll(props) {
 					}
 				});
 			}
-		},
-		[props.api, props.id, selected]
-	);
-
-	const editPollPrompt = () => {
-		const updatedPrompt = prompt("Enter updated poll prompt:");
-		if (updatedPrompt != null) {
-			props.api.editPollPrompt(props.id, updatedPrompt)
+	}, [props.api, props.id, selected]);
+	useEffect(() => {
+		if (timeLeft > 0 && props.closeDate != null) {
+			const timer = setInterval(() => {
+				const newTimeLeft = getSecondsLeft(props.closeDate);
+				if (newTimeLeft != timeLeft) {
+					clearInterval(timer);
+					setTimeLeft(newTimeLeft);
+				}
+			}, 500);
+			return () => clearInterval(timer);
 		}
-	};
+	}, [ timeLeft ]);
 
+	// Various handlers
 	const onSelect = (choiceID) => {
-		if (!props.closed && props.api != null && allowResponse) {
+		if (!isClosed && props.api != null && allowResponse) {
 			allowResponse = false;
 			props.api
 				.respondToPoll(props.id, choiceID)
@@ -44,17 +62,34 @@ function Poll(props) {
 				.finally(() => (allowResponse = true));
 		}
 	};
-
 	const onClose = () => {
-		if (!props.closed && props.api != null) {
+		if (!isClosed && props.api != null) {
 			props.api.closePoll(props.id);
 		}
 	};
+	const editPollPrompt = () => {
+		const updatedPrompt = prompt("Enter updated poll prompt:");
+		if (updatedPrompt != null) {
+			props.api.editPollPrompt(props.id, updatedPrompt)
+		}
+	};
 
-	const choices = props.choices.map(x => x).sort((x, y) => x.id - y.id);
+	// Time left string generation
+	let timeLeftStr = "";
+	if (!isClosed && props.closeDate != null) {
+		let min = "", sec = "";
+		if (timeLeft > 60) {
+			min = `${Math.floor(timeLeft / 60)}m`;
+		}
+		if (timeLeft % 0 > 0) {
+			sec = `${timeLeft % 60}s`;
+		}
+		timeLeftStr = min + (min != "" ? " " : "") + sec + " remaining";
+	}
 
+	// Component
 	const resultsURL = `results?poll=${props.id}`;
-
+	const choices = props.choices.map(x => x).sort((x, y) => x.id - y.id);
 	return (
 		<li className={`poll ${props.me ? "me" : ""}`}>
 			<div>
@@ -63,11 +98,12 @@ function Poll(props) {
 					<div className="poll-header">
 						<div className="title-container">
 							<div className="container">
-								<span className="title">POLL{props.closed ? " (closed)" : ""}</span>
+								<span className="title">POLL{isClosed ? " (closed)" : ""}</span>
+								<span className="time-left">{timeLeftStr}</span>
 							</div>
 							<div className="line" />
 						</div>
-						{!props.closed && props.elevated ? <button className="button close" onClick={onClose}>CLOSE</button> : null}
+						{!isClosed && props.elevated ? <button className="button close" onClick={onClose}>CLOSE</button> : null}
 						{props.elevated ? <Link className="button results" to={resultsURL}>VIEW PARTICIPATION</Link> : null}
 					</div>
 					<div className="content">
@@ -78,9 +114,9 @@ function Poll(props) {
 								pollID={props.id}
 								api={props.api}
 								elevated={props.elevated}
-								onSelect={!props.closed ? () => onSelect(x.id) : null}
+								onSelect={!isClosed ? () => onSelect(x.id) : null}
 								selected={x.id == selected}
-								correct={props.closed ? x.correct == true : null}>
+								correct={isClosed ? x.correct == true : null}>
 								{x.text}
 							</PollOption>)}
 						</div>

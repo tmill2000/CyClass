@@ -204,6 +204,9 @@
 	font-size: 1.5em;
 	font-weight: bold;
 }
+.lfeed .poll .time-left {
+	color: #777
+}
 
 .lfeed .poll .content > span {
 	position: relative;

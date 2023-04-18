@@ -197,7 +197,7 @@ class LiveLectureAPI {
 				// Make poll event
 				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, {
 					prompt: msg.payload.question_text,
-					closed: false,
+					closeDate: msg.close_date,
 					time: new Date(msg.payload.timestamp),
 					choices: choices
 				});
@@ -217,7 +217,8 @@ class LiveLectureAPI {
 
 				// Make poll updated event
 				lectureEvent = new LiveLecturePollUpdatedEvent(this.lectureID, msg.payload.poll_id, {
-					closed: true
+					closeDate: new Date(Date.now() - 1000),
+					time: new Date()
 				});
 				break;
 
@@ -353,7 +354,7 @@ class LiveLectureAPI {
 						// Dispatch poll
 						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, {
 							prompt: msg.question,
-							closed: msg.closed,
+							closeDate: msg.close_date,
 							time: new Date(msg.timestamp),
 							choices: choices
 						});
@@ -595,14 +596,12 @@ class LiveLectureAPI {
 	 * indefinite / manually closed) and has the specified choice options. Assumes a live lecture connection has been
 	 * established.
 	 * @param {string} prompt 
-	 * @param {number?} close_time
+	 * @param {Date?} close_time
 	 * @param {number} course_id
 	 * @param {number} lecture_id
 	 * @param {{ text: string, correct: boolean }[]} choices
 	 */
 	createPoll(prompt, close_time, choices, course_id, lecture_id, poll_type) {
-		console.log("made it here");
-		console.log(prompt);
 		
 		// Verify connection
 		if (this.websocket == null) {
@@ -615,9 +614,6 @@ class LiveLectureAPI {
 			payload: {
 				lecture_id: lecture_id,
 				question_text: prompt,
-				
-				
-				
 				
 				poll_choices: choices.map(choice => ({
 					choice_text: choice.text,
@@ -1068,7 +1064,7 @@ class LiveLectureMessageDeletedEvent extends Event {
  * - `pollID` (number)
  * - `prompt` (string)
  * - `userID` (number?)
- * - `closed` (boolean)
+ * - `closeDate` (Date?)
  * - `time` ({@link Date})
  * - `choices` (`{ id: number, text: string, correct?: boolean }[]`, won't have correct if not closed)
  */
@@ -1080,7 +1076,7 @@ class LiveLecturePollEvent extends Event {
 		this.pollID = pollID;
 		this.prompt = data.prompt;
 		this.userID = data.userID;
-		this.closed = data.closed;
+		this.closeDate = data.closeDate;
 		this.time = data.time;
 		this.choices = data.choices;
 	}
@@ -1093,7 +1089,7 @@ class LiveLecturePollEvent extends Event {
  * - `pollID` (number)
  * - `prompt` (string?)
  * - `choices` (`{ id: number, text: string }[]`?)
- * - `closed` (boolean?)
+ * - `closeDate` (Date?)
  */
 class LiveLecturePollUpdatedEvent extends Event {
 
@@ -1103,7 +1099,7 @@ class LiveLecturePollUpdatedEvent extends Event {
 		this.pollID = pollID;
 		this.prompt = data.prompt;
 		this.choices = data.choices;
-		this.closed = data.closed;
+		this.closeDate = data.closeDate;
 	}
 
 }

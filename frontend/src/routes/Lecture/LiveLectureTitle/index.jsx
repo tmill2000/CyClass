@@ -28,8 +28,6 @@ const LiveLectureTitle = (props) => {
 
     }, []);
 
-    console.log(lectureInfo?.host);
-
     return (
         <div className="live-lecture-outline">
             <button className="standard button" onClick={() => navigate(`/course/${props.courseID}`)}>LEAVE</button>

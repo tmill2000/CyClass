@@ -22,7 +22,6 @@ function Message(props) {
 	const handleEdit = (updatedContent) => {
 		props.api.editMessage(props.id, updatedContent);
 	};
-
 	const handleDelete = () => {
 		props.api.deleteMessage(props.id);
 	};

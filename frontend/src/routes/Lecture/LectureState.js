@@ -111,7 +111,7 @@ export default class LectureState {
 				me: event.userID == this.userID,
 				prompt: event.prompt,
 				choices: event.choices,
-				closed: event.closed,
+				closeDate: event.closeDate,
 				time: event.time
 			});
 
@@ -126,8 +126,8 @@ export default class LectureState {
 			if (index >= 0) {
 
 				// Update object
-				if (event.closed != null) {
-					this.polls[index].closed = event.closed;
+				if (event.closeDate != null) {
+					this.polls[index].closeDate = event.closeDate;
 				}
 				if (event.prompt != null) {
 					this.polls[index].prompt = event.prompt;
