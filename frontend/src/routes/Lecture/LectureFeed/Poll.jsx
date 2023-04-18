@@ -84,7 +84,6 @@ function Poll(props) {
 		if (timeLeft % 60 > 0) {
 			sec = `${timeLeft % 60}s`;
 		}
-		console.log(timeLeft, min, sec)
 		timeLeftStr = min + (min != "" ? " " : "") + sec + " remaining";
 	}
 

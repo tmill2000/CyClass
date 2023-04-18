@@ -197,7 +197,7 @@ class LiveLectureAPI {
 				// Make poll event
 				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, {
 					prompt: msg.payload.question_text,
-					closeDate: new Date(msg.close_date),
+					closeDate: new Date(msg.payload.close_date),
 					time: new Date(msg.payload.timestamp),
 					choices: choices
 				});
