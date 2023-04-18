@@ -197,7 +197,7 @@ class LiveLectureAPI {
 				// Make poll event
 				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, {
 					prompt: msg.payload.question_text,
-					closeDate: msg.close_date,
+					closeDate: new Date(msg.close_date),
 					time: new Date(msg.payload.timestamp),
 					choices: choices
 				});
@@ -354,7 +354,7 @@ class LiveLectureAPI {
 						// Dispatch poll
 						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, {
 							prompt: msg.question,
-							closeDate: msg.close_date,
+							closeDate: new Date(msg.close_date),
 							time: new Date(msg.timestamp),
 							choices: choices
 						});
