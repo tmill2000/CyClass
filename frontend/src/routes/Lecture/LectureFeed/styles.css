@@ -114,6 +114,14 @@
 	color: #e00000;
 }
 
+.lfeed .edit-delete {
+	display: block;
+	flex-direction: row;
+	justify-content: space-between;
+	gap: 10em;
+}
+
+
 /*****************************************************************************/
 /* POLL */
 
