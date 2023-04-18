@@ -35,7 +35,7 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, "../www"),
 		filename: "bundle.js",
-		publicPath: "/",
+		publicPath: "",
 		clean: {
 			keep(asset) {
 				return !asset.includes("assets");
