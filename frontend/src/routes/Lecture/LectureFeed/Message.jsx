@@ -1,22 +1,23 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/06/2022
- * UPDATED:	03/27/2023
+ * UPDATED:	04/18/2023
  */
 
 import React, { useState } from "react";
-import Button from "../../../components/Button/Button"
+
+import ProfileIcon from "../../../components/ProfileIcon";
+
 import TimeLabel from "./TimeLabel";
 import Attachment from "./Attachment";
-import ProfileIcon from "../../../components/ProfileIcon";
-import LocalUser from '../../../utilities/model/LocalUser';
-import editIcon from './icons/edit.png'
-import trashIcon from './icons/trash.png'
+import EditDelete from "./EditDelete";
+
 import "./styles.css";
 
 function Message(props) {
 
-	const isEditable = props.user.id == LocalUser.current?.userID;
+	const isEditable = props.me;
+	const isDeletable = props.me || props.elevated;
 
 	const handleEdit = (updatedContent) => {
 		props.api.editMessage(props.id, updatedContent);
@@ -31,13 +32,12 @@ function Message(props) {
 		<li
 			className={`msg ${props.me ? "me" : ""}`}
 			onMouseEnter={() => setIsHovering(true)}
-			onMouseLeave={() => setIsHovering(false)}
-		>
+			onMouseLeave={() => setIsHovering(false)}>
 			<div className="post-container">
 				<TimeLabel time={props.time} />
 				<div className="post-bubble">
-					{isEditable ? (
-						<EditableMessage message={props.text} handleDelete={handleDelete} isEditable handleEdit={handleEdit} />
+					{(isEditable || isDeletable) ? (
+						<EditableMessage message={props.text} canEdit={isEditable} handleDelete={handleDelete} isEditable handleEdit={handleEdit} />
 					) : (
 						<span className="selectable">{props.text}</span>
 					)}
@@ -83,27 +83,15 @@ function EditableMessage(props) {
 		<div>
 			{isEditing ? (
 				<div>
-					<textarea
-						value={newContent}
-						onChange={(e) => setNewContent(e.target.value)}
-					/>
+					<textarea value={newContent} onChange={(e) => setNewContent(e.target.value)} />
 					<div>
-						<Button onClick={handleEdit}>Save</Button>
-						<Button onClick={() => setIsEditing(false)}>Cancel</Button>
+						<button className="standard button" onClick={handleEdit}>Save</button>
+						<button className="standard button" onClick={() => setIsEditing(false)}>Cancel</button>
 					</div>
 				</div>
 			) : (
 				<div>
-					<div className="edit-delete" align="right">
-						<img
-							onClick={() => setIsEditing(true)}
-							src={editIcon}
-						/>
-						<img
-							onClick={handleDelete}
-							src={trashIcon}
-						/>
-					</div>
+					<EditDelete canDelete={true} canEdit={props.canEdit} handleDelete={handleDelete} handleEdit={() => setIsEditing(true)} />
 					<span className="editable">{props.message}</span>
 				</div>
 			)}
