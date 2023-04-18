@@ -24,7 +24,6 @@ function PollTypePopUp(props){
 	function get_date(inputs){
 		if (inputs.numMins > 0) {
 			let date = new Date(new Date().getTime() + inputs.numMins * 60 * 1000);
-			console.log(date);
 			return date;
 		} else {
 			return null;
