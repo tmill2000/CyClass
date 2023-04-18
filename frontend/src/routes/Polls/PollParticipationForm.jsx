@@ -13,8 +13,18 @@
  import LocalUser from '../../utilities/model/LocalUser';
  import LiveLectureAPI from '../../utilities/api/LiveLectureAPI';
  import UserAPI from '../../utilities/api/UserAPI';
+ import { CSVLink } from "react-csv";
 
  //  /course/1/lecture/1/results?poll=5
+
+ const headers = [
+   { label: "First Name", key: "first_name" },
+   { label: "Last Name", key: "last_name" },
+   { label: "Email", key: "email" },
+   { label: "Role", key: "role" },
+   { label: "Correct", key: "correct" }
+ ];
+
 
  const userAPI = new UserAPI();
 
@@ -64,7 +74,9 @@
                      responses.push({
                         user: {
                            id: response.userID,
-                           name: userData.name,
+                           first_name: userData.first_name,
+                           last_name: userData.last_name,
+                           email: userData.email,
                            role: userData.role
                         },
                         option: response.choiceID,
@@ -75,7 +87,9 @@
                      responses.push({
                         user: {
                            id: response.userID,
-                           name: "ERROR",
+                           first_name: "ERROR",
+                           last_name: "ERROR",
+                           email: "ERROR",
                            role: "Unknown"
                         },
                         option: response.choiceID,
@@ -84,19 +98,30 @@
                   });
 
             }))
-               .then(() => {
+            .then(() => {
 
-                  // Update data
-                  setResults({
-                     responses: responses,
-                     totalParticipants: result.totalResponses
-                  });
-
-               })
+               // Update data
+               setResults({
+                  responses: responses,
+                  totalParticipants: result.totalResponses
+               });
+            })
 
          })
 
     }, []);
+
+   let responsesMap = null
+
+    if(results != null){
+      responsesMap = results.responses.map((response) => ({
+         first_name: response.user.first_name,
+         last_name: response.user.last_name,
+         email: response.user.email,
+         role: response.user.role,
+         correct: response.correct
+      }))
+    }
 
 	// Component
 	return (
@@ -124,6 +149,9 @@
         </div>
         <div style={{paddingLeft: '160px'}}>
            {results != null ? results.responses.map((response, index) => <ParticipantPill name={response.user.name} role={response.user.role} correct={response.correct} altStyle={index % 2 == 1}></ParticipantPill>) : null}
+        </div>
+        <div style={{textAlign: 'center', paddingTop: '75px'}}>
+            {responsesMap != null ? <CSVLink data={responsesMap} headers={headers} filename="Poll_Results.csv" ><button className='button-csv-download'>Poll Results</button></CSVLink> : null}
         </div>
      </div>
 	);
