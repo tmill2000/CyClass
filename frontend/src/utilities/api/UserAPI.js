@@ -177,9 +177,9 @@ class UserAPI {
 		if (userData != null) {
 			return Promise.resolve({
 				name: userData.data.email,
-				first_name: userData.first_name,
-				last_name: userData.last_name,
-				email: userData.email,
+				first_name: userData.data.first_name,
+				last_name: userData.data.last_name,
+				email: userData.data.email,
 				role: "Student",
 				iconURL: defaultProfileImg
 			});
