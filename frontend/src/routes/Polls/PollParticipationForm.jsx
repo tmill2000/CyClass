@@ -74,6 +74,7 @@
                      responses.push({
                         user: {
                            id: response.userID,
+                           name: userData.name,
                            first_name: userData.first_name,
                            last_name: userData.last_name,
                            email: userData.email,
@@ -87,6 +88,7 @@
                      responses.push({
                         user: {
                            id: response.userID,
+                           name: "Unknown",
                            first_name: "ERROR",
                            last_name: "ERROR",
                            email: "ERROR",

@@ -176,6 +176,7 @@ class UserAPI {
 		const userData = userDataCache[userID];
 		if (userData != null) {
 			return Promise.resolve({
+				name: userData.data.email,
 				first_name: userData.first_name,
 				last_name: userData.last_name,
 				email: userData.email,
@@ -193,6 +194,7 @@ class UserAPI {
 			.then((res) => {
 				userDataCache[userID] = res.data;
 				return {
+					name: res.data.email,
 					first_name: res.data.first_name,
 					last_name: res.data.last_name,
 					email: res.data.email,
