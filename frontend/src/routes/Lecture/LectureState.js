@@ -137,12 +137,7 @@ export default class LectureState {
 					for (const choice of event.choices) {
 						const choiceIndex = this.polls[index].choices.findIndex(x => x.id == choice.id);
 						if (choiceIndex >= 0) {
-							if (choice.text != null) {
-								this.polls[index].choices[choiceIndex].text = choice.text;
-							}
-							if (choice.correct != null) {
-								this.polls[index].choices[choiceIndex].correct = choice.correct;
-							}
+							this.polls[index].choices[choiceIndex].text = choice.text;
 						} else {
 							console.error(`Failed to update poll: missing choice with ID ${choice.id}`);
 						}

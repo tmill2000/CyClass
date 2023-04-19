@@ -17,10 +17,6 @@ import "./styles.css";
 function getSecondsLeft(closeTime) {
 	return Math.floor((closeTime.getTime() - Date.now()) / 1000);
 }
-function isSelected(selection, choiceID) {
-	const index = selection.findIndex(x => x.choiceID == choiceID);
-	return index >= 0;
-}
 
 let allowResponse = true;
 const selectedCache = {};
@@ -29,15 +25,17 @@ function Poll(props) {
 
 	// State
 	const [timeLeft, setTimeLeft] = useState(props.closeDate != null ? getSecondsLeft(props.closeDate) : 1);
-	const [selected, setSelected] = useState(selectedCache[props.id] || []);
+	const [selected, setSelected] = useState(selectedCache[props.id] || null);
 	selectedCache[props.id] = selected;
 	const isClosed = timeLeft <= 0;
 
 	// Effect for pulling current selection / auto-updating
 	useEffect(() => {
-		if (props.api != null && props.id != null && selected.length == 0) {
-			props.api.getPollResponses(props.id).then((responses) => {
-				setSelected(responses);
+		if (props.api != null && props.id != null && selected == null) {
+			props.api.getPollResponse(props.id).then((choice) => {
+				if (choice.choiceID != null) {
+					setSelected(choice.choiceID);
+				}
 			});
 		}
 	}, [props.api, props.id, selected]);
@@ -63,11 +61,7 @@ function Poll(props) {
 			allowResponse = false;
 			props.api
 				.respondToPoll(props.id, choiceID)
-				.then(() => {
-					return props.api.getPollResponses(props.id).then((responses) => {
-						setSelected(responses);
-					})
-				})
+				.then(() => setSelected(choiceID))
 				.finally(() => (allowResponse = true));
 		}
 	};
@@ -124,7 +118,7 @@ function Poll(props) {
 								api={props.api}
 								elevated={props.elevated}
 								onSelect={!isClosed ? () => onSelect(x.id) : null}
-								selected={isSelected(selected, x.id)}
+								selected={x.id == selected}
 								correct={isClosed ? x.correct == true : null}>
 								{x.text}
 							</PollOption>)}

@@ -727,14 +727,14 @@ class LiveLectureAPI {
 	}
 
 	/**
-	 * Returns the user's responses (a `choiceID`) to the given poll. Returns a Promise that will resolve with the an
+	 * Returns the user's response (a `choiceID`) to the given poll. Returns a Promise that will resolve with the an
 	 * object of the following format (unless an error occurs):
 	 * - `choiceID?` (number or null if not responded yet)
 	 * - `correct?` (boolean or null if not responded/available yet)
 	 * @param {number} pollID 
 	 * @return Promise
 	 */
-	getPollResponses(pollID) {
+	getPollResponse(pollID) {
 
 		// Perform get
 		return axios.get("/api/poll/metrics", {
@@ -745,19 +745,21 @@ class LiveLectureAPI {
 			})
 			.then((res) => {
 
-				// Try to collect responses in response list
-				const responses = [];
+				// Try to find response in response list
 				for (const i of res.data.userResponses) {
 					if (i.user_id == this.userID) {
-						responses.push({
+						return {
 							choiceID: i.poll_choice_id,
 							correct: i.is_correct_choice
-						});
+						}
 					}
 				}
 
-				// Return what was found
-				return responses
+				// Didn't find, so return all null
+				return {
+					choiceID: null,
+					correct: null
+				}
 
 			})
 			.catch((err) => {
@@ -1125,7 +1127,7 @@ class LiveLecturePollEvent extends Event {
  * - `lectureID` (number)
  * - `pollID` (number)
  * - `prompt` (string?)
- * - `choices` (`{ id: number, text: string?, correct: boolean? }[]`?)
+ * - `choices` (`{ id: number, text: string }[]`?)
  * - `closeDate` (Date?)
  */
 class LiveLecturePollUpdatedEvent extends Event {
