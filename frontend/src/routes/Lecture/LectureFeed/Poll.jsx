@@ -40,7 +40,7 @@ function Poll(props) {
 				setSelected(responses);
 			});
 		}
-	}, [props.api, props.id, selected]);
+	}, [props.api, props.id, selected.length]);
 	useEffect(() => {
 		if (timeLeft > 0 && props.closeDate != null) {
 			const timer = setInterval(() => {
