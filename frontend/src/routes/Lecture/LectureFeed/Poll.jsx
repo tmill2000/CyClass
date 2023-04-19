@@ -47,7 +47,7 @@ function Poll(props) {
 				const newTimeLeft = getSecondsLeft(props.closeDate);
 				if (newTimeLeft != timeLeft) {
 					if (newTimeLeft <= 0) {
-						props.api.refreshPoll(props.id);
+						setTimeout(() => props.api.refreshPoll(props.id), 1000);
 					}
 					clearInterval(timer);
 					setTimeLeft(newTimeLeft);
