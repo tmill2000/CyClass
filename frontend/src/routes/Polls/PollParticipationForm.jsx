@@ -112,8 +112,8 @@ function ParticipationForm (props) {
 	let responsesMap = null
 	if(results != null){
 		responsesMap = results.responses.map((response) => ({
-			first_name: response.user.firstName,
-			last_name: response.user.lastName,
+			firstName: response.user.firstName,
+			lastName: response.user.lastName,
 			email: response.user.email,
 			role: response.user.role,
 			correct: response.correct
