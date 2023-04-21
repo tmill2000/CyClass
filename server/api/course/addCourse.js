@@ -25,7 +25,7 @@ const addCourse = async (req, res) => {
 
         return res
             .status(201)
-            .send({ course_id: insertObj.courseId, ownerRoleId: insertObj.roleId, join_code: joinCode });
+            .send({ course_id: insertObj.courseId, owner_role_id: insertObj.roleId, join_code: joinCode });
     } catch (e) {
         writeLog("error", e.message);
         return res.status(500).send({ msg: "Internal Server Error" });
