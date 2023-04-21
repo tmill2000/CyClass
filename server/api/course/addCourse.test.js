@@ -18,7 +18,7 @@ describe("addCourse", () => {
     it("should return 201 for success", async () => {
         const req = getMockReq({ body: { ownerID: 1, courseTitle: 1 } });
         req.session = professorSession;
-        const spy = jest.spyOn(courseService, "addCourse").mockResolvedValueOnce();
+        const spy = jest.spyOn(courseService, "addCourse").mockResolvedValueOnce({ courseId: 1, roleId: 1 });
         await addCourse(req, res);
         expect(res.status).toBeCalledWith(201);
         expect(spy).toBeCalledTimes(1);
