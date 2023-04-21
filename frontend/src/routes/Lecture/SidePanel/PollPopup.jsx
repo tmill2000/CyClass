@@ -146,9 +146,9 @@ function PollTypePopUp(props){
 			onSubmit={create}
 			inputs={[
 				{ 
-                    label: "Poll Title",
+                    label: "Prompt",
 					name: "title",
-					type: "text",
+					type: "paragraph",
 					validator: (input) => input != ""
 				},
 				{

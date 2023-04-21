@@ -116,7 +116,7 @@ function Poll(props) {
 						{props.elevated ? <Link className="button results" to={resultsURL}>VIEW PARTICIPATION</Link> : null}
 					</div>
 					<div className="content">
-						<span>{props.prompt}{props.elevated ? <EditDelete canEdit={props.elevated} handleEdit={editPollPrompt} /> : null}</span>
+						<span className="selectable">{props.prompt}{props.elevated ? <EditDelete canEdit={props.elevated} handleEdit={editPollPrompt} /> : null}</span>
 						<div>
 							{choices.map(x => <PollOption key={x.id.toString()}
 								id={x.id}
