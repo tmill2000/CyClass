@@ -19,22 +19,24 @@ const LiveLectureTitle = (props) => {
             .then((info) => {
                 setLectureInfo(info);
             })
-            .catch(() => {
+            .catch((err) => {
+				if (err.response?.status == 401) {
+					navigate("/login?expired");
+                    return;
+				}
                 setLectureInfo({
-                    name: "Lecture",
+                    title: "Live Lecture",
                     time: new Date()
                 });
             });
 
     }, []);
 
-    console.log(lectureInfo?.host);
-
     return (
         <div className="live-lecture-outline">
             <button className="standard button" onClick={() => navigate(`/course/${props.courseID}`)}>LEAVE</button>
             <div className="title-section">
-                <div className="title">{lectureInfo?.name ?? "Loading..."}</div>
+                <div className="title">{lectureInfo?.title ?? "Loading..."}</div>
                 <div className="time">{lectureInfo != null ? (lectureInfo?.time?.toAbsoluteString() ?? new Date().toAbsoluteString()) : ""}</div>
             </div>
             <div className="host-section">

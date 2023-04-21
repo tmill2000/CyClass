@@ -1,6 +1,7 @@
 const roleService = require("../role/services/roleService");
 const userService = require("./services/userService");
 const { writeLog } = require("../../utils/logger");
+const { isInCourse } = require("../../utils/permissions");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 
@@ -91,4 +92,33 @@ const getCoursesByUser = async (req, res) => {
     }
 };
 
-module.exports = { getUserInfoByUserId, login, logout, getCoursesByUser };
+/**
+*
+* @param {Express.Request} req
+* @param {Express.Response} res
+* @returns {Promise<Express.Response>}
+*/
+const getRoleByUserCourse = async (req, res) => {
+   try {
+       const { user_id: userId, course_id: courseId } = req.query;
+       if (!userId || !courseId) {
+           return res.status(400).send({ msg: "Missing Parameters" });
+       }
+       if (!isInCourse(courseId, req.session)) {
+           return res.status(401).send({ msg: "Must be associated with course to retrieve other user role info in that course." });
+       }
+       const roles = await roleService.getCourseRolesByUser(userId);
+       const courseRole = roles.find(role => role.course_id == courseId);
+       if (courseRole != null) {
+            return res.status(200).send({
+                role_id: courseRole.role_id
+            });
+       }
+       return res.status(404).send({ msg: "User does not exist or is not in the given course." });
+   } catch (e) {
+       writeLog("error", e.message);
+       return res.status(500).send({ msg: "Internal Server Error" });
+   }
+};
+
+module.exports = { getUserInfoByUserId, login, logout, getCoursesByUser, getRoleByUserCourse };

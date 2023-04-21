@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	02/21/2023
- * UPDATED:	04/15/2023
+ * UPDATED:	04/21/2023
  */
 
 import LiveLectureAPI from "../../utilities/api/LiveLectureAPI";
@@ -13,7 +13,7 @@ const TRY_RECONNECT_DELAY = 3; // (sec)
 
 const userAPI = new UserAPI();
 
-async function toUserInfo(userID, anonymous) {
+async function toUserInfo(userID, anonymous, courseID) {
 
 	// If anonymous, return constant data; otherwise, fetch
 	if (anonymous) {
@@ -23,10 +23,10 @@ async function toUserInfo(userID, anonymous) {
 			role: "Student"
 		}
 	} else if (userID != null) {
-		const data = await userAPI.getUserData(userID);
+		const data = await userAPI.getUserData(userID, courseID);
 		return {
 			id: userID,
-			name: data.name,
+			name: data.displayName,
 			role: data.role
 		}
 	}
@@ -35,6 +35,9 @@ async function toUserInfo(userID, anonymous) {
 		role: "Unknown"
 	};
 
+}
+function sleep(sec) {
+	return new Promise((resolve) => setTimeout(resolve, sec * 1000));
 }
 
 export default class LectureState {
@@ -55,15 +58,24 @@ export default class LectureState {
 		// Bind to new messages
 		this.api.onMessage(async (event) => {
 
-			// Add to messages array
-			this.messages.push({
+			// Do nothing if already in array (may happen in a re-fetch of history)
+			if (this.messages.find(x => x.id == event.messageID) != null) {
+				return;
+			}
+
+			// Add to messages array, checking after loading user data again if the message was added by something else
+			const msg = {
 				id: event.messageID,
-				user: await toUserInfo(event.userID, event.isAnonymous),
+				user: await this.toUserInfoOptimized(event.userID, event.isAnonymous),
 				me: event.userID == this.userID,
 				text: event.body,
 				time: event.time,
 				attachments: event.attachments
-			});
+			};
+			if (this.messages.find(x => x.id == event.messageID) != null) {
+				return;
+			}
+			this.messages.push(msg);
 
 			// Update version
 			this.setStateVersion(++this.version);
@@ -104,16 +116,26 @@ export default class LectureState {
 		});
 		this.api.onPoll(async (event) => {
 
-			// Add to polls array
-			this.polls.push({
+			// Do nothing if already in array (may happen in a re-fetch of history)
+			if (this.polls.find(x => x.id == event.pollID) != null) {
+				return;
+			}
+
+			// Add to polls array, checking after loading user data again if the poll was added by something else
+			const poll = {
 				id: event.pollID,
-				user: await toUserInfo(event.userID, false),
+				user: await this.toUserInfoOptimized(event.userID, false),
 				me: event.userID == this.userID,
 				prompt: event.prompt,
 				choices: event.choices,
-				closed: event.closed,
-				time: event.time
-			});
+				closeDate: event.closeDate,
+				time: event.time,
+				hasMultipleAnswers: event.hasMultipleAnswers
+			};
+			if (this.polls.find(x => x.id == event.pollID) != null) {
+				return;
+			}
+			this.polls.push(poll);
 
 			// Update version
 			this.setStateVersion(++this.version);
@@ -126,8 +148,8 @@ export default class LectureState {
 			if (index >= 0) {
 
 				// Update object
-				if (event.closed != null) {
-					this.polls[index].closed = event.closed;
+				if (event.closeDate != null) {
+					this.polls[index].closeDate = event.closeDate;
 				}
 				if (event.prompt != null) {
 					this.polls[index].prompt = event.prompt;
@@ -136,7 +158,12 @@ export default class LectureState {
 					for (const choice of event.choices) {
 						const choiceIndex = this.polls[index].choices.findIndex(x => x.id == choice.id);
 						if (choiceIndex >= 0) {
-							this.polls[index].choices[choiceIndex].text = choice.text;
+							if (choice.text != null) {
+								this.polls[index].choices[choiceIndex].text = choice.text;
+							}
+							if (choice.correct != null) {
+								this.polls[index].choices[choiceIndex].correct = choice.correct;
+							}
 						} else {
 							console.error(`Failed to update poll: missing choice with ID ${choice.id}`);
 						}
@@ -155,7 +182,7 @@ export default class LectureState {
 			this.questions.push({
 				id: event.questionID,
 				question: event.question,
-				user: await toUserInfo(event.userID, event.isAnonymous),
+				user: await this.toUserInfoOptimized(event.userID, event.isAnonymous),
 				time: event.time
 			});
 
@@ -229,6 +256,21 @@ export default class LectureState {
 		// Clear data
 		this.messages = [];
 		this.polls = [];
+
+	}
+
+	pendingUserInfoReq = []
+	toUserInfoOptimized(userID, anonymous) {
+
+		// If info is already pending, return that promise; otherwise make new
+		if (this.pendingUserInfoReq[userID] != null) {
+			return this.pendingUserInfoReq[userID];
+		} else {
+			const promise = toUserInfo(userID, anonymous, this.courseID)
+				.finally(() => this.pendingUserInfoReq[userID] = null);
+			this.pendingUserInfoReq[userID] = promise;
+			return promise;
+		}
 
 	}
 

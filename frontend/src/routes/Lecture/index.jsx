@@ -69,7 +69,7 @@ function Lecture(props) {
 		<div className="lecture page">
             <LiveLectureTitle lectureID={lectureID} courseID={courseID} />
 			<div className="lecture-main">
-            	<SidePanel userIDname={LocalUser.current.netID} userIDrole={user_role} api={api} elevated={isElevatedUser} courseID={courseID} lectureID={lectureID}/>
+            	<SidePanel api={api} elevated={isElevatedUser} courseID={courseID} lectureID={lectureID}/>
 				<div className="feed-container">
 					<LectureFeed api={api} elevated={isElevatedUser} messages={lectureState.messages} polls={lectureState.polls} />
 					<NewMessageEntry api={api} />

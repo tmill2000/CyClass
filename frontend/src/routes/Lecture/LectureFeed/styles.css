@@ -43,6 +43,44 @@
 	filter: drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.07));
 }
 
+.lfeed .edit-delete {
+	position: absolute;
+	right: -5px;
+	top: -16px;
+	display: flex;
+	gap: 2px;
+	transform: translate(0px, 5px);
+	filter: opacity(0%);
+	transition: all cubic-bezier(0.19, 1, 0.22, 1) 0.2s;
+}
+.lfeed .poll .edit-delete {
+	right: -25px;
+}
+.lfeed .msg .post-bubble:hover .edit-delete,
+.lfeed .poll .content:hover > span .edit-delete,
+.lfeed .poll .option:hover .edit-delete {
+	transform: translate(0px, 0px);
+	filter: opacity(100%);
+}
+
+.lfeed .edit-delete > button {
+	width: 25px;
+	height: 25px;
+	border: none;
+	padding: 5px;
+	border-radius: 50%;
+}
+.lfeed .edit-delete > button.edit {
+	background-color: rgb(0, 200, 255);
+}
+.lfeed .edit-delete > button.delete {
+	background-color: rgb(255, 0, 0);
+}
+.lfeed .edit-delete > button > img {
+	width: 100%;
+	height: 100%;
+}
+
 /*****************************************************************************/
 /* MESSAGE */
 
@@ -73,9 +111,22 @@
 	margin-right: auto;
 }
 .lfeed .msg.me .post-bubble {
+	position: relative;
 	background-color: #DBF0FF;
 	margin-left: auto;
 	margin-right: 0px;
+}
+
+.lfeed .msg .post-bubble .standard.button {
+	padding: 4px 8px;
+	font-size: 0.8em;
+	margin-right: 6px;
+}
+.lfeed .msg .post-bubble .standard.button.save {
+	background-color: #0D0;
+}
+.lfeed .msg .post-bubble .standard.button.cancel {
+	background-color: #DDD;
 }
 
 .lfeed .attachment-list {
@@ -153,8 +204,18 @@
 	font-size: 1.5em;
 	font-weight: bold;
 }
+.lfeed .poll .time-left {
+	color: #777
+}
 
-.lfeed .poll .button {
+.lfeed .poll .content > span {
+	position: relative;
+	display: inline-block;
+	margin: 16px 0px;
+	white-space: pre-line;
+}
+
+.lfeed .poll .poll-header .button {
 	flex-grow: 0;
 	width: fit-content;
 	height: 100%;
@@ -166,10 +227,10 @@
 	color: #FFF;
 	cursor: pointer;
 }
-.lfeed .poll .button.results {
+.lfeed .poll .poll-header .button.results {
 	background-color: #008615;
 }
-.lfeed .poll .button.close {
+.lfeed .poll .poll-header .button.close {
 	background-color: #d60000;
 }
 
@@ -183,10 +244,9 @@
 	flex-direction: row;
 	align-items: center;
 	padding: 0.4rem;
-	width: 100%;
 	transition: all 0.2s;
 }
-.lfeed .poll .option:disabled {
+.lfeed .poll .option.disabled {
 	cursor: default;
 }
 .lfeed .poll .option.selected {
@@ -197,6 +257,10 @@
 }
 .lfeed .poll .option.selected.wrong {
 	background-color: rgba(136, 0, 0, 0.2);
+}
+
+.lfeed .poll .option > span {
+	position: relative;
 }
 
 .lfeed .poll .option .select-box {

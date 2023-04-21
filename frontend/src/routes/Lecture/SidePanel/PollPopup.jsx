@@ -18,29 +18,16 @@ function PollTypePopUp(props){
 		if (!multipleAnswers){
 			pollType = 'MULTIPLE_CHOICE';
 		}
-		props.onClose();
-		//create new multiple choice or select all that apply form
-		return props.api.createPoll(poll_question, close_date, options, props.courseID, props.lectureID, pollType)
-			.catch((err) => props.onClose());
+		return props.api.createPoll(poll_question, close_date, options, props.courseID, props.lectureID, pollType);
 	};
 
 	function get_date(inputs){
-        var date = new Date();
-        const time_elapsed = inputs.numMins;
-        console.log(time_elapsed);
-        let updated_mins = date.getMinutes() + time_elapsed;
-        let add_mins = updated_mins % 60;
-        console.log(updated_mins);
-        updated_mins = updated_mins - add_mins * 60;
-        console.log(updated_mins);
-        let updated_hours = date.getHours() + add_mins;
-        console.log(updated_hours);
-        date.setHours(updated_hours);
-        date.setMinutes(updated_mins);
-        console.log(date); // Wed Jan 01 2014 13:28:56 GMT-1000 (Hawaiian Standard Time) 
-        
-        // return date.toISOString();
-        return null;
+		if (inputs.numMins > 0) {
+			let date = new Date(new Date().getTime() + inputs.numMins * 60 * 1000);
+			return date;
+		} else {
+			return null;
+		}
     }
 
 	const get_options = (A, B, C, D) => {
@@ -48,12 +35,13 @@ function PollTypePopUp(props){
 		const message = [];
 		for (let i =0; i < 4; i++){
 			let something = some[i][0];
-			message.push({
-				text: something.text,
-				correct: something.correct
-			});
+			if (something.text.trim() != "") {
+				message.push({
+					text: something.text,
+					correct: something.correct
+				});
+			}
         }
-		console.log(message);
 		return message;
 	}
 
@@ -158,9 +146,9 @@ function PollTypePopUp(props){
 			onSubmit={create}
 			inputs={[
 				{ 
-                    label: "Poll Title",
+                    label: "Prompt",
 					name: "title",
-					type: "text",
+					type: "paragraph",
 					validator: (input) => input != ""
 				},
 				{
