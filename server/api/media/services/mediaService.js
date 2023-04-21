@@ -31,6 +31,7 @@ const authUpload = async mediaID => {
  *
  * @param {string} mediaID GUID of media file
  * @param {string} fileType File extension associated with saved file (i.e. 'png' or 'jpg')
+ * @param {string} fileName File name
  * @returns
  */
 const updateMediaMetadataOnReceived = async (mediaID, fileType, fileName) => {
@@ -48,12 +49,12 @@ const updateMediaMetadataOnReceived = async (mediaID, fileType, fileName) => {
  * Service to return necessary media metadata for file downloads
  * @param {int} userID ID of user making the request
  * @param {string} mediaID GUID of media file
- * @returns received, file_type, user_in_course
+ * @returns received, file_type, user_in_course, file_name
  */
 const metadataForDownload = async (userID, mediaID) => {
     try {
         const query = `
-            SELECT received, file_type,
+            SELECT received, file_type, file_name
             EXISTS (SELECT user_id FROM roles WHERE user_id = ? LIMIT 1 ) AS user_in_course
             FROM media_metadata WHERE media_id = ?;
         `;
