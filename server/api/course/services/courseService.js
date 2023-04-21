@@ -23,8 +23,8 @@ const addCourse = async (ownerID, courseTitle, joinCode) => {
         const query = "INSERT INTO courses (owner_id, course_name, join_code, closed) VALUES (?, ?, ?, ?);";
         const resp = await runQuery(query, [ownerID, courseTitle, joinCode, false]);
 
-        await roleService.addRole(resp.insertId, ownerID, "PROFESSOR");
-        return resp.insertId;
+        const roleId = await roleService.addRole(resp.insertId, ownerID, "PROFESSOR");
+        return { courseId: resp.insertId, roleId };
     } catch (e) {
         writeLog("error", e.message);
         throw e;
