@@ -8,7 +8,7 @@
  * - polls: object[] (use object from LectureState)
  */
 
-import React, { useRef } from "react";
+import React, { useEffect, useState } from "react";
 
 import Message from "./Message";
 import Poll from "./Poll";
@@ -78,7 +78,7 @@ function LectureFeed(props) {
 
 	// Define handler for auto-loading more messages/polls
 	// (for timestamp, picks the newest of the msg/poll oldest, also ensuring it is older than the last fetch)
-	const lastFetchTS = useRef(null);
+	const [lastFetchTS, setLastFetchTS] = useState(null);
 	let oldestTime = null;
 	if (oldestMsgTime != null && oldestPollTime == null) {
 		oldestTime = oldestMsgTime;
@@ -86,19 +86,25 @@ function LectureFeed(props) {
 		oldestTime = oldestPollTime;
 	} else if (oldestMsgTime != null && oldestPollTime != null) {
 		if (oldestMsgTime.getTime() > oldestPollTime.getTime()) {
-			oldestTime = (lastFetchTS.current == null || oldestMsgTime.getTime() < lastFetchTS.current.getTime()) ? oldestMsgTime : oldestPollTime;
+			oldestTime = (lastFetchTS == null || oldestMsgTime.getTime() < lastFetchTS.getTime()) ? oldestMsgTime : oldestPollTime;
 		} else {
-			oldestTime = (lastFetchTS.current == null || oldestPollTime.getTime() < lastFetchTS.current.getTime()) ? oldestPollTime : oldestMsgTime;
+			oldestTime = (lastFetchTS == null || oldestPollTime.getTime() < lastFetchTS.getTime()) ? oldestPollTime : oldestMsgTime;
 		}
 	}
 	const fetchMore = () => {
-		if (canFetchMore && oldestTime != null && (lastFetchTS.current == null || oldestTime.getTime() < lastFetchTS.current.getTime())) { // (won't fetch if last fetch was equivalent or older)
+		if (canFetchMore && oldestTime != null && (lastFetchTS == null || oldestTime.getTime() < lastFetchTS.getTime())) { // (won't fetch if last fetch was equivalent or older)
 			canFetchMore = false;
 			props.api.fetchHistory(oldestTime)
-				.then(() => lastFetchTS.current = oldestTime)
+				.then(() => setLastFetchTS(oldestTime))
 				.finally(() => canFetchMore = true);
 		}
 	};
+	const checkShouldFetchMore = () => {
+		const feed = document.getElementById("lecture-feed");
+		if (feed.scrollTop < -feed.scrollHeight + feed.clientHeight + 100) {
+			fetchMore();
+		}
+	}
 
 	// Reduce feed list to those after the fetch time (also extracting elements)
 	const finalFeedList = [];
@@ -108,9 +114,16 @@ function LectureFeed(props) {
 		}
 	}
 
+	// Ensure scroll is at the bottom by default and auto-fetches more if no scroll is possible
+	useEffect(() => {
+		const feed = document.getElementById("lecture-feed");
+		feed.scrollTop = 0;
+	}, []);
+	useEffect(checkShouldFetchMore, [oldestTime?.getTime()]);
+
 	// Component
 	return (
-		<div className="lfeed" style={props.style || {}} onScroll={(e) => { if (e.target.scrollTop < -e.target.scrollHeight + e.target.clientHeight + 100) fetchMore() }}>
+		<div id="lecture-feed" className="lfeed" style={props.style || {}} onScroll={checkShouldFetchMore}>
 			<ul className="feed">
 				{finalFeedList}
 			</ul>
