@@ -139,7 +139,7 @@ const handleRequest = async (webSocket, req) => {
     webSocket.on("close", () => {
         webSockets.delete(userId);
         lectures.get(lectureId).delete(userId);
-        if (ownerMap.get(lectureId) === userId) {
+        if (ownerMap.get(lectureId)?.has(userId)) {
             ownerMap.get(lectureId).delete(userId);
             if (ownerMap.get(lectureId).size === 0) {
                 ownerMap.delete(lectureId);

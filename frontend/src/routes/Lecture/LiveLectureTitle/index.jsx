@@ -19,7 +19,11 @@ const LiveLectureTitle = (props) => {
             .then((info) => {
                 setLectureInfo(info);
             })
-            .catch(() => {
+            .catch((err) => {
+				if (err.response?.status == 401) {
+					navigate("/login?expired");
+                    return;
+				}
                 setLectureInfo({
                     title: "Live Lecture",
                     time: new Date()
