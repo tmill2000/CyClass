@@ -21,7 +21,7 @@ const LiveLectureTitle = (props) => {
             })
             .catch(() => {
                 setLectureInfo({
-                    name: "Lecture",
+                    title: "Live Lecture",
                     time: new Date()
                 });
             });
@@ -32,7 +32,7 @@ const LiveLectureTitle = (props) => {
         <div className="live-lecture-outline">
             <button className="standard button" onClick={() => navigate(`/course/${props.courseID}`)}>LEAVE</button>
             <div className="title-section">
-                <div className="title">{lectureInfo?.name ?? "Loading..."}</div>
+                <div className="title">{lectureInfo?.title ?? "Loading..."}</div>
                 <div className="time">{lectureInfo != null ? (lectureInfo?.time?.toAbsoluteString() ?? new Date().toAbsoluteString()) : ""}</div>
             </div>
             <div className="host-section">

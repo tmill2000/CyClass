@@ -33,7 +33,7 @@ function TopBar(props) {
 	const [currDropdown, setCurrDropdown] = React.useState(null);
 	const courses = structuredClone(LocalUser.useValue("courses"));
 	const location = useLocation();
-	const netID = LocalUser.useValue("netID");
+	const userInfo = LocalUser.useValue("userInfo");
 
 	// Get course list and decide on current using URL
 	let currCourse = null;
@@ -61,10 +61,10 @@ function TopBar(props) {
 	return (
 		<div ref={topBarRef} className="topbar">
 			<CourseDropdown courses={courses} expanded={currDropdown == "course"} onClick={(e) => setCurrDropdown(currDropdown == "course" ? null : "course")} />
-			<div className="topbar-logo-container">
-				<Link to="/home"><img className="topbar-logo" src={logoImg} /></Link>
+			<div className="logo-container">
+				<Link to="/home"><img className="logo" src={logoImg} /></Link>
 			</div>
-			<UserDropdown name={netID} email="" expanded={currDropdown == "user"} onClick={(e) => setCurrDropdown(currDropdown == "user" ? null : "user")} />
+			<UserDropdown name={userInfo?.displayName} email={userInfo?.email} expanded={currDropdown == "user"} onClick={(e) => setCurrDropdown(currDropdown == "user" ? null : "user")} />
 		</div>
 	);
 

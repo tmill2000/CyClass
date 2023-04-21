@@ -63,14 +63,14 @@ function CourseDropdown(props) {
 
 	// Component
 	return (
-		<div className="topbar-dropdown topbar-course-dropdown" style={dropdownStyle}>
-			<div className="topbar-dropdown-top" style={dropdownTopStyle} onClick={props.onClick} onMouseEnter={(e) => setHovering(true)} onMouseLeave={(e) => setHovering(false)}>
-				<div className="topbar-dropdown-image-container">
-					<img className="topbar-dropdown-arrow" src={arrowImg} style={arrowStyle}/>
+		<div className="dropdown course-dropdown" style={dropdownStyle}>
+			<div className="top-container" style={dropdownTopStyle} onClick={props.onClick} onMouseEnter={(e) => setHovering(true)} onMouseLeave={(e) => setHovering(false)}>
+				<div className="image-container">
+					<img className="dropdown-arrow" src={arrowImg} style={arrowStyle}/>
 				</div>
-				<span className="topbar-dropdown-title overflow-ellipsis">{currCourseTitle}</span>
+				<span className="dropdown-title overflow-ellipsis">{currCourseTitle}</span>
 			</div>
-			<div className="topbar-dropdown-bottom">
+			<div className="bottom-container">
 				{dropdownList}
 			</div>
 		</div>

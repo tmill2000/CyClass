@@ -28,10 +28,11 @@ export default class LocalUser {
 
 			// Cancel if not all needed data exists in storage or the version is out-of-date
 			const userData = {
-				netID: DataStore.get("netID") || MISSING,
+				username: DataStore.get("username") || MISSING,
 				userID: DataStore.get("userID") || MISSING,
 				sessionID: DataStore.get("sessionID") || MISSING,
 				courses: DataStore.get("courses") || MISSING,
+				userInfo: DataStore.get("userInfo") || MISSING,
 				version: DataStore.get("userVersion") || MISSING,
 			};
 			for (const key in userData) {
@@ -55,8 +56,10 @@ export default class LocalUser {
 
 	/**
 	 * Creates and sets a new logged-in LocalUser using the provided user data, replacing any existing LocalUser. Not
-	 * generally used externally (see {@link login}).
-	 * @param {{netID, userID, sessionID, courses: {id, name, role}[]}} userData 
+	 * generally used externally (see {@link login}). Returns a Promise that will resolve if successful, as this method
+	 * needs to pull user info.
+	 * @param {{username, userID, sessionID, courses: {id, name, role}[]}} userData 
+	 * @return {Promise<void>}
 	 */
 	static set(userData) {
 
@@ -64,10 +67,11 @@ export default class LocalUser {
 		if (userData == null) {
 
 			// Remove from storage
-			DataStore.clear("netID");
+			DataStore.clear("username");
 			DataStore.clear("userID");
 			DataStore.clear("sessionID");
 			DataStore.clear("courses");
+			DataStore.clear("userInfo");
 			DataStore.clear("userVersion");
 
 			// Clear current and return
@@ -76,22 +80,40 @@ export default class LocalUser {
 
 		}
 
-		// Make a new LocalUser and assign properties
+		// Make a new LocalUser and assign basic properties
 		const user = new LocalUser();
-		user.netID = userData.netID;
+		user.username = userData.username;
 		user.userID = userData.userID;
 		user.sessionID = userData.sessionID;
 		user.courses = userData.courses;
+		user.userInfo = userData.userInfo; // (may be null)
 
-		// Set current
+		// Set current (need to do this first so session ID is known to requests)
 		currentUser = user;
 
-		// Record in local storage
-		DataStore.set("netID", user.netID);
-		DataStore.set("userID", user.userID);
-		DataStore.set("sessionID", user.sessionID);
-		DataStore.set("courses", user.courses);
-		DataStore.set("userVersion", VERSION);
+		// Define local storage record function
+		const record = () => {
+			DataStore.set("username", user.username);
+			DataStore.set("userID", user.userID);
+			DataStore.set("sessionID", user.sessionID);
+			DataStore.set("courses", user.courses);
+			DataStore.set("userInfo", user.userInfo);
+			DataStore.set("userVersion", VERSION);
+		}
+
+		// Pull user info if not given
+		if (user.userInfo == null) {
+			return user.refreshUserInfo()
+				.then(record)
+				.catch((err) => {
+					currentUser = null;
+					throw err;
+				});
+		}
+
+		// Record immediately and return resolved Promise
+		record();
+		return Promise.resolve();
 
 	}
 
@@ -108,18 +130,21 @@ export default class LocalUser {
 		// Attempt login
 		const result = await new UserAPI().login(username, password);
 
-		// Set new user if successful
+		// Set new user if successful and return result
 		if (result.accepted) {
-			LocalUser.set({
-				netID: username,
+			return LocalUser.set({
+				username: username,
 				userID: result.userID,
 				sessionID: result.sessionID,
 				courses: result.courses
+			}).then(() => {
+				return true;
+			}).catch((err) => {
+				return false;
 			});
+		} else {
+			return false;
 		}
-
-		// Return result
-		return result.accepted;
 
 	}
 
@@ -148,7 +173,7 @@ export default class LocalUser {
 	 * React hook for various values of the currently logged-in LocalUser. Since this is static and independent of the
 	 * {@link current} LocalUser object, this is valid even if no user is logged-in. Will error if the specified value
 	 * doesn't exist.
-	 * @param {"netID"|"userID"|"sessionID"|"courses"} value
+	 * @param {"username"|"userID"|"sessionID"|"userInfo"|"courses"} value
 	 * @return {any}
 	 */
 	static useValue(value) {
@@ -157,9 +182,10 @@ export default class LocalUser {
 		switch (value) {
 			case "courses":
 				return useDataStoreValue("courses") || [];
-			case "netID":
+			case "username":
 			case "userID":
 			case "sessionID":
+			case "userInfo":
 				return useDataStoreValue(value);
 			default:
 				throw new Error(`Invalid LocalUser value "${value}"`);
@@ -168,10 +194,10 @@ export default class LocalUser {
 	}
 	
 	/**
-	 * Local user's NetID.
+	 * Local user's username.
 	 * @type {string}
 	 */
-	netID;
+	username;
 	
 	/**
 	 * Local user's user ID.
@@ -184,6 +210,30 @@ export default class LocalUser {
 	 * @type {string}
 	 */
 	sessionID;
+	
+	/**
+	 * Local user's info, from {@link UserAPI.getUserData}.
+	 * @type {{displayName: string, firstName: string, lastName: string, email: string, iconURL: string}}
+	 */
+	userInfo;
+
+	/**
+	 * Refreshes the {@link userInfo} property using up-to-date information from the backend.
+	 * @return {Promise<void>}
+	 */
+	refreshUserInfo() {
+
+		// Update user info value
+		return new UserAPI().getUserData(this.userID)
+			.then((data) => {
+				this.userInfo = data;
+			})
+			.catch((err) => {
+				console.error("Failed to refresh local user's info:", err);
+				throw err;
+			});
+
+	}
 
 	/**
 	 * Returns all courses that this user is a member of. Recommended over directly indexing `.courses`, since the

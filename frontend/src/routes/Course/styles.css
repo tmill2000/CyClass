@@ -54,6 +54,10 @@
 	flex-direction: column;
 }
 
+.course .post .top .user-container {
+	margin-right: -10px;
+}
+
 .course .post .top .tags {
 	flex-grow: 1;
 	display: flex;

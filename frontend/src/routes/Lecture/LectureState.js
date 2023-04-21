@@ -13,7 +13,7 @@ const TRY_RECONNECT_DELAY = 3; // (sec)
 
 const userAPI = new UserAPI();
 
-async function toUserInfo(userID, anonymous) {
+async function toUserInfo(userID, anonymous, courseID) {
 
 	// If anonymous, return constant data; otherwise, fetch
 	if (anonymous) {
@@ -23,10 +23,10 @@ async function toUserInfo(userID, anonymous) {
 			role: "Student"
 		}
 	} else if (userID != null) {
-		const data = await userAPI.getUserData(userID);
+		const data = await userAPI.getUserData(userID, courseID);
 		return {
 			id: userID,
-			name: data.name,
+			name: data.displayName,
 			role: data.role
 		}
 	}
@@ -58,7 +58,7 @@ export default class LectureState {
 			// Add to messages array
 			this.messages.push({
 				id: event.messageID,
-				user: await toUserInfo(event.userID, event.isAnonymous),
+				user: await toUserInfo(event.userID, event.isAnonymous, courseID),
 				me: event.userID == this.userID,
 				text: event.body,
 				time: event.time,
@@ -107,7 +107,7 @@ export default class LectureState {
 			// Add to polls array
 			this.polls.push({
 				id: event.pollID,
-				user: await toUserInfo(event.userID, false),
+				user: await toUserInfo(event.userID, false, courseID),
 				me: event.userID == this.userID,
 				prompt: event.prompt,
 				choices: event.choices,
@@ -161,7 +161,7 @@ export default class LectureState {
 			this.questions.push({
 				id: event.questionID,
 				question: event.question,
-				user: await toUserInfo(event.userID, event.isAnonymous),
+				user: await toUserInfo(event.userID, event.isAnonymous, courseID),
 				time: event.time
 			});
 
