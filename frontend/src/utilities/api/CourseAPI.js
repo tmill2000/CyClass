@@ -44,7 +44,7 @@ class CourseAPI {
 						}
 					})
 						.then((result) => {
-							return new UserAPI().getUserData(res.data.owner_id, this.id)
+							return new UserAPI().getUserData(lecture.owner_id, this.id)
 								.then((ownerData) => {
 									return {
 										id: lecture.lecture_id,
@@ -166,11 +166,38 @@ class CourseAPI {
 	}
 
 	/**
+	 * Attempts to create a new course, returning a Promise that resolves to the new course's ID if successful (rejects
+	 * otherwise).
+	 * @param {string} title 
+	 * @param {number} ownerID user ID
+	 * @returns {Promise<number>}
+	 */
+	newCourse(title, ownerID) {
+
+		// Perform post
+		return axios.post("/api/course", {
+			courseTitle: title,
+			ownerID: ownerID
+		})
+			.then((res) => {
+
+				// Return new course ID
+				return res.data.course_id;
+
+			})
+			.catch((err) => {
+				console.error("Failed to create new course:", err);
+				throw err;
+			});
+
+	}
+
+	/**
 	 * Attempts to add the current signed in user to the course they provide via join code. 
 	 * @param {string} joinCode join code 
 	 * @returns {Promise<{accepted: boolean, course?: {id: number, name: string, role: string}}>}
 	 */
-	addCourseByJoinCode(joinCode) {
+	joinCourseByJoinCode(joinCode) {
 		
 		// Perform post
 		return axios.post("/api/role/join", {}, {
