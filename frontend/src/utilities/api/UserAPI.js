@@ -15,6 +15,7 @@ const ROLE_MAP = {
 };
 
 const userDataCache = {};
+const pendingUserIDs = {};
 
 function prettifyRole(backendRole) {
 	const prettyRole = ROLE_MAP[backendRole];
@@ -24,6 +25,9 @@ function prettifyRole(backendRole) {
 		console.error(`Unexpected role for user in course: "${backendRole}"`);
 		return backendRole;
 	}
+}
+function sleep(sec) {
+	return new Promise((resolve) => setTimeout(resolve, sec * 1000));
 }
 
 /**
@@ -181,6 +185,11 @@ class UserAPI {
 	 */
 	getUserData(userID, courseID) {
 
+		// If user ID is part of a pending request, pause and then try again
+		if (pendingUserIDs[userID]) {
+			return sleep(0.2 + Math.random() * 0.1).then(() => this.getUserData(userID, courseID));
+		}
+
 		// Define final data return function
 		const getFinalData = () => {
 			const userData = userDataCache[userID];
@@ -207,6 +216,7 @@ class UserAPI {
 			if (courseID != null && userData.roles[courseID] == null) {
 
 				// Peform role fetch
+				pendingUserIDs[userID] = true;
 				return axios.get("/api/user/role", {
 					params: {
 						user_id: userID,
@@ -222,10 +232,12 @@ class UserAPI {
 
 						// Cache result and return data
 						userData.roles[courseID] = prettifyRole(res.data.role);
+						pendingUserIDs[userID] = null;
 						return getFinalData();
 
 					})
 					.catch((err) => {
+						pendingUserIDs[userID] = null;
 						console.error("Failed to fetch user course role:", err);
 						throw err;
 					});
@@ -238,6 +250,7 @@ class UserAPI {
 		}
 
 		// Perform fetch
+		pendingUserIDs[userID] = true;
 		return axios.get("/api/user", {
 				params: {
 					id: userID
@@ -273,14 +286,17 @@ class UserAPI {
 
 							// Cache result and return data
 							userData.roles[courseID] = prettifyRole(res.data.role);
+							pendingUserIDs[userID] = null;
 							return getFinalData();
 	
 						});
 				}
+				pendingUserIDs[userID] = null;
 				return getFinalData();
 
 			})
 			.catch((err) => {
+				pendingUserIDs[userID] = null;
 				console.error("Failed to fetch user data:", err);
 				throw err;
 			})
