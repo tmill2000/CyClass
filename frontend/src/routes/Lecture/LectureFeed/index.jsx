@@ -100,11 +100,19 @@ function LectureFeed(props) {
 		}
 	};
 
+	// Reduce feed list to those after the fetch time (also extracting elements)
+	const finalFeedList = [];
+	for (const x of feedList) {
+		if (x.time >= oldestTime.getTime()) {
+			finalFeedList.push(x.element);
+		}
+	}
+
 	// Component
 	return (
 		<div className="lfeed" style={props.style || {}} onScroll={(e) => { if (e.target.scrollTop < -e.target.scrollHeight + e.target.clientHeight + 100) fetchMore() }}>
 			<ul className="feed">
-				{feedList.map(x => x.element)}
+				{finalFeedList}
 			</ul>
 		</div>
 	);
