@@ -207,7 +207,6 @@ class UserAPI {
 			if (courseID != null && userData.roles[courseID] == null) {
 
 				// Peform role fetch
-				pendingUserIDs[userID] = true;
 				return axios.get("/api/user/role", {
 					params: {
 						user_id: userID,
@@ -223,12 +222,10 @@ class UserAPI {
 
 						// Cache result and return data
 						userData.roles[courseID] = prettifyRole(res.data.role);
-						pendingUserIDs[userID] = null;
 						return getFinalData();
 
 					})
 					.catch((err) => {
-						pendingUserIDs[userID] = null;
 						console.error("Failed to fetch user course role:", err);
 						throw err;
 					});
@@ -241,7 +238,6 @@ class UserAPI {
 		}
 
 		// Perform fetch
-		pendingUserIDs[userID] = true;
 		return axios.get("/api/user", {
 				params: {
 					id: userID
@@ -277,17 +273,14 @@ class UserAPI {
 
 							// Cache result and return data
 							userData.roles[courseID] = prettifyRole(res.data.role);
-							pendingUserIDs[userID] = null;
 							return getFinalData();
 	
 						});
 				}
-				pendingUserIDs[userID] = null;
 				return getFinalData();
 
 			})
 			.catch((err) => {
-				pendingUserIDs[userID] = null;
 				console.error("Failed to fetch user data:", err);
 				throw err;
 			})
