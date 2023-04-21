@@ -15,7 +15,6 @@ const ROLE_MAP = {
 };
 
 const userDataCache = {};
-const pendingUserIDs = {};
 
 function prettifyRole(backendRole) {
 	const prettyRole = ROLE_MAP[backendRole];
@@ -25,9 +24,6 @@ function prettifyRole(backendRole) {
 		console.error(`Unexpected role for user in course: "${backendRole}"`);
 		return backendRole;
 	}
-}
-function sleep(sec) {
-	return new Promise((resolve) => setTimeout(resolve, sec * 1000));
 }
 
 /**
@@ -184,11 +180,6 @@ class UserAPI {
 	 * @return Promise 
 	 */
 	getUserData(userID, courseID) {
-
-		// If user ID is part of a pending request, pause and then try again
-		if (pendingUserIDs[userID]) {
-			return sleep(0.2 + Math.random() * 0.1).then(() => this.getUserData(userID, courseID));
-		}
 
 		// Define final data return function
 		const getFinalData = () => {

@@ -36,6 +36,9 @@ async function toUserInfo(userID, anonymous, courseID) {
 	};
 
 }
+function sleep(sec) {
+	return new Promise((resolve) => setTimeout(resolve, sec * 1000));
+}
 
 export default class LectureState {
 
@@ -63,7 +66,7 @@ export default class LectureState {
 			// Add to messages array
 			this.messages.push({
 				id: event.messageID,
-				user: await toUserInfo(event.userID, event.isAnonymous, courseID),
+				user: await this.toUserInfoOptimized(event.userID, event.isAnonymous),
 				me: event.userID == this.userID,
 				text: event.body,
 				time: event.time,
@@ -117,7 +120,7 @@ export default class LectureState {
 			// Add to polls array
 			this.polls.push({
 				id: event.pollID,
-				user: await toUserInfo(event.userID, false, courseID),
+				user: await this.toUserInfoOptimized(event.userID, false),
 				me: event.userID == this.userID,
 				prompt: event.prompt,
 				choices: event.choices,
@@ -171,7 +174,7 @@ export default class LectureState {
 			this.questions.push({
 				id: event.questionID,
 				question: event.question,
-				user: await toUserInfo(event.userID, event.isAnonymous, courseID),
+				user: await this.toUserInfoOptimized(event.userID, event.isAnonymous),
 				time: event.time
 			});
 
@@ -245,6 +248,21 @@ export default class LectureState {
 		// Clear data
 		this.messages = [];
 		this.polls = [];
+
+	}
+
+	pendingUserInfoReq = []
+	toUserInfoOptimized(userID, anonymous) {
+
+		// If info is already pending, return that promise; otherwise make new
+		if (this.pendingUserInfoReq[userID] != null) {
+			return this.pendingUserInfoReq[userID];
+		} else {
+			const promise = toUserInfo(userID, anonymous, this.courseID)
+				.finally(() => this.pendingUserInfoReq[userID] = null);
+			this.pendingUserInfoReq[userID] = promise;
+			return promise;
+		}
 
 	}
 
