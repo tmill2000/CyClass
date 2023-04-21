@@ -55,6 +55,7 @@ const getMessage = async messageId => {
  */
 const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
     try {
+        timestamp = timestamp != null ? new Date(timestamp).toISOString().slice(0, 19).replace('T', ' ') : null;
         let query = `
         SELECT
             DISTINCT

@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	02/21/2023
- * UPDATED:	04/15/2023
+ * UPDATED:	04/21/2023
  */
 
 import LiveLectureAPI from "../../utilities/api/LiveLectureAPI";
@@ -55,6 +55,11 @@ export default class LectureState {
 		// Bind to new messages
 		this.api.onMessage(async (event) => {
 
+			// Do nothing if already in array (may happen in a re-fetch of history)
+			if (this.messages.find(x => x.id == event.messageID) != null) {
+				return;
+			}
+
 			// Add to messages array
 			this.messages.push({
 				id: event.messageID,
@@ -103,6 +108,11 @@ export default class LectureState {
 
 		});
 		this.api.onPoll(async (event) => {
+
+			// Do nothing if already in array (may happen in a re-fetch of history)
+			if (this.polls.find(x => x.id == event.pollID) != null) {
+				return;
+			}
 
 			// Add to polls array
 			this.polls.push({

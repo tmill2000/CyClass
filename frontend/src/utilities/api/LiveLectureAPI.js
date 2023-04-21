@@ -296,7 +296,7 @@ class LiveLectureAPI {
 	 * Fetches the live lecture history. If a timestamp is specified, then only messages before that timestamp will be
 	 * fetched (within a server-defined limit). Otherwise, it will fetch the most recent messages. Does not resolve to
 	 * any value, but will instead dispatch events for each fetched message as if it had streamed in live.
-	 * @param {Number?} beforeTimestamp 
+	 * @param {Date?} beforeTimestamp 
 	 * @return Promise
 	 */
 	fetchHistory(beforeTimestamp) {
@@ -319,7 +319,7 @@ class LiveLectureAPI {
 		return axios.get("/api/message/messagesByLecture", {
 				params: {
 					lecture_id: this.lectureID,
-					timestamp: beforeTimestamp || undefined
+					timestamp: beforeTimestamp?.toJSON()
 				}
 			})
 			.then((res) => {
