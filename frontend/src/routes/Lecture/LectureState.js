@@ -63,15 +63,19 @@ export default class LectureState {
 				return;
 			}
 
-			// Add to messages array
-			this.messages.push({
+			// Add to messages array, checking after loading user data again if the message was added by something else
+			const msg = {
 				id: event.messageID,
 				user: await this.toUserInfoOptimized(event.userID, event.isAnonymous),
 				me: event.userID == this.userID,
 				text: event.body,
 				time: event.time,
 				attachments: event.attachments
-			});
+			};
+			if (this.messages.find(x => x.id == event.messageID) != null) {
+				return;
+			}
+			this.messages.push(msg);
 
 			// Update version
 			this.setStateVersion(++this.version);
@@ -117,8 +121,8 @@ export default class LectureState {
 				return;
 			}
 
-			// Add to polls array
-			this.polls.push({
+			// Add to polls array, checking after loading user data again if the poll was added by something else
+			const poll = {
 				id: event.pollID,
 				user: await this.toUserInfoOptimized(event.userID, false),
 				me: event.userID == this.userID,
@@ -127,7 +131,11 @@ export default class LectureState {
 				closeDate: event.closeDate,
 				time: event.time,
 				hasMultipleAnswers: event.hasMultipleAnswers
-			});
+			};
+			if (this.polls.find(x => x.id == event.pollID) != null) {
+				return;
+			}
+			this.polls.push(poll);
 
 			// Update version
 			this.setStateVersion(++this.version);
