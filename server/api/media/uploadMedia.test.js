@@ -16,7 +16,7 @@ describe("downloadMedia", () => {
         expect(res.status).toBeCalledWith(400);
     });
     it("should return 401 for media not available", async () => {
-        const req = getMockReq({ query: { course_id: 1, media_id: 1 } });
+        const req = getMockReq({ query: { course_id: 1, media_id: 1, file_name: "filen-name" } });
         req.session = noAssociationSession;
         await uploadMedia(req, res);
         expect(res.status).toBeCalledWith(401);
@@ -32,7 +32,7 @@ describe("downloadMedia", () => {
         expect(res.status).toBeCalledWith(400);
     });
     it("should return 403 for forbidden", async () => {
-        const req = getMockReq({ query: { course_id: 1, media_id: "file" } });
+        const req = getMockReq({ query: { course_id: 1, media_id: "file", file_name: "filen-name" } });
         req.session = professorSession;
         req.get = jest.fn().mockReturnValue("x/png");
         jest.spyOn(mediaService, "authUpload").mockResolvedValueOnce([{ user_id: 69, course_id: 1, received: true }]);
@@ -41,7 +41,7 @@ describe("downloadMedia", () => {
     });
 
     it("should return 200 for success", async () => {
-        const req = getMockReq({ query: { course_id: 1, media_id: "file" } });
+        const req = getMockReq({ query: { course_id: 1, media_id: "file", file_name: "filen-name" } });
         req.session = professorSession;
         req.get = jest.fn().mockReturnValue("x/png");
         jest.spyOn(mediaService, "authUpload").mockResolvedValueOnce([{ user_id: 1, course_id: 1, received: false }]);
@@ -54,7 +54,7 @@ describe("downloadMedia", () => {
     });
 
     it("should return 200 for success", async () => {
-        const req = getMockReq({ query: { course_id: 1, media_id: "file" } });
+        const req = getMockReq({ query: { course_id: 1, media_id: "file", file_name: "filen-name" } });
         req.session = professorSession;
         req.get = jest.fn().mockReturnValue("x/png");
         jest.spyOn(mediaService, "authUpload").mockResolvedValueOnce([{ user_id: 1, course_id: 1, received: false }]);
@@ -67,7 +67,7 @@ describe("downloadMedia", () => {
     });
 
     it("should return 500 for for Server error", async () => {
-        const req = getMockReq({ query: { course_id: 1, media_id: "file" } });
+        const req = getMockReq({ query: { course_id: 1, media_id: "file", file_name: "filen-name" } });
         req.get = jest.fn().mockReturnValue("x/png");
         req.session = professorSession;
         jest.spyOn(mediaService, "authUpload").mockRejectedValueOnce(new Error());
