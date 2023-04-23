@@ -207,6 +207,26 @@ class UserAPI {
 
 	}
 
+	/**
+	 * Fetches the user data for the provided user ID, which will resolve in a Promise to the following if successful:
+	 * - `name`
+	 * - `role`
+	 * - `iconURL`
+	 * @param {Number} userID 
+	 * @param {string} password
+	 * @return Promise 
+	 */
+	updateUserData(userID, password){
+
+		return axios,patch("/api/user", {}, {
+			params: {
+				user_id: userID, password
+			}
+		})
+
+	}
+
+
 };
 
 export default UserAPI;

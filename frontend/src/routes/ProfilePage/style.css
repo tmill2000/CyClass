@@ -1,0 +1,14 @@
+.username-group{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.username-label{
+    font-size: 25px;
+
+}
+
+.username-entry{
+    font-size: 25px;
+}

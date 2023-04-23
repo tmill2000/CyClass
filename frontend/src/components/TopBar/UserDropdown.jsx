@@ -40,6 +40,10 @@ function UserDropdown(props) {
 		navigate("/login");
 	};
 
+	const navigateProfile = () => {
+		navigate("/profile");
+	}
+
 	// Component
 	return (
 		<div className="topbar-dropdown topbar-user-dropdown" style={dropdownStyle}>
@@ -63,6 +67,9 @@ function UserDropdown(props) {
 				<div className="topbar-dropdown-separator" /> */}
 				<button className="topbar-dropdown-option" style={{color: "#555", textAlign: "right"}} onClick={toggleLogin}>
 					<span className="topbar-dropdown-option-title overflow-ellipsis">{props.name != null ? "Log Out" : "Log In"}</span>
+				</button>
+				<button className="topbar-dropdown-option" style={{color: "#555", textAlign: "right"}} onClick={navigateProfile}>
+					<span className="topbar-dropdown-option-title overflow-ellipsis">Profile</span>
 				</button>
 			</div>
 		</div>
