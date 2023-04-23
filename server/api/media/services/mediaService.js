@@ -37,7 +37,7 @@ const authUpload = async mediaID => {
 const updateMediaMetadataOnReceived = async (mediaID, fileType, fileName) => {
     try {
         const query = "UPDATE media_metadata SET received = true, file_type = ?, file_name = ? WHERE media_id = ?;";
-        const resp = await runQuery(query, [fileType, mediaID, fileName]);
+        const resp = await runQuery(query, [fileType, fileName, mediaID]);
         return resp;
     } catch (e) {
         writeLog("error", e.message);
