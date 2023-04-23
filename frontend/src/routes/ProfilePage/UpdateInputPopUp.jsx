@@ -8,16 +8,17 @@ import { PopupForm } from "../../components/PopUp";
 function UpdateInputPopUp(props){
 
     const create = (inputs) => {
-        let joinCode = inputs.joinCode;
-        return addCourse(joinCode);
+        let new_username = inputs.newUsername;
+        let password = inputs.password;
+        return udpateUsername(new_username, password);
     }
 
-    async function addCourse(joinCode){
-        const res_addCourse = await props.api.addCourseByJoinCode(joinCode);
+    async function udpateUsername(userID, password){
+        const res_addCourse = await props.api.updateUserData(userID, password);
         if (res_addCourse.accepted){
-            LocalUser.current.addCourse(res_addCourse.course);
+            // LocalUser.current.addCourse(res_addCourse.course);
         } else{
-            throw new Error("Invalid join code");
+            throw new Error("Unable to update username");
         }
     
     }
