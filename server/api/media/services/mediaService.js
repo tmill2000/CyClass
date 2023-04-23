@@ -54,7 +54,7 @@ const updateMediaMetadataOnReceived = async (mediaID, fileType, fileName) => {
 const metadataForDownload = async (userID, mediaID) => {
     try {
         const query = `
-            SELECT received, file_type, file_name
+            SELECT received, file_type, file_name,
             EXISTS (SELECT user_id FROM roles WHERE user_id = ? LIMIT 1 ) AS user_in_course
             FROM media_metadata WHERE media_id = ?;
         `;
