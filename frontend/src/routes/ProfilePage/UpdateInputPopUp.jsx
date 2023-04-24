@@ -14,7 +14,11 @@ function UpdateInputPopUp(props){
     }
 
     async function udpateUsername(userID, password){
+        console.log("&&&&&&&&&&&&&&&&&&&&&&");
+        console.log(props);
         const res_addCourse = await props.api.updateUserData(userID, password);
+        console.log("here????");
+        console.log(res_addCourse);
         if (res_addCourse.accepted){
             // LocalUser.current.addCourse(res_addCourse.course);
         } else{
@@ -28,7 +32,7 @@ function UpdateInputPopUp(props){
 
     return (
 		<PopupForm
-			title="Update Username: "
+			title="Update Username"
 			enabled={props.visible}
 			onClose={props.onClose}
 			submitText="UPDATE"

@@ -218,10 +218,18 @@ class UserAPI {
 	 */
 	updateUserData(userID, password){
 
-		return axios,patch("/api/user", {}, {
+		return axios.patch("/api/user", {}, {
 			params: {
 				user_id: userID, password
 			}
+		}).then((res) => {
+			// userDataCache[userID] = res.data;
+			return {
+				accepted: true
+			};
+		}).catch((err) => {
+			console.error("Failed to update user info:", err);
+			throw err;
 		})
 
 	}
