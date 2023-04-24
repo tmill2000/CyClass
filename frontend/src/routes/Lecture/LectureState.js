@@ -263,6 +263,11 @@ export default class LectureState {
 	pendingUserInfoReq = []
 	toUserInfoOptimized(userID, anonymous) {
 
+		// If anonymous, just return immediately (function won't do an API call anyway)
+		if (anonymous) {
+			return toUserInfo(userID, anonymous, this.courseID);
+		}
+
 		// If info is already pending, return that promise; otherwise make new
 		if (this.pendingUserInfoReq[userID] != null) {
 			return this.pendingUserInfoReq[userID];
