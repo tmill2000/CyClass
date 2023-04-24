@@ -64,11 +64,12 @@ export default class LectureState {
 			}
 
 			// Add to messages array, checking after loading user data again if the message was added by something else
+			const isMe = event.userID == this.userID;
 			const msg = {
 				id: event.messageID,
-				user: await this.toUserInfoOptimized(event.userID, event.isAnonymous),
+				user: await this.toUserInfoOptimized(event.userID, event.isAnonymous && !isMe),
 				anonymous: event.isAnonymous,
-				me: event.userID == this.userID,
+				me: isMe,
 				text: event.body,
 				time: event.time,
 				attachments: event.attachments
