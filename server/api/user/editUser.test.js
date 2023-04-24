@@ -6,7 +6,7 @@
 
 // jest.mock("../utils/patchService");
 
-describe.skip("editUser", () => {
+describe("editUser", () => {
     it("should run", () => {
         expect(true).toBe(true);
     });
