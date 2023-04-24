@@ -58,6 +58,38 @@ paths:
           description: NetId {netid} is taken
         '500':
           description: Internal Server Error
+    patch:
+      tags:
+        - user
+      summary: edits a user
+      parameters:
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                user_id:
+                  type: number
+                  example: 4
+                password:
+                  type: string
+                  example: password
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Invalid Body
+        '401':
+          description: Unauthorized
+        '403':
+          description: Invalid Session
+        '500':
+          description: Internal Server Error
     get:
       tags:
         - user
