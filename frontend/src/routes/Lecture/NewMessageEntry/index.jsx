@@ -44,8 +44,10 @@ function NewMessageEntry(props) {
 	const sendMsg = (e) => {
 		const msg = textBoxRef.current.value.trim();
 		if (msg != "") {
-			props.api.sendMessage(msg, false, selectedFile);
+			const anonInput = document.getElementById("lme-anon");
+			props.api.sendMessage(msg, anonInput.checked, selectedFile);
 			textBoxRef.current.value = "";
+			anonInput.checked = false;
 			setFileIssue("");
 			setSelectedFile(null);
 		}
@@ -57,7 +59,10 @@ function NewMessageEntry(props) {
 			<div className="lme-line" />
 			<textarea ref={textBoxRef} className="lme-textbox" />
 			<div className="lme-buttonarea">
-				
+				<div className="lme-anon-container">
+					<input id="lme-anon" type="checkbox" />
+					Anonymous
+				</div>
 				{fileIssue == "" ? (
 					<span className="lme-selected-file" style={{display: selectedFile != null ? "block" : "none"}}>
 						<strong>Attached:</strong> {selectedFile?.name}
