@@ -72,10 +72,18 @@ paths:
         content:
           application/json:
             schema:
+              required:
+                - user_id
               properties:
                 user_id:
                   type: number
                   example: 4
+                first_name:
+                  type: string
+                  example: Borat
+                last_name:
+                  type: string
+                  example: Margaret Sagdiyev
                 password:
                   type: string
                   example: password
