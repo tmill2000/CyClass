@@ -23,7 +23,7 @@ function ProfilePage(props) {
 	}
 
     const userID = LocalUser.useValue("userID");
-    // const password = structuredClone(LocalUser.useValue("password"));
+	const netID = LocalUser.useValue("netID");
 
 	// const sessionID = useDataStoreValue("sessionID");
 
@@ -35,9 +35,13 @@ function ProfilePage(props) {
 	return (
 		<div className="signup">
 			<div className="username-group">
+				<div className="username-label">NetID: </div>
+				<div className="username-entry">{netID}</div>
+			</div>
+			<div className="username-group">
 				<div className="username-label">UserID: </div>
 				<div className="username-entry">{userID}</div>
-				<button className="edit-button" onClick={() => setUpdatePopup(true)}>edit</button>
+				<button className="standard button" onClick={() => setUpdatePopup(true)}>edit</button>
 				<UpdateInputPopUp visible={updatePopup} api={userAPI}  onClose={() => closePopUp()}></UpdateInputPopUp>
 			</div>
 		</div>

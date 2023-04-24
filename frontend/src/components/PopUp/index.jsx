@@ -110,6 +110,11 @@ export function PopupForm(props) {
 				getter = () => inputRef.current.value.trim();
 				clearer = () => inputRef.current.value = "";
 				break;
+			case "password":
+				mainInput = <input ref={inputRef} type="password" onChange={(e) => e.target.className = ""}/>;
+				getter = () => inputRef.current.value.trim();
+				clearer = () => inputRef.current.value = "";
+				break;
 			default:
 				throw new Error(`Unrecognized input type: ${x.type}`);
 		}

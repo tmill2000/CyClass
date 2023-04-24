@@ -122,7 +122,6 @@ class UserAPI {
 						courses: null
 					};
 				}
-
 				// Otherwise, log and propogate
 				console.error("Failed to perform login:", err);
 				throw err;
@@ -212,15 +211,21 @@ class UserAPI {
 	 * - `name`
 	 * - `role`
 	 * - `iconURL`
-	 * @param {Number} userID 
+	 * @param {stirng} userID
+	 * @param {Number} newUserID 
 	 * @param {string} password
 	 * @return Promise 
 	 */
-	updateUserData(userID, password){
+	updateUserData(newUserID, userID, password){
 
-		return axios.patch("/api/user", {}, {
+		return axios.patch("/api/user", 
+		{
 			params: {
-				user_id: userID, password
+				user_id: userID, password }
+			}, 
+		{ 
+			params: {
+				user_id: newUserID, password
 			}
 		}).then((res) => {
 			// userDataCache[userID] = res.data;
