@@ -154,7 +154,7 @@ class LiveLectureAPI {
 				// Make message event
 				lectureEvent = new LiveLectureMessageEvent(this.lectureID, msg.payload.message_id, {
 					body: msg.payload.body,
-					userID: !msg.payload.is_anonymous ? msg.payload.sender_id : null,
+					userID: msg.payload.sender_id,
 					isAnonymous: msg.payload.is_anonymous,
 					time: new Date(msg.payload.timestamp),
 					attachments: msg.payload.media_id != null ? [{
@@ -337,7 +337,7 @@ class LiveLectureAPI {
 						// Dispatch message
 						const event = new LiveLectureMessageEvent(this.lectureID, msg.message_id, {
 							body: msg.body,
-							userID: !msg.is_anonymous ? msg.sender_id : null,
+							userID: msg.sender_id,
 							isAnonymous: msg.is_anonymous,
 							time: new Date(msg.timestamp),
 							attachments: msg.media_id != null ? [{
