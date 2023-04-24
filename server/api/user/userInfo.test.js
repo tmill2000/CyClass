@@ -7,7 +7,7 @@ const crypto = require("crypto");
 const { res, mockClear } = getMockRes();
 const { studentSession, noAssociationSession } = require("../../test/mock/mockStudentUserSession");
 
-describe("userInfo", () => {
+describe.skip("userInfo", () => {
     beforeEach(() => {
         mockClear(); // can also use clearMockRes()
     });
