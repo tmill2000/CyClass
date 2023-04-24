@@ -112,7 +112,17 @@ const handleRequest = async (webSocket, req) => {
             const { poll_id } = messageObj.payload;
             message.payload = { poll_id };
         } else if (messageObj.type === "media_upload") {
-            const { body, is_anonymous, parent_id, sender_id, message_id, lecture_id, media_id, file_type, file_name } = messageObj.payload;
+            const {
+                body,
+                is_anonymous,
+                parent_id,
+                sender_id,
+                message_id,
+                lecture_id,
+                media_id,
+                file_type,
+                file_name
+            } = messageObj.payload;
             const parsedPayload = {
                 body,
                 is_anonymous,

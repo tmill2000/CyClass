@@ -57,11 +57,14 @@ function NewMessageEntry(props) {
 			<div className="lme-line" />
 			<textarea ref={textBoxRef} className="lme-textbox" />
 			<div className="lme-buttonarea">
-				{fileIssue == "" ?
-				<span className="lme-selected-file" style={{display: selectedFile != null ? "block" : "none"}}>
-					<strong>Attached:</strong> {selectedFile?.name}
-				</span>
-				: <span className="lme-file-issue">{fileIssue}</span> }
+				
+				{fileIssue == "" ? (
+					<span className="lme-selected-file" style={{display: selectedFile != null ? "block" : "none"}}>
+						<strong>Attached:</strong> {selectedFile?.name}
+					</span>
+				) : (
+					<span className="lme-file-issue">{fileIssue}</span>
+				)}
 				<input id="file-select" type="file" style={{display: "none"}} onChange={fileInputChanged} />
 				<button id="attach-button" className={"button lme-circlebutton" + (selectedFile != null ? " attached" : "")} onClick={attachFile}><img src={attachmentImg} /></button>
 				<button id="send-button" className="button lme-button" onClick={sendMsg}>SEND</button>
