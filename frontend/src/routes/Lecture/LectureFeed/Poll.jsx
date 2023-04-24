@@ -40,14 +40,14 @@ function Poll(props) {
 				setSelected(responses);
 			});
 		}
-	}, [props.api, props.id, selected]);
+	}, [props.api, props.id, selected.length]);
 	useEffect(() => {
 		if (timeLeft > 0 && props.closeDate != null) {
 			const timer = setInterval(() => {
 				const newTimeLeft = getSecondsLeft(props.closeDate);
 				if (newTimeLeft != timeLeft) {
 					if (newTimeLeft <= 0) {
-						props.api.refreshPoll(props.id);
+						setTimeout(() => props.api.refreshPoll(props.id), 1000);
 					}
 					clearInterval(timer);
 					setTimeLeft(newTimeLeft);
@@ -116,7 +116,7 @@ function Poll(props) {
 						{props.elevated ? <Link className="button results" to={resultsURL}>VIEW PARTICIPATION</Link> : null}
 					</div>
 					<div className="content">
-						<span>{props.prompt}{props.elevated ? <EditDelete canEdit={props.elevated} handleEdit={editPollPrompt} /> : null}</span>
+						<span className="selectable">{props.prompt}{props.elevated ? <EditDelete canEdit={props.elevated} handleEdit={editPollPrompt} /> : null}</span>
 						<div>
 							{choices.map(x => <PollOption key={x.id.toString()}
 								id={x.id}

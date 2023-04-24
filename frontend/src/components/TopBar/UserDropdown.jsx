@@ -9,7 +9,7 @@
  */
 
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import LocalUser from "../../utilities/model/LocalUser";
 
@@ -46,27 +46,27 @@ function UserDropdown(props) {
 
 	// Component
 	return (
-		<div className="topbar-dropdown topbar-user-dropdown" style={dropdownStyle}>
-			<div className="topbar-dropdown-top" style={dropdownTopStyle} onClick={props.onClick} onMouseEnter={(e) => setHovering(true)} onMouseLeave={(e) => setHovering(false)}>
-				<div className="topbar-dropdown-image-container">
+		<div className="dropdown user-dropdown" style={dropdownStyle}>
+			<div className="top-container" style={dropdownTopStyle} onClick={props.onClick} onMouseEnter={(e) => setHovering(true)} onMouseLeave={(e) => setHovering(false)}>
+				<div className="image-container">
 				</div>
-				<div className="topbar-user-info-container">
-					<span className="topbar-user-info topbar-user-info-name overflow-ellipsis">{props.name || "Not Logged In"}</span>
-					<span className="topbar-user-info topbar-user-info-email overflow-ellipsis">{props.email}</span>
+				<div className="user-info-container">
+					<span className="user-info info-name overflow-ellipsis">{props.name || "Not Logged In"}</span>
+					<span className="user-info info-email overflow-ellipsis">{props.email}</span>
 				</div>
-				<div className="topbar-dropdown-image-container">
-					<img className="topbar-user-badge" src={userBadgeImg}/>
+				<div className="image-container">
+					<img className="user-badge" src={userBadgeImg}/>
 				</div>
 			</div>
-			<div className="topbar-dropdown-bottom">
+			<div className="bottom-container">
 				{/* <UserOption icon={userBadgeImg} name="Account" href="/account" />
-				<div className="topbar-dropdown-separator" />
+				<div className="separator" />
 				<UserOption icon={userBadgeImg} name="Courses" href="/" />
-				<div className="topbar-dropdown-separator" />
+				<div className="separator" />
 				<UserOption icon={userBadgeImg} name="Settings" href="/settings" />
-				<div className="topbar-dropdown-separator" /> */}
-				<button className="topbar-dropdown-option" style={{color: "#555", textAlign: "right"}} onClick={toggleLogin}>
-					<span className="topbar-dropdown-option-title overflow-ellipsis">{props.name != null ? "Log Out" : "Log In"}</span>
+				<div className="separator" /> */}
+				<button className="dropdown-option" style={{color: "#555", textAlign: "right"}} onClick={toggleLogin}>
+					<span className="option-title overflow-ellipsis">{props.name != null ? "Log Out" : "Log In"}</span>
 				</button>
 				<button className="topbar-dropdown-option" style={{color: "#555", textAlign: "right"}} onClick={navigateProfile}>
 					<span className="topbar-dropdown-option-title overflow-ellipsis">Profile</span>

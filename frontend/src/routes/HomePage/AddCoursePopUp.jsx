@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import LocalUser from "../../utilities/model/LocalUser";
+import React from "react";
 
 import { PopupForm } from "../../components/PopUp";
+import LocalUser from "../../utilities/model/LocalUser";
+import CourseAPI from "../../utilities/api/CourseAPI";
 
 
 function AddCoursePopUp(props){
@@ -13,7 +13,7 @@ function AddCoursePopUp(props){
     }
 
     async function addCourse(joinCode){
-        const res_addCourse = await props.api.addCourseByJoinCode(joinCode);
+        const res_addCourse = await new CourseAPI(null).joinCourseByJoinCode(joinCode);
         if (res_addCourse.accepted){
             LocalUser.current.addCourse(res_addCourse.course);
         } else{
@@ -23,14 +23,14 @@ function AddCoursePopUp(props){
 
     return (
 		<PopupForm
-			title="Add A Course"
+			title="Join a Course"
 			enabled={props.visible}
 			onClose={props.onClose}
-			submitText="ADD"
+			submitText="JOIN"
 			onSubmit={create}
 			inputs={[
 				{ 
-                    label: "Enter Join Code: ",
+                    label: "Join Code",
 					name: "joinCode",
 					type: "text",
 					validator: (input) => input != ""

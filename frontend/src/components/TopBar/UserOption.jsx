@@ -17,9 +17,9 @@ function UserOption(props) {
 
 	// Component
 	return (
-		<a className="topbar-dropdown-option" href={props.href}>
-			<img className="topbar-dropdown-option-image" src={props.icon} />
-			<span className="topbar-dropdown-option-title overflow-ellipsis">{props.name}</span>
+		<a className="dropdown-option" href={props.href}>
+			<img src={props.icon} />
+			<span className="option-title overflow-ellipsis">{props.name}</span>
 		</a>
 	);
 

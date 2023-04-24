@@ -212,6 +212,7 @@
 	position: relative;
 	display: inline-block;
 	margin: 16px 0px;
+	white-space: pre-line;
 }
 
 .lfeed .poll .poll-header .button {

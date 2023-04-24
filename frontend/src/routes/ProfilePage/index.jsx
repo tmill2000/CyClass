@@ -22,8 +22,11 @@ function ProfilePage(props) {
 		return <Navigate to="/login" />;
 	}
 
-    const userID = LocalUser.useValue("userID");
-	const netID = LocalUser.useValue("netID");
+    // const userID = LocalUser.useValue("userID");
+	// const netID = LocalUser.useValue("netID");
+	// const firstname = LocalUser.useValue("firstname");
+	const user = LocalUser.useValue("userInfo");
+
 
 	// const sessionID = useDataStoreValue("sessionID");
 
@@ -36,19 +39,19 @@ function ProfilePage(props) {
 		<div className="signup">
 			<div className="username-group">
 				<div className="username-label">NetID: </div>
-				<div className="username-entry">{netID}</div>
+				<div className="username-entry">{user.displayName}</div>
 			</div>
 			<div className="username-group">
 				<div className="username-label">First Name: </div>
-				<div className="username-entry">{firstname}</div>
+				<div className="username-entry">{user.firstName}</div>
 			</div>
 			<div className="username-group">
 				<div className="username-label">Last Name: </div>
-				<div className="username-entry">{lastname}</div>
+				<div className="username-entry">{user.lastName}</div>
 			</div>
 			<div className="username-group">
-				<div className="username-label">UserID: </div>
-				<div className="username-entry">{userID}</div>
+				{/* <div className="username-label">UserID: </div>
+				<div className="username-entry">{userID}</div> */}
 				<button className="standard button" onClick={() => setUpdatePopup(true)}>edit</button>
 				<UpdateInputPopUp visible={updatePopup} api={userAPI}  onClose={() => closePopUp()}></UpdateInputPopUp>
 			</div>

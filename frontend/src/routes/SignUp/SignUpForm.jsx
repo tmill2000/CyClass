@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import InputField from '../Login/InputField';
 import SubmitButton from '../Login/SubmitButton';
-import logoImg from "../Login/ISULogo.png";
 
+import { showErrorToast } from '../../components/Toast';
 import LocalUser from '../../utilities/model/LocalUser';
 import UserAPI from '../../utilities/api/UserAPI';
 
 const userAPI = new UserAPI();
 
 import './style.css';
+import { useNavigate } from 'react-router-dom';
 
 const DEFAULT_INPUT_STATE = {
     firstname: '',
@@ -25,6 +26,7 @@ function SignUpForm(props) {
     const [inputState, setInputState] = useState(DEFAULT_INPUT_STATE);
 
     // Helper functions
+    const navigate = useNavigate();
     const setInputValue = (property, val) => {
         val = val.trim();
         if (val.length > 30) {
@@ -40,21 +42,26 @@ function SignUpForm(props) {
     }
     const doSignup = async () => {
         if(!inputState.firstname){
+            showErrorToast("Missing first name");
             return;
         }
         if(!inputState.lastname){
+            showErrorToast("Missing last name");
             return;
         }
         if(!inputState.netid){
+            showErrorToast("Missing username");
+            return;
+        } else if (!/^[A-z0-9_.\-]+$/.test(inputState.netid)) {
+            showErrorToast("Username is invalid. Can only use letters, numbers, and a few special characters ( _-. )");
             return;
         }
         if(!inputState.password){
+            showErrorToast("Missing password");
             return;
         }
-        if(!inputState.confirmpassword){
-            return;
-        }
-        if (!(inputState.password === inputState.confirmpassword)){
+        if (inputState.password !== inputState.confirmpassword){
+            showErrorToast("Passwords do not match");
             return;
         }
         
@@ -70,6 +77,7 @@ function SignUpForm(props) {
             if(res.accepted) {
                 const loginRes = await LocalUser.login(inputState.netid, inputState.password);
                 console.log("Login success?", loginRes);
+                navigate("/home");
             } else {
                 resetForm();
                 alert(result.msg);
@@ -88,7 +96,7 @@ function SignUpForm(props) {
                    type="text"
                    placeholder="Username"
                    value={inputState.netid ? inputState.netid : ''}
-                   onChange={ (val) => setInputValue('netid', val) }
+                   onChange={ (val) => setInputValue('netid', val.trim()) }
                 />
             </div>
             <div className="username-container">

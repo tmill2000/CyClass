@@ -8,7 +8,7 @@
 	user-select: none;
 }
 
-.topbar-dropdown {
+.topbar .dropdown {
 	background-color: #d2d2d2;
 	height: 100%;
 	overflow: hidden;
@@ -16,33 +16,31 @@
 	flex-basis: 45%;
 	transition: all 0.06s ease-out;
 }
-
-.topbar-course-dropdown {
+.topbar .dropdown.course-dropdown {
+	max-width: 400px;
+}
+.topbar .dropdown.user-dropdown {
 	max-width: 400px;
 }
 
-.topbar-user-dropdown {
-	max-width: 400px;
-}
-
-.topbar-dropdown-top {
+.topbar .dropdown .top-container {
 	background-color: #363636;
 	height: 60px;
 	width: 100%;
 	display: flex;
 	transition: all 0.06s ease-out;
 }
-.topbar-dropdown-top:hover {
+.topbar .dropdown .top-container:hover {
 	background-color: #484848;
 	cursor: pointer;
 }
 
-.topbar-dropdown-image-container {
+.topbar .dropdown .image-container {
 	height: 100%;
 	width: 60px;
 }
 
-.topbar-dropdown-arrow {
+.topbar .dropdown .dropdown-arrow {
 	position: relative;
 	height: 30%;
 	top: 50%;
@@ -51,7 +49,7 @@
 	transition: all 0.06s ease-out;
 }
 
-.topbar-dropdown-title {
+.topbar .dropdown .dropdown-title {
 	height: 100%;
 	width: calc(100% - 70px);
 	line-height: 60px;
@@ -60,7 +58,7 @@
 	font-size: 115%;
 }
 
-.topbar-dropdown-bottom {
+.topbar .dropdown .bottom-container {
 	top: 100%;
 	width: 100%;
 	display: flex;
@@ -68,7 +66,7 @@
 	align-items: center;
 }
 
-.topbar-dropdown-option {
+.topbar .dropdown-option {
 	border: none;
 	background: none;
 	cursor: pointer;
@@ -80,34 +78,39 @@
 	font-size: 115%;
 }
 
-.topbar-dropdown-course-notifs {
+.topbar .dropdown-option .course-notifs {
 	position: relative;
 	height: fit-content;
 	font-weight: bold;
 	border-radius: 10px;
 	padding: 3px 7px;
 }
-.topbar-dropdown-course-notifs-nonzero {
+.topbar .dropdown-option .course-notifs.notifs-nonzero {
 	background-color: red;
 	color: white;
 }
-.topbar-dropdown-course-notifs-zero {
+.topbar .dropdown-option .course-notifs.notifs-zero {
 	background-color: white;
 	color: gray;
 }
 
-.topbar-dropdown-option-title {
+.topbar .dropdown-option .option-title {
 	flex-grow: 1;
 	font-weight: bold;
 }
 
-.topbar-dropdown-separator {
+.topbar .dropdown-option > img {
+	position: relative;
+	height: 80%;
+}
+
+.topbar .dropdown-option .separator {
 	background-color: #bbb;
 	width: 95%;
 	height: 1px;
 }
 
-.topbar-user-info-container {
+.topbar .user-dropdown .user-info-container {
 	height: 100%;
 	width: calc(100% - 120px);
 	padding-left: 10px;
@@ -116,25 +119,25 @@
 	justify-content: center;
 }
 
-.topbar-user-info {
+.topbar .user-dropdown .user-info {
 	display: block;
 	width: 100%;
 	text-align: right;
 	font-weight: bold;
 }
-
-.topbar-user-info-name {
+.topbar .user-dropdown .user-info.info-name {
 	line-height: 1;
 	font-size: 115%;
 	color: white;
+	overflow: visible;
 }
-
-.topbar-user-info-email {
+.topbar .user-dropdown .user-info.info-email {
 	font-size: 90%;
 	color: #bbb;
+	overflow: visible;
 }
 
-.topbar-user-badge {
+.topbar .user-dropdown .user-badge {
 	background-color: white;
 	position: relative;
 	height: 70%;
@@ -144,19 +147,14 @@
 	border-radius: 50%;
 }
 
-.topbar-dropdown-option-image {
-	position: relative;
-	height: 80%;
-}
-
-.topbar-logo-container {
+.topbar .logo-container {
 	height: 100%;
 	flex-grow: 1;
 	flex-basis: 10%;
 	overflow: hidden;
 }
 
-.topbar-logo {
+.topbar .logo {
 	position: relative;
 	height: 70%;
 	top: 50%;

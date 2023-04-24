@@ -46,19 +46,22 @@ function Message(props) {
 									api={props.api}
 									id={a.id}
 									type={a.type}
+									name={a.name}
 								/>
 							))}
 						</div>
 					) : null}
 				</div>
 			</div>
-			<div className="user-container">
-				<ProfileIcon
-					profile_name={props.me ? "You" : props.user.name}
-					profile_role={props.user.role}
-					flipped={props.me}
-				/>
-			</div>
+			{props.showUser ? (
+				<div className="user-container">
+					<ProfileIcon
+						profile_name={props.me ? "You" : props.user.name}
+						profile_role={props.user.role}
+						flipped={props.me}
+					/>
+				</div>
+			) : null}
 		</li>
 	);
 }

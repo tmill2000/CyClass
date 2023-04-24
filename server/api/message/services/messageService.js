@@ -39,7 +39,7 @@ const { writeLog } = require("../../../utils/logger");
 const getMessage = async messageId => {
     try {
         const query =
-            "SELECT messages.*, media_id, file_type from messages left join media_metadata on messages.message_id = media_metadata.message_id WHERE messages.message_id = ?;";
+            "SELECT messages.*, media_id, file_type, file_name from messages left join media_metadata on messages.message_id = media_metadata.message_id WHERE messages.message_id = ?;";
         const resp = await runQuery(query, [messageId]);
         return resp;
     } catch (e) {
@@ -55,6 +55,7 @@ const getMessage = async messageId => {
  */
 const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
     try {
+        timestamp = timestamp != null ? new Date(timestamp).toISOString().slice(0, 19).replace('T', ' ') : null;
         let query = `
         SELECT
             DISTINCT
@@ -67,7 +68,8 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
                 messages.parent_id,
                 messages.message_id,
                 media_id,
-                file_type
+                file_type,
+                file_name
         FROM messages
             inner join roles
             on messages.sender_id = roles.user_id AND roles.course_id = (SELECT course_id from lectures where lecture_id = ?)
@@ -79,7 +81,7 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
             messages.lecture_id = ?
     `;
         query += timestamp
-            ? "AND messages.timestamp > ? ORDER BY messages.timestamp DESC LIMIT 50;"
+            ? "AND messages.timestamp < ? ORDER BY messages.timestamp DESC LIMIT 50;"
             : "ORDER BY messages.timestamp DESC LIMIT 50;";
         const options = timestamp ? [lectureId, lectureId, timestamp] : [lectureId, lectureId];
         const messages = await runQuery(query, options);
@@ -93,7 +95,8 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
             parent_id: value.parent_id,
             message_id: value.message_id,
             media_id: value.media_id,
-            file_type: value.file_type
+            file_type: value.file_type,
+            file_name: value.file_name
         }));
         query = `
         SELECT
@@ -113,7 +116,7 @@ const getMessagesAndPollsByLectureId = async (lectureId, timestamp) => {
             polls.lecture_id = ?
     `;
         query += timestamp
-            ? "AND polls.timestamp > ? ORDER BY polls.timestamp DESC LIMIT 50;"
+            ? "AND polls.timestamp < ? ORDER BY polls.timestamp DESC LIMIT 50;"
             : "ORDER BY polls.timestamp DESC LIMIT 50;";
         const polls = await runQuery(query, options);
         const pollMap = new Map();

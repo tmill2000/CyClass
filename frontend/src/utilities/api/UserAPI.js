@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	11/22/2022
- * UPDATED:	03/06/2023
+ * UPDATED:	04/21/2023
  */
 
 import axios from "axios";
@@ -15,6 +15,16 @@ const ROLE_MAP = {
 };
 
 const userDataCache = {};
+
+function prettifyRole(backendRole) {
+	const prettyRole = ROLE_MAP[backendRole];
+	if (prettyRole != null) {
+		return prettyRole;
+	} else {
+		console.error(`Unexpected role for user in course: "${backendRole}"`);
+		return backendRole;
+	}
+}
 
 /**
  * Interface for the API related to users.
@@ -90,12 +100,7 @@ class UserAPI {
 
 				// Make role strings more readable
 				for (const role of res.data.userRoles) {
-					const prettyRole = ROLE_MAP[role.role];
-					if (prettyRole != null) {
-						role.role = prettyRole;
-					} else {
-						console.error(`Unexpected role for user in course "${role.name}": ${role.role}`);
-					}
+					role.role = prettifyRole(role.role);
 				}
 
 				// Return formatted data
@@ -163,24 +168,72 @@ class UserAPI {
 	
 	/**
 	 * Fetches the user data for the provided user ID, which will resolve in a Promise to the following if successful:
-	 * - `name`
-	 * - `role`
+	 * - `displayName`
+	 * - `firstName?`
+	 * - `lastName?`
+	 * - `email?`
+	 * - `role?` (always exists if `courseID` is specified)
 	 * - `iconURL`
 	 * @param {Number} userID 
+	 * @param {Number?} courseID course context
 	 * @return Promise 
 	 */
-	getUserData(userID) {
+	getUserData(userID, courseID) {
 
-		// Return successful immediately if in cache
+		// Define final data return function
+		const getFinalData = () => {
+			const userData = userDataCache[userID];
+			const result = {
+				firstName: userData?.info.firstName,
+				lastName: userData?.info.lastName,
+				email: userData?.info.email,
+				role: courseID != null ? (userData?.roles[courseID] ?? "Student") : null,
+				iconURL: defaultProfileImg
+			};
+			if (result.firstName != null || result.lastName != null) {
+				result.displayName = `${result.firstName ?? ""} ${result.lastName ?? ""}`;
+			} else {
+				result.displayName = result.email;
+			}
+			return result;
+		}
+
+		// Check if already in cache
 		const userData = userDataCache[userID];
 		if (userData != null) {
-			return Promise.resolve({
-				first_name: userData.first_name,
-				last_name: userData.last_name,
-				email: userData.email,
-				role: "Student",
-				iconURL: defaultProfileImg
-			});
+
+			// Check if wants role as well and needs to fetch
+			if (courseID != null && userData.roles[courseID] == null) {
+
+				// Peform role fetch
+				return axios.get("/api/user/role", {
+					params: {
+						user_id: userID,
+						course_id: courseID
+					}
+				})
+					.then((res) => axios.get("/api/role", {
+						params: {
+							role_id: res.data.role_id
+						}
+					}))
+					.then((res) => {
+
+						// Cache result and return data
+						userData.roles[courseID] = prettifyRole(res.data.role);
+						return getFinalData();
+
+					})
+					.catch((err) => {
+						console.error("Failed to fetch user course role:", err);
+						throw err;
+					});
+
+			}
+
+			// Otherwise, just return cached info
+			return Promise.resolve(getFinalData());
+
 		}
 
 		// Perform fetch
@@ -190,14 +243,41 @@ class UserAPI {
 				}
 			})
 			.then((res) => {
-				userDataCache[userID] = res.data;
-				return {
-					first_name: res.data.first_name,
-					last_name: res.data.last_name,
-					email: res.data.email,
-					role: "Student",
-					iconURL: defaultProfileImg
+
+				// Cache main data
+				const userData = {
+					info: {
+						firstName: res.data.first_name,
+						lastName: res.data.last_name,
+						email: res.data.email
+					},
+					roles: {}
 				};
+				userDataCache[userID] = userData;
+
+				// If a course ID was also given, fetch role; otherwise return
+				if (courseID != null) {
+					return axios.get("/api/user/role", {
+						params: {
+							user_id: userID,
+							course_id: courseID
+						}
+					})
+						.then((res) => axios.get("/api/role", {
+							params: {
+								role_id: res.data.role_id
+							}
+						}))
+						.then((res) => {
+
+							// Cache result and return data
+							userData.roles[courseID] = prettifyRole(res.data.role);
+							return getFinalData();
+	
+						});
+				}
+				return getFinalData();
+
 			})
 			.catch((err) => {
 				console.error("Failed to fetch user data:", err);
@@ -220,10 +300,10 @@ class UserAPI {
 
 		return axios.patch("/api/user", 
 		{
-			user_id: userID, password,
-			lastname: lastname,
-			firstname: firstname,
-			userID: userID
+			user_id: userID,
+			last_name: lastname,
+			first_name: firstname,
+			password: password
 		}).then((res) => {
 			// userDataCache[userID] = res.data;
 			return {

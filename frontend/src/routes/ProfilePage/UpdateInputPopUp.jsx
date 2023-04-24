@@ -7,10 +7,17 @@ import { PopupForm } from "../../components/PopUp";
 
 function UpdateInputPopUp(props){
 
+    const user = LocalUser.useValue("userInfo");
+
     const create = (inputs) => {
+        console.log("hi");
+        
+        console.log(user);
         let password1 = inputs.password1;
         let password2 = inputs.password1;
         let password = inputs.oldPassword;
+        let firstname = inputs.firstname;
+        let lastname = inputs.lastname;
         if (password1 != password2){
             console.log("New Passwords do not match.");
         }
@@ -19,11 +26,20 @@ function UpdateInputPopUp(props){
                 
             }
             else{
+                console.log("using new password");
                 password = password1;
             }
         }
+        if (firstname == "" || firstname == null){
+            console.log("using old firstname ");
+            firstname = user.firstName;
+        }
+        if (lastname == "" || lastname == null){
+            lastname = user.lastName;
+        }
 
-        return udpateUsername(inputs.firstname, inputs.lastname, inputs.email, password);
+
+        return udpateUsername(firstname, lastname, inputs.email, password);
     }
 
     async function udpateUsername(firstname, lastname, userID, password){
@@ -39,9 +55,9 @@ function UpdateInputPopUp(props){
         }
     
     }
-    function getTitle() {
-        return "Update " + LocalUser.useValue("netID") + " username: ";
-    }
+    // function getTitle() {
+    //     // return "Update " + LocalUser.useValue("netID") + " username: ";
+    // }
 
     return (
 		<PopupForm
@@ -58,16 +74,14 @@ function UpdateInputPopUp(props){
 					validator: (input) => input != ""
 				},
                 { 
-                    label: "Enter First Name: ",
+                    label: "Enter new first name if you want to change it, leave blank otherwise:  ",
 					name: "firstname",
-					type: "text",
-					validator: (input) => input != ""
+					type: "text"
 				},
                 { 
-                    label: "Enter Last Name: ",
+                    label: "Enter new last name if you want to change it, leave blank otherwise:  ",
 					name: "lastname",
-					type: "text",
-					validator: (input) => input != ""
+					type: "text"
 				},
                 { 
                     label: "Enter password: ",
