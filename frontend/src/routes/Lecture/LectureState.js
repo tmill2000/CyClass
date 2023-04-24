@@ -67,6 +67,7 @@ export default class LectureState {
 			const msg = {
 				id: event.messageID,
 				user: await this.toUserInfoOptimized(event.userID, event.isAnonymous),
+				anonymous: event.isAnonymous,
 				me: event.userID == this.userID,
 				text: event.body,
 				time: event.time,

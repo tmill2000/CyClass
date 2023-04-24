@@ -62,13 +62,13 @@ function LectureFeed(props) {
 			const msg = listEntry.msg
 			if (i > 0) {
 				const prevEntry = feedList[i - 1];
-				if (prevEntry.type == "msg" && prevEntry.msg.user.id == msg.user.id && listEntry.time - prevEntry.time < MAX_CONDENSE_TIME_DIFF * 1000) {
+				if (prevEntry.type == "msg" && prevEntry.msg.user.id == msg.user.id && prevEntry.msg.anonymous == msg.anonymous && listEntry.time - prevEntry.time < MAX_CONDENSE_TIME_DIFF * 1000) {
 					showTime = false;
 				}
 			}
 			if (i < feedList.length - 1) {
 				const nextEntry = feedList[i + 1];
-				if (nextEntry.type == "msg" && nextEntry.msg.user.id == msg.user.id && nextEntry.time - listEntry.time < MAX_CONDENSE_TIME_DIFF * 1000) {
+				if (nextEntry.type == "msg" && nextEntry.msg.user.id == msg.user.id && nextEntry.msg.anonymous == msg.anonymous && nextEntry.time - listEntry.time < MAX_CONDENSE_TIME_DIFF * 1000) {
 					showUser = false;
 				}
 			}
