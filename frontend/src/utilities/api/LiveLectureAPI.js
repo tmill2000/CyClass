@@ -20,6 +20,9 @@ const ATTACHMENT_TYPES = {
 	},
 	"text/plain": {
 		extension: ".txt"
+	},
+	"video/mp4": {
+		extension: ".mp4"
 	}
 }
 
@@ -156,7 +159,8 @@ class LiveLectureAPI {
 					time: new Date(msg.payload.timestamp),
 					attachments: msg.payload.media_id != null ? [{
 						id: msg.payload.media_id,
-						type: null
+						type: msg.payload.file_type,
+						name: msg.payload.file_name
 					}] : null
 				});
 				break;
@@ -197,9 +201,10 @@ class LiveLectureAPI {
 				// Make poll event
 				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, {
 					prompt: msg.payload.question_text,
-					closed: false,
+					closeDate: new Date(msg.payload.close_date),
 					time: new Date(msg.payload.timestamp),
-					choices: choices
+					choices: choices,
+					hasMultipleAnswers: msg.payload.poll_type == "MULTIPLE_SELECT"
 				});
 				break;
 
@@ -217,7 +222,8 @@ class LiveLectureAPI {
 
 				// Make poll updated event
 				lectureEvent = new LiveLecturePollUpdatedEvent(this.lectureID, msg.payload.poll_id, {
-					closed: true
+					closeDate: new Date(Date.now() - 1000),
+					time: new Date()
 				});
 				break;
 
@@ -294,7 +300,7 @@ class LiveLectureAPI {
 	 * Fetches the live lecture history. If a timestamp is specified, then only messages before that timestamp will be
 	 * fetched (within a server-defined limit). Otherwise, it will fetch the most recent messages. Does not resolve to
 	 * any value, but will instead dispatch events for each fetched message as if it had streamed in live.
-	 * @param {Number?} beforeTimestamp 
+	 * @param {Date?} beforeTimestamp 
 	 * @return Promise
 	 */
 	fetchHistory(beforeTimestamp) {
@@ -317,7 +323,7 @@ class LiveLectureAPI {
 		return axios.get("/api/message/messagesByLecture", {
 				params: {
 					lecture_id: this.lectureID,
-					timestamp: beforeTimestamp || undefined
+					timestamp: beforeTimestamp?.toJSON()
 				}
 			})
 			.then((res) => {
@@ -336,7 +342,8 @@ class LiveLectureAPI {
 							time: new Date(msg.timestamp),
 							attachments: msg.media_id != null ? [{
 								id: msg.media_id,
-								type: msg.file_type
+								type: msg.file_type,
+								name: msg.file_name
 							}] : null
 						});
 						this.eventTarget.dispatchEvent(event);
@@ -353,9 +360,10 @@ class LiveLectureAPI {
 						// Dispatch poll
 						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, {
 							prompt: msg.question,
-							closed: msg.closed,
+							closeDate: new Date(msg.close_date),
 							time: new Date(msg.timestamp),
-							choices: choices
+							choices: choices,
+							hasMultipleAnswers: msg.poll_type == "MULTIPLE_SELECT"
 						});
 						this.eventTarget.dispatchEvent(event);
 
@@ -425,7 +433,8 @@ class LiveLectureAPI {
 						axios.post("/api/upload-media", reader.result, {
 							params: {
 								media_id: res.data.mediaId,
-								course_id: this.courseID
+								course_id: this.courseID,
+								file_name: attachment.name
 							},
 							headers: {
 								"Content-Type": attachment.type
@@ -448,7 +457,9 @@ class LiveLectureAPI {
 											lecture_id: this.lectureID,
 											parent_id: null,
 											message_id: res.data.messageId,
-											media_id: res.data.mediaId
+											media_id: res.data.mediaId,
+											file_type: attachment.type,
+											file_name: attachment.name
 										}
 									}));
 								}
@@ -556,9 +567,10 @@ class LiveLectureAPI {
 	 * Sends a request to retrieve the file attached to a message. Returns a Promise that will resolve to the loaded
 	 * File if successful.
 	 * @param {string} attachmentID 
+	 * @param {string?} fileName optional name to assign to file
 	 * @returns {Promise<File>}
 	 */
-	getAttachment(attachmentID) {
+	getAttachment(attachmentID, fileName) {
 
 		// Make request
 		return axios.get("/api/download-media", {
@@ -578,7 +590,7 @@ class LiveLectureAPI {
 				}
 
 				// Make into File and return
-				return new File([res.data], "attachment" + extension, {
+				return new File([res.data], fileName ?? ("attachment" + extension), {
 					type: mimeType
 				});
 
@@ -591,17 +603,53 @@ class LiveLectureAPI {
 	}
 
 	/**
+	 * Refreshs info about the poll with the given ID.
+	 * @param {number} pollID 
+	 */
+	refreshPoll(pollID) {
+
+		// Send GET
+		return axios.get("/api/poll", {
+			params: {
+				poll_id: pollID,
+				course_id: this.courseID
+			}
+		})
+			.then((res) => {
+
+				// Send out event
+				this.eventTarget.dispatchEvent(new LiveLecturePollUpdatedEvent(this.lectureID, pollID, {
+					prompt: res.data.question_text,
+					closeDate: new Date(res.data.close_date),
+					time: new Date(res.data.timestamp),
+					choices: res.data.poll_choices.map((choice) => ({
+						id: choice.poll_choice_id,
+						text: choice.choice_text,
+						correct: choice.is_correct_choice
+					})),
+					hasMultipleAnswers: res.data.poll_type == "MULTIPLE_SELECT"
+				}));
+
+			})
+			.catch((err) => {
+				console.error("Failed to get poll:", err);
+				throw err;
+			});
+
+	}
+
+	/**
 	 * Creates a new poll with the specified prompt that will be open for the specified number of minutes (or null if
 	 * indefinite / manually closed) and has the specified choice options. Assumes a live lecture connection has been
 	 * established.
 	 * @param {string} prompt 
-	 * @param {number?} close_time
+	 * @param {Date?} close_time
 	 * @param {number} course_id
 	 * @param {number} lecture_id
 	 * @param {{ text: string, correct: boolean }[]} choices
 	 */
 	createPoll(prompt, close_time, choices, course_id, lecture_id, poll_type) {
-
+		
 		// Verify connection
 		if (this.websocket == null) {
 			throw new Error("No WebSocket connection was established");
@@ -613,9 +661,6 @@ class LiveLectureAPI {
 			payload: {
 				lecture_id: lecture_id,
 				question_text: prompt,
-				
-				
-				
 				
 				poll_choices: choices.map(choice => ({
 					choice_text: choice.text,
@@ -691,14 +736,14 @@ class LiveLectureAPI {
 	}
 
 	/**
-	 * Returns the user's response (a `choiceID`) to the given poll. Returns a Promise that will resolve with the an
+	 * Returns the user's responses (a `choiceID`) to the given poll. Returns a Promise that will resolve with the an
 	 * object of the following format (unless an error occurs):
 	 * - `choiceID?` (number or null if not responded yet)
 	 * - `correct?` (boolean or null if not responded/available yet)
 	 * @param {number} pollID 
 	 * @return Promise
 	 */
-	getPollResponse(pollID) {
+	getPollResponses(pollID) {
 
 		// Perform get
 		return axios.get("/api/poll/metrics", {
@@ -709,21 +754,19 @@ class LiveLectureAPI {
 			})
 			.then((res) => {
 
-				// Try to find response in response list
+				// Try to collect responses in response list
+				const responses = [];
 				for (const i of res.data.userResponses) {
 					if (i.user_id == this.userID) {
-						return {
+						responses.push({
 							choiceID: i.poll_choice_id,
 							correct: i.is_correct_choice
-						}
+						});
 					}
 				}
 
-				// Didn't find, so return all null
-				return {
-					choiceID: null,
-					correct: null
-				}
+				// Return what was found
+				return responses
 
 			})
 			.catch((err) => {
@@ -1009,7 +1052,7 @@ class LiveLectureCloseEvent extends Event {
  * - `userID` (number?)
  * - `isAnonymous` (boolean)
  * - `time` ({@link Date})
- * - `attachments` (`{id: number, type: string}[]`)
+ * - `attachments` (`{id: number, type: string, name: string?}[]`)
  */
 class LiveLectureMessageEvent extends Event {
 
@@ -1066,7 +1109,7 @@ class LiveLectureMessageDeletedEvent extends Event {
  * - `pollID` (number)
  * - `prompt` (string)
  * - `userID` (number?)
- * - `closed` (boolean)
+ * - `closeDate` (Date?)
  * - `time` ({@link Date})
  * - `choices` (`{ id: number, text: string, correct?: boolean }[]`, won't have correct if not closed)
  */
@@ -1078,8 +1121,9 @@ class LiveLecturePollEvent extends Event {
 		this.pollID = pollID;
 		this.prompt = data.prompt;
 		this.userID = data.userID;
-		this.closed = data.closed;
+		this.closeDate = data.closeDate;
 		this.time = data.time;
+		this.hasMultipleAnswers = data.hasMultipleAnswers;
 		this.choices = data.choices;
 	}
 
@@ -1090,8 +1134,8 @@ class LiveLecturePollEvent extends Event {
  * - `lectureID` (number)
  * - `pollID` (number)
  * - `prompt` (string?)
- * - `choices` (`{ id: number, text: string }[]`?)
- * - `closed` (boolean?)
+ * - `choices` (`{ id: number, text: string?, correct: boolean? }[]`?)
+ * - `closeDate` (Date?)
  */
 class LiveLecturePollUpdatedEvent extends Event {
 
@@ -1101,7 +1145,7 @@ class LiveLecturePollUpdatedEvent extends Event {
 		this.pollID = pollID;
 		this.prompt = data.prompt;
 		this.choices = data.choices;
-		this.closed = data.closed;
+		this.closeDate = data.closeDate;
 	}
 
 }

@@ -99,6 +99,46 @@ paths:
           description: Invalid Session
         '500':
           description: Internal Server Error
+  /user/role:
+    get:
+      tags:
+        - user
+      summary: gets the role ID for a given user in a given course
+      operationId: getRoleByUserCourse
+      parameters:
+        - in: query
+          required: true
+          name: user_id
+          schema:
+            type: integer
+        - in: query
+          required: true
+          name: course_id
+          schema:
+            type: integer
+        - in: header
+          name: x-session-id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role_id: 
+                    type: integer  
+        '400':
+          description: Invalid Parameters
+        '401':
+          description: Unauthorized (session user not in course)
+        '404':
+          description: Not Found (query user doesn't exist or not in course)
+        '500':
+          description: Internal Server Error
   /user/login:
     post:
       tags:
@@ -281,6 +321,8 @@ paths:
                   course_id:
                     type: integer
                     example: 1
+                  owner_role_id:
+                    type: integer
                   join_code:
                     type: string
         '400':
@@ -356,6 +398,8 @@ paths:
                   title:
                     type: string
                     example: Lecture 15
+                  timestamp:
+                    type: string
         '400':
           description: Invalid Parameters
         '401':

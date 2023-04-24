@@ -1,13 +1,13 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	10/24/2022
- * UPDATED:	03/06/2023
+ * UPDATED:	04/24/2023
  */
 
 import React from "react";
 import axios from "axios";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from "react-router-dom";
 
 import "./app.css";
 
@@ -16,14 +16,14 @@ import { DataStoreProvider } from "./utilities/data/DataStore";
 import LocalUser from "./utilities/model/LocalUser";
 
 import ErrorPage from "./routes/ErrorPage";
-import Home from "./routes/Home";
+import HomePage from "./routes/HomePage";
 import Course from "./routes/Course";
 import Lecture from "./routes/Lecture";
 import Login from "./routes/Login";
 import SignUp from "./routes/SignUp";
-import HomePage from "./routes/HomePage";
 
 import TopBar from "./components/TopBar";
+import ToastContainer from "./components/Toast";
 import ParticipationForm from "./routes/Polls/PollParticipationForm";
 
 // Set up axios to insert session ID into all requests
@@ -42,15 +42,17 @@ const router = createBrowserRouter([
 		element: <div id="main">
 			<TopBar />
 			<Outlet />
+			<ToastContainer />
 		</div>,
 		errorElement: <div id="main">
 			<TopBar />
 			<ErrorPage />
+			<ToastContainer />
 		</div>,
 		children: [
 			{
 				path: "",
-				element: <Home />
+				element: <Navigate to="/home" />
 			},
 			{
 				path: "login",

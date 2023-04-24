@@ -8,9 +8,9 @@ describe("courseService", () => {
     describe("addCourse", () => {
         it("should return response", async () => {
             jest.spyOn(db, "runQuery").mockResolvedValueOnce({ insertId: 1 });
-            jest.spyOn(roleService, "addRole").mockResolvedValueOnce();
+            jest.spyOn(roleService, "addRole").mockResolvedValueOnce(1);
             const res = await addCourse(1, "Title");
-            expect(res).toEqual(1);
+            expect(res).toEqual({ courseId: 1, roleId: 1 });
         });
         it("should throw error", async () => {
             jest.spyOn(db, "runQuery").mockRejectedValueOnce(new Error());

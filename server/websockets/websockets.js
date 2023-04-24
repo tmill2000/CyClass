@@ -112,7 +112,17 @@ const handleRequest = async (webSocket, req) => {
             const { poll_id } = messageObj.payload;
             message.payload = { poll_id };
         } else if (messageObj.type === "media_upload") {
-            const { body, is_anonymous, parent_id, sender_id, message_id, lecture_id, media_id } = messageObj.payload;
+            const {
+                body,
+                is_anonymous,
+                parent_id,
+                sender_id,
+                message_id,
+                lecture_id,
+                media_id,
+                file_type,
+                file_name
+            } = messageObj.payload;
             const parsedPayload = {
                 body,
                 is_anonymous,
@@ -120,7 +130,9 @@ const handleRequest = async (webSocket, req) => {
                 message_id,
                 sender_id,
                 lecture_id,
-                media_id
+                media_id,
+                file_type,
+                file_name
             };
             messageObj.payload = parsedPayload;
             messageObj.payload.timestamp = new Date().toISOString();
@@ -139,7 +151,7 @@ const handleRequest = async (webSocket, req) => {
     webSocket.on("close", () => {
         webSockets.delete(userId);
         lectures.get(lectureId).delete(userId);
-        if (ownerMap.get(lectureId) === userId) {
+        if (ownerMap.get(lectureId)?.has(userId)) {
             ownerMap.get(lectureId).delete(userId);
             if (ownerMap.get(lectureId).size === 0) {
                 ownerMap.delete(lectureId);

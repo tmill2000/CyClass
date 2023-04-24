@@ -18,13 +18,13 @@ import "./styles.css";
 function CourseOption(props) {
 
 	// Dynamic styles
-	const notifExtraClass = (props.course.notifs || 0) > 0 ? "topbar-dropdown-course-notifs-nonzero" : "topbar-dropdown-course-notifs-zero";
+	const notifExtraClass = (props.course.notifs || 0) > 0 ? "notifs-nonzero" : "notifs-zero";
 
 	// Component
 	return (
-		<Link className="topbar-dropdown-option" to={`/course/${props.course.id || 0}`}>
-			<span className={`topbar-dropdown-course-notifs ${notifExtraClass}`}>{props.course.notifs || 0}</span>
-			<span className="topbar-dropdown-option-title overflow-ellipsis">{props.course.name || "???"}</span>
+		<Link className="dropdown-option" to={`/course/${props.course.id || 0}`}>
+			<span className={`course-notifs ${notifExtraClass}`}>{props.course.notifs || 0}</span>
+			<span className="option-title overflow-ellipsis">{props.course.name || "???"}</span>
 		</Link>
 	);
 

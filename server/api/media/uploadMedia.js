@@ -9,6 +9,8 @@ const { writeLog } = require("../../utils/logger");
  * @param {Express.Request} req
  * req.query = {
  *    media_id: String
+ *    course_id: String
+ *    file_name: String
  * }
  * req.headers = {
  *    Content-Type must be set to correct image MIME type
@@ -19,9 +21,9 @@ const { writeLog } = require("../../utils/logger");
 const uploadMedia = async (req, res) => {
     //TODO: Add open-api spec
     try {
-        const { media_id: mediaID, course_id: courseId } = req.query;
+        const { media_id: mediaID, course_id: courseId, file_name: fileName } = req.query;
 
-        if (!mediaID || !courseId) {
+        if (!mediaID || !courseId || !fileName) {
             return res.status(400).send({ msg: "Invalid Body" });
         }
 
@@ -51,7 +53,7 @@ const uploadMedia = async (req, res) => {
             }
         });
 
-        await mediaService.updateMediaMetadataOnReceived(mediaID, fileType);
+        await mediaService.updateMediaMetadataOnReceived(mediaID, fileType, fileName);
 
         return res.status(200).send({ msg: "Image successfully saved" });
     } catch (e) {

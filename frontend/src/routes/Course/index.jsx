@@ -64,12 +64,12 @@ function Course(props) {
 	const posts = [];
 	if (lectures != null) {
 		for (const lecture of lectures) {
-			posts.push(<LecturePost key={lecture.id} id={lecture.id} title={lecture.title} user={{}} time={lecture.time} live={lecture.live} />);
+			posts.push(<LecturePost key={lecture.id} id={lecture.id} title={lecture.title} user={lecture.host} time={lecture.time} live={lecture.live} />);
 		}
 	}
 
 	// Sort posts by time
-	posts.sort((x, y) => x.props.time > y.props.time);
+	posts.sort((x, y) => y.props.time - x.props.time);
 
 	// Component
 	return (

@@ -77,3 +77,9 @@
 .login {
   padding: 5%
 }
+
+.login .container {
+  margin: 0px auto;
+  width: fit-content;
+  text-align: center;
+}

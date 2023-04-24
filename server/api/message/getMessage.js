@@ -23,7 +23,8 @@ const getMessage = async (req, res) => {
             is_anonymous: resp.is_anonymous,
             body: resp.body,
             media_id: resp.media_id,
-            file_type: resp.file_type
+            file_type: resp.file_type,
+            file_name: resp.file_name
         });
     } catch (e) {
         writeLog("error", e.message);

@@ -12,10 +12,9 @@
  import React, { useState } from "react";
 
  import "./styles.css";
+import EditDelete from "./EditDelete";
  
  function PollOption(props) {
-	
-	const [hovering, setHovering] = useState(false); // New state hook for hover tracking
  
 	 // Decide on "correct" style class/label
 	 let correctClass = "", correctLabel;
@@ -34,19 +33,13 @@
 	 };
  
 	 // Component
+	 const disabled = props.onSelect == null || props.elevated;
 	 return (
-		 <button className={`option ${props.selected ? "selected" : ""} ${correctClass}`} onClick={props.onSelect} disabled={props.onSelect == null}
-		 onMouseEnter={() => setHovering(true)}
-		 onMouseLeave={() => setHovering(false)}>
+		 <div className={`option ${props.selected ? "selected" : ""} ${correctClass} ${disabled ? "disabled" : ""}`} onClick={() => { if (!disabled) props.onSelect() }}>
 			 <div className="select-box" />
-			 <span className="option-text">{props.children}</span>
+			 <span className="option-text">{props.children}{props.elevated ? <EditDelete canEdit={props.elevated} handleEdit={editPollChoice} /> : null}</span>
 			 <span className="option-text label">{correctLabel}</span>
-			 {props.canEdit && (
-				<button className="edit-button" onClick={editPollChoice}>
-				Edit Choice
-				</button>
-				)}
-		 </button>
+		 </div>
 	 );
  
  }

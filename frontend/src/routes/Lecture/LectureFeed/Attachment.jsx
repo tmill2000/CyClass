@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	03/27/2023
- * UPDATED:	03/27/2023
+ * UPDATED:	04/24/2023
  */
 
 import React, { useState } from "react";
@@ -33,7 +33,7 @@ function Attachment(props) {
 	const download = (e) => {
 		if (!processing) {
 			processing = true;
-			props.api.getAttachment(props.id)
+			props.api.getAttachment(props.id, props.name)
 				.then((attachment) => {
 					const temp = document.createElement("a");
 					temp.style.display = "none";
@@ -56,7 +56,7 @@ function Attachment(props) {
 		<button className="attachment" onClick={download}>
 			<img src={ATTACHMENT_ICONS[props.type] ?? DEFAULT_ATTACHMENT_ICON} />
 			<div className="info-list">
-				{!failed ? <div>Download Attachment</div> : <div className="error">Download Failed</div>}
+				{!failed ? <div>Download {props.name ?? "Attachment"}</div> : <div className="error">Download Failed</div>}
 			</div>
 		</button>
 	);

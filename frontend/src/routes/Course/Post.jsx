@@ -26,7 +26,9 @@ function Post(props) {
 							<span className="selectable">{props.title}</span>
 						</div>
 					</div>
-					<ProfileIcon profile_name={props.user.name} profile_role={props.user.role} flipped={true} />
+					<div className="user-container">
+						<ProfileIcon profile_name={props.user.name} profile_role={props.user.role} flipped={true} />
+					</div>
 				</div>
 				<div className="content">
 					{props.children}

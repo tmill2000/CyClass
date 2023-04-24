@@ -35,7 +35,7 @@ import LocalUser from "../../utilities/model/LocalUser";
 		return (
 			<div className="login">
 				<div className="container">
-					Welcome {LocalUser.current.netID}
+					Welcome {LocalUser.current.userInfo.firstName ?? LocalUser.current.userInfo.displayName}
 
 					{/* <Link to="/lecture">
 						<SubmitButton
