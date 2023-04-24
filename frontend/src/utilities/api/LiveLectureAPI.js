@@ -20,6 +20,9 @@ const ATTACHMENT_TYPES = {
 	},
 	"text/plain": {
 		extension: ".txt"
+	},
+	"video/mp4": {
+		extension: ".mp4"
 	}
 }
 
@@ -156,7 +159,8 @@ class LiveLectureAPI {
 					time: new Date(msg.payload.timestamp),
 					attachments: msg.payload.media_id != null ? [{
 						id: msg.payload.media_id,
-						type: null
+						type: msg.payload.file_type,
+						name: msg.payload.file_name
 					}] : null
 				});
 				break;
@@ -338,7 +342,8 @@ class LiveLectureAPI {
 							time: new Date(msg.timestamp),
 							attachments: msg.media_id != null ? [{
 								id: msg.media_id,
-								type: msg.file_type
+								type: msg.file_type,
+								name: msg.file_name
 							}] : null
 						});
 						this.eventTarget.dispatchEvent(event);
@@ -428,7 +433,8 @@ class LiveLectureAPI {
 						axios.post("/api/upload-media", reader.result, {
 							params: {
 								media_id: res.data.mediaId,
-								course_id: this.courseID
+								course_id: this.courseID,
+								file_name: attachment.name
 							},
 							headers: {
 								"Content-Type": attachment.type
@@ -451,7 +457,9 @@ class LiveLectureAPI {
 											lecture_id: this.lectureID,
 											parent_id: null,
 											message_id: res.data.messageId,
-											media_id: res.data.mediaId
+											media_id: res.data.mediaId,
+											file_type: attachment.type,
+											file_name: attachment.name
 										}
 									}));
 								}
@@ -559,9 +567,10 @@ class LiveLectureAPI {
 	 * Sends a request to retrieve the file attached to a message. Returns a Promise that will resolve to the loaded
 	 * File if successful.
 	 * @param {string} attachmentID 
+	 * @param {string?} fileName optional name to assign to file
 	 * @returns {Promise<File>}
 	 */
-	getAttachment(attachmentID) {
+	getAttachment(attachmentID, fileName) {
 
 		// Make request
 		return axios.get("/api/download-media", {
@@ -581,7 +590,7 @@ class LiveLectureAPI {
 				}
 
 				// Make into File and return
-				return new File([res.data], "attachment" + extension, {
+				return new File([res.data], fileName ?? ("attachment" + extension), {
 					type: mimeType
 				});
 
@@ -1043,7 +1052,7 @@ class LiveLectureCloseEvent extends Event {
  * - `userID` (number?)
  * - `isAnonymous` (boolean)
  * - `time` ({@link Date})
- * - `attachments` (`{id: number, type: string}[]`)
+ * - `attachments` (`{id: number, type: string, name: string?}[]`)
  */
 class LiveLectureMessageEvent extends Event {
 

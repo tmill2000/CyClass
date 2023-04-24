@@ -46,6 +46,7 @@ function Message(props) {
 									api={props.api}
 									id={a.id}
 									type={a.type}
+									name={a.name}
 								/>
 							))}
 						</div>
