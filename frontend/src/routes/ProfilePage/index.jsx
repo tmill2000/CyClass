@@ -39,6 +39,14 @@ function ProfilePage(props) {
 				<div className="username-entry">{netID}</div>
 			</div>
 			<div className="username-group">
+				<div className="username-label">First Name: </div>
+				<div className="username-entry">{firstname}</div>
+			</div>
+			<div className="username-group">
+				<div className="username-label">Last Name: </div>
+				<div className="username-entry">{lastname}</div>
+			</div>
+			<div className="username-group">
 				<div className="username-label">UserID: </div>
 				<div className="username-entry">{userID}</div>
 				<button className="standard button" onClick={() => setUpdatePopup(true)}>edit</button>

@@ -216,17 +216,14 @@ class UserAPI {
 	 * @param {string} password
 	 * @return Promise 
 	 */
-	updateUserData(newUserID, userID, password){
+	updateUserData(firstname, lastname, userID, password){
 
 		return axios.patch("/api/user", 
 		{
-			params: {
-				user_id: userID, password }
-			}, 
-		{ 
-			params: {
-				user_id: newUserID, password
-			}
+			user_id: userID, password,
+			lastname: lastname,
+			firstname: firstname,
+			userID: userID
 		}).then((res) => {
 			// userDataCache[userID] = res.data;
 			return {
