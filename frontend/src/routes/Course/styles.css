@@ -2,9 +2,24 @@
 /* MAIN */
 
 .course {
-	padding: 20px calc((100% - 1400px) / 2.0);
 	background-color: #DDD;
+}
+.course > .course-main {
+	padding: 20px calc((100% - 1400px) / 2.0);
 	white-space: nowrap;
+}
+
+.page > .join-code {
+	width: 100%;
+	padding: 0.2em 0;
+	background-color: #1976D2;
+	color: #FFF;
+	text-align: center;
+	font-weight: bold;
+	white-space: pre-wrap;
+}
+.page > .join-code > span {
+	font-family: 'Courier New', Courier, monospace;
 }
 
 /*****************************************************************************/

@@ -33,17 +33,21 @@ function Course(props) {
 		return <ErrorPage code={403} text="You are not a member of that course" />;
 	}
 	const role = LocalUser.current.getCourseRole(courseID);
+	const isOwner = role == "Professor";
 	const isElevated = role == "Professor" || role == "TA";
 
 	// Hooks
 	const [lectures, setLectures] = useState(null);
+	const [courseInfo, setCourseInfo] = useState(null);
 	const [error, setError] = useState(null);
 	const [newLecturePopup, setNewLecturePopup] = useState(false);
 	const navigate = useNavigate();
 
-	// Load lectures
+	// Load course info and lectures
 	const api = new CourseAPI(courseID);
 	useEffect(() => {
+		api.getCourseInfo()
+			.then((data) => setCourseInfo(data));
 		api.getAllLectures()
 			.then((lectures) => setLectures(lectures))
 			.catch((err) => {
@@ -74,15 +78,18 @@ function Course(props) {
 	// Component
 	return (
 		<div className="page course">
-			<div className="filter-panel">
+			{(isOwner && courseInfo?.joinCode != null) ? <div className="join-code">Join Code:  <span className="selectable">{courseInfo.joinCode}</span></div> : null}
+			<div className="course-main">
+				<div className="filter-panel">
+				</div>
+				<div className="feed">
+					{lectures != null ? posts : <div style={{textAlign: "center", fontSize: "1.5em", fontStyle: "italic"}}>Loading ...</div>}
+				</div>
+				<div className="create-panel">
+					{isElevated ? <button className="button new-lecture" onClick={() => setNewLecturePopup(!newLecturePopup)}>NEW LECTURE</button> : null }
+				</div>
+				{isElevated ? <NewLecturePopUp api={api} visible={newLecturePopup} onClose={() => setNewLecturePopup(false)} /> : null }
 			</div>
-			<div className="feed">
-				{lectures != null ? posts : <div style={{textAlign: "center", fontSize: "1.5em", fontStyle: "italic"}}>Loading ...</div>}
-			</div>
-			<div className="create-panel">
-				{isElevated ? <button className="button new-lecture" onClick={() => setNewLecturePopup(!newLecturePopup)}>NEW LECTURE</button> : null }
-			</div>
-			{isElevated ? <NewLecturePopUp api={api} visible={newLecturePopup} onClose={() => setNewLecturePopup(false)} /> : null }
 		</div>
 	);
 
