@@ -11,7 +11,7 @@ const editUser = async (req, res) => {
     try {
         const { user_id: userId, password } = req.body;
         if (password) {
-            const hash = bcrypt.hashSync(password, 10);
+            const hash = bcrypt.hashSync(String(password), 10);
             req.body.password = hash;
         }
         writeLog("general", req.body);
