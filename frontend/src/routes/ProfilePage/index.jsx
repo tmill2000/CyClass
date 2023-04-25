@@ -1,64 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Navigate } from "react-router-dom";
 
-import DataStore, { useDataStoreValue } from "../../utilities/data/DataStore";
 import UserAPI from "../../utilities/api/UserAPI";
 import LocalUser from "../../utilities/model/LocalUser";
- 
-import { Link, Navigate } from "react-router-dom";
 
+import AccountField from "./AccountField";
 import "./style.css";
-import UpdateInputPopUp from "./UpdateInputPopUp";
-
-const userAPI = new UserAPI();
-
-let invalidSessionID = null;
 
 function ProfilePage(props) {
-
-	const [updatePopup, setUpdatePopup] = useState(false);
 
     // If no one is logged in, go to login
 	if (LocalUser.current == null) {
 		return <Navigate to="/login" />;
 	}
 
-    // const userID = LocalUser.useValue("userID");
-	// const netID = LocalUser.useValue("netID");
-	// const firstname = LocalUser.useValue("firstname");
-	const user = LocalUser.useValue("userInfo");
+	// State
+	const userInfo = LocalUser.useValue("userInfo");
 
+	// Handler
+	const api = new UserAPI();
+	const updateInfo = (key, value) => {
+		api.updateUserData(LocalUser.current.userID, {[key]: value})
+			.finally(() => LocalUser.current.refreshUserInfo());
+	};
 
-	// const sessionID = useDataStoreValue("sessionID");
-
-	function closePopUp(){
-		setUpdatePopup(false);
-	}
-
-	//If not logged in return...
+	// Component
 	return (
-		<div className="signup">
-			<div className="username-group">
-				<div className="username-label">NetID: </div>
-				<div className="username-entry">{user.displayName}</div>
-			</div>
-			<div className="username-group">
-				<div className="username-label">First Name: </div>
-				<div className="username-entry">{user.firstName}</div>
-			</div>
-			<div className="username-group">
-				<div className="username-label">Last Name: </div>
-				<div className="username-entry">{user.lastName}</div>
-			</div>
-			<div className="username-group">
-				{/* <div className="username-label">UserID: </div>
-				<div className="username-entry">{userID}</div> */}
-				<button className="standard button" onClick={() => setUpdatePopup(true)}>edit</button>
-				<UpdateInputPopUp visible={updatePopup} api={userAPI}  onClose={() => closePopUp()}></UpdateInputPopUp>
+		<div className="page account">
+			<h1>Account</h1>
+			<div className="field-container">
+				<AccountField label={"First Name"} current={userInfo.firstName} onEdit={(x) => updateInfo("firstName", x)} />
+				<AccountField label={"Last Name"} current={userInfo.lastName} onEdit={(x) => updateInfo("lastName", x)} />
+				<AccountField label={"Password"} secret={true} onEdit={(x) => updateInfo("password", x)} />
 			</div>
 		</div>
 	);
 
- }
+}
 
- //observer() allows app to listen to changes in the UserStore
- export default ProfilePage;
+export default ProfilePage;

@@ -287,35 +287,32 @@ class UserAPI {
 	}
 
 	/**
-	 * Fetches the user data for the provided user ID, which will resolve in a Promise to the following if successful:
-	 * - `name`
-	 * - `role`
-	 * - `iconURL`
-	 * @param {stirng} userID
-	 * @param {Number} newUserID 
-	 * @param {string} password
-	 * @return Promise 
+	 * Attempts to update the given user's data to the given values (can specify as many as you want), which will
+	 * resolve if successful.
+	 * @param {number} userID
+	 * @param {{firstName: string?, lastName: string?, password: string?}} toUpdate 
+	 * @return {Promise<void>}
 	 */
-	updateUserData(firstname, lastname, userID, password){
+	updateUserData(userID, toUpdate) {
 
-		return axios.patch("/api/user", 
-		{
+		// Perform PATCH
+		return axios.patch("/api/user", {
 			user_id: userID,
-			last_name: lastname,
-			first_name: firstname,
-			password: password
-		}).then((res) => {
-			// userDataCache[userID] = res.data;
-			return {
-				accepted: true
-			};
-		}).catch((err) => {
-			console.error("Failed to update user info:", err);
-			throw err;
+			first_name: toUpdate?.firstName ?? undefined,
+			last_name: toUpdate?.lastName ?? undefined,
+			password: toUpdate?.password ?? undefined
 		})
+			.then((res) => {
+
+				// Clear cache for user so updates will be reflected
+				userDataCache[userID] = null;
+
+			}).catch((err) => {
+				console.error("Failed to update user info:", err);
+				throw err;
+			});
 
 	}
-
 
 };
 

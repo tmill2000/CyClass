@@ -1,17 +1,56 @@
-.username-group{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding: 10px;
+.account {
+	width: calc(100% - 40px);
+	max-width: 700px;
+	padding: 20px;
+	margin: 0 auto;
 }
 
-.username-label{
-    font-size: 25px;
-
+.account > h1 {
+	text-align: center;
 }
 
-.username-entry{
-    font-size: 25px;
-    margin-left: 10px;
-    margin-right: 10px;
+.account .field-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.account .account-field {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	gap: 6px;
+}
+
+.account .account-field .button {
+	padding: 4px 10px;
+	font-size: 0.8em;
+	margin: auto 0;
+}
+.account .account-field .button.save {
+	background-color: #59B0FD;
+}
+.account .account-field .button.cancel {
+	background-color: #DDD;
+}
+
+.account .account-field .label {
+	width: 100px;
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-right: 10px;
+	height: fit-content;
+	font-weight: bolder;
+	text-align: right;
+}
+
+.account .account-field .input {
+	padding: 4px 8px;
+	flex-grow: 1;
+	border: 2px solid #D5D5D5;
+	border-radius: 6px;
+	height: fit-content;
+}
+.account .account-field div.input {
+	cursor: pointer;
 }
