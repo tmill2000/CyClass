@@ -45,11 +45,13 @@
 }
 
 .account .account-field .input {
+	height: calc(1.2em + 12px);
+	min-height: fit-content;
 	padding: 4px 8px;
 	flex-grow: 1;
 	border: 2px solid #D5D5D5;
 	border-radius: 6px;
-	height: fit-content;
+	line-height: 1.2em;
 }
 .account .account-field div.input {
 	cursor: pointer;
