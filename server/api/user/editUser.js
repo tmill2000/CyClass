@@ -14,6 +14,7 @@ const editUser = async (req, res) => {
             const hash = bcrypt.hashSync(password, 10);
             req.body.password = hash;
         }
+        writeLog("general", req.body);
         await patch.genericPatch("users", req.body, "user_id", userId);
 
         return res.status(200).send({ msg: "Success" });
