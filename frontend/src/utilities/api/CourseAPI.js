@@ -1,7 +1,7 @@
 /**
  * AUTHOR:	Adam Walters
  * CREATED:	03/06/2023
- * UPDATED:	04/15/2023
+ * UPDATED:	04/25/2023
  */
 
 import axios from "axios";
@@ -82,6 +82,36 @@ class CourseAPI {
 			});
 
 	}
+
+	/**
+	 * Retrieves info about this course.
+	 * @returns {Promise<{name: string, joinCode: string, ownerID: number}>}
+	 */
+	getCourseInfo() {
+
+		// Perform GET
+		return axios.get("/api/course", {
+			params: {
+				course_id: this.id
+			}
+		})
+			.then((res) => {
+
+				// Assemble and return final result
+				return {
+					name: res.data.course_name,
+					joinCode: res.data.join_code,
+					ownerID: res.data.owner_id
+				};
+
+			})
+			.catch((err) => {
+				console.error("Failed to get course info:", err);
+				throw err;
+			});
+
+	}
+
 	/**
 	 * Retrieves info about the specified lecture.
 	 * @param {number} lectureID 
