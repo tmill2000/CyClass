@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
+import { showToast } from "../../components/Toast";
 import UserAPI from "../../utilities/api/UserAPI";
 import LocalUser from "../../utilities/model/LocalUser";
 
@@ -21,6 +22,7 @@ function ProfilePage(props) {
 	const api = new UserAPI();
 	const updateInfo = (key, value) => {
 		api.updateUserData(LocalUser.current.userID, {[key]: value})
+			.then(() => showToast("Updated successfully.", 3, "#0C0"))
 			.finally(() => LocalUser.current.refreshUserInfo());
 	};
 
