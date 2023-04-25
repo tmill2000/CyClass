@@ -22,7 +22,7 @@ function ProfilePage(props) {
 	const api = new UserAPI();
 	const updateInfo = (key, value) => {
 		api.updateUserData(LocalUser.current.userID, {[key]: value})
-			.then(() => showToast("Updated successfully.", 3, "#0C0"))
+			.then(() => showToast("Updated successfully.", 3, "#FFF", "#0C0"))
 			.finally(() => LocalUser.current.refreshUserInfo());
 	};
 
