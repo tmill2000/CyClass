@@ -40,6 +40,10 @@ function UserDropdown(props) {
 		navigate("/login");
 	};
 
+	const navigateProfile = () => {
+		navigate("/profile");
+	}
+
 	// Component
 	return (
 		<div className="dropdown user-dropdown" style={dropdownStyle}>
@@ -55,9 +59,9 @@ function UserDropdown(props) {
 				</div>
 			</div>
 			<div className="bottom-container">
-				{/* <UserOption icon={userBadgeImg} name="Account" href="/account" />
+				<UserOption icon={userBadgeImg} name="Account" href="/account" />
 				<div className="separator" />
-				<UserOption icon={userBadgeImg} name="Courses" href="/" />
+				{/* <UserOption icon={userBadgeImg} name="Courses" href="/" />
 				<div className="separator" />
 				<UserOption icon={userBadgeImg} name="Settings" href="/settings" />
 				<div className="separator" /> */}

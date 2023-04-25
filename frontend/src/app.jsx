@@ -21,6 +21,7 @@ import Course from "./routes/Course";
 import Lecture from "./routes/Lecture";
 import Login from "./routes/Login";
 import SignUp from "./routes/SignUp";
+import ProfilePage from "./routes/ProfilePage";
 
 import TopBar from "./components/TopBar";
 import ToastContainer from "./components/Toast";
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
 			{
 				path: "home",
 				element: <HomePage />
+			},
+			{
+				path: "account",
+				element: <ProfilePage/>
 			}
 		]
 	}

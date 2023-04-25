@@ -227,6 +227,7 @@ export default class LocalUser {
 		return new UserAPI().getUserData(this.userID)
 			.then((data) => {
 				this.userInfo = data;
+				DataStore.set("userInfo", this.userInfo);
 			})
 			.catch((err) => {
 				console.error("Failed to refresh local user's info:", err);

@@ -127,7 +127,6 @@ class UserAPI {
 						courses: null
 					};
 				}
-
 				// Otherwise, log and propogate
 				console.error("Failed to perform login:", err);
 				throw err;
@@ -284,6 +283,34 @@ class UserAPI {
 				console.error("Failed to fetch user data:", err);
 				throw err;
 			})
+
+	}
+
+	/**
+	 * Attempts to update the given user's data to the given values (can specify as many as you want), which will
+	 * resolve if successful.
+	 * @param {number} userID
+	 * @param {{firstName: string?, lastName: string?, password: string?}} toUpdate 
+	 * @return {Promise<void>}
+	 */
+	updateUserData(userID, toUpdate) {
+
+		// Perform PATCH
+		return axios.patch("/api/user", {
+			user_id: userID,
+			first_name: toUpdate?.firstName ?? undefined,
+			last_name: toUpdate?.lastName ?? undefined,
+			password: toUpdate?.password ?? undefined
+		})
+			.then((res) => {
+
+				// Clear cache for user so updates will be reflected
+				userDataCache[userID] = null;
+
+			}).catch((err) => {
+				console.error("Failed to update user info:", err);
+				throw err;
+			});
 
 	}
 
