@@ -201,7 +201,7 @@ class LiveLectureAPI {
 				// Make poll event
 				lectureEvent = new LiveLecturePollEvent(this.lectureID, msg.payload.pollInfo.pollId, {
 					prompt: msg.payload.question_text,
-					closeDate: new Date(msg.payload.close_date),
+					closeDate: msg.payload.close_date != null ? new Date(msg.payload.close_date) : null,
 					time: new Date(msg.payload.timestamp),
 					choices: choices,
 					hasMultipleAnswers: msg.payload.poll_type == "MULTIPLE_SELECT"
@@ -360,7 +360,7 @@ class LiveLectureAPI {
 						// Dispatch poll
 						const event = new LiveLecturePollEvent(this.lectureID, msg.poll_id, {
 							prompt: msg.question,
-							closeDate: new Date(msg.close_date),
+							closeDate: msg.close_date != null ? new Date(msg.close_date) : null,
 							time: new Date(msg.timestamp),
 							choices: choices,
 							hasMultipleAnswers: msg.poll_type == "MULTIPLE_SELECT"
