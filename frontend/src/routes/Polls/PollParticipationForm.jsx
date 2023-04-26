@@ -122,7 +122,7 @@ function ParticipationForm (props) {
 
 	// Component
 	return (
-		<div className="white-container">
+		<div className="page white-container">
 		<div style={{float:'left', width: '50%'}}>
 		<div className="header" style={{fontWeight:'bold', fontSize:'27px', fontFamily:'Arial', paddingLeft:'15px', paddingTop:'9px',float:'left'}}>Poll Participation</div>
 		<div style={{fontWeight: 'bold', fontFamily: 'Arial', color: 'gray', textAlign: 'left', paddingTop: '47px', paddingLeft: '15px'}}>{results != null ? `${results.totalParticipants} participants` : "loading..."}</div>

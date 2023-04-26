@@ -2,7 +2,7 @@
 .white-container {
     background-color: white;
     width: 900px;
-    height: 1100px;
+    margin-top: 20px;
     margin: auto;
     border-color:black;
 }
