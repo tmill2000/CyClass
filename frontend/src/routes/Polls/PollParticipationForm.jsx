@@ -144,11 +144,11 @@ function ParticipationForm (props) {
 		<div style={{paddingTop: '82px'}}>
 		<div style={{borderTop: '1px solid gray'}}></div>
 		</div>
-		<div style={{paddingLeft: '160px'}}>
-		{results != null ? results.responses.map((response, index) => <ParticipantPill name={response.user.name} role={response.user.role} correct={response.correct} altStyle={index % 2 == 1}></ParticipantPill>) : null}
-		</div>
 		<div style={{textAlign: 'center', paddingTop: '75px'}}>
 			{responsesMap != null ? <CSVLink data={responsesMap} headers={headers} filename="Poll_Results.csv" ><button className='button-csv-download'>Poll Results</button></CSVLink> : null}
+		</div>
+		<div style={{paddingLeft: '160px'}}>
+		{results != null ? results.responses.map((response, index) => <ParticipantPill name={response.user.name} role={response.user.role} correct={response.correct} altStyle={index % 2 == 1}></ParticipantPill>) : null}
 		</div>
 	</div>
 	);
