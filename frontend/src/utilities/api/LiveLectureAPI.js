@@ -222,7 +222,7 @@ class LiveLectureAPI {
 
 				// Make poll updated event
 				lectureEvent = new LiveLecturePollUpdatedEvent(this.lectureID, msg.payload.poll_id, {
-					closeDate: new Date(Date.now() - 1000),
+					closeDate: new Date(Date.now() - 60 * 1000),
 					time: new Date()
 				});
 				break;

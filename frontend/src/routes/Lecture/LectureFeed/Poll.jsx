@@ -55,7 +55,7 @@ function Poll(props) {
 			}, 500);
 			return () => clearInterval(timer);
 		}
-	}, [ timeLeft ]);
+	}, [ timeLeft, props.closeDate?.getTime() ]);
 
 	// Various handlers
 	const onSelect = (choiceID) => {
