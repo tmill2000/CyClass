@@ -65,7 +65,7 @@ function UserDropdown(props) {
 				<div className="separator" />
 				<UserOption icon={userBadgeImg} name="Settings" href="/settings" />
 				<div className="separator" /> */}
-				<button className="dropdown-option" style={{color: "#555", textAlign: "right"}} onClick={toggleLogin}>
+				<button className="dropdown-option" style={{color: "#000", textAlign: "right"}} onClick={toggleLogin}>
 					<span className="option-title overflow-ellipsis">{props.name != null ? "Log Out" : "Log In"}</span>
 				</button>
 			</div>
