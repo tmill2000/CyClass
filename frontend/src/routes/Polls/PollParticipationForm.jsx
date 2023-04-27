@@ -144,7 +144,7 @@ function ParticipationForm (props) {
 		<div style={{paddingTop: '82px'}}>
 		<div style={{borderTop: '1px solid gray'}}></div>
 		</div>
-		<div style={{textAlign: 'center', paddingTop: '75px'}}>
+		<div className="poll-results-block" style={{textAlign: 'center'}}>
 			{responsesMap != null ? <CSVLink data={responsesMap} headers={headers} filename="Poll_Results.csv" ><button className='button-csv-download'>Poll Results</button></CSVLink> : null}
 		</div>
 		<div style={{paddingLeft: '160px'}}>

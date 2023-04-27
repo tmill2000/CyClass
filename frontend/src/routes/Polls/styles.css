@@ -5,6 +5,7 @@
     margin-top: 20px;
     margin: auto;
     border-color:black;
+    overflow-y: auto;
 }
 /*-------------------------------------------------------*/
 
@@ -84,6 +85,13 @@
     transform: translateX(20px) translateY(20px) rotate(-45deg);
 }
 /*-------------------------------------------------------*/
+.poll-results-block{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+
 /*CSV Download Button*/
 .button-csv-download {
 	padding: 0.4em 0.8em;
